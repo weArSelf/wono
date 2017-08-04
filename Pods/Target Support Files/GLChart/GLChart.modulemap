@@ -1,0 +1,6 @@
+framework module GLChart {
+  umbrella header "GLChart-umbrella.h"
+
+  export *
+  module * { export * }
+}

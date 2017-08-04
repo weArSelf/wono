@@ -1,0 +1,6 @@
+framework module Pods_wonoAPP {
+  umbrella header "Pods-wonoAPP-umbrella.h"
+
+  export *
+  module * { export * }
+}
