@@ -7,9 +7,10 @@
 //
 
 #import "PengViewController.h"
-#import "StuffTableViewCell.h"
 
-@interface PengViewController ()<UITableViewDelegate,UITableViewDataSource>
+#import "PengTableViewCell.h"
+
+@interface PengViewController ()<UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
 
 @property (nonatomic,strong)UIView *headView;
 @property (nonatomic,strong)UILabel *titleLabel;
@@ -47,6 +48,10 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:animated];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [_stuffTableView flashScrollIndicators];
 }
 
 
@@ -123,12 +128,28 @@
         changeMark = true;
         _nextBtn.selected = YES;
         [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteClick" object:nil];
+        [self changeBtn];
     }else{
         _nextBtn.selected = NO;
         changeMark = false;
         [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteUnClick" object:nil];
+        [self changeBtnBack];
     }
     
+}
+
+-(void)changeBtn{
+    [_addBtn layoutIfNeeded];
+    [self.view layoutIfNeeded];
+    [UIView animateWithDuration:0.5 animations:^{
+        _addBtn.transform = CGAffineTransformMakeTranslation(0, 200);
+    }];
+    
+}
+-(void)changeBtnBack{
+    [UIView animateWithDuration:0.5 animations:^{
+        _addBtn.transform = CGAffineTransformIdentity;
+    }];
 }
 
 -(void)createTable{
@@ -143,17 +164,36 @@
     //    _plantTableView.frame = self.view.frame;
     //    _stuffTableView.showsVerticalScrollIndicator = NO;
     //    _stuffTableView.scrollEnabled = NO;
-    [_stuffTableView flashScrollIndicators];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapClick)];
+    tap.delegate = self;
+    [_stuffTableView addGestureRecognizer:tap];
+    
+    
     [self.view addSubview:_stuffTableView];
     
     [_stuffTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
         make.top.equalTo(self.headView.mas_bottom).offset(5);
-        make.height.equalTo(@(HDAutoHeight(520)));
+        make.bottom.equalTo(self.view.mas_bottom).offset(-HDAutoHeight(200));
     }];
     
+    
+    
+    
+    
+    
 }
+
+-(void)tapClick{
+    NSLog(@"点击了");
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteUnClick" object:nil];
+    _nextBtn.selected = NO;
+    
+    [self changeBtnBack];
+}
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
@@ -163,9 +203,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *cellIdentifier = @"cellIdentifier";
-    StuffTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    PengTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        cell = [[StuffTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[PengTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         cell.changeMark = changeMark;
@@ -174,7 +214,7 @@
         
         cell.changeMark = changeMark;
         
-        [cell setCellClickBlock:^(StuffTableViewCell *cell){
+        [cell setCellClickBlock:^(PengTableViewCell *cell){
             //            NSLog(@"%ld", (long)tag);
             
             
@@ -217,6 +257,7 @@
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteUnClick" object:nil];
     _nextBtn.selected = NO;
+    [self changeBtnBack];
     
 }
 
@@ -234,7 +275,7 @@
         make.centerX.equalTo(self.view.mas_centerX);
         make.width.equalTo(@(HDAutoWidth(520)));
         make.height.equalTo(@(HDAutoHeight(128)));
-        make.top.equalTo(_stuffTableView.mas_bottom).offset(HDAutoHeight(100));
+        make.bottom.equalTo(self.view.mas_bottom).offset(-HDAutoHeight(30));
         
     }];
     
@@ -244,5 +285,12 @@
     NSLog(@"点击添加新员工");
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    if ([touch.view isKindOfClass:[UITableView class]]) {
+        return YES;
+    }
+    
+    return  NO;
+}
 
 @end

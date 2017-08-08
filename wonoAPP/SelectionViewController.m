@@ -28,8 +28,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     [self creatTitleAndBackBtn];
-    [self createFirseView];
-    [self createTabelview];
+    
     
     
 }
@@ -37,7 +36,9 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    [self createFirseView];
+    [self createTabelview];
 }
 
 
@@ -98,7 +99,7 @@
 
 -(void)createFirseView{
     _firstView = [[UIView alloc]init];
-    _firstView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"图层 3"]];
+    _firstView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"图层-3"]];
     [self.view addSubview:_firstView];
     
     [_firstView mas_makeConstraints:^(MASConstraintMaker *make) {

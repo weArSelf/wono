@@ -189,7 +189,7 @@
     orginImageView3.contentMode = UIViewContentModeScaleAspectFit;
     _confirmPsw = [[UITextField alloc]init];
     _confirmPsw.font = [UIFont systemFontOfSize:14];
-    _confirmPsw.placeholder = @"新密码";
+    _confirmPsw.placeholder = @"确认密码";
     _confirmPsw.textColor = UIColorFromHex(0x9fa0a0);
     UIView *orginView3 = [[UIView alloc]init];
     orginView3.backgroundColor = [UIColor lightGrayColor];

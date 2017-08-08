@@ -45,6 +45,13 @@
 		A821F5541F3442E60040846E /* KBTabbar.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F5531F3442E60040846E /* KBTabbar.m */; };
 		A821F5571F34618C0040846E /* PengViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F5561F34618C0040846E /* PengViewController.m */; };
 		A821F55A1F34637D0040846E /* PengTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F5591F34637D0040846E /* PengTableViewCell.m */; };
+		A821F5601F34754A0040846E /* UIImageView+ForScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F55F1F34754A0040846E /* UIImageView+ForScrollView.m */; };
+		A821F5631F3801070040846E /* MyFarmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F5621F3801070040846E /* MyFarmViewController.m */; };
+		A821F5661F3818240040846E /* MyFarmTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F5651F3818240040846E /* MyFarmTableViewCell.m */; };
+		A821F5691F3844C40040846E /* NeedSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F5681F3844C40040846E /* NeedSelectionViewController.m */; };
+		A821F56F1F386A670040846E /* CustomLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F56E1F386A670040846E /* CustomLabel.m */; };
+		A821F5721F394FBF0040846E /* AddStuffViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F5711F394FBF0040846E /* AddStuffViewController.m */; };
+		A821F5751F3955CA0040846E /* MyCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F5741F3955CA0040846E /* MyCollectionViewController.m */; };
 		A82469FF1F14626B00CFD65A /* MBProgressHUD+XMG.m in Sources */ = {isa = PBXBuildFile; fileRef = A82469FE1F14626B00CFD65A /* MBProgressHUD+XMG.m */; };
 		A8246A0D1F1467DC00CFD65A /* JXTCacher.m in Sources */ = {isa = PBXBuildFile; fileRef = A8246A0A1F1467DC00CFD65A /* JXTCacher.m */; };
 		A8246A0E1F1467DC00CFD65A /* NSObject+JKCoding.m in Sources */ = {isa = PBXBuildFile; fileRef = A8246A0C1F1467DC00CFD65A /* NSObject+JKCoding.m */; };
@@ -221,6 +228,20 @@
 		A821F5561F34618C0040846E /* PengViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PengViewController.m; sourceTree = "<group>"; };
 		A821F5581F34637D0040846E /* PengTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PengTableViewCell.h; sourceTree = "<group>"; };
 		A821F5591F34637D0040846E /* PengTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PengTableViewCell.m; sourceTree = "<group>"; };
+		A821F55E1F34754A0040846E /* UIImageView+ForScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+ForScrollView.h"; sourceTree = "<group>"; };
+		A821F55F1F34754A0040846E /* UIImageView+ForScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+ForScrollView.m"; sourceTree = "<group>"; };
+		A821F5611F3801070040846E /* MyFarmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFarmViewController.h; sourceTree = "<group>"; };
+		A821F5621F3801070040846E /* MyFarmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFarmViewController.m; sourceTree = "<group>"; };
+		A821F5641F3818240040846E /* MyFarmTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFarmTableViewCell.h; sourceTree = "<group>"; };
+		A821F5651F3818240040846E /* MyFarmTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFarmTableViewCell.m; sourceTree = "<group>"; };
+		A821F5671F3844C40040846E /* NeedSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NeedSelectionViewController.h; sourceTree = "<group>"; };
+		A821F5681F3844C40040846E /* NeedSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NeedSelectionViewController.m; sourceTree = "<group>"; };
+		A821F56D1F386A670040846E /* CustomLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomLabel.h; sourceTree = "<group>"; };
+		A821F56E1F386A670040846E /* CustomLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomLabel.m; sourceTree = "<group>"; };
+		A821F5701F394FBF0040846E /* AddStuffViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddStuffViewController.h; sourceTree = "<group>"; };
+		A821F5711F394FBF0040846E /* AddStuffViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddStuffViewController.m; sourceTree = "<group>"; };
+		A821F5731F3955CA0040846E /* MyCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCollectionViewController.h; sourceTree = "<group>"; };
+		A821F5741F3955CA0040846E /* MyCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCollectionViewController.m; sourceTree = "<group>"; };
 		A82469F81F145D7D00CFD65A /* WonoPrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WonoPrefixHeader.pch; sourceTree = "<group>"; };
 		A82469FD1F14626B00CFD65A /* MBProgressHUD+XMG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+XMG.h"; sourceTree = "<group>"; };
 		A82469FE1F14626B00CFD65A /* MBProgressHUD+XMG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+XMG.m"; sourceTree = "<group>"; };
@@ -412,6 +433,8 @@
 				A821F5441F32D2430040846E /* StuffTableViewCell.m */,
 				A821F5581F34637D0040846E /* PengTableViewCell.h */,
 				A821F5591F34637D0040846E /* PengTableViewCell.m */,
+				A821F5641F3818240040846E /* MyFarmTableViewCell.h */,
+				A821F5651F3818240040846E /* MyFarmTableViewCell.m */,
 			);
 			name = view;
 			sourceTree = "<group>";
@@ -444,6 +467,10 @@
 				A82469FE1F14626B00CFD65A /* MBProgressHUD+XMG.m */,
 				A821F4AC1F21F4560040846E /* UIImage+Scale.h */,
 				A821F4AD1F21F4560040846E /* UIImage+Scale.m */,
+				A821F55E1F34754A0040846E /* UIImageView+ForScrollView.h */,
+				A821F55F1F34754A0040846E /* UIImageView+ForScrollView.m */,
+				A821F56D1F386A670040846E /* CustomLabel.h */,
+				A821F56E1F386A670040846E /* CustomLabel.m */,
 			);
 			name = "Support Tools";
 			sourceTree = "<group>";
@@ -531,6 +558,14 @@
 				A821F53D1F32AEBF0040846E /* MineDataViewController.m */,
 				A821F5551F34618C0040846E /* PengViewController.h */,
 				A821F5561F34618C0040846E /* PengViewController.m */,
+				A821F5611F3801070040846E /* MyFarmViewController.h */,
+				A821F5621F3801070040846E /* MyFarmViewController.m */,
+				A821F5671F3844C40040846E /* NeedSelectionViewController.h */,
+				A821F5681F3844C40040846E /* NeedSelectionViewController.m */,
+				A821F5701F394FBF0040846E /* AddStuffViewController.h */,
+				A821F5711F394FBF0040846E /* AddStuffViewController.m */,
+				A821F5731F3955CA0040846E /* MyCollectionViewController.h */,
+				A821F5741F3955CA0040846E /* MyCollectionViewController.m */,
 			);
 			name = "我的";
 			sourceTree = "<group>";
@@ -939,6 +974,7 @@
 			files = (
 				A821F53B1F31D13F0040846E /* MineSettingViewController.m in Sources */,
 				A821F53E1F32AEBF0040846E /* MineDataViewController.m in Sources */,
+				A821F5751F3955CA0040846E /* MyCollectionViewController.m in Sources */,
 				A8A11D481F1CA217008CA39A /* SelectionViewController.m in Sources */,
 				A821F5111F2B06BD0040846E /* FZHPickerView.m in Sources */,
 				A8246A0D1F1467DC00CFD65A /* JXTCacher.m in Sources */,
@@ -959,6 +995,7 @@
 				A8246A251F149C5400CFD65A /* LoginViewController.m in Sources */,
 				A8A11D261F1852DB008CA39A /* ForgetViewController.m in Sources */,
 				A8A11D391F18A929008CA39A /* PlantCell.m in Sources */,
+				A821F5631F3801070040846E /* MyFarmViewController.m in Sources */,
 				A8A11D551F1DF058008CA39A /* WSDatePickerView.m in Sources */,
 				A8ADF1671F0F841200781E06 /* AppDelegate.m in Sources */,
 				A821F4B91F25E6900040846E /* CABasicAnimation+Category.m in Sources */,
@@ -973,16 +1010,20 @@
 				A8246A181F146F4800CFD65A /* TempViewController.m in Sources */,
 				A8246A281F14C25A00CFD65A /* CompleteInfoViewController.m in Sources */,
 				A8246A0E1F1467DC00CFD65A /* NSObject+JKCoding.m in Sources */,
+				A821F5661F3818240040846E /* MyFarmTableViewCell.m in Sources */,
 				A821F5411F32C1390040846E /* CustomActionSheet.m in Sources */,
 				A8A11D541F1DF058008CA39A /* UIView+Extension.m in Sources */,
 				A8A11D2B1F18532D008CA39A /* HDTimerBtn.m in Sources */,
 				A8246A2B1F17448300CFD65A /* AgreementViewController.m in Sources */,
 				A821F5571F34618C0040846E /* PengViewController.m in Sources */,
 				A821F4FB1F2878360040846E /* SetTempViewController.m in Sources */,
+				A821F5691F3844C40040846E /* NeedSelectionViewController.m in Sources */,
 				A821F5381F31C47E0040846E /* EmployeeViewController.m in Sources */,
 				A821F5011F28975C0040846E /* TempSetTableViewCell.m in Sources */,
+				A821F5721F394FBF0040846E /* AddStuffViewController.m in Sources */,
 				A821F4BB1F25E6900040846E /* LoadingView.m in Sources */,
 				A8246A221F14710C00CFD65A /* BaseTabBarController.m in Sources */,
+				A821F5601F34754A0040846E /* UIImageView+ForScrollView.m in Sources */,
 				A821F51D1F2EE1A10040846E /* ZhiBaoViewController.m in Sources */,
 				A8A11D5A1F1EEAE3008CA39A /* MapViewController.m in Sources */,
 				A821F5231F2F06A30040846E /* TempCViewController.m in Sources */,
@@ -1001,6 +1042,7 @@
 				A8246A121F146EE400CFD65A /* MineViewController.m in Sources */,
 				A8A11D531F1DF058008CA39A /* NSDate+Extension.m in Sources */,
 				A821F4AE1F21F4560040846E /* UIImage+Scale.m in Sources */,
+				A821F56F1F386A670040846E /* CustomLabel.m in Sources */,
 				A821F4BE1F26D50B0040846E /* MoreTempViewController.m in Sources */,
 				A8246A151F146F0100CFD65A /* WonoCircleViewController.m in Sources */,
 				A821F5541F3442E60040846E /* KBTabbar.m in Sources */,

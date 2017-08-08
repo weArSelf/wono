@@ -9,6 +9,7 @@
 #import "TempCViewController.h"
 #import "MyZView.h"
 #import "PlantModel.h"
+#import "CustomLabel.h"
 
 @interface TempCViewController ()
 
@@ -16,6 +17,11 @@
 @property (nonatomic,strong)UILabel *titleLabel;
 @property (nonatomic,strong)UIButton *backBtn;
 
+@property (nonatomic,strong)UIImageView *backgroundImageView;
+
+@property (nonatomic,strong)UIButton *rightBtn;
+
+@property (nonatomic,strong)CustomLabel *appearLabel;
 
 @end
 
@@ -28,6 +34,8 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
     [self creatTitleAndBackBtn];
+    [self createRight];
+    [self createBackGround];
     [self createZXview];
     [self createZXview2];
 }
@@ -36,6 +44,99 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:animated];
+}
+
+-(void)createRight{
+    _rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    [_rightBtn setImage:[UIImage imageNamed:@"问号"] forState:UIControlStateNormal];
+    [_rightBtn addTarget:self action:@selector(rightClick) forControlEvents:UIControlEventTouchUpInside];
+    _rightBtn.contentMode = UIViewContentModeScaleAspectFit;
+    [_headView addSubview:_rightBtn];
+    [_rightBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(_headView.mas_right).offset(-15);
+        make.top.equalTo(_headView.mas_top).offset(24);
+        make.width.equalTo(@(26));
+        make.height.equalTo(@(26));
+    }];
+}
+
+-(void)rightClick{
+    NSLog(@"点击问号");
+    if(_appearLabel == nil){
+        _appearLabel = [[CustomLabel alloc]init];
+        _appearLabel.numberOfLines = 0;
+        _appearLabel.backgroundColor = [UIColor whiteColor];
+        _appearLabel.textColor = UIColorFromHex(0x4db366);
+//        _appearLabel.font = [UIFont systemFontOfSize:13];
+        [self setLabelSpace:_appearLabel withValue: @"新一次，每天凌晨12点刷新昨日全部数据，曲线图中记录的每日额平均值" withFont:[UIFont systemFontOfSize:13]];
+//        _appearLabel.text = @"新一次，每天凌晨12点刷新昨日全部数据，曲线图中记录的每日额平均值";
+        _appearLabel.layer.masksToBounds = YES;
+        _appearLabel.layer.cornerRadius = 5;
+
+        _appearLabel.textInsets = UIEdgeInsetsMake(HDAutoHeight(20),HDAutoWidth(30), HDAutoHeight(20), HDAutoWidth(30));
+    }
+    
+    CGFloat height = [self getSpaceLabelHeight:@"新一次，每天凌晨12点刷新昨日全部数据，曲线图中记录的每日额平均值" withFont:[UIFont systemFontOfSize:13] withWidth:HDAutoWidth(365)];
+    height +=HDAutoHeight(50);
+    _appearLabel.alpha = 0.1;
+    [self.view addSubview:_appearLabel];
+    
+    [_appearLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(@(HDAutoWidth(425)));
+        make.top.equalTo(_headView.mas_bottom);
+        make.right.equalTo(self.view.mas_right).offset(-HDAutoWidth(14));
+        make.height.equalTo(@(height));
+    }];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        _appearLabel.alpha = 1;
+    } completion:^(BOOL finished) {
+        dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC);
+        
+        dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+            [UIView animateWithDuration:1 animations:^{
+                _appearLabel.alpha = 0;
+            }];
+
+        });
+    }];
+    
+}
+
+-(CGFloat)getSpaceLabelHeight:(NSString*)str withFont:(UIFont*)font withWidth:(CGFloat)width {
+    NSMutableParagraphStyle *paraStyle = [[NSMutableParagraphStyle alloc] init];
+    paraStyle.lineBreakMode = NSLineBreakByCharWrapping;
+    paraStyle.alignment = NSTextAlignmentLeft;
+    paraStyle.lineSpacing = HDAutoHeight(13);
+    paraStyle.hyphenationFactor = 1.0;
+    paraStyle.firstLineHeadIndent = 0.0;
+    paraStyle.paragraphSpacingBefore = 0.0;
+    paraStyle.headIndent = 0;
+    paraStyle.tailIndent = 0;
+    NSDictionary *dic = @{NSFontAttributeName:font, NSParagraphStyleAttributeName:paraStyle, NSKernAttributeName:@1.5f
+                          };
+    
+    CGSize size = [str boundingRectWithSize:CGSizeMake(width, [ [ UIScreen mainScreen ] bounds ].size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:dic context:nil].size;
+    return size.height;
+}
+
+-(void)setLabelSpace:(UILabel*)label withValue:(NSString*)str withFont:(UIFont*)font {
+    NSMutableParagraphStyle *paraStyle = [[NSMutableParagraphStyle alloc] init];
+    paraStyle.lineBreakMode = NSLineBreakByCharWrapping;
+    paraStyle.alignment = NSTextAlignmentLeft;
+    paraStyle.lineSpacing = HDAutoHeight(13); //设置行间距
+    paraStyle.hyphenationFactor = 1.0;
+    paraStyle.firstLineHeadIndent = 0.0;
+    paraStyle.paragraphSpacingBefore = 0.0;
+    paraStyle.headIndent = 0;
+    paraStyle.tailIndent = 0;
+    //设置字间距 NSKernAttributeName:@1.5f
+    NSDictionary *dic = @{NSFontAttributeName:font, NSParagraphStyleAttributeName:paraStyle, NSKernAttributeName:@1.5f
+                          };
+    
+    NSAttributedString *attributeStr = [[NSAttributedString alloc] initWithString:str attributes:dic];
+    label.attributedText = attributeStr;
 }
 
 
@@ -124,7 +225,7 @@
 }
 
 -(void)createZXview{
-    MyZView *Zview = [[MyZView alloc]initWithFrame:CGRectMake(0, 64, APP_CONTENT_WIDTH, (APP_CONTENT_HEIGHT-128)/2)];
+    MyZView *Zview = [[MyZView alloc]initWithFrame:CGRectMake(0, 64,APP_CONTENT_WIDTH,HDAutoHeight(550))];
     
     Zview.tag = 201;
     
@@ -161,17 +262,6 @@
     [dataArr addObject:model];
     
     Zview.dataArr = dataArr;
-    
-//    NSMutableArray *arr2 = [NSMutableArray array];
-//    model.Height = 0;
-//    [arr2 addObject:model];
-//    [arr2 addObject:model];
-//    [arr2 addObject:model];
-//    [arr2 addObject:model];
-//    [arr2 addObject:model];
-//    [arr2 addObject:model];
-//    [arr2 addObject:model];
-//    Zview.dataArr2 = arr2;
     
     [self.view addSubview:Zview];
     
@@ -243,24 +333,28 @@
     [dataArr addObject:model];
     
     
-    MyZView *Zview = [[MyZView alloc]initWithFrame:CGRectMake(0, 64 +(APP_CONTENT_HEIGHT-128)/2, APP_CONTENT_WIDTH, (APP_CONTENT_HEIGHT-128)/2) AndData:dataArr];
+    MyZView *Zview = [[MyZView alloc]initWithFrame:CGRectMake(0, 64 +HDAutoHeight(550), APP_CONTENT_WIDTH, HDAutoHeight(550)) AndData:dataArr];
     
     
     Zview.tag = 202;
     
-    //    NSMutableArray *arr2 = [NSMutableArray array];
-    //    model.Height = 0;
-    //    [arr2 addObject:model];
-    //    [arr2 addObject:model];
-    //    [arr2 addObject:model];
-    //    [arr2 addObject:model];
-    //    [arr2 addObject:model];
-    //    [arr2 addObject:model];
-    //    [arr2 addObject:model];
-    //    Zview.dataArr2 = arr2;
-    
     [self.view addSubview:Zview];
     
+}
+
+-(void)createBackGround{
+    _backgroundImageView = [[UIImageView alloc]init];
+    _backgroundImageView.image = [UIImage imageNamed:@"天气背景"];
+    _backgroundImageView.contentMode = UIViewContentModeScaleToFill;
+    
+    [self.view addSubview:_backgroundImageView];
+    
+    [_backgroundImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_headView.mas_bottom);
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.bottom.equalTo(self.view.mas_bottom);
+    }];
 }
 
 

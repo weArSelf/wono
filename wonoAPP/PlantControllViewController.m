@@ -51,7 +51,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 -(void)setBtn{
     
@@ -84,7 +84,7 @@
     [self.view addSubview:_plantTableView];
     [_plantTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left);
-        make.bottom.equalTo(self.view.mas_bottom).offset(-44);
+        make.bottom.equalTo(self.view.mas_bottom);
         make.right.equalTo(self.view.mas_right);
         make.top.equalTo(self.headView.mas_bottom).offset(5);
     }];

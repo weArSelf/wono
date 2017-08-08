@@ -10,9 +10,9 @@
 
 #define BorX HDAutoWidth(40)
 
-#define LineColor [UIColor blueColor]
+#define LineColor UIColorFromHex(0xff8585)
 
-#define LineColor2 [UIColor orangeColor]
+#define LineColor2 UIColorFromHex(0x00479d)
 
 @interface MyZView ()
 
@@ -28,10 +28,11 @@
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
+    
     self = [super initWithFrame:frame];
     if (self) {
         
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
         self.BackgroundView = [[UIScrollView alloc]initWithFrame:self.frame];
         self.BackgroundView.y=0;
         self.BackgroundView.x=0;
@@ -47,7 +48,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
         self.BackgroundView = [[UIScrollView alloc]initWithFrame:self.frame];
         self.BackgroundView.y=0;
         self.BackgroundView.x=0;
@@ -98,7 +99,7 @@
     
     UILabel *pointLabel = [[UILabel alloc]init];
     pointLabel.textAlignment = NSTextAlignmentCenter;
-    pointLabel.textColor = UIColorFromHex(0x727171);
+    pointLabel.textColor = [UIColor whiteColor];
     pointLabel.text = firM.firstBottomStr;
     pointLabel.font = [UIFont systemFontOfSize:11];
     pointLabel.center = orginP;
@@ -147,7 +148,7 @@
         
         UILabel *pointLabel = [[UILabel alloc]init];
         pointLabel.textAlignment = NSTextAlignmentCenter;
-        pointLabel.textColor = UIColorFromHex(0x727171);
+        pointLabel.textColor = [UIColor whiteColor];
         pointLabel.text = nowM.firstBottomStr;
         pointLabel.font = [UIFont systemFontOfSize:11];
         pointLabel.center = nowP;
@@ -209,7 +210,7 @@
     
     UILabel *pointLabel = [[UILabel alloc]init];
     pointLabel.textAlignment = NSTextAlignmentCenter;
-    pointLabel.textColor = UIColorFromHex(0x727171);
+    pointLabel.textColor = [UIColor whiteColor];
     pointLabel.text = firM.firstBottomStr;
     pointLabel.font = [UIFont systemFontOfSize:11];
     pointLabel.center = orginP;
@@ -225,7 +226,7 @@
     
     UILabel *bottomLabel = [[UILabel alloc]init];
     bottomLabel.font = [UIFont systemFontOfSize:12];
-    bottomLabel.textColor = UIColorFromHex(0x727171);
+    bottomLabel.textColor = [UIColor whiteColor];
     bottomLabel.text =firM.lineName;
     bottomLabel.textAlignment = NSTextAlignmentCenter;
     bottomLabel.frame = CGRectMake(BorX-HDAutoWidth(30), self.height -HDAutoHeight(40) , HDAutoWidth(60), HDAutoHeight(40));
@@ -261,7 +262,7 @@
         
         UILabel *pointLabel = [[UILabel alloc]init];
         pointLabel.textAlignment = NSTextAlignmentCenter;
-        pointLabel.textColor = UIColorFromHex(0x727171);
+        pointLabel.textColor =[UIColor whiteColor];
         pointLabel.text = nowM.firstBottomStr;
         pointLabel.font = [UIFont systemFontOfSize:11];
         pointLabel.center = nowP;
@@ -277,7 +278,7 @@
         
         UILabel *bottomLabel = [[UILabel alloc]init];
         bottomLabel.font = [UIFont systemFontOfSize:12];
-        bottomLabel.textColor = UIColorFromHex(0x727171);
+        bottomLabel.textColor = [UIColor whiteColor];
         bottomLabel.text =firM.lineName;
         bottomLabel.textAlignment = NSTextAlignmentCenter;
         bottomLabel.frame = CGRectMake(realX-HDAutoWidth(30), self.height  - HDAutoHeight(40) , HDAutoWidth(60), HDAutoHeight(40));
@@ -323,11 +324,11 @@
     
     UILabel *firLabel = [[UILabel alloc]init];
     firLabel.font = [UIFont systemFontOfSize:13];
-    firLabel.textColor = UIColorFromHex(0x727171);
+    firLabel.textColor = [UIColor whiteColor];
     firLabel.text = @"气温";
     UILabel *secLabel = [[UILabel alloc]init];
     secLabel.font = [UIFont systemFontOfSize:13];
-    secLabel.textColor = UIColorFromHex(0x727171);
+    secLabel.textColor = [UIColor whiteColor];
     secLabel.text = @"地温";
     
     firView.frame = CGRectMake(HDAutoWidth(510), HDAutoHeight(45), HDAutoWidth(20), HDAutoWidth(20));

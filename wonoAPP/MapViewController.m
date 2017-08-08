@@ -16,7 +16,7 @@
 #import <BaiduMapAPI_Utils/BMKUtilsComponent.h>//引入计算工具所有的头文件
 #import <BaiduMapAPI_Radar/BMKRadarComponent.h>//引入周边雷达功能所有的头文件
 #import <BaiduMapAPI_Map/BMKMapView.h>//只引入所需的单个头文件
-#define BMK_KEY @"SsZWbh9PGkXmhZReYQtbLBgFz06TBew8"//百度地图的key
+#define BMK_KEY @"kClOFMdxGkzAgIr6MEfGF8cgGWMjqx02"//百度地图的key
 
 
 @interface MapViewController ()<CLLocationManagerDelegate,BMKGeneralDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,BMKMapViewDelegate,BMKPoiSearchDelegate,BMKSuggestionSearchDelegate,UITableViewDelegate,UITableViewDataSource>

@@ -15,13 +15,16 @@
 
 @property(nonatomic,strong) UILabel *dateLabel;
 @property(nonatomic,strong) UILabel *timeLabel;
-@property(nonatomic,strong) UIImageView *headImageView;
+//@property(nonatomic,strong) UIImageView *headImageView;
 @property(nonatomic,strong) UILabel *nameLabel;
 @property(nonatomic,strong) UILabel *typeLabel;
 @property(nonatomic,strong) UILabel *numberLabel;
 
+@property(nonatomic,strong) UILabel *typeContentLabel;
+
 @end
 
+//蔬菜>西红柿>小西红柿
 
 @implementation PlantCell
 
@@ -109,14 +112,14 @@
     _timeLabel.font = [UIFont systemFontOfSize:14];
     [self.ConView addSubview:_timeLabel];
     
-    _headImageView = [[UIImageView alloc]init];
-    _headImageView.image = [UIImage imageNamed:@"我的"];
-    //设置内部image大小限制 添加圆角等 未完待续
-    _headImageView.contentMode = UIViewContentModeScaleAspectFit;
-    _headImageView.layer.masksToBounds = YES;
-    _headImageView.layer.cornerRadius = 22;
-    
-    [self.ConView addSubview:_headImageView];
+//    _headImageView = [[UIImageView alloc]init];
+//    _headImageView.image = [UIImage imageNamed:@"我的"];
+//    //设置内部image大小限制 添加圆角等 未完待续
+//    _headImageView.contentMode = UIViewContentModeScaleAspectFit;
+//    _headImageView.layer.masksToBounds = YES;
+//    _headImageView.layer.cornerRadius = 22;
+//    
+//    [self.ConView addSubview:_headImageView];
     
     _nameLabel = [[UILabel alloc]init];
     _nameLabel.text = @"黄瓜大棚-张毅";
@@ -148,14 +151,14 @@
         make.width.equalTo(@(60));
         make.height.equalTo(@(HDAutoHeight(33)));
     }];
-    [_headImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_timeLabel.mas_right);
-        make.centerY.equalTo(_ConView.mas_centerY);
-        make.width.equalTo(@(HDAutoWidth(64)));
-        make.height.equalTo(@(HDAutoWidth(64)));
-    }];
+//    [_headImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(_timeLabel.mas_right);
+//        make.centerY.equalTo(_ConView.mas_centerY);
+//        make.width.equalTo(@(HDAutoWidth(64)));
+//        make.height.equalTo(@(HDAutoWidth(64)));
+//    }];
     [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_headImageView.mas_right).offset(15);
+        make.left.equalTo(_timeLabel.mas_right).offset(10);
         make.centerY.equalTo(_dateLabel.mas_centerY);
         make.width.equalTo(@(150));
         make.height.equalTo(@(40));
@@ -174,6 +177,19 @@
     }];
     
     
+    _typeContentLabel = [[UILabel alloc]init];
+    _typeContentLabel.text = @"蔬菜>西红柿>小西红柿";
+    _typeContentLabel.textColor = [UIColor grayColor];
+    _typeContentLabel.font = [UIFont systemFontOfSize:11];
+    _typeContentLabel.textAlignment = NSTextAlignmentRight;
+    [self.ConView addSubview:_typeContentLabel];
+
+    [_typeContentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_nameLabel.mas_centerY);
+        make.height.equalTo(_nameLabel.mas_height);
+        make.width.equalTo(@(HDAutoWidth(400)));
+        make.right.equalTo(_ConView.mas_right).offset(-HDAutoWidth(20));
+    }];
     
 }
 

@@ -8,8 +8,9 @@
 
 #import "EmployeeViewController.h"
 #import "StuffTableViewCell.h"
+#import "AddStuffViewController.h"
 
-@interface EmployeeViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface EmployeeViewController ()<UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
 
 @property (nonatomic,strong)UIView *headView;
 @property (nonatomic,strong)UILabel *titleLabel;
@@ -41,6 +42,10 @@
     [self createTable];
     [self createAddBtn];
 
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [_stuffTableView flashScrollIndicators];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -123,12 +128,28 @@
         changeMark = true;
         _nextBtn.selected = YES;
         [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteClick" object:nil];
+        [self changeBtn];
     }else{
         _nextBtn.selected = NO;
         changeMark = false;
         [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteUnClick" object:nil];
+        [self changeBtnBack];
     }
     
+}
+
+-(void)changeBtn{
+    [_addBtn layoutIfNeeded];
+    [self.view layoutIfNeeded];
+    [UIView animateWithDuration:0.5 animations:^{
+        _addBtn.transform = CGAffineTransformMakeTranslation(0, 200);
+    }];
+    
+}
+-(void)changeBtnBack{
+    [UIView animateWithDuration:0.5 animations:^{
+        _addBtn.transform = CGAffineTransformIdentity;
+    }];
 }
 
 -(void)createTable{
@@ -144,6 +165,9 @@
 //    _stuffTableView.showsVerticalScrollIndicator = NO;
 //    _stuffTableView.scrollEnabled = NO;
     
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapClick)];
+    tap.delegate = self;
+    [_stuffTableView addGestureRecognizer:tap];
     
     
     [self.view addSubview:_stuffTableView];
@@ -152,7 +176,7 @@
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
         make.top.equalTo(self.headView.mas_bottom).offset(5);
-        make.height.equalTo(@(HDAutoHeight(520)));
+        make.bottom.equalTo(self.view.mas_bottom).offset(-HDAutoHeight(200));
     }];
     
     
@@ -160,6 +184,13 @@
     
     
     
+}
+-(void)tapClick{
+    NSLog(@"点击了");
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteUnClick" object:nil];
+    _nextBtn.selected = NO;
+
+    [self changeBtnBack];
 }
 
 -(void)flash{
@@ -239,7 +270,7 @@
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteUnClick" object:nil];
     _nextBtn.selected = NO;
-    
+    [self changeBtnBack];
 }
 
 -(void)createAddBtn{
@@ -256,7 +287,7 @@
         make.centerX.equalTo(self.view.mas_centerX);
         make.width.equalTo(@(HDAutoWidth(520)));
         make.height.equalTo(@(HDAutoHeight(128)));
-        make.top.equalTo(_stuffTableView.mas_bottom).offset(HDAutoHeight(100));
+        make.bottom.equalTo(self.view.mas_bottom).offset(-HDAutoHeight(30));
         
     }];
     
@@ -264,7 +295,17 @@
 
 -(void)addBtnClick{
     NSLog(@"点击添加新员工");
+    AddStuffViewController *addStuff = [[AddStuffViewController alloc]init];
+    [self.navigationController pushViewController:addStuff animated:YES];
 }
 
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    if ([touch.view isKindOfClass:[UITableView class]]) {
+        return YES;
+    }
+    
+    return  NO;
+}
 
 @end

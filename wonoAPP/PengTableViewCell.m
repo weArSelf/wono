@@ -15,10 +15,12 @@
 
 @property(nonatomic,strong) UIButton *deleteBtn;
 
-@property(nonatomic,strong) UIImageView *headImageView;
+
 @property(nonatomic,strong) UILabel *nameLabel;
 
 @property(nonatomic,strong) UILabel *contentLabel;
+
+@property(nonatomic,strong) UILabel *stateLabel;
 
 
 @property (nonatomic,strong) UIButton *hubBtn;
@@ -133,41 +135,43 @@
 }
 
 -(void)createContent{
-    _headImageView = [[UIImageView alloc]init];
-    _headImageView.contentMode = UIViewContentModeScaleAspectFit;
-    _headImageView.image = [UIImage imageNamed:@"选中-农场主"];
-    
-    [_ConView addSubview:_headImageView];
-    
-    [_headImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_ConView.mas_left).offset(HDAutoWidth(40));
-        make.centerY.equalTo(_ConView.mas_centerY);
-        make.width.equalTo(@(HDAutoWidth(70)));
-        make.height.equalTo(@(HDAutoWidth(70)));
-    }];
     
     _nameLabel = [[UILabel alloc]init];
-    _nameLabel.text = @"啊啊";
+    _nameLabel.text = @"大棚1";
     _nameLabel.textColor = UIColorFromHex(0x000000);
     _nameLabel.font = [UIFont systemFontOfSize:13];
     [_ConView addSubview:_nameLabel];
     [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_headImageView.mas_right).offset(HDAutoWidth(20));
+        make.left.equalTo(_ConView.mas_left).offset(HDAutoWidth(35));
         make.centerY.equalTo(_ConView.mas_centerY);
         make.width.equalTo(@(HDAutoWidth(100)));
         make.height.equalTo(@(HDAutoHeight(60)));
     }];
     
     _contentLabel = [[UILabel alloc]init];
-    _contentLabel.text = @"大棚1·大棚2·大棚3";
+    _contentLabel.text = @"TPG92347842";
     _contentLabel.textColor = UIColorFromHex(0x9fa0a0);
     _contentLabel.font = [UIFont systemFontOfSize:13];
+    _contentLabel.textAlignment = NSTextAlignmentCenter;
     [_ConView addSubview:_contentLabel];
     [_contentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_nameLabel.mas_right).offset(HDAutoWidth(40));
+        make.centerX.equalTo(_ConView.mas_centerX);
         make.centerY.equalTo(_ConView.mas_centerY);
-        make.right.equalTo(_ConView.mas_right).offset(HDAutoWidth(20));
+        make.width.equalTo(@(HDAutoWidth(400)));
         make.height.equalTo(@(HDAutoHeight(60)));
+    }];
+    
+    _stateLabel = [[UILabel alloc]init];
+    _stateLabel.text = @"正常";
+    _stateLabel.textColor = UIColorFromHex(0x000000);
+    _stateLabel.font = [UIFont systemFontOfSize:13];
+    _stateLabel.textAlignment = NSTextAlignmentRight;
+    [_ConView addSubview:_stateLabel];
+    [_stateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_ConView.mas_centerY);
+        make.right.equalTo(_ConView.mas_right).offset(-HDAutoWidth(35));
+        make.height.equalTo(@(HDAutoHeight(60)));
+        make.width.equalTo(@(HDAutoWidth(100)));
     }];
     
     

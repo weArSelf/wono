@@ -167,18 +167,26 @@
 
 -(void)createDetail{
     
+    NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@"最低值=          °C"];
+    NSRange range1=[[title string]rangeOfString:@"         "];
+    [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range1];
+    NSMutableAttributedString *title2 = [[NSMutableAttributedString alloc] initWithString:@"最高值=          °C"];
+    NSRange range2=[[title2 string]rangeOfString:@"         "];
+//    NSRange titleRange = {0,[title length]};
+    [title2 addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range2];
+    
     UILabel *tempLabel = [self myLabel];
     tempLabel.text = @"气温:";
     
     UILabel *tempMinLabel = [self myLabel2];
-    tempMinLabel.text = @"最低值=          °C";
+    tempMinLabel.attributedText = title;
     tempMinLabel.tag = 101;
     UITapGestureRecognizer *labelTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelClick:)];
     [tempMinLabel addGestureRecognizer:labelTapGestureRecognizer];
     tempMinLabel.userInteractionEnabled = YES; // 可以理解为设置label可被点击
     
     UILabel *tempMaxLabel = [self myLabel2];
-    tempMaxLabel.text = @"最高值=          °C";
+    tempMaxLabel.attributedText =title2;
 //    tempMaxLabel.textAlignment = NSTextAlignmentRight;
     tempMaxLabel.tag = 102;
     UITapGestureRecognizer *labelTapGestureRecognizer2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelClick:)];
@@ -215,14 +223,14 @@
     tempLabel2.text = @"地温:";
     
     UILabel *tempMinLabel2 = [self myLabel2];
-    tempMinLabel2.text = @"最低值=          °C";
+    tempMinLabel2.attributedText =title;
     tempMinLabel2.tag = 201;
     UITapGestureRecognizer *labelTapGestureRecognizer3 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelClick:)];
     [tempMinLabel2 addGestureRecognizer:labelTapGestureRecognizer3];
     tempMinLabel2.userInteractionEnabled = YES; // 可以理解为设置label可被点击
     
     UILabel *tempMaxLabel2 = [self myLabel2];
-    tempMaxLabel2.text = @"最高值=          °C";
+    tempMaxLabel2.attributedText = title2;
 //    tempMaxLabel2.textAlignment = NSTextAlignmentRight;
     tempMaxLabel2.tag = 202;
     UITapGestureRecognizer *labelTapGestureRecognizer4 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelClick:)];
@@ -259,14 +267,14 @@
     tempLabel3.text = @"气湿:";
     
     UILabel *tempMinLabel3 = [self myLabel2];
-    tempMinLabel3.text = @"最低值=          °C";
+    tempMinLabel3.attributedText = title;
     tempMinLabel3.tag = 301;
     UITapGestureRecognizer *labelTapGestureRecognizer5 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelClick:)];
     [tempMinLabel3 addGestureRecognizer:labelTapGestureRecognizer5];
     tempMinLabel3.userInteractionEnabled = YES; // 可以理解为设置label可被点击
     
     UILabel *tempMaxLabel3 = [self myLabel2];
-    tempMaxLabel3.text = @"最高值=          °C";
+    tempMaxLabel3.attributedText =title2;
 //    tempMaxLabel3.textAlignment = NSTextAlignmentRight;
     tempMaxLabel3.tag = 302;
     UITapGestureRecognizer *labelTapGestureRecognizer6 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelClick:)];
@@ -303,14 +311,14 @@
     tempLabel4.text = @"地湿:";
     
     UILabel *tempMinLabel4 = [self myLabel2];
-    tempMinLabel4.text = @"最低值=          °C";
+    tempMinLabel4.attributedText = title;
     tempMinLabel4.tag = 401;
     UITapGestureRecognizer *labelTapGestureRecognizer7 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelClick:)];
     [tempMinLabel4 addGestureRecognizer:labelTapGestureRecognizer7];
     tempMinLabel4.userInteractionEnabled = YES; // 可以理解为设置label可被点击
     
     UILabel *tempMaxLabel4 = [self myLabel2];
-    tempMaxLabel4.text = @"最高值=          °C";
+    tempMaxLabel4.attributedText = title2;
 //    tempMaxLabel4.textAlignment = NSTextAlignmentRight;
     tempMaxLabel4.tag = 402;
     UITapGestureRecognizer *labelTapGestureRecognizer8 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelClick:)];
@@ -358,9 +366,15 @@
         NSString *str2 = label.text;
         str2 = [str2 substringToIndex:8];
         
-        NSString *result = [NSString stringWithFormat:@"%@%@°C",str2,str];
+        NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
         
-        label.text = result;
+        NSRange range = NSMakeRange(str2.length-2, str.length+4);
+        
+        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
+        [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+        
+        
+        label.attributedText = title;
     }cancel:^{
         //your code
         NSLog(@"取消");
@@ -414,7 +428,7 @@
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
         make.top.equalTo(_selectLabel.mas_bottom).offset(HDAutoHeight(10));
-        make.bottom.equalTo(self.view.mas_bottom).offset(-64);
+        make.bottom.equalTo(self.view.mas_bottom);
     }];
     
     

@@ -17,7 +17,7 @@
 
 #import "BaseNavViewController.h"
 
-#define BMK_KEY @"SsZWbh9PGkXmhZReYQtbLBgFz06TBew8"//百度地图的key
+#define BMK_KEY @"kClOFMdxGkzAgIr6MEfGF8cgGWMjqx02"//百度地图的key
 #import <BaiduMapAPI_Base/BMKBaseComponent.h>//引入base相关所有的头文件
 
 @interface AppDelegate ()<UIApplicationDelegate,BMKGeneralDelegate>

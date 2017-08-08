@@ -15,6 +15,8 @@
 #import "MineSettingViewController.h"
 #import "MineDataViewController.h"
 #import "PengViewController.h"
+#import "MyFarmViewController.h"
+#import "MyCollectionViewController.h"
 
 @interface MineViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -167,6 +169,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     switch (indexPath.row) {
+        case 0:{
+            MyCollectionViewController *myVc = [[MyCollectionViewController alloc]init];
+            myVc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:myVc animated:YES];
+            break;
+        }
         case 1:{
             EmployeeViewController *empVc = [[EmployeeViewController alloc]init];
             empVc.hidesBottomBarWhenPushed = YES;
@@ -179,6 +187,14 @@
             [self.navigationController pushViewController:pengVc animated:YES];
 //            CallBackViewController *CallVc = [[CallBackViewController alloc]init];
 //            [self.navigationController pushViewController:CallVc animated:YES];
+            break;
+        }
+        case 3:{
+            MyFarmViewController *MyVc = [[MyFarmViewController alloc]init];
+//            MyVc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:MyVc animated:YES];
+            //            CallBackViewController *CallVc = [[CallBackViewController alloc]init];
+            //            [self.navigationController pushViewController:CallVc animated:YES];
             break;
         }
         case 4:{
