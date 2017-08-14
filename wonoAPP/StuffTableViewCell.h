@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SearchModel.h"
 
 @interface StuffTableViewCell : UITableViewCell
 
 @property (nonatomic,copy) void(^cellClickBlock)(StuffTableViewCell *cell);
 
 @property (nonatomic) BOOL changeMark;
+
+@property (nonatomic,strong) SearchModel *searchModel;
 
 @end

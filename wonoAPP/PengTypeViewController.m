@@ -1,43 +1,38 @@
 //
-//  MineSettingViewController.m
+//  PengTypeViewController.m
 //  wonoAPP
 //
-//  Created by IF on 2017/8/2.
+//  Created by IF on 2017/8/10.
 //  Copyright © 2017年 IF. All rights reserved.
 //
 
-#import "MineSettingViewController.h"
+#import "PengTypeViewController.h"
+#import "PengAddViewController.h"
 
-#import "AboutViewController.h"
-#import "CallBackViewController.h"
-#import "ChangePswViewController.h"
-#import "LoginViewController.h"
-
-@interface MineSettingViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface PengTypeViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic,strong)UIView *headView;
 @property (nonatomic,strong)UILabel *titleLabel;
 @property (nonatomic,strong)UIButton *backBtn;
 
-@property (nonatomic,strong)UIButton *nextBtn;
-
 @property (nonatomic,strong) UITableView *contentTableView;
 
 @end
 
-@implementation MineSettingViewController{
-    NSArray *dataArr;
+@implementation PengTypeViewController{
+     NSArray *dataArr;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self creatTitleAndBackBtn];
-    
     self.view.backgroundColor = [UIColor whiteColor];
-    dataArr = [NSArray arrayWithObjects:@"关于沃农",@"意见反馈",@"修改密码",@"注销账号",nil];
-    [self createTable];
     
+    dataArr = [NSArray arrayWithObjects:@"蔬菜",@"花卉",@"水果",@"橘子",@"🍊",nil];
+    
+    [self creatTitleAndBackBtn];
+    [self createTable];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -46,7 +41,6 @@
     [self.navigationController setNavigationBarHidden:YES animated:animated];
 }
 
-
 -(void)creatTitleAndBackBtn{
     
     _headView = [[UIView alloc]init];
@@ -54,7 +48,7 @@
     _headView.alpha = 0.8;
     [self.view addSubview:_headView];
     _titleLabel = [[UILabel alloc]init];
-    _titleLabel.text = @"设置";
+    _titleLabel.text = @"选择大棚品种";
     _titleLabel.textColor = [UIColor whiteColor];
     _titleLabel.font = [UIFont systemFontOfSize:18];
     _titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -84,19 +78,25 @@
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(_headView.mas_centerX);
         make.centerY.equalTo(_backBtn.mas_centerY);
-        make.width.equalTo(@(100));
+        make.width.equalTo(@(300));
         make.height.equalTo(@(40));
     }];
 }
 
-
 -(void)BackClick{
     NSLog(@"点击返回");
     [self.navigationController popViewControllerAnimated:YES];
+    
+//    for (UIViewController *controller in self.navigationController.viewControllers) {
+//        if ([controller isKindOfClass:[PengAddViewController class]]) {
+//            PengAddViewController *A =(PengAddViewController *)controller;
+//            [self.navigationController popToViewController:A animated:YES];
+//        }
+//    }
+    
+    
+    
 }
-
-
-
 
 
 
@@ -111,14 +111,14 @@
     _contentTableView.backgroundColor = [UIColor clearColor];
     //    _plantTableView.frame = self.view.frame;
     _contentTableView.showsVerticalScrollIndicator = NO;
-    _contentTableView.scrollEnabled = NO;
+//    _contentTableView.scrollEnabled = NO;
     [self.view addSubview:_contentTableView];
     
     [_contentTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
         make.top.equalTo(self.headView.mas_bottom).offset(5);
-        make.bottom.equalTo(self.view.mas_bottom).offset(-HDAutoHeight(200));
+        make.bottom.equalTo(self.view.mas_bottom);
     }];
     
 }
@@ -176,54 +176,9 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    switch (indexPath.row) {
-        case 0:{
-            AboutViewController *about = [[AboutViewController alloc]init];
-            [self.navigationController pushViewController:about animated:YES];
-            
-            break;
-        }
-        case 1:{
-            CallBackViewController *CallVc = [[CallBackViewController alloc]init];
-            [self.navigationController pushViewController:CallVc animated:YES];
-            break;
-        }
-        case 2:{
-            ChangePswViewController *ChangeVc = [[ChangePswViewController alloc]init];
-            [self.navigationController pushViewController:ChangeVc animated:YES];
-            break;
-        }
-        case 3:{
-//             [[NSUserDefaults standardUserDefaults]objectForKey:@"loginMark"];
-            
-            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"是否确认注销" preferredStyle:UIAlertControllerStyleAlert];
-             UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                 [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"loginMark"];
-                 
-                 LoginViewController *login = [[LoginViewController alloc]init];
-                 UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:login];
-                 nav.navigationBarHidden = YES;
-                 
-                 appDelegate.window.rootViewController = nav;
-
-             }];
-            
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                NSLog(@"点击取消");
-            }];
-            
-            [alertC addAction:cancelAction];
-            [alertC addAction:confirmAction];
-            [self presentViewController:alertC animated:YES completion:nil];
-            
-            
-            break;
-        }
-            
-        default:
-            break;
-    }
     
+    PengTypeViewController *pengType = [[PengTypeViewController alloc]init];
+    [self.navigationController pushViewController:pengType animated:YES];
     
     NSLog(@"%ld",(long)indexPath.row);
 }

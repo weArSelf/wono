@@ -58,7 +58,7 @@
         count --;
         [self setTitle:str forState:UIControlStateNormal];
         self.enabled = NO;
-        [self setBackgroundColor:[UIColor colorWithRed:163.0/255.0 green:163.0/255.0 blue:163.0/255.0 alpha:1.0]];
+        [self setBackgroundColor:[UIColor clearColor]];
     }
     else
     {
@@ -66,7 +66,7 @@
         timer = nil;
         [self setTitle:@"获取验证码" forState:UIControlStateNormal];
         self.enabled = YES;
-        [self setBackgroundColor:[UIColor lightGrayColor]];
+        [self setBackgroundColor:[UIColor clearColor]];
     }
 }
 

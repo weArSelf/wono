@@ -10,6 +10,7 @@
 #import "StuffTableViewCell.h"
 #import "AddStuffViewController.h"
 
+
 @interface EmployeeViewController ()<UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
 
 @property (nonatomic,strong)UIView *headView;

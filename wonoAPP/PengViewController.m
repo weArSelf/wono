@@ -10,6 +10,8 @@
 
 #import "PengTableViewCell.h"
 
+#import "PengAddViewController.h"
+
 @interface PengViewController ()<UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
 
 @property (nonatomic,strong)UIView *headView;
@@ -283,6 +285,8 @@
 
 -(void)addBtnClick{
     NSLog(@"点击添加新员工");
+    PengAddViewController *pengAdd = [[PengAddViewController alloc]init];
+    [self.navigationController pushViewController:pengAdd animated:YES];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {

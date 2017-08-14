@@ -69,7 +69,7 @@
         _appearLabel.backgroundColor = [UIColor whiteColor];
         _appearLabel.textColor = UIColorFromHex(0x4db366);
 //        _appearLabel.font = [UIFont systemFontOfSize:13];
-        [self setLabelSpace:_appearLabel withValue: @"新一次，每天凌晨12点刷新昨日全部数据，曲线图中记录的每日额平均值" withFont:[UIFont systemFontOfSize:13]];
+        [self setLabelSpace:_appearLabel withValue: @"最近记录的为近十次的记录 （每隔15分钟记录一次），每天凌晨12点刷新昨日全部数据，曲线中记录的是每日气温（气温、地温、地湿）的平均值" withFont:[UIFont systemFontOfSize:13]];
 //        _appearLabel.text = @"新一次，每天凌晨12点刷新昨日全部数据，曲线图中记录的每日额平均值";
         _appearLabel.layer.masksToBounds = YES;
         _appearLabel.layer.cornerRadius = 5;
@@ -77,7 +77,7 @@
         _appearLabel.textInsets = UIEdgeInsetsMake(HDAutoHeight(20),HDAutoWidth(30), HDAutoHeight(20), HDAutoWidth(30));
     }
     
-    CGFloat height = [self getSpaceLabelHeight:@"新一次，每天凌晨12点刷新昨日全部数据，曲线图中记录的每日额平均值" withFont:[UIFont systemFontOfSize:13] withWidth:HDAutoWidth(365)];
+    CGFloat height = [self getSpaceLabelHeight:@"最近记录的为近十次的记录 （每隔15分钟记录一次），每天凌晨12点刷新昨日全部数据，曲线中记录的是每日气温（气温、地温、地湿）的平均值" withFont:[UIFont systemFontOfSize:13] withWidth:HDAutoWidth(365)];
     height +=HDAutoHeight(50);
     _appearLabel.alpha = 0.1;
     [self.view addSubview:_appearLabel];

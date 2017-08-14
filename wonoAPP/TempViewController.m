@@ -58,6 +58,9 @@
 
 @property (nonatomic,strong) UIButton *hubBtn;
 
+@property (nonatomic,strong) UILabel *zaihaiLabel;
+
+
 @end
 
 @implementation TempViewController{
@@ -140,7 +143,7 @@
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
         make.top.equalTo(self.view.mas_top).offset(64);
-        make.height.equalTo(@(HDAutoHeight(150)));
+        make.height.equalTo(@(HDAutoHeight(202)));
     }];
     _headView.backgroundColor = [UIColor whiteColor];
     [_headView layoutIfNeeded];
@@ -213,7 +216,7 @@
         make.left.equalTo(_posiLabel.mas_left);
         make.top.equalTo(_posiLabel.mas_bottom).offset(HDAutoHeight(20));
         make.width.equalTo(@(HDAutoWidth(80)));
-        make.bottom.equalTo(_headView.mas_bottom).offset(-HDAutoHeight(16));
+        make.height.equalTo(@(HDAutoHeight(40)));
     }];
     [_weatherLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(_tempLabel.mas_centerY);
@@ -260,6 +263,21 @@
         make.right.equalTo(_moreImgBtn.mas_left);
         make.bottom.equalTo(_qualityLabel.mas_bottom);
     }];
+    
+    _zaihaiLabel = [[UILabel alloc]init];
+    _zaihaiLabel.text = @"...";
+    _zaihaiLabel.font = [UIFont systemFontOfSize:13];
+    _zaihaiLabel.textColor = [UIColor whiteColor];
+    _zaihaiLabel.numberOfLines = 0;
+    [_headView addSubview:_zaihaiLabel];
+    
+    [_zaihaiLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_tempLabel.mas_left);
+        make.top.equalTo(_tempLabel.mas_bottom).offset(HDAutoHeight(20));
+        make.right.equalTo(_headView.mas_right).offset(-HDAutoWidth(20));
+        make.bottom.equalTo(_headView.mas_bottom).offset(-HDAutoHeight(10));
+    }];
+
 
 }
 
@@ -515,7 +533,7 @@
         
         [self getTemp];
         [self getQuality];
-        
+        [self getAlert];
         //保存位置信息到模型
 //        [self.userLocationInfoModel saveLocationInfoWithBMKReverseGeoCodeResult:result];
         
@@ -558,9 +576,17 @@
                                                        dispatch_async(dispatch_get_main_queue(), ^{
                                                            loadMark++;
                                                            if(loadMark == 2){
+                                                               [_headView layoutIfNeeded];
+                                                               [self.view layoutIfNeeded];
+                                                               
                                                                UIImage *image = [UIImage imageNamed:@"晴天图"];
                                                                image = [image TransformtoSize:_headView.size];
-                                                               _headView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"晴天图"]];
+                                                               UIImageView *imageView = [[UIImageView alloc]init];
+                                                               imageView.image = image;
+                                                               imageView.contentMode = UIViewContentModeScaleAspectFill;
+                                                               imageView.frame = CGRectMake(0, 0, _headView.width, _headView.height);
+                                                               [_headView addSubview:imageView];
+                                                               [_headView sendSubviewToBack:imageView];
                                                                [MBProgressHUD hideHUDForView:_headView];
                                                                [self createHubBtn];
                                                            }
@@ -623,9 +649,18 @@
                                                        dispatch_async(dispatch_get_main_queue(), ^{
                                                            loadMark++;
                                                            if(loadMark == 2){
+                                                               [_headView layoutIfNeeded];
+                                                               [self.view layoutIfNeeded];
                                                                UIImage *image = [UIImage imageNamed:@"晴天图"];
                                                                image = [image TransformtoSize:_headView.size];
-                                                               _headView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"晴天图"]];
+                                                            
+                                                               UIImageView *imageView = [[UIImageView alloc]init];
+                                                               imageView.image = image;
+                                                               imageView.contentMode = UIViewContentModeScaleAspectFill;
+                                                               imageView.frame = CGRectMake(0, 0, _headView.width, _headView.height);
+                                                               [_headView addSubview:imageView];
+                                                             [_headView sendSubviewToBack:imageView];
+                                                               
                                                                [self createHubBtn];
                                                                [MBProgressHUD hideHUDForView:_headView];
                                                               
@@ -653,6 +688,52 @@
     [task resume];
 }
 
+-(void)getAlert{
+    
+    NSString *appcode = TempCode;
+    NSString *host = @"http://aliv8.data.moji.com";
+    NSString *path = @"/whapi/json/aliweather/alert";
+    NSString *method = @"POST";
+    NSString *querys = @"";
+    NSString *url = [NSString stringWithFormat:@"%@%@%@",  host,  path , querys];
+//    NSString *bodys = @"lat=39.91488908&lon=116.40387397&token=d01246ac6284b5a591f875173e9e2a18";
+    NSString *bodys = [NSString stringWithFormat:@"lat=%f&lon=%f&token=d01246ac6284b5a591f875173e9e2a18",needLocate.latitude,needLocate.longitude];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString: url]  cachePolicy:1  timeoutInterval:  5];
+    request.HTTPMethod  =  method;
+    [request addValue:  [NSString  stringWithFormat:@"APPCODE %@" ,  appcode]  forHTTPHeaderField:  @"Authorization"];
+    [request addValue: @"application/x-www-form-urlencoded; charset=UTF-8" forHTTPHeaderField: @"Content-Type"];
+    NSData *data = [bodys dataUsingEncoding: NSUTF8StringEncoding];
+    [request setHTTPBody: data];
+    NSURLSession *requestSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    NSURLSessionDataTask *task = [requestSession dataTaskWithRequest:request
+                                                   completionHandler:^(NSData * _Nullable body , NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                       NSLog(@"Response object: %@" , response);
+                                                       NSString *bodyString = [[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding];
+                                                       
+                                                       id obj = [NSJSONSerialization JSONObjectWithData:body options:0 error:NULL];
+                                                       
+                                                       NSDictionary *dict = obj[@"data"];
+
+                                                       NSArray *alertDic = dict[@"alert"];
+                                                       NSDictionary *newDic = alertDic[0];
+                                                       
+                                                       NSString *content = newDic[@"title"];
+                                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                                           if(content == nil){
+                                                               _zaihaiLabel.text = @"本地暂无气象灾害预警";
+                                                           }else{
+                                                               _zaihaiLabel.text = content;
+                                                           }
+                                                        });
+                                                       
+                                                       //打印应答中的body
+                                                       NSLog(@"Response body: %@" , bodyString);
+                                                   }];
+    
+    [task resume];
+    
+}
 
 
 

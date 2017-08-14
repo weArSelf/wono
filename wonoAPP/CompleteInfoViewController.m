@@ -19,9 +19,15 @@
 #import "WSDatePickerView.h"
 #import "MapViewController.h"
 
+
+
 @interface CompleteInfoViewController ()<UITextFieldDelegate,MyLocationDelegate>
 
 @property (nonatomic,strong)BaseTabBarController *base;
+
+@property (nonatomic,strong)UIView *headView;
+@property (nonatomic,strong)UILabel *titleLabel2;
+@property (nonatomic,strong)UIButton *backBtn;
 
 @property (nonatomic,strong)UILabel *titleLabel;
 @property (nonatomic,strong)UIButton *farmerBtn;
@@ -56,12 +62,27 @@
 
 @implementation CompleteInfoViewController{
     CGFloat height;
+    CompleteModel *model;
+    
+    NSString *orgName;
+    NSString *orgfarm;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    orgName = @"";
+    orgfarm = @"";
+    
+    model = [[CompleteModel alloc]init];
+    
+    model.type = 1;
+    
+    model.sex = -1;
+    
+    [self creatTitleAndBackBtn];
     [self createTitleAndBtn];
     [self createLabels];
     [self creatConfiemBtn];
@@ -90,8 +111,8 @@
     [_farmerBtn setImage:[UIImage imageNamed:@"未选中-农场主"] forState:UIControlStateNormal];
     [_farmerBtn setImage:[UIImage imageNamed:@"选中-农场主"] forState:UIControlStateSelected];
     _farmerBtn.imageView.contentMode=UIViewContentModeScaleAspectFit;
-    [_farmerBtn setTitle:@"农场主" forState:UIControlStateNormal];
-    [_farmerBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//    [_farmerBtn setTitle:@"农场主" forState:UIControlStateNormal];
+//    [_farmerBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     
     _farmerBtn.selected = YES;
     
@@ -104,8 +125,8 @@
     [_employBtn setImage:[UIImage imageNamed:@"未选中-员工"] forState:UIControlStateNormal];
      [_employBtn setImage:[UIImage imageNamed:@"选中-员工"] forState:UIControlStateSelected];
     _employBtn.imageView.contentMode=UIViewContentModeScaleAspectFit;
-    [_employBtn setTitle:@"员工" forState:UIControlStateNormal];
-    [_employBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//    [_employBtn setTitle:@"员工" forState:UIControlStateNormal];
+//    [_employBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     
     
     [self.view addSubview:_employBtn];
@@ -113,7 +134,7 @@
     
     
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view.mas_top).offset(34);
+        make.top.equalTo(_headView.mas_bottom).offset(HDAutoHeight(20));
         make.height.equalTo(@(30));
         make.centerX.equalTo(self.view.mas_centerX);
         make.width.equalTo(@(100));
@@ -149,13 +170,13 @@
     
     [_FnameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(_farmerBtn.mas_centerX);
-        make.top.equalTo(_farmerBtn.mas_bottom).offset(-5);
+        make.top.equalTo(_farmerBtn.mas_bottom);
         make.width.equalTo(@(100));
         make.height.equalTo(@(40));
     }];
     [_YnameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(_employBtn.mas_centerX);
-        make.top.equalTo(_employBtn.mas_bottom).offset(-5);
+        make.top.equalTo(_employBtn.mas_bottom);
         make.width.equalTo(@(100));
         make.height.equalTo(@(40));
 
@@ -182,14 +203,42 @@
 
 -(void)farmerBtnClick{
     NSLog(@"点击农场主");
+    
+    model.type = 1;
     _farmerBtn.selected = YES;
     _employBtn.selected = NO;
+    
+    [_farmTextField resignFirstResponder];
+    [_nameTextField resignFirstResponder];
+    
+    
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        _farmLabel.alpha = 1;
+        _farmTextField.alpha = 1;
+        _addressLabel.alpha = 1;
+        _addressView.alpha = 1;
+    }];
 }
 
 -(void)employBtnClick{
     NSLog(@"点击员工");
+    
+    model.type = 2;
     _farmerBtn.selected = NO;
     _employBtn.selected = YES;
+    
+    [_farmTextField resignFirstResponder];
+    [_nameTextField resignFirstResponder];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        _farmLabel.alpha = 0;
+        _farmTextField.alpha = 0;
+        _addressLabel.alpha = 0;
+        _addressView.alpha = 0;
+    }];
+    
+    
 }
 
 -(void)createLabels{
@@ -290,14 +339,62 @@
 -(void)confirmBtnClick{
     NSLog(@"点击开始使用");
     
-    self.base = [[BaseTabBarController alloc]init];
-    appDelegate.window.rootViewController = self.base;
+    model.name = _nameTextField.text;
+    model.farmName = _farmTextField.text;
+    
+    if([model.name isEqualToString:@""]){
+        [MBProgressHUD showSuccess:@"请填写姓名"];
+        return;
+    }
+    if(model.sex == -1){
+        [MBProgressHUD showSuccess:@"请选择性别"];
+        return;
+    }
+    if(model.birth == nil){
+        [MBProgressHUD showSuccess:@"请选择出生年月"];
+        return;
+    }
+    if(model.type == 1){
+        if([model.farmName isEqualToString:@""]){
+            [MBProgressHUD showSuccess:@"请填写农场名"];
+            return;
+        }
+        
+        
+        //判断农场地址相关内容！！！！！
+        
+
+    }
+    
+    [[InterfaceSingleton shareInstance].interfaceModel completeUserInfoWthModel:model WithCallBack:^(int state, id data, NSString *msg) {
+       
+        
+        if(state == 2000){
+            [MBProgressHUD showSuccess:@"完善信息成功"];
+            BaseTabBarController *base = [[BaseTabBarController alloc]init];
+            appDelegate.window.rootViewController = base;
+            
+            [[NSUserDefaults standardUserDefaults]setObject:@"login" forKey:@"loginMark"];
+            
+        }else{
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
     
     
     
     
     
     
+   
+    
+    
+    
+    
+    
+//    self.base = [[BaseTabBarController alloc]init];
+//    appDelegate.window.rootViewController = self.base;
     
 }
 
@@ -310,10 +407,18 @@
     _nameTextField.layer.borderColor = [UIColor lightGrayColor].CGColor;
     _nameTextField.layer.borderWidth = 1;
     _nameTextField.layer.cornerRadius = 5;
-    _nameTextField.textAlignment = NSTextAlignmentCenter;
+//    _nameTextField.textAlignment = NSTextAlignmentCenter;
+    _nameTextField.leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 6, 0)];
+    //设置显示模式为永远显示(默认不显示)
+    _nameTextField.leftViewMode = UITextFieldViewModeAlways;
     _nameTextField.font = [UIFont systemFontOfSize:14];
     _nameTextField.returnKeyType = UIReturnKeyDone;
     _nameTextField.delegate = self;
+    
+    [_nameTextField addTarget:self
+                        action:@selector(textFieldEditChanged:)
+              forControlEvents:UIControlEventEditingChanged];
+    
     [self.view addSubview:_nameTextField];
     
     _farmTextField = [[UITextField alloc]init];
@@ -323,7 +428,15 @@
     _farmTextField.layer.borderColor = [UIColor lightGrayColor].CGColor;
     _farmTextField.layer.borderWidth = 1;
     _farmTextField.layer.cornerRadius = 5;
-    _farmTextField.textAlignment = NSTextAlignmentCenter;
+//    _farmTextField.textAlignment = NSTextAlignmentCenter;
+    
+    [_farmTextField addTarget:self
+                       action:@selector(textFieldEditChanged:)
+             forControlEvents:UIControlEventEditingChanged];
+    
+    _farmTextField.leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 6, 0)];
+    //设置显示模式为永远显示(默认不显示)
+    _farmTextField.leftViewMode = UITextFieldViewModeAlways;
     _farmTextField.font = [UIFont systemFontOfSize:14];
     _farmTextField.returnKeyType = UIReturnKeyDone;
     _farmTextField.delegate = self;
@@ -377,11 +490,15 @@
     UIAlertAction *maleAction = [UIAlertAction actionWithTitle:@"男" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSLog(@"男");
         _sexSelectLabel.text = @"男";
+        
+        model.sex = 1;
     }];
     [alertController addAction:maleAction];
     UIAlertAction *femaleAction = [UIAlertAction actionWithTitle:@"女" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSLog(@"女");
         _sexSelectLabel.text = @"女";
+        
+        model.sex = 2;
     }];
     [alertController addAction:femaleAction];
     [self presentViewController:alertController animated:YES completion:nil];
@@ -426,8 +543,12 @@
 -(void)dateClick{
     NSLog(@"选择日期");
     _datepicker = [[WSDatePickerView alloc] initWithDateStyle:DateStyleShowYearMonthDay CompleteBlock:^(NSDate *startDate) {
+        
         NSString *date = [startDate stringWithFormat:@"yyyy-MM-dd"];
         NSLog(@"时间： %@",date);
+        
+        model.birth = date;
+        
         _selDateLabel.text = date;
          _SelDate = startDate;
         
@@ -521,13 +642,20 @@
 
 - (void)keyboardWillShow:(NSNotification *)aNotification
 {
+    
+    if (_nameTextField.isFirstResponder) {
+        return;
+    }
+    [_addressLabel layoutIfNeeded];
+    [self.view layoutIfNeeded];
     NSDictionary *userInfo = [aNotification userInfo];
     NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
     CGRect keyboardRect = [aValue CGRectValue];
     height = keyboardRect.size.height;
+    CGFloat realHeight = height - (APP_CONTENT_HEIGHT - _addressLabel.y);
 //    float raiseHeight =  CGRectGetMaxY(self.farmLabel.frame)-height;
     [UIView animateWithDuration:0.3 animations:^{
-        self.view.transform =CGAffineTransformMakeTranslation(0, -60);
+        self.view.transform =CGAffineTransformMakeTranslation(0, -realHeight);
         
     } completion:^(BOOL finished) {
         
@@ -554,5 +682,109 @@
     
     NSLog(@"bbb");
 }
+
+
+
+-(void)creatTitleAndBackBtn{
+    
+    _headView = [[UIView alloc]init];
+    _headView.backgroundColor = UIColorFromHex(0x3fb36f);
+    _headView.alpha = 0.8;
+    [self.view addSubview:_headView];
+    _titleLabel2 = [[UILabel alloc]init];
+    _titleLabel2.text = @"完善信息";
+    _titleLabel2.textColor = [UIColor whiteColor];
+    _titleLabel2.font = [UIFont systemFontOfSize:18];
+    _titleLabel2.textAlignment = NSTextAlignmentCenter;
+    [_headView addSubview:_titleLabel2];
+    
+    _backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_backBtn setImage:[UIImage imageNamed:@"0-返回"] forState:UIControlStateNormal];
+    [_backBtn addTarget:self action:@selector(BackClick) forControlEvents:UIControlEventTouchUpInside];
+    _backBtn.contentMode = UIViewContentModeScaleAspectFit;
+    //    _backBtn.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+    [_headView addSubview:_backBtn];
+    
+    [_headView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left);
+        make.top.equalTo(self.view.mas_top);
+        make.right.equalTo(self.view.mas_right);
+        make.height.equalTo(@(64));
+    }];
+    
+    [_backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_headView.mas_left).offset(15);
+        make.top.equalTo(_headView.mas_top).offset(24);
+        make.width.equalTo(@(26));
+        make.height.equalTo(@(26));
+    }];
+    
+    [_titleLabel2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(_headView.mas_centerX);
+        make.centerY.equalTo(_backBtn.mas_centerY);
+        make.width.equalTo(@(100));
+        make.height.equalTo(@(40));
+    }];
+}
+
+-(void)BackClick{
+    NSLog(@"点击返回");
+    
+    [self.navigationController popToRootViewControllerAnimated:YES];
+//    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+    NSString *str = textField.text;
+    
+    if (textField == _nameTextField) {
+        if(str.length>6){
+            [MBProgressHUD showSuccess:@"姓名不得超过6个字符"];
+            NSString *res = [str substringWithRange:NSMakeRange(0, 6)];
+            _nameTextField.text = res;
+        }
+    }else if (textField == _farmTextField){
+        
+        if(str.length>15){
+            [MBProgressHUD showSuccess:@"农场名不得超过15个字符"];
+            NSString *res = [str substringWithRange:NSMakeRange(0, 15)];
+            _farmTextField.text = res;
+        }
+        
+    }
+
+    
+}
+
+- (void)textFieldEditChanged:(UITextField *)textField
+{
+    NSLog(@"输入改变");
+//    
+//    NSString *content = textField.text;
+//    
+//    if(textField == _nameTextField){
+//        
+//        if(content.length>6){
+//            [MBProgressHUD showSuccess:@"姓名不得超过6个字符"];
+//            _nameTextField.text = orgName;
+//        }else{
+//            orgName = _nameTextField.text;
+//        }
+//        
+//    }else if (textField == _farmTextField){
+//        
+//        if(content.length>15){
+//            [MBProgressHUD showSuccess:@"农场名不得超过15个字符"];
+//            _farmTextField.text = orgfarm;
+//        }else{
+//            orgfarm = _farmTextField.text;
+//        }
+//        
+//    }
+    
+}
+
+
 
 @end

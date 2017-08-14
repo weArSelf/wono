@@ -8,6 +8,7 @@
 
 #import "SelectionViewController.h"
 #import "PlantCell.h"
+#import "StatisticsTableViewCell.h"
 
 @interface SelectionViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -29,7 +30,8 @@
     self.view.backgroundColor = [UIColor whiteColor];
     [self creatTitleAndBackBtn];
     
-    
+    [self createFirseView];
+    [self createTabelview];
     
 }
 
@@ -37,8 +39,7 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:YES];
-    [self createFirseView];
-    [self createTabelview];
+   
 }
 
 
@@ -181,7 +182,7 @@
     [self.view addSubview:_plantTableView];
     [_plantTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left);
-        make.bottom.equalTo(self.view.mas_bottom).offset(-44);
+        make.bottom.equalTo(self.view.mas_bottom);
         make.right.equalTo(self.view.mas_right);
         make.top.equalTo(self.firstView.mas_bottom).offset(5);
     }];
@@ -207,6 +208,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
+    if(section == 0){
+        return 1;
+    }
     return 2;
 }
 
@@ -217,6 +221,18 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if(indexPath.section == 0){
+        static NSString *cellIdentifier = @"cellIdentifier2";
+        StatisticsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        if(cell == nil){
+            cell = [[StatisticsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        return cell;
+    }
+    
+    
     static NSString *cellIdentifier = @"cellIdentifier";
     PlantCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
@@ -230,13 +246,26 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if(indexPath.section == 0){
+        return HDAutoHeight(510);
+    }
+    
     return HDAutoHeight(140);
     
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if(section == 0){
+        return 0.01;
+    }
     return HDAutoHeight(68);
 }
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    
+    if(section == 0){
+        UIView *view = [[UIView alloc]init];
+        return view;
+    }
     
     UIView *headView = [[UIView alloc]init];
     

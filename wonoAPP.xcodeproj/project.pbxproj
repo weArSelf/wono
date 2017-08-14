@@ -52,6 +52,10 @@
 		A821F56F1F386A670040846E /* CustomLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F56E1F386A670040846E /* CustomLabel.m */; };
 		A821F5721F394FBF0040846E /* AddStuffViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F5711F394FBF0040846E /* AddStuffViewController.m */; };
 		A821F5751F3955CA0040846E /* MyCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F5741F3955CA0040846E /* MyCollectionViewController.m */; };
+		A821F5801F39B5720040846E /* BaseInterfaceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F57B1F39B5720040846E /* BaseInterfaceModel.m */; };
+		A821F5811F39B5720040846E /* InterfaceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F57D1F39B5720040846E /* InterfaceModel.m */; };
+		A821F5821F39B5720040846E /* InterfaceSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F57F1F39B5720040846E /* InterfaceSingleton.m */; };
+		A821F5861F3AA29B0040846E /* PengAddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F5851F3AA29B0040846E /* PengAddViewController.m */; };
 		A82469FF1F14626B00CFD65A /* MBProgressHUD+XMG.m in Sources */ = {isa = PBXBuildFile; fileRef = A82469FE1F14626B00CFD65A /* MBProgressHUD+XMG.m */; };
 		A8246A0D1F1467DC00CFD65A /* JXTCacher.m in Sources */ = {isa = PBXBuildFile; fileRef = A8246A0A1F1467DC00CFD65A /* JXTCacher.m */; };
 		A8246A0E1F1467DC00CFD65A /* NSObject+JKCoding.m in Sources */ = {isa = PBXBuildFile; fileRef = A8246A0C1F1467DC00CFD65A /* NSObject+JKCoding.m */; };
@@ -91,6 +95,10 @@
 		A8ADF1B51F13181A00781E06 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8ADF19F1F0F85E500781E06 /* Charts.framework */; };
 		A8ADF1B61F13181A00781E06 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A8ADF19F1F0F85E500781E06 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A8ADF1BB1F13182700781E06 /* Pods_wonoAPP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8ADF1BA1F13182700781E06 /* Pods_wonoAPP.framework */; };
+		A8BC31421F3C329000BD6E76 /* PengTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8BC31411F3C329000BD6E76 /* PengTypeViewController.m */; };
+		A8BC31471F3C428900BD6E76 /* ZhengZeSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = A8BC31461F3C428900BD6E76 /* ZhengZeSupport.m */; };
+		A8BC314C1F3D599300BD6E76 /* CompleteModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8BC314B1F3D599300BD6E76 /* CompleteModel.m */; };
+		A8BC314F1F41326300BD6E76 /* SearchModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8BC314E1F41326300BD6E76 /* SearchModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -242,6 +250,15 @@
 		A821F5711F394FBF0040846E /* AddStuffViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddStuffViewController.m; sourceTree = "<group>"; };
 		A821F5731F3955CA0040846E /* MyCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCollectionViewController.h; sourceTree = "<group>"; };
 		A821F5741F3955CA0040846E /* MyCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCollectionViewController.m; sourceTree = "<group>"; };
+		A821F57A1F39B5720040846E /* BaseInterfaceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseInterfaceModel.h; sourceTree = "<group>"; };
+		A821F57B1F39B5720040846E /* BaseInterfaceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseInterfaceModel.m; sourceTree = "<group>"; };
+		A821F57C1F39B5720040846E /* InterfaceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterfaceModel.h; sourceTree = "<group>"; };
+		A821F57D1F39B5720040846E /* InterfaceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterfaceModel.m; sourceTree = "<group>"; };
+		A821F57E1F39B5720040846E /* InterfaceSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterfaceSingleton.h; sourceTree = "<group>"; };
+		A821F57F1F39B5720040846E /* InterfaceSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterfaceSingleton.m; sourceTree = "<group>"; };
+		A821F5831F39B88E0040846E /* key.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = key.h; sourceTree = "<group>"; };
+		A821F5841F3AA29B0040846E /* PengAddViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PengAddViewController.h; sourceTree = "<group>"; };
+		A821F5851F3AA29B0040846E /* PengAddViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PengAddViewController.m; sourceTree = "<group>"; };
 		A82469F81F145D7D00CFD65A /* WonoPrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WonoPrefixHeader.pch; sourceTree = "<group>"; };
 		A82469FD1F14626B00CFD65A /* MBProgressHUD+XMG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+XMG.h"; sourceTree = "<group>"; };
 		A82469FE1F14626B00CFD65A /* MBProgressHUD+XMG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+XMG.m"; sourceTree = "<group>"; };
@@ -317,6 +334,14 @@
 		A8ADF1961F0F84DB00781E06 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		A8ADF1981F0F85E500781E06 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = "Charts-master/Charts.xcodeproj"; sourceTree = "<group>"; };
 		A8ADF1BA1F13182700781E06 /* Pods_wonoAPP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_wonoAPP.framework; path = "../../Library/Developer/Xcode/DerivedData/wonoAPP-cdwoqfbpurkwhmcothogotqekvbb/Build/Products/Debug-iphonesimulator/Pods_wonoAPP.framework"; sourceTree = "<group>"; };
+		A8BC31401F3C329000BD6E76 /* PengTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PengTypeViewController.h; sourceTree = "<group>"; };
+		A8BC31411F3C329000BD6E76 /* PengTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PengTypeViewController.m; sourceTree = "<group>"; };
+		A8BC31451F3C428900BD6E76 /* ZhengZeSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZhengZeSupport.h; sourceTree = "<group>"; };
+		A8BC31461F3C428900BD6E76 /* ZhengZeSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZhengZeSupport.m; sourceTree = "<group>"; };
+		A8BC314A1F3D599300BD6E76 /* CompleteModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompleteModel.h; sourceTree = "<group>"; };
+		A8BC314B1F3D599300BD6E76 /* CompleteModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompleteModel.m; sourceTree = "<group>"; };
+		A8BC314D1F41326300BD6E76 /* SearchModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchModel.h; sourceTree = "<group>"; };
+		A8BC314E1F41326300BD6E76 /* SearchModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchModel.m; sourceTree = "<group>"; };
 		C19FD802BF9A56E1A918136F /* Pods-wonoAPP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wonoAPP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-wonoAPP/Pods-wonoAPP.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -439,6 +464,20 @@
 			name = view;
 			sourceTree = "<group>";
 		};
+		A821F5771F39A3C50040846E /* web封装 */ = {
+			isa = PBXGroup;
+			children = (
+				A821F57A1F39B5720040846E /* BaseInterfaceModel.h */,
+				A821F57B1F39B5720040846E /* BaseInterfaceModel.m */,
+				A821F57C1F39B5720040846E /* InterfaceModel.h */,
+				A821F57D1F39B5720040846E /* InterfaceModel.m */,
+				A821F57E1F39B5720040846E /* InterfaceSingleton.h */,
+				A821F57F1F39B5720040846E /* InterfaceSingleton.m */,
+				A821F5831F39B88E0040846E /* key.h */,
+			);
+			name = "web封装";
+			sourceTree = "<group>";
+		};
 		A82469FA1F14625600CFD65A /* Support Tools */ = {
 			isa = PBXGroup;
 			children = (
@@ -539,6 +578,7 @@
 		A8246A041F14669300CFD65A /* 我的 */ = {
 			isa = PBXGroup;
 			children = (
+				A8BC31501F41327100BD6E76 /* Model */,
 				A821F5421F32D1E70040846E /* view */,
 				A8246A101F146EE400CFD65A /* MineViewController.h */,
 				A8246A111F146EE400CFD65A /* MineViewController.m */,
@@ -566,6 +606,10 @@
 				A821F5711F394FBF0040846E /* AddStuffViewController.m */,
 				A821F5731F3955CA0040846E /* MyCollectionViewController.h */,
 				A821F5741F3955CA0040846E /* MyCollectionViewController.m */,
+				A821F5841F3AA29B0040846E /* PengAddViewController.h */,
+				A821F5851F3AA29B0040846E /* PengAddViewController.m */,
+				A8BC31401F3C329000BD6E76 /* PengTypeViewController.h */,
+				A8BC31411F3C329000BD6E76 /* PengTypeViewController.m */,
 			);
 			name = "我的";
 			sourceTree = "<group>";
@@ -585,6 +629,7 @@
 		A8246A0F1F1468ED00CFD65A /* 登录注册 */ = {
 			isa = PBXGroup;
 			children = (
+				A8BC31491F3D598000BD6E76 /* Model */,
 				A8A11D2C1F185334008CA39A /* View */,
 				A8246A231F149C5400CFD65A /* LoginViewController.h */,
 				A8246A241F149C5400CFD65A /* LoginViewController.m */,
@@ -692,6 +737,8 @@
 		A8ADF1611F0F841100781E06 /* wonoAPP */ = {
 			isa = PBXGroup;
 			children = (
+				A8BC31481F3C42A900BD6E76 /* 正则表达式 */,
+				A821F5771F39A3C50040846E /* web封装 */,
 				A8246A1F1F1470E600CFD65A /* Base */,
 				A8246A0F1F1468ED00CFD65A /* 登录注册 */,
 				A8246A041F14669300CFD65A /* 我的 */,
@@ -751,6 +798,33 @@
 				A8ADF1A31F0F85E500781E06 /* ChartsTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		A8BC31481F3C42A900BD6E76 /* 正则表达式 */ = {
+			isa = PBXGroup;
+			children = (
+				A8BC31451F3C428900BD6E76 /* ZhengZeSupport.h */,
+				A8BC31461F3C428900BD6E76 /* ZhengZeSupport.m */,
+			);
+			name = "正则表达式";
+			sourceTree = "<group>";
+		};
+		A8BC31491F3D598000BD6E76 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A8BC314A1F3D599300BD6E76 /* CompleteModel.h */,
+				A8BC314B1F3D599300BD6E76 /* CompleteModel.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		A8BC31501F41327100BD6E76 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A8BC314D1F41326300BD6E76 /* SearchModel.h */,
+				A8BC314E1F41326300BD6E76 /* SearchModel.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -973,7 +1047,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A821F53B1F31D13F0040846E /* MineSettingViewController.m in Sources */,
+				A821F5801F39B5720040846E /* BaseInterfaceModel.m in Sources */,
 				A821F53E1F32AEBF0040846E /* MineDataViewController.m in Sources */,
+				A8BC31421F3C329000BD6E76 /* PengTypeViewController.m in Sources */,
 				A821F5751F3955CA0040846E /* MyCollectionViewController.m in Sources */,
 				A8A11D481F1CA217008CA39A /* SelectionViewController.m in Sources */,
 				A821F5111F2B06BD0040846E /* FZHPickerView.m in Sources */,
@@ -989,10 +1065,12 @@
 				A8A11D351F189F1B008CA39A /* BaseViewController.m in Sources */,
 				A821F52C1F3177CC0040846E /* AboutViewController.m in Sources */,
 				A8ADF16A1F0F841200781E06 /* ViewController.m in Sources */,
+				A8BC31471F3C428900BD6E76 /* ZhengZeSupport.m in Sources */,
 				A8ADF1971F0F84DB00781E06 /* File.swift in Sources */,
 				A8246A1E1F146FA800CFD65A /* PlantControllViewController.m in Sources */,
 				A821F51A1F2EDA190040846E /* ShifeiViewController.m in Sources */,
 				A8246A251F149C5400CFD65A /* LoginViewController.m in Sources */,
+				A821F5861F3AA29B0040846E /* PengAddViewController.m in Sources */,
 				A8A11D261F1852DB008CA39A /* ForgetViewController.m in Sources */,
 				A8A11D391F18A929008CA39A /* PlantCell.m in Sources */,
 				A821F5631F3801070040846E /* MyFarmViewController.m in Sources */,
@@ -1001,6 +1079,7 @@
 				A821F4B91F25E6900040846E /* CABasicAnimation+Category.m in Sources */,
 				A8A11D451F1C7FCB008CA39A /* WonoCircleModel.m in Sources */,
 				A821F50B1F2AD1030040846E /* WorkViewController.m in Sources */,
+				A8BC314C1F3D599300BD6E76 /* CompleteModel.m in Sources */,
 				A8ADF1641F0F841100781E06 /* main.m in Sources */,
 				A821F4F81F2842070040846E /* ZXView.m in Sources */,
 				A821F4F11F2729840040846E /* TempModel.m in Sources */,
@@ -1008,6 +1087,7 @@
 				A821F5171F2B2EA30040846E /* AddViewController.m in Sources */,
 				A82469FF1F14626B00CFD65A /* MBProgressHUD+XMG.m in Sources */,
 				A8246A181F146F4800CFD65A /* TempViewController.m in Sources */,
+				A821F5811F39B5720040846E /* InterfaceModel.m in Sources */,
 				A8246A281F14C25A00CFD65A /* CompleteInfoViewController.m in Sources */,
 				A8246A0E1F1467DC00CFD65A /* NSObject+JKCoding.m in Sources */,
 				A821F5661F3818240040846E /* MyFarmTableViewCell.m in Sources */,
@@ -1034,6 +1114,8 @@
 				A821F5351F31BC970040846E /* CallBackViewController.m in Sources */,
 				A8A11D5E1F1F5E72008CA39A /* RegeistViewController.m in Sources */,
 				A821F5261F3011B20040846E /* MyZView.m in Sources */,
+				A821F5821F39B5720040846E /* InterfaceSingleton.m in Sources */,
+				A8BC314F1F41326300BD6E76 /* SearchModel.m in Sources */,
 				A8246A1B1F146F9200CFD65A /* StatisticsViewController.m in Sources */,
 				A8A11D3D1F18C1DF008CA39A /* PlantModel.m in Sources */,
 				A821F4AB1F21C43B0040846E /* StatisticsTableViewCell.m in Sources */,

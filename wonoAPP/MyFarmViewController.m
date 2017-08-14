@@ -38,7 +38,8 @@
     [self creatHeadView];
     
     firstDataArr = [NSArray arrayWithObjects:@"地理位置",@"占地面积",@"大棚总数",@"员工总数",@"成立时间", nil];
-    NSArray *arr = [NSArray arrayWithObjects:@"天津市",@"35亩",@"14座",@"100个",@"2014年7月12日", nil];
+    NSArray *arr = [NSArray arrayWithObjects:@"",@"",@"",@"",@"", nil];
+//    NSArray *arr = [NSArray arrayWithObjects:@"天津市",@"35亩",@"14座",@"100个",@"2014年7月12日", nil];
     
     nextDataArr = [NSMutableArray arrayWithArray:arr];
     
@@ -47,7 +48,33 @@
 //    NSDate *date = [dateFormatter dateFromString:@"2010-08-04 16:01:03"];
     
     [self createTable];
+    [self requestData];
 }
+
+-(void)requestData{
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getMyFarmWithCallBack:^(int state, id data, NSString *msg) {
+        
+        if(state == 2000){
+            nextDataArr = [NSMutableArray array];
+            NSDictionary *dic = data;
+            [nextDataArr addObject:dic[@"address"]];
+            [nextDataArr addObject:dic[@"area"]];
+            [nextDataArr addObject:dic[@"greenhouse_num"]];
+            [nextDataArr addObject:dic[@"employee_num"]];
+            [nextDataArr addObject:dic[@"build"]];
+            
+            [_contentTabel reloadData];
+            
+        }else{
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+        
+    }];
+    
+}
+
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];

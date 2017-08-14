@@ -24,6 +24,8 @@
 
 @property (nonatomic,strong) UIImageView *headImageView;
 
+@property (nonatomic,strong) UILabel *timeLabel;
+
 
 @end
 
@@ -39,6 +41,7 @@
         [self createTitle];
         [self createDetail];
         [self createImage];
+        [self createTimeLabel];
     }
     return self;
 }
@@ -199,6 +202,21 @@
         make.height.equalTo(@(HDAutoWidth(170)*fixelH/fixelW));
     }];
     
+}
+
+-(void)createTimeLabel{
+    _timeLabel = [[UILabel alloc]init];
+    _timeLabel.text = @"三小时之前更新";
+    _timeLabel.font = [UIFont systemFontOfSize:12];
+    _timeLabel.textColor = UIColorFromHex(0x9fa0a0);
+    _timeLabel.textAlignment = NSTextAlignmentRight;
+    [_ConView addSubview:_timeLabel];
+    [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(_ConView.mas_right).offset(-HDAutoWidth(20));
+        make.centerY.equalTo(_yuangongLabel.mas_centerY);
+        make.height.equalTo(_yuangongLabel.mas_height);
+        make.width.equalTo(@(HDAutoWidth(200)));
+    }];
 }
 
 

@@ -7,8 +7,10 @@
 //
 
 #import "AddStuffViewController.h"
+#import "StuffTableViewCell.h"
+#import "SearchModel.h"
 
-@interface AddStuffViewController ()
+@interface AddStuffViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
 
 @property (nonatomic,strong)UIView *headView;
 @property (nonatomic,strong)UILabel *titleLabel;
@@ -17,22 +19,67 @@
 @property (nonatomic,strong)UITextField *mainTextField;
 @property (nonatomic,strong)UIButton *confirmBtn;
 
+@property (nonatomic,strong)UITableView *stuffTableView;
+
 @end
 
 @implementation AddStuffViewController{
-   
+    int count;
+    NSTimer *nowNsTimer;
+    NSTimer *newNsTimer;
+    NSString *orginStr;
+    NSMutableArray *dataArr;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    count = 5;
+    dataArr = [NSMutableArray array];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
     [self creatTitleAndBackBtn];
-    [self createConfirmBtn];
+//    [self createConfirmBtn];
     [self createMain];
+    [self createTable];
+    orginStr = @"";
+    //    newNsTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(timerFired:) userInfo:nil repeats:NO];
+
     
+}
+
+-(void)timerFired{
+    NSLog(@"aa");
+    
+    [[InterfaceSingleton shareInstance].interfaceModel searchForUserPhone:_mainTextField.text WithCallBack:^(int state, id data, NSString *msg) {
+        
+//        if(state == 2000){
+            NSArray *arr = data;
+            
+            [dataArr removeAllObjects];
+            
+            for(int i=0;i<arr.count;i++){
+                SearchModel *model = [[SearchModel alloc]init];
+                NSDictionary *dic = data[i];
+                model.imageUrl = dic[@"avatar"];
+                model.name = dic[@"username"];
+                model.phoneNum = dic[@"mobile"];
+                
+                [dataArr addObject:model];
+            }
+            
+            [_stuffTableView reloadData];
+            
+            NSLog(@"搜索成功");
+            
+//        }else{
+//            [MBProgressHUD showSuccess:msg];
+//        }
+        
+    }];
+    
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -102,6 +149,11 @@
     //设置显示模式为永远显示(默认不显示)
     _mainTextField.leftViewMode = UITextFieldViewModeAlways;
     _mainTextField.keyboardType = UIKeyboardTypeNumberPad;
+    _mainTextField.delegate = self;
+    [_mainTextField addTarget:self
+                        action:@selector(textFieldEditChanged:)
+              forControlEvents:UIControlEventEditingChanged];
+
     [self.view addSubview:_mainTextField];
     [_mainTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left).offset(-1);
@@ -133,6 +185,108 @@
 -(void)confirmClick{
     NSLog(@"点击修改");
     
+}
+
+- (void)textFieldEditChanged:(UITextField *)textField
+{
+    NSLog(@"输入改变");
+    
+    if([orginStr isEqualToString:@""]){
+        orginStr = textField.text;
+        [self timerFired];
+        
+    }else{
+        if(nowNsTimer!=nil){
+            [nowNsTimer invalidate];
+        }
+        
+        newNsTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(timerFired) userInfo:nil repeats:NO];
+        [newNsTimer fireDate];
+        
+        nowNsTimer = newNsTimer;
+
+    }
+    
+    
+}
+
+
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    [_mainTextField resignFirstResponder];
+    
+}
+
+
+-(void)createTable{
+    
+    _stuffTableView = [[UITableView alloc]initWithFrame:self.view.frame style:UITableViewStyleGrouped];
+    //    [_plantTableView registerClass:[PlantCell class] forHeaderFooterViewReuseIdentifier:@"plantCell"];
+    _stuffTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _stuffTableView.dataSource = self;
+    _stuffTableView.delegate = self;
+    //    _plantTableView.showsVerticalScrollIndicator = NO;
+    _stuffTableView.backgroundColor = [UIColor clearColor];
+    //    _plantTableView.frame = self.view.frame;
+    //    _stuffTableView.showsVerticalScrollIndicator = NO;
+    //    _stuffTableView.scrollEnabled = NO;
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapClick)];
+    tap.delegate = self;
+    [_stuffTableView addGestureRecognizer:tap];
+    
+    
+    [self.view addSubview:_stuffTableView];
+    
+    [_stuffTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.top.equalTo(_mainTextField.mas_bottom).offset(HDAutoHeight(40));
+        make.bottom.equalTo(self.view.mas_bottom).offset(-HDAutoHeight(60));
+    }];
+    
+    
+    
+}
+
+-(void)tapClick{
+    NSLog(@"点击了");
+    [_mainTextField resignFirstResponder];
+}
+
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    
+    return dataArr.count;
+    
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *cellIdentifier = @"cellIdentifier";
+    StuffTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        cell = [[StuffTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        
+        //        [cell setLeftColor:[UIColor blueColor]];
+    }
+    cell.tag = 300 +indexPath.row;
+    
+    SearchModel *model = dataArr[indexPath.row];
+    
+    cell.searchModel = model;
+    
+    //    [cell creatConView];
+    
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return HDAutoHeight(130);
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 0.01;
 }
 
 

@@ -51,7 +51,7 @@
     [self.view addSubview:_contentTabel];
     [_contentTabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left);
-        make.bottom.equalTo(self.view.mas_bottom).offset(-44);
+        make.bottom.equalTo(self.view.mas_bottom);
         make.right.equalTo(self.view.mas_right);
         make.top.equalTo(self.view.mas_top);
     }];

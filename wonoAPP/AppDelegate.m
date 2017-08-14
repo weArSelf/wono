@@ -39,7 +39,10 @@
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
-    if(loginMark == false){
+//    [[NSUserDefaults standardUserDefaults]setObject:@"login" forKey:@"loginMark"];
+    NSString *mark = [[NSUserDefaults standardUserDefaults]objectForKey:@"loginMark"];
+    
+    if([mark isEqualToString:@"login"]){
     
         self.base = [[BaseTabBarController alloc]init];
      

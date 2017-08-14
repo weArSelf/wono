@@ -174,4 +174,18 @@
     
 }
 
+
+-(void)setSearchModel:(SearchModel *)searchModel{
+    _searchModel = searchModel;
+    
+    NSURL *imageUrl = [NSURL URLWithString:_searchModel.imageUrl];
+    
+    [_headImageView sd_setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"选中-农场主"]];
+    _nameLabel.text = _searchModel.name;
+    
+    _contentLabel.text = _searchModel.phoneNum;
+    
+}
+
+
 @end

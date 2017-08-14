@@ -11,6 +11,8 @@
 #import "AgreementViewController.h"
 #import "ForgetViewController.h"
 #import "RegeistViewController.h"
+#import "ZhengZeSupport.h"
+#import "BaseTabBarController.h"
 
 @interface LoginViewController ()<UITextFieldDelegate>
 
@@ -32,10 +34,13 @@
 
 @end
 
-@implementation LoginViewController
+@implementation LoginViewController{
+    NSString *phoneNum;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    phoneNum = @"";
     [self createTitleImage];
     // Do any additional setup after loading the view.
     [self createTextFieldUI];
@@ -169,13 +174,111 @@
 
 -(void)LogOnClick{
     NSLog(@"点击登录");
-    CompleteInfoViewController *com = [[CompleteInfoViewController alloc]init];
-    [self.navigationController pushViewController:com animated:YES];
+    
+//    CompleteInfoViewController *com = [[CompleteInfoViewController alloc]init];
+//    [self.navigationController pushViewController:com animated:YES];
+//    
+
+    BOOL res = [ZhengZeSupport isMobileNumber:_phoneTextField.text];
+    
+    if(res == true){
+        
+        NSString *pswStr = _pswTextField.text;
+        if(pswStr.length>=6){
+            NSLog(@"下一步");
+            
+            [[InterfaceSingleton shareInstance].interfaceModel userLoginWithPhone:_phoneTextField.text AndSecret:_pswTextField.text WithCallBack:^(int state, id data, NSString *msg) {
+                
+                
+                
+                if(state == 2000){
+                    
+                    NSDictionary *dic = (NSDictionary *)data;
+                    
+                    NSString *token = dic[@"token"];
+                    
+                    [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"token"];
+                    
+                    int status = [dic[@"status"]intValue];
+                    if(status == 0 ){
+                        [MBProgressHUD showSuccess:@"您的账号已被冻结"];
+                        return ;
+                    }else if(status == 1){
+                        _btnLogin.enabled = false;
+                        //正常状态
+                        [MBProgressHUD showSuccess:@"登陆成功"];
+                        
+                        dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.5* NSEC_PER_SEC);
+                        
+                        dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+                            BaseTabBarController *base = [[BaseTabBarController alloc]init];
+                            appDelegate.window.rootViewController = base;
+                            
+                            [[NSUserDefaults standardUserDefaults]setObject:@"login" forKey:@"loginMark"];
+                        });
+
+                        
+                       
+                        
+                        return;
+                    }else if(status == 2){
+                        //完善信息
+                        
+                        [MBProgressHUD showSuccess:@"请先完善信息后再登录"];
+                        CompleteInfoViewController *com = [[CompleteInfoViewController alloc]init];
+                        [self.navigationController pushViewController:com animated:YES];
+
+                        return;
+                    }
+                    
+                    //                [[JXTCacher cacher]setValue:token forKey:@"token"];
+//                    [[JXTCacher cacher]setObject:token forKey:@"token" userId:UserId useArchive:YES];
+                    
+                    
+                }else{
+                    [MBProgressHUD showSuccess:msg];
+                    
+                }
+//                [[JXTCacher cacher]objectForKey:@"token" userId:UserId achive:^(JXTCacher *cacher, id obj, CacheError error) {
+//                    NSString *token = obj;
+//                  
+//                }];
+               
+                
+            }];
+
+            
+        }else{
+//            NSLog(@"密码长度小于6位");
+            [MBProgressHUD showSuccess:@"密码长度小于6位"];
+        }
+        
+        
+    }else{
+        [MBProgressHUD showSuccess:@"手机号格式错误"];
+    }
+    
+    
+    
 }
 
 - (void)textFieldEditChanged:(UITextField *)textField
 {
     NSLog(@"输入改变");
+    if(textField == _phoneTextField){
+        
+        NSString *str = textField.text;
+        
+        if(str.length>11){
+            _phoneTextField.text = phoneNum;
+            
+            [MBProgressHUD showSuccess:@"手机号应为11位"];
+        }else{
+            phoneNum = str;
+        }
+        
+    }
+    
 
 }
 
