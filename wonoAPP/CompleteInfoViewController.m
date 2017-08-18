@@ -375,6 +375,12 @@
             appDelegate.window.rootViewController = base;
             
             [[NSUserDefaults standardUserDefaults]setObject:@"login" forKey:@"loginMark"];
+            [[NSUserDefaults standardUserDefaults]synchronize];
+            NSDictionary *dic = data;
+            
+            NSString *fid = dic[@"fid"];
+            
+            [[NSUserDefaults standardUserDefaults] setObject:fid forKey:@"fid"];
             
         }else{
             [MBProgressHUD showSuccess:msg];

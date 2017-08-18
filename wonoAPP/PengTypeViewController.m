@@ -20,7 +20,7 @@
 @end
 
 @implementation PengTypeViewController{
-     NSArray *dataArr;
+     NSMutableArray *dataArr;
 }
 
 - (void)viewDidLoad {
@@ -28,10 +28,10 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
     
-    dataArr = [NSArray arrayWithObjects:@"蔬菜",@"花卉",@"水果",@"橘子",@"🍊",nil];
+//    dataArr = [NSArray arrayWithObjects:@"蔬菜",@"花卉",@"水果",@"橘子",@"🍊",nil];
     
     [self creatTitleAndBackBtn];
-    [self createTable];
+    
 
 }
 
@@ -177,11 +177,80 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    PengTypeViewController *pengType = [[PengTypeViewController alloc]init];
-    [self.navigationController pushViewController:pengType animated:YES];
+    PengTypeModel *model = _NowdataArr[indexPath.row];
     
-    NSLog(@"%ld",(long)indexPath.row);
+    NSString *pid = model.typeId;
+//    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeTitle:) name:@"catChange" object:nil];
+    
+   
+
+    
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"catChange" object:model];
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getPengWithCatPid:pid AndCallBack:^(int state, id data, NSString *msg) {
+        
+        if(state == 2000){
+            NSLog(@"");
+            NSMutableArray *RdataArr = [NSMutableArray array];
+            
+            NSArray *arr = data;
+            
+            for (int i=0; i<arr.count; i++) {
+                PengTypeModel *model = [[PengTypeModel alloc]init];
+                NSDictionary *dic = arr[i];
+                model.typeName = dic[@"name"];
+                model.typeId = dic[@"id"];
+                [RdataArr addObject:model];
+            }
+            
+            
+            
+            PengTypeViewController *pengtype = [[PengTypeViewController alloc]init];
+            pengtype.NowdataArr = RdataArr;
+            
+            [self.navigationController pushViewController:pengtype animated:YES];
+            
+        }
+        if(state == 2001){
+            
+            for (UIViewController *controller in self.navigationController.viewControllers) {
+                if ([controller isKindOfClass:[PengAddViewController class]]) {
+                    PengAddViewController *A =(PengAddViewController *)controller;
+                    [self.navigationController popToViewController:A animated:YES];
+                }
+            }
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
+
+    
+    
+//    PengTypeViewController *pengType = [[PengTypeViewController alloc]init];
+//    [self.navigationController pushViewController:pengType animated:YES];
+//    
+//    NSLog(@"%ld",(long)indexPath.row);
 }
+
+-(void)setNowdataArr:(NSArray *)NowdataArr{
+    _NowdataArr = NowdataArr;
+    dataArr = [NSMutableArray array];
+    for (int i=0; i<_NowdataArr.count; i++) {
+        PengTypeModel *model = _NowdataArr[i];
+        [dataArr addObject:model.typeName];
+    }
+    
+    [self createTable];
+    
+}
+
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+
+
 
 
 @end

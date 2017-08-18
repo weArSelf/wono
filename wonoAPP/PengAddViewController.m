@@ -11,8 +11,12 @@
 #import "AddStuffViewController.h"
 #import "StuffTableViewCell.h"
 #import "PengTypeViewController.h"
+#import "PengTypeModel.h"
 
-@interface PengAddViewController ()<UITableViewDelegate,UITableViewDataSource>
+
+#import <BabyBluetooth/BabyBluetooth.h>
+
+@interface PengAddViewController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
 
 @property (nonatomic,strong)UIView *headView;
 @property (nonatomic,strong)UILabel *titleLabel;
@@ -35,15 +39,40 @@
 
 @property (nonatomic,strong)UITableView *stuffTableView;
 
+@property (nonatomic,strong) UILabel *catLabelContent;
+@property (nonatomic,strong) UILabel *typeLabelContent;
+
 
 @end
 
 @implementation PengAddViewController{
     int count;
+    BabyBluetooth *baby;
+    
+    NSMutableArray *typeArr;
+    NSMutableArray *typeIDArr;
+    
+    NSString *titleStr;
+    
+    NSMutableArray *dataArr;
+    
+    NSString *nowType;
+    
+    NSMutableDictionary *stuffDic;
+    
+    NSString *nowPlantTypeId;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    nowPlantTypeId = @"";
+    titleStr = @"";
+    nowType = @"";
+    stuffDic = [NSMutableDictionary dictionary];
+    typeArr = [NSMutableArray array];
+    dataArr = [NSMutableArray array];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeTitle:) name:@"catChange" object:nil];
+    
     // Do any additional setup after loading the view.
     count = 5;
     
@@ -56,6 +85,155 @@
     [self createTypeLabel];
     [self createAddBtn];
     [self createTable];
+    
+    [self requestType];
+    
+    [self createBlusTooth];
+    
+    [self createOtherLabel];
+    
+    [self requestStuff];
+    
+}
+
+
+-(void)requestStuff{
+    
+    NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getFarmStuffWithFid:str WithCallBack:^(int state, id data, NSString *msg) {
+        if(state == 2000){
+            NSArray *arr = data;
+            dataArr = [NSMutableArray array];
+            for (int i=0; i<arr.count; i++) {
+                NSDictionary *dic = arr[i];
+                SearchModel *model = [[SearchModel alloc]init];
+                model.imageUrl = dic[@"avatar"];
+                model.name = dic[@"username"];
+                model.phoneNum = dic[@"greenHouse"];
+                model.stufID = dic[@"id"];
+                
+                [dataArr addObject:model];
+                
+            }
+            
+            [_stuffTableView reloadData];
+            
+        }
+        
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+        
+        
+    }];
+    
+}
+
+
+
+-(void)changeTitle:(NSNotification *)noti{
+    
+//    UIColor *receiveColor=(UIColor *)[notification object];
+    PengTypeModel *model = (PengTypeModel *)[noti object];
+    
+    NSString *newStr = model.typeName;
+    
+    NSString *reId = model.typeId;
+    
+    int re = [reId intValue];
+    
+    nowPlantTypeId = [NSString stringWithFormat:@"%d",re];
+    
+    
+    if([titleStr isEqualToString:@""]){
+        titleStr = newStr;
+    }else{
+    
+        NSString *new = [NSString stringWithFormat:@"%@>%@",titleStr,newStr];
+        titleStr = new;
+    }
+    _catLabelContent.text = titleStr;
+    
+}
+
+-(void)createBlusTooth{
+    //初始化BabyBluetooth 蓝牙库
+    baby = [BabyBluetooth shareBabyBluetooth];
+    //设置蓝牙委托
+    [self babyDelegate];
+    
+    
+    //    baby.scanForPeripherals().begin();
+    
+    //    __block BabyBluetooth *blTooth = baby;
+    
+    //示例：
+    [baby setBlockOnCentralManagerDidUpdateState:^(CBCentralManager *central) {
+        if (central.state == CBCentralManagerStatePoweredOn) {
+            NSLog(@"设备打开成功，开始扫描设备");
+            //搜索设备
+            //            blTooth.scanForPeripherals().begin();
+            //            [SVProgressHUD showInfoWithStatus:@"设备打开成功，开始扫描设备"];
+        }
+    }];
+    
+    
+    //设置发现设备的Services的委托
+    [baby setBlockOnDiscoverServices:^(CBPeripheral *peripheral, NSError *error) {
+        for (CBService *s in peripheral.services) {
+            //每个service
+            NSLog(@"qweqweqwe");
+        }
+    }];
+    //设置发现设service的Characteristics的委托
+    [baby setBlockOnDiscoverCharacteristics:^(CBPeripheral *peripheral, CBService *service, NSError *error) {
+        NSLog(@"===service name:%@",service.UUID);
+    }];
+    //设置读取characteristics的委托
+    [baby setBlockOnReadValueForCharacteristic:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
+        NSLog(@"characteristic name:%@ value is:%@",characteristics.UUID,characteristics.value);
+    }];
+    //设置发现characteristics的descriptors的委托
+    [baby setBlockOnDiscoverDescriptorsForCharacteristic:^(CBPeripheral *peripheral, CBCharacteristic *characteristic, NSError *error) {
+        NSLog(@"===characteristic name:%@",characteristic.service.UUID);
+        for (CBDescriptor *d in characteristic.descriptors) {
+            NSLog(@"CBDescriptor name is :%@",d.UUID);
+        }
+    }];
+    //设置读取Descriptor的委托
+    [baby setBlockOnReadValueForDescriptors:^(CBPeripheral *peripheral, CBDescriptor *descriptor, NSError *error) {
+        NSLog(@"Descriptor name:%@ value is:%@",descriptor.characteristic.UUID, descriptor.value);
+    }];
+    
+
+}
+
+//设置蓝牙委托
+-(void)babyDelegate{
+    
+    //设置扫描到设备的委托
+    [baby setBlockOnDiscoverToPeripherals:^(CBCentralManager *central, CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI) {
+        NSLog(@"搜索到了设备:%@",peripheral.name);
+    }];
+    
+    //过滤器
+    //设置查找设备的过滤器
+    [baby setFilterOnDiscoverPeripherals:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
+        //最常用的场景是查找某一个前缀开头的设备
+        //if ([peripheralName hasPrefix:@"Pxxxx"] ) {
+        //    return YES;
+        //}
+        //return NO;
+        //设置查找规则是名称大于1 ， the search rule is peripheral.name length > 1
+        if (peripheralName.length >1) {
+            return YES;
+        }
+        return NO;
+    }];
+    
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -63,6 +241,38 @@
     
     [self.navigationController setNavigationBarHidden:YES animated:animated];
 }
+
+
+-(void)requestType{
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getPengTypeCallBack:^(int state, id data, NSString *msg) {
+        if(state == 2000){
+            typeArr = [NSMutableArray array];
+            typeIDArr = [NSMutableArray array];
+            NSArray *arr = data;
+            
+            for (int i=0; i<arr.count; i++) {
+                NSString *str = arr[i][@"name"];
+                
+                NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+                [dic setObject:arr[i][@"name"] forKey:@"name"];
+                [dic setObject:arr[i][@"id"] forKey:@"id"];
+                
+                [typeIDArr addObject:dic];
+                
+                
+                [typeArr addObject:str];
+            }
+            
+            NSLog(@"成功");
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+    }];
+    
+}
+
 
 -(void)creatTitleAndBackBtn{
     
@@ -114,6 +324,7 @@
 -(void)createMain{
     
     _mainTextField = [[UITextField alloc]init];
+    _mainTextField.delegate = self;
     _mainTextField.placeholder = @"请输入设备的识别号";
     _mainTextField.font = [UIFont systemFontOfSize:13];
     _mainTextField.textColor = UIColorFromHex(0x727171);
@@ -169,7 +380,7 @@
 
 -(void)searchClick{
     NSLog(@"点击搜索设备");
-    
+    baby.scanForPeripherals().begin();
     
 }
 
@@ -193,6 +404,7 @@
 
 -(void)createPengNameAndOther{
     _pengNameTextField = [[UITextField alloc]init];
+    _pengNameTextField.delegate = self;
     _pengNameTextField.placeholder = @"大棚的名称";
     _pengNameTextField.font = [UIFont systemFontOfSize:13];
     _pengNameTextField.textColor = UIColorFromHex(0x727171);
@@ -252,9 +464,41 @@
 }
 
 -(void)catClick{
-    PengTypeViewController *pengtype = [[PengTypeViewController alloc]init];
-    [self.navigationController pushViewController:pengtype animated:YES];
-}
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getPengWithCatPid:@"0" AndCallBack:^(int state, id data, NSString *msg) {
+       
+        if(state == 2000){
+            NSLog(@"");
+            
+            titleStr = @"";
+            
+            NSMutableArray *dataArr233 = [NSMutableArray array];
+            
+            NSArray *arr = data;
+            
+            for (int i=0; i<arr.count; i++) {
+                PengTypeModel *model = [[PengTypeModel alloc]init];
+                NSDictionary *dic = arr[i];
+                model.typeName = dic[@"name"];
+                model.typeId = dic[@"id"];
+                [dataArr233 addObject:model];
+            }
+            
+            
+            
+            PengTypeViewController *pengtype = [[PengTypeViewController alloc]init];
+            pengtype.NowdataArr = dataArr233;
+            
+            [self.navigationController pushViewController:pengtype animated:YES];
+
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
+    
+   }
 
 -(void)createTypeLabel{
     _typeLabel = [[UILabel alloc]init];
@@ -283,11 +527,30 @@
 -(void)typeClick{
     NSLog(@"点击选择类型");
     
-    NSArray *arr = [NSArray arrayWithObjects:@"水果大棚",@"啊啊啊啊",@"呜呜呜呜",@"嗯嗯嗯嗯", nil];
+//    NSArray *arr = [NSArray arrayWithObjects:@"水果大棚",@"啊啊啊啊",@"呜呜呜呜",@"嗯嗯嗯嗯", nil];
+    NSArray *arr = typeArr;
     
       [CDZPicker showPickerInView:self.view withStrings:arr confirm:^(NSArray<NSString *> *stringArray) {
           
-          _typeLabel.text = stringArray.firstObject;
+          NSString *str = stringArray.firstObject;
+          
+          _typeLabelContent.text = str;
+          
+          NSString *needId;
+          
+          for(int i=0;i<typeIDArr.count;i++){
+              
+              NSString *name = typeIDArr[i][@"name"];
+              
+              if([name isEqualToString:str]){
+                  needId = typeIDArr[i][@"id"];
+              }
+              
+          }
+          int re = [needId intValue];
+          
+          nowType = [NSString stringWithFormat:@"%d",re];
+          
           
       } cancel:^{
           NSLog(@"点击取消了");
@@ -299,10 +562,12 @@
 -(void)createAddBtn{
     
     _addBtn = [[UIButton alloc]init];
-    [_addBtn setImage:[UIImage imageNamed:@"添加新员工"] forState:UIControlStateNormal];
-    _addBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [_addBtn addTarget:self action:@selector(addBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    
+    [_addBtn setTitle:@"从上方列表中选择该大棚员工" forState:UIControlStateNormal];
+    [_addBtn setTitleColor:UIColorFromHex(0x9fa0a0) forState:UIControlStateNormal];
+//    [_addBtn setImage:[UIImage imageNamed:@"添加新员工"] forState:UIControlStateNormal];
+//    _addBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
+//    [_addBtn addTarget:self action:@selector(addBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    _addBtn.titleLabel.font = [UIFont systemFontOfSize:14];
     [self.view addSubview:_addBtn];
     
     
@@ -346,7 +611,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return count;
+    return dataArr.count;
     
 }
 
@@ -357,32 +622,13 @@
         cell = [[StuffTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        [cell setCellClickBlock:^(StuffTableViewCell *cell){
-            //            NSLog(@"%ld", (long)tag);
-            
-            
-            
-            
-            //            [_stuffTableView reloadData];
-            
-            NSIndexPath *index = [_stuffTableView indexPathForCell:cell];
-            
-            count--;
-            
-            if(count == 0){
-                [_stuffTableView reloadData];
-            }else{
-                [_stuffTableView beginUpdates];
-                [_stuffTableView deleteRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationAutomatic];
-                [_stuffTableView endUpdates];
-            }
-            
-            
-            
-        }];
-        //        [cell setLeftColor:[UIColor blueColor]];
+               //        [cell setLeftColor:[UIColor blueColor]];
     }
     cell.tag = 300 +indexPath.row;
+    
+    SearchModel *model = dataArr[indexPath.row];
+    cell.searchModel = model;
+
     //    [cell creatConView];
     
     return cell;
@@ -398,11 +644,140 @@
 
 
 
--(void)confirmClick{
-    NSLog(@"点击修改");
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    
+    [_mainTextField resignFirstResponder];
+    [_pengNameTextField resignFirstResponder];
     
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return true;
+}
 
+-(void)createOtherLabel{
+    
+    _catLabelContent = [[UILabel alloc]init];
+    _catLabelContent.textColor = UIColorFromHex(0x9fa0a0);
+    _catLabelContent.font = [UIFont systemFontOfSize:13];
+    _catLabelContent.textAlignment = NSTextAlignmentCenter;
+    _catLabelContent.text = @"未选择品种";
+    [self.view addSubview:_catLabelContent];
+    
+    _typeLabelContent = [[UILabel alloc]init];
+    _typeLabelContent.textColor = UIColorFromHex(0x9fa0a0);
+    _typeLabelContent.font = [UIFont systemFontOfSize:13];
+    _typeLabelContent.textAlignment = NSTextAlignmentCenter;
+    _typeLabelContent.text = @"未选择类型";
+    [self.view addSubview:_typeLabelContent];
+    
+    [_catLabelContent mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_catSelBtn.mas_centerY);
+        make.height.equalTo(_catSelBtn.mas_height);
+        make.width.equalTo(@(HDAutoWidth(300)));
+        make.left.equalTo(_catSelBtn.mas_right).offset(HDAutoWidth(30));
+    }];
+    [_typeLabelContent mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_typeLabel.mas_centerY);
+        make.height.equalTo(_typeLabel.mas_height);
+        make.width.equalTo(@(HDAutoWidth(300)));
+        make.left.equalTo(_typeLabel.mas_right).offset(HDAutoWidth(30));
+
+    }];
+    
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    
+    SearchModel *model = dataArr[indexPath.row];
+    
+    NSString *SelId = model.stufID;
+    
+    StuffTableViewCell * cell = (StuffTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+    
+    if(cell.selectMark == false){
+        
+        [stuffDic setObject:SelId forKey:SelId];
+        
+        [cell changeColor];
+    }else{
+        
+        [stuffDic removeObjectForKey:SelId];
+        [cell changeColorBack];
+    }
+
+}
+
+-(void)confirmClick{
+    NSLog(@"点击添加");
+    NSString *fid = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
+    
+    if([_pengNameTextField.text isEqualToString:@""]){
+        [MBProgressHUD showSuccess:@"请填写大棚名称"];
+        return;
+    }
+    
+    if([nowType isEqualToString:@""]){
+        [MBProgressHUD showSuccess:@"请选择大棚类型"];
+        return;
+    }
+    
+    NSArray *stufArr = [stuffDic allValues];
+    
+    NSString *nowArr = [self objArrayToJSON:stufArr];
+    
+    if(stufArr.count == 0){
+        [MBProgressHUD showSuccess:@"请选择大棚职员"];
+        return;
+    }
+    
+    if([nowPlantTypeId isEqualToString:@""]){
+        [MBProgressHUD showSuccess:@"请选择大棚种植品种"];
+        return;
+    }
+    
+    if([_mainTextField.text isEqualToString:@""]){
+        [MBProgressHUD showSuccess:@"请输入设备识别号"];
+        return;
+    }
+    
+    [[InterfaceSingleton shareInstance].interfaceModel AddPengWithFid:fid AndImei:_mainTextField.text AndName:_pengNameTextField.text AndType:nowType AndUids:nowArr AndVarID:nowPlantTypeId WithCallBack:^(int state, id data, NSString *msg) {
+        
+        if(state == 2000){
+            NSLog(@"成功");
+            [MBProgressHUD showSuccess:@"添加成功"];
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
+    
+    
+}
+
+//把多个json字符串转为一个json字符串
+- (NSString *)objArrayToJSON:(NSArray *)array {
+    
+    NSString *jsonStr = @"[";
+    
+    for (NSInteger i = 0; i < array.count; ++i) {
+        if (i != 0) {
+            jsonStr = [jsonStr stringByAppendingString:@","];
+        }
+        
+        NSString *str = array[i];
+        int qw = [str intValue];
+        NSString *res = [NSString stringWithFormat:@"%d",qw];
+        
+        jsonStr = [jsonStr stringByAppendingString:res];
+    }
+    jsonStr = [jsonStr stringByAppendingString:@"]"];
+    
+    return jsonStr;
+}
 
 @end

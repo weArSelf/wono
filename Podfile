@@ -15,4 +15,5 @@ target 'wonoAPP' do
     pod 'BaiduMapKit'
     pod 'JHChart'
     pod 'GLChart'
+    pod 'BabyBluetooth','~> 0.7.0'
 end

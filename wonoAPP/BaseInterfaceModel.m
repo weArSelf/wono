@@ -89,10 +89,26 @@ static AFHTTPSessionManager             *_sessionManager;
             return [self PUT:URLString parameters:parameters success:success failure:failure];
         case ENRT_GET:
             return [self GET:URLString parameters:parameters success:success failure:failure];
+        case ENRT_DELETE:
+            return [self DELETE:URLString parameters:parameters success:success failure:failure];
         default:
             return [self POST:URLString parameters:parameters success:success failure:failure];
     }
 }
+
+- (id)DELETE:(NSString *)URLString
+parameters:(NSMutableDictionary *)parameters
+   success:(void (^)(id task, id responseObject))success
+   failure:(void (^)(id task, NSError *error))failure
+{
+    NSDictionary* para = [self addRequiredParameter:parameters];
+    [self logRequestUrl:URLString withParam:para];
+    return [_sessionManager DELETE:URLString
+                      parameters:para
+                         success:success
+                         failure:failure];
+}
+
 
 - (id)POST:(NSString *)URLString
 parameters:(NSMutableDictionary *)parameters

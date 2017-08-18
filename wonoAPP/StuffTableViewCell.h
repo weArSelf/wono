@@ -17,4 +17,11 @@
 
 @property (nonatomic,strong) SearchModel *searchModel;
 
+@property (nonatomic) BOOL selectMark;
+
+
+-(void)changeColor;
+
+-(void)changeColorBack;
+
 @end

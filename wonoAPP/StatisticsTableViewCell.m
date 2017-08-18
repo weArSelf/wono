@@ -27,13 +27,25 @@
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if(self){
+//        NSMutableArray *newges = [NSMutableArray arrayWithArray:self.gestureRecognizers];
+//        for (int i =0; i<[newges count]; i++) {
+//            [self removeGestureRecognizer:[newges objectAtIndex:i]];
+//        }
+        
+//        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapClick)];
+//        [self addGestureRecognizer:tap];
+        
         self.backgroundColor = [UIColor clearColor];
-        percentArr = [NSArray arrayWithObjects:[NSNumber numberWithDouble:20.0],[NSNumber numberWithDouble:30.0],[NSNumber numberWithDouble:40.0],[NSNumber numberWithDouble:10.0], nil];
-        dataArr = [NSArray arrayWithObjects:@"土豆",@"黄瓜",@"西红柿",@"白菜", nil];
-        [self createFirstPie];
-        [self creatLabel];
+//        percentArr = [NSArray arrayWithObjects:[NSNumber numberWithDouble:20.0],[NSNumber numberWithDouble:30.0],[NSNumber numberWithDouble:40.0],[NSNumber numberWithDouble:10.0], nil];
+//        dataArr = [NSArray arrayWithObjects:@"土豆",@"黄瓜",@"西红柿",@"白菜", nil];
+//        [self createFirstPie];
+//        [self creatLabel];
     }
     return self;
+}
+
+-(void)tapClick{
+    NSLog(@"qweqwe");
 }
 
 -(void)createFirstPie{
@@ -44,6 +56,7 @@
     //    self.chartView.backgroundColor = [UIColor orangeColor];
     
     _chartView.delegate = self;
+    
     
     //    ChartLegend *l = _chartView.legend;
     //    l.horizontalAlignment = ChartLegendHorizontalAlignmentRight;
@@ -64,7 +77,8 @@
     
     [_chartView animateWithXAxisDuration:1.4 easingOption:ChartEasingOptionEaseOutBack];
     
-    [self setDataCount:4 range:100];
+    NSArray *arr = _model.colorArr;
+    [self setDataCount:arr.count range:100];
     
     [self.chartView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.mas_centerX);
@@ -95,13 +109,20 @@
     
     // add a lot of colors
     
+    
     NSMutableArray *colors = [[NSMutableArray alloc] init];
-    [colors addObjectsFromArray:ChartColorTemplates.vordiplom];
-    [colors addObjectsFromArray:ChartColorTemplates.joyful];
-    [colors addObjectsFromArray:ChartColorTemplates.colorful];
-    [colors addObjectsFromArray:ChartColorTemplates.liberty];
-    [colors addObjectsFromArray:ChartColorTemplates.pastel];
-    [colors addObject:[UIColor colorWithRed:51/255.f green:181/255.f blue:229/255.f alpha:1.f]];
+    
+    NSArray *arr = _model.colorArr;
+    for(int i=0;i<arr.count;i++){
+        [colors addObject:arr[i]];
+    }
+    
+//    [colors addObjectsFromArray:ChartColorTemplates.vordiplom];
+//    [colors addObjectsFromArray:ChartColorTemplates.joyful];
+//    [colors addObjectsFromArray:ChartColorTemplates.colorful];
+//    [colors addObjectsFromArray:ChartColorTemplates.liberty];
+//    [colors addObjectsFromArray:ChartColorTemplates.pastel];
+//    [colors addObject:[UIColor colorWithRed:51/255.f green:181/255.f blue:229/255.f alpha:1.f]];
     
     dataSet.colors = colors;
     
@@ -131,10 +152,18 @@
     NSLog(@"chartValueNothingSelected");
 }
 
+- (void)chartTranslated:(ChartViewBase * _Nonnull)chartView dX:(CGFloat)dX dY:(CGFloat)dY{
+    NSLog(@"aaa");
+}
+
+- (void)chartScaled:(ChartViewBase * _Nonnull)chartView scaleX:(CGFloat)scaleX scaleY:(CGFloat)scaleY{
+    NSLog(@"qwe");
+}
+
 -(void)creatLabel{
     _headLabel = [[UILabel alloc]init];
     _headLabel.font = [UIFont systemFontOfSize:14];
-    _headLabel.text = @"占地面积：320亩";
+    _headLabel.text = _model.title;
     _headLabel.textColor = UIColorFromHex(0x727171);
     [self addSubview:_headLabel];
     [_headLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -144,6 +173,26 @@
         make.height.equalTo(@(HDAutoHeight(35)));
     }];
 }
+
+-(void)setModel:(PercentModel *)model{
+    
+    if(_model == nil){
+    
+        _model = model;
+        
+        dataArr = model.nameArr;
+        percentArr = model.percentArr;
+        
+    //    _headLabel.text = model.title;
+        
+        [self createFirstPie];
+        [self creatLabel];
+    }
+    
+}
+
+
+
 
 
 @end

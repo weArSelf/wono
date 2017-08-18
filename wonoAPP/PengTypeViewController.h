@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PengTypeModel.h"
 
 @interface PengTypeViewController : UIViewController
+
+@property (nonatomic,strong) NSArray *NowdataArr;
 
 @end

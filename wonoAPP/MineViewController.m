@@ -191,7 +191,7 @@
         }
         case 3:{
             MyFarmViewController *MyVc = [[MyFarmViewController alloc]init];
-//            MyVc.hidesBottomBarWhenPushed = YES;
+            MyVc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:MyVc animated:YES];
             //            CallBackViewController *CallVc = [[CallBackViewController alloc]init];
             //            [self.navigationController pushViewController:CallVc animated:YES];

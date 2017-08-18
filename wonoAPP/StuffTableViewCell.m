@@ -31,6 +31,7 @@
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if(self){
+        self.selectMark = false;
         self.backgroundColor = [UIColor clearColor];
         [self createBtn];
         [self creatConView];
@@ -187,5 +188,33 @@
     
 }
 
+-(void)changeColor{
+    _ConView.backgroundColor = [UIColor whiteColor];
+    _ConView.layer.shadowColor = [UIColor grayColor].CGColor;
+    _ConView.layer.shadowOpacity = 0.3f;
+    _ConView.layer.shadowRadius =5;
+    _ConView.layer.shadowOffset = CGSizeMake(3,3);
+    _ConView.layer.borderColor = [UIColor orangeColor].CGColor;
+    _ConView.layer.borderWidth = 0.6;
+    //    _ConView.layer.masksToBounds = YES;
+    _ConView.layer.cornerRadius = 5;
+    
+    self.selectMark = true;
+}
+
+-(void)changeColorBack{
+
+    _ConView.backgroundColor = [UIColor whiteColor];
+    _ConView.layer.shadowColor = [UIColor grayColor].CGColor;
+    _ConView.layer.shadowOpacity = 0.3f;
+    _ConView.layer.shadowRadius =5;
+    _ConView.layer.shadowOffset = CGSizeMake(3,3);
+    _ConView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    _ConView.layer.borderWidth = 0.6;
+    //    _ConView.layer.masksToBounds = YES;
+    _ConView.layer.cornerRadius = 5;
+    
+    self.selectMark = false;
+}
 
 @end

@@ -26,4 +26,27 @@
 #define API_SearchPhone                     @"user/like/mobile"
 #define API_GetFarm                         @"farm"
 
+//首页数据
+#define API_GreenHouse                      @"index/greenhouse"
+
+#define API_FarmEmployees                   @"farm/employees"
+#define API_DeleteEmployees                 @"farm/employee"
+#define API_AddEmployees                    @"farm/employee"
+
+#define API_GetPeng                         @"greenhouse"
+#define API_AddPeng                         @"greenhouse/add"
+#define API_DeletePeng                      @"greenhouse"
+
+#define API_GetPengCat                      @"greenhouse/varieties"
+#define API_GetPengType                     @"greenhouse/type"
+
+#define API_GetGreenDetail                  @"greenhouse/monitor"
+
+#define API_UpdateAlert                     @"greenhouse/threshold"
+
+#define API_GetPlant                        @"plant"
+#define API_getPengDetail                   @"greenhouse/detail"
+#define API_GetPengPay                      @"greenhouse/bill"
+#define API_GetPengList                     @"plant/detail"
+
 #endif /* key_h */

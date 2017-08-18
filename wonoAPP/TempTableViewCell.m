@@ -86,13 +86,13 @@
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_ConView.mas_left).offset(HDAutoWidth(15));
         make.top.equalTo(_ConView.mas_top).offset(HDAutoHeight(15));
-        make.width.equalTo(@(width));
+        make.width.equalTo(@(HDAutoWidth(250)));
         make.height.equalTo(@(HDAutoHeight(50)));
     }];
     [_nextTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(_titleLabel.mas_centerY);
         make.left.equalTo(_titleLabel.mas_right).offset(HDAutoWidth(5));
-        make.width.equalTo(@(width2));
+        make.width.equalTo(@(HDAutoWidth(450)));
         make.bottom.equalTo(_titleLabel.mas_bottom);
     }];
 
@@ -157,7 +157,7 @@
     [_yuangongLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_qishiLabel.mas_left);
         make.top.equalTo(_leibieLabel.mas_top);
-        make.width.equalTo(@(HDAutoWidth(200)));
+        make.width.equalTo(@(HDAutoWidth(400)));
         make.height.equalTo(@(HDAutoHeight(40)));
     }];
     
@@ -192,7 +192,7 @@
     CGFloat fixelW = CGImageGetWidth(image.CGImage);
     CGFloat fixelH = CGImageGetHeight(image.CGImage);
     
-    _headImageView.image = image;
+//    _headImageView.image = image;
     _headImageView.contentMode = UIViewContentModeScaleAspectFit;
     [_ConView addSubview:_headImageView];
     [_headImageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -217,6 +217,78 @@
         make.height.equalTo(_yuangongLabel.mas_height);
         make.width.equalTo(@(HDAutoWidth(200)));
     }];
+}
+
+-(void)setModel:(MainTempModel *)model{
+    _model = model;
+    
+    _titleLabel.text =_model.name;
+    
+    _nextTitleLabel.text = _model.extra;
+    
+    if(_model.temp1sign == 1){
+        _qiwenLabel.textColor = [UIColor redColor];
+    }else{
+        _qiwenLabel.textColor = UIColorFromHex(0x9fa0a0);
+    }
+    if(_model.temp2sign == 1){
+        _qishiLabel.textColor = [UIColor redColor];
+    }else{
+        _qishiLabel.textColor = UIColorFromHex(0x9fa0a0);
+    }
+    if(_model.temp3sign == 1){
+        _diwenLabel.textColor = [UIColor redColor];
+    }else{
+        _diwenLabel.textColor = UIColorFromHex(0x9fa0a0);
+    }
+    if(_model.temp4sign == 1){
+        _dishiLabel.textColor = [UIColor redColor];
+    }else{
+        _dishiLabel.textColor = UIColorFromHex(0x9fa0a0);
+    }
+    
+    NSString *text1 = [NSString stringWithFormat:@"气温：%@°C",_model.temp1];
+    NSString *text2 = [NSString stringWithFormat:@"气湿：%@°C",_model.temp2];
+    NSString *text3 = [NSString stringWithFormat:@"地温：%@°C",_model.temp3];
+    NSString *text4 = [NSString stringWithFormat:@"地湿：%@°C",_model.temp4];
+    
+    _qiwenLabel.text = text1;
+    
+    _qishiLabel.text = text2;
+    
+    _diwenLabel.text = text3;
+    
+    _dishiLabel.text = text4;
+    
+    NSString *str = [NSString stringWithFormat:@"类别：%@",_model.cat];
+    
+    NSMutableAttributedString *hintString=[[NSMutableAttributedString alloc]initWithString:str];
+    //获取要调整颜色的文字位置,调整颜色
+    NSRange range1=[[hintString string]rangeOfString:@"类别："];
+    [hintString addAttribute:NSForegroundColorAttributeName value:UIColorFromHex(0x9fa0a0) range:range1];
+    
+    _leibieLabel.attributedText = hintString;
+    
+    NSString *st2 = [NSString stringWithFormat:@"员工：%@",_model.stuf];
+    
+    _yuangongLabel.text = st2;
+
+    _timeLabel.text = _model.time;
+    
+    if(model.state == 2){
+    
+        UIImage *image = [UIImage imageNamed:@"1-预警"];
+        
+        _headImageView.image = image;
+    }
+    
+    if(model.state == 3){
+        
+        UIImage *image = [UIImage imageNamed:@"1-异常"];
+        
+        _headImageView.image = image;
+    }
+    
 }
 
 

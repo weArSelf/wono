@@ -83,6 +83,16 @@
 		A8A11D561F1DF058008CA39A /* WSDatePickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A8A11D521F1DF058008CA39A /* WSDatePickerView.xib */; };
 		A8A11D5A1F1EEAE3008CA39A /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A11D591F1EEAE3008CA39A /* MapViewController.m */; };
 		A8A11D5E1F1F5E72008CA39A /* RegeistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A11D5D1F1F5E72008CA39A /* RegeistViewController.m */; };
+		A8A94F621F41856E00D9BBA2 /* MainTempModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F611F41856E00D9BBA2 /* MainTempModel.m */; };
+		A8A94F671F428BAD00D9BBA2 /* PengModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F661F428BAD00D9BBA2 /* PengModel.m */; };
+		A8A94F6A1F42A40F00D9BBA2 /* PengTypeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F691F42A40F00D9BBA2 /* PengTypeModel.m */; };
+		A8A94F6D1F4537F800D9BBA2 /* ScreenDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F6C1F4537F800D9BBA2 /* ScreenDetailViewController.m */; };
+		A8A94F701F4546BD00D9BBA2 /* ScreenDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F6F1F4546BD00D9BBA2 /* ScreenDetailModel.m */; };
+		A8A94F731F4562CD00D9BBA2 /* MainPlantModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F721F4562CD00D9BBA2 /* MainPlantModel.m */; };
+		A8A94F761F4572C000D9BBA2 /* PlantBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F751F4572C000D9BBA2 /* PlantBaseModel.m */; };
+		A8A94F791F46983A00D9BBA2 /* PercentModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F781F46983A00D9BBA2 /* PercentModel.m */; };
+		A8A94F7C1F46D73000D9BBA2 /* AddModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F7B1F46D73000D9BBA2 /* AddModel.m */; };
+		A8A94F7F1F46E3C700D9BBA2 /* AddDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F7E1F46E3C700D9BBA2 /* AddDetailModel.m */; };
 		A8ADF1641F0F841100781E06 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A8ADF1631F0F841100781E06 /* main.m */; };
 		A8ADF1671F0F841200781E06 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A8ADF1661F0F841200781E06 /* AppDelegate.m */; };
 		A8ADF16A1F0F841200781E06 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8ADF1691F0F841200781E06 /* ViewController.m */; };
@@ -314,6 +324,26 @@
 		A8A11D591F1EEAE3008CA39A /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		A8A11D5C1F1F5E72008CA39A /* RegeistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegeistViewController.h; sourceTree = "<group>"; };
 		A8A11D5D1F1F5E72008CA39A /* RegeistViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegeistViewController.m; sourceTree = "<group>"; };
+		A8A94F601F41856E00D9BBA2 /* MainTempModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTempModel.h; sourceTree = "<group>"; };
+		A8A94F611F41856E00D9BBA2 /* MainTempModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTempModel.m; sourceTree = "<group>"; };
+		A8A94F651F428BAD00D9BBA2 /* PengModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PengModel.h; sourceTree = "<group>"; };
+		A8A94F661F428BAD00D9BBA2 /* PengModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PengModel.m; sourceTree = "<group>"; };
+		A8A94F681F42A40F00D9BBA2 /* PengTypeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PengTypeModel.h; sourceTree = "<group>"; };
+		A8A94F691F42A40F00D9BBA2 /* PengTypeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PengTypeModel.m; sourceTree = "<group>"; };
+		A8A94F6B1F4537F800D9BBA2 /* ScreenDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenDetailViewController.h; sourceTree = "<group>"; };
+		A8A94F6C1F4537F800D9BBA2 /* ScreenDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScreenDetailViewController.m; sourceTree = "<group>"; };
+		A8A94F6E1F4546BD00D9BBA2 /* ScreenDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenDetailModel.h; sourceTree = "<group>"; };
+		A8A94F6F1F4546BD00D9BBA2 /* ScreenDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScreenDetailModel.m; sourceTree = "<group>"; };
+		A8A94F711F4562CD00D9BBA2 /* MainPlantModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainPlantModel.h; sourceTree = "<group>"; };
+		A8A94F721F4562CD00D9BBA2 /* MainPlantModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainPlantModel.m; sourceTree = "<group>"; };
+		A8A94F741F4572C000D9BBA2 /* PlantBaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlantBaseModel.h; sourceTree = "<group>"; };
+		A8A94F751F4572C000D9BBA2 /* PlantBaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlantBaseModel.m; sourceTree = "<group>"; };
+		A8A94F771F46983A00D9BBA2 /* PercentModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PercentModel.h; sourceTree = "<group>"; };
+		A8A94F781F46983A00D9BBA2 /* PercentModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PercentModel.m; sourceTree = "<group>"; };
+		A8A94F7A1F46D73000D9BBA2 /* AddModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddModel.h; sourceTree = "<group>"; };
+		A8A94F7B1F46D73000D9BBA2 /* AddModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddModel.m; sourceTree = "<group>"; };
+		A8A94F7D1F46E3C700D9BBA2 /* AddDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddDetailModel.h; sourceTree = "<group>"; };
+		A8A94F7E1F46E3C700D9BBA2 /* AddDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddDetailModel.m; sourceTree = "<group>"; };
 		A8ADF15F1F0F841100781E06 /* wonoAPP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wonoAPP.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8ADF1631F0F841100781E06 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A8ADF1651F0F841100781E06 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -436,6 +466,8 @@
 				A821F4FD1F288D6A0040846E /* SetModel.m */,
 				A821F5271F3012230040846E /* PointModel.h */,
 				A821F5281F3012230040846E /* PointModel.m */,
+				A8A94F601F41856E00D9BBA2 /* MainTempModel.h */,
+				A8A94F611F41856E00D9BBA2 /* MainTempModel.m */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -533,6 +565,8 @@
 				A821F51C1F2EE1A10040846E /* ZhiBaoViewController.m */,
 				A821F51E1F2EFA350040846E /* ZhongZhiViewController.h */,
 				A821F51F1F2EFA350040846E /* ZhongZhiViewController.m */,
+				A8A94F6B1F4537F800D9BBA2 /* ScreenDetailViewController.h */,
+				A8A94F6C1F4537F800D9BBA2 /* ScreenDetailViewController.m */,
 			);
 			name = "种植管理";
 			sourceTree = "<group>";
@@ -683,6 +717,18 @@
 			children = (
 				A8A11D3B1F18C1DF008CA39A /* PlantModel.h */,
 				A8A11D3C1F18C1DF008CA39A /* PlantModel.m */,
+				A8A94F6E1F4546BD00D9BBA2 /* ScreenDetailModel.h */,
+				A8A94F6F1F4546BD00D9BBA2 /* ScreenDetailModel.m */,
+				A8A94F711F4562CD00D9BBA2 /* MainPlantModel.h */,
+				A8A94F721F4562CD00D9BBA2 /* MainPlantModel.m */,
+				A8A94F741F4572C000D9BBA2 /* PlantBaseModel.h */,
+				A8A94F751F4572C000D9BBA2 /* PlantBaseModel.m */,
+				A8A94F771F46983A00D9BBA2 /* PercentModel.h */,
+				A8A94F781F46983A00D9BBA2 /* PercentModel.m */,
+				A8A94F7A1F46D73000D9BBA2 /* AddModel.h */,
+				A8A94F7B1F46D73000D9BBA2 /* AddModel.m */,
+				A8A94F7D1F46E3C700D9BBA2 /* AddDetailModel.h */,
+				A8A94F7E1F46E3C700D9BBA2 /* AddDetailModel.m */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -823,6 +869,10 @@
 			children = (
 				A8BC314D1F41326300BD6E76 /* SearchModel.h */,
 				A8BC314E1F41326300BD6E76 /* SearchModel.m */,
+				A8A94F651F428BAD00D9BBA2 /* PengModel.h */,
+				A8A94F661F428BAD00D9BBA2 /* PengModel.m */,
+				A8A94F681F42A40F00D9BBA2 /* PengTypeModel.h */,
+				A8A94F691F42A40F00D9BBA2 /* PengTypeModel.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1051,6 +1101,7 @@
 				A821F53E1F32AEBF0040846E /* MineDataViewController.m in Sources */,
 				A8BC31421F3C329000BD6E76 /* PengTypeViewController.m in Sources */,
 				A821F5751F3955CA0040846E /* MyCollectionViewController.m in Sources */,
+				A8A94F6A1F42A40F00D9BBA2 /* PengTypeModel.m in Sources */,
 				A8A11D481F1CA217008CA39A /* SelectionViewController.m in Sources */,
 				A821F5111F2B06BD0040846E /* FZHPickerView.m in Sources */,
 				A8246A0D1F1467DC00CFD65A /* JXTCacher.m in Sources */,
@@ -1058,7 +1109,9 @@
 				A821F4B21F2598C50040846E /* TempTableViewCell.m in Sources */,
 				A821F50E1F2AFFC00040846E /* UITextView+Placeholder.m in Sources */,
 				A821F4BA1F25E6900040846E /* catergory.swift in Sources */,
+				A8A94F7C1F46D73000D9BBA2 /* AddModel.m in Sources */,
 				A821F52F1F319AEF0040846E /* ChangeNameViewController.m in Sources */,
+				A8A94F671F428BAD00D9BBA2 /* PengModel.m in Sources */,
 				A821F5071F29BE790040846E /* CDZPicker.m in Sources */,
 				A821F5321F31B1270040846E /* ChangePswViewController.m in Sources */,
 				A8A11D421F1C6A29008CA39A /* WonoCircleTableViewCell.m in Sources */,
@@ -1071,9 +1124,11 @@
 				A821F51A1F2EDA190040846E /* ShifeiViewController.m in Sources */,
 				A8246A251F149C5400CFD65A /* LoginViewController.m in Sources */,
 				A821F5861F3AA29B0040846E /* PengAddViewController.m in Sources */,
+				A8A94F6D1F4537F800D9BBA2 /* ScreenDetailViewController.m in Sources */,
 				A8A11D261F1852DB008CA39A /* ForgetViewController.m in Sources */,
 				A8A11D391F18A929008CA39A /* PlantCell.m in Sources */,
 				A821F5631F3801070040846E /* MyFarmViewController.m in Sources */,
+				A8A94F7F1F46E3C700D9BBA2 /* AddDetailModel.m in Sources */,
 				A8A11D551F1DF058008CA39A /* WSDatePickerView.m in Sources */,
 				A8ADF1671F0F841200781E06 /* AppDelegate.m in Sources */,
 				A821F4B91F25E6900040846E /* CABasicAnimation+Category.m in Sources */,
@@ -1081,12 +1136,14 @@
 				A821F50B1F2AD1030040846E /* WorkViewController.m in Sources */,
 				A8BC314C1F3D599300BD6E76 /* CompleteModel.m in Sources */,
 				A8ADF1641F0F841100781E06 /* main.m in Sources */,
+				A8A94F621F41856E00D9BBA2 /* MainTempModel.m in Sources */,
 				A821F4F81F2842070040846E /* ZXView.m in Sources */,
 				A821F4F11F2729840040846E /* TempModel.m in Sources */,
 				A8A11D2F1F1863A6008CA39A /* BaseNavViewController.m in Sources */,
 				A821F5171F2B2EA30040846E /* AddViewController.m in Sources */,
 				A82469FF1F14626B00CFD65A /* MBProgressHUD+XMG.m in Sources */,
 				A8246A181F146F4800CFD65A /* TempViewController.m in Sources */,
+				A8A94F791F46983A00D9BBA2 /* PercentModel.m in Sources */,
 				A821F5811F39B5720040846E /* InterfaceModel.m in Sources */,
 				A8246A281F14C25A00CFD65A /* CompleteInfoViewController.m in Sources */,
 				A8246A0E1F1467DC00CFD65A /* NSObject+JKCoding.m in Sources */,
@@ -1094,8 +1151,10 @@
 				A821F5411F32C1390040846E /* CustomActionSheet.m in Sources */,
 				A8A11D541F1DF058008CA39A /* UIView+Extension.m in Sources */,
 				A8A11D2B1F18532D008CA39A /* HDTimerBtn.m in Sources */,
+				A8A94F701F4546BD00D9BBA2 /* ScreenDetailModel.m in Sources */,
 				A8246A2B1F17448300CFD65A /* AgreementViewController.m in Sources */,
 				A821F5571F34618C0040846E /* PengViewController.m in Sources */,
+				A8A94F761F4572C000D9BBA2 /* PlantBaseModel.m in Sources */,
 				A821F4FB1F2878360040846E /* SetTempViewController.m in Sources */,
 				A821F5691F3844C40040846E /* NeedSelectionViewController.m in Sources */,
 				A821F5381F31C47E0040846E /* EmployeeViewController.m in Sources */,
@@ -1121,6 +1180,7 @@
 				A821F4AB1F21C43B0040846E /* StatisticsTableViewCell.m in Sources */,
 				A821F5451F32D2430040846E /* StuffTableViewCell.m in Sources */,
 				A821F55A1F34637D0040846E /* PengTableViewCell.m in Sources */,
+				A8A94F731F4562CD00D9BBA2 /* MainPlantModel.m in Sources */,
 				A8246A121F146EE400CFD65A /* MineViewController.m in Sources */,
 				A8A11D531F1DF058008CA39A /* NSDate+Extension.m in Sources */,
 				A821F4AE1F21F4560040846E /* UIImage+Scale.m in Sources */,

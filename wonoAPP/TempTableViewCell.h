@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MainTempModel.h"
 
 @interface TempTableViewCell : UITableViewCell
+
+@property (nonatomic,strong) MainTempModel *model;
 
 @end

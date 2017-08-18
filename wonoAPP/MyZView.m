@@ -85,7 +85,7 @@
     
     PointModel *firM = _dataArr[0];
     
-    CGPoint orginP = CGPointMake(BorX, (self.height - HDAutoHeight(60)-HDAutoHeight(60)) *(1 - firM.Height/50) + HDAutoHeight(60));
+    CGPoint orginP = CGPointMake(BorX, HDAutoHeight(60)+(self.height-HDAutoHeight(140))*(50-firM.Height)/60);
     
     UIView *pointView = [[UIView alloc]init];
     pointView.center = orginP;
@@ -132,7 +132,9 @@
             realX = BorX + i*(self.width - BorX*2)/(9);
         }
         
-        CGPoint nowP = CGPointMake(realX, (self.height - HDAutoHeight(60)-HDAutoHeight(60)) *(1 - nowM.Height/50) + HDAutoHeight(60));
+        
+        
+        CGPoint nowP = CGPointMake(realX,HDAutoHeight(60)+(self.height-HDAutoHeight(140))*(50-nowM.Height)/60);
         
         
         UIView *pointView = [[UIView alloc]init];
@@ -195,7 +197,7 @@
     
     PointModel *firM = _dataArr[0];
     
-    CGPoint orginP = CGPointMake(BorX, (self.height - HDAutoHeight(60)-HDAutoHeight(60)) *(1 - firM.Height2/50) + HDAutoHeight(60));
+    CGPoint orginP = CGPointMake(BorX, HDAutoHeight(60)+(self.height-HDAutoHeight(140))*(50-firM.Height2)/60);
     
     UIView *pointView = [[UIView alloc]init];
     pointView.center = orginP;
@@ -211,7 +213,7 @@
     UILabel *pointLabel = [[UILabel alloc]init];
     pointLabel.textAlignment = NSTextAlignmentCenter;
     pointLabel.textColor = [UIColor whiteColor];
-    pointLabel.text = firM.firstBottomStr;
+    pointLabel.text = firM.nextBottomStr;
     pointLabel.font = [UIFont systemFontOfSize:11];
     pointLabel.center = orginP;
     
@@ -228,8 +230,17 @@
     bottomLabel.font = [UIFont systemFontOfSize:12];
     bottomLabel.textColor = [UIColor whiteColor];
     bottomLabel.text =firM.lineName;
-    bottomLabel.textAlignment = NSTextAlignmentCenter;
-    bottomLabel.frame = CGRectMake(BorX-HDAutoWidth(30), self.height -HDAutoHeight(40) , HDAutoWidth(60), HDAutoHeight(40));
+//    bottomLabel.textAlignment = NSTextAlignmentCenter;
+    bottomLabel.numberOfLines = 0;
+    
+//    [self setLabelSpace:bottomLabel withValue: firM.lineName withFont:[UIFont systemFontOfSize:13]];
+    
+    CGFloat height = [self getSpaceLabelHeight:firM.lineName withFont:[UIFont systemFontOfSize:13] withWidth:HDAutoWidth(60)];
+    
+    
+    
+    
+    bottomLabel.frame = CGRectMake(BorX-HDAutoWidth(30), self.height -HDAutoHeight(80) , HDAutoWidth(60), HDAutoHeight(80));
     
     
     [self.BackgroundView addSubview:bottomLabel];
@@ -246,7 +257,7 @@
             realX = BorX + i*(self.width - BorX*2)/(9);
         }
         
-        CGPoint nowP = CGPointMake(realX, (self.height - HDAutoHeight(60)-HDAutoHeight(60)) *(1 - nowM.Height2/50) + HDAutoHeight(60));
+        CGPoint nowP = CGPointMake(realX, HDAutoHeight(60)+(self.height-HDAutoHeight(140))*(50-nowM.Height2)/60);
         
         
         UIView *pointView = [[UIView alloc]init];
@@ -263,7 +274,7 @@
         UILabel *pointLabel = [[UILabel alloc]init];
         pointLabel.textAlignment = NSTextAlignmentCenter;
         pointLabel.textColor =[UIColor whiteColor];
-        pointLabel.text = nowM.firstBottomStr;
+        pointLabel.text = nowM.nextBottomStr;
         pointLabel.font = [UIFont systemFontOfSize:11];
         pointLabel.center = nowP;
         
@@ -279,9 +290,17 @@
         UILabel *bottomLabel = [[UILabel alloc]init];
         bottomLabel.font = [UIFont systemFontOfSize:12];
         bottomLabel.textColor = [UIColor whiteColor];
-        bottomLabel.text =firM.lineName;
-        bottomLabel.textAlignment = NSTextAlignmentCenter;
-        bottomLabel.frame = CGRectMake(realX-HDAutoWidth(30), self.height  - HDAutoHeight(40) , HDAutoWidth(60), HDAutoHeight(40));
+        bottomLabel.text =nowM.lineName;
+//        bottomLabel.textAlignment = NSTextAlignmentCenter;
+        bottomLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        
+        bottomLabel.numberOfLines = 0;
+//        [self setLabelSpace:bottomLabel withValue: nowM.lineName withFont:[UIFont systemFontOfSize:13]];
+        
+        CGFloat height = [self getSpaceLabelHeight:nowM.lineName withFont:[UIFont systemFontOfSize:13] withWidth:HDAutoWidth(60)];
+        
+        
+        bottomLabel.frame = CGRectMake(realX-HDAutoWidth(30), self.height  - HDAutoHeight(80) , HDAutoWidth(60),HDAutoHeight(80));
         
         
         [self.BackgroundView addSubview:bottomLabel];
@@ -325,11 +344,16 @@
     UILabel *firLabel = [[UILabel alloc]init];
     firLabel.font = [UIFont systemFontOfSize:13];
     firLabel.textColor = [UIColor whiteColor];
+    
+    firLabel.tag = 350;
+    
     firLabel.text = @"气温";
     UILabel *secLabel = [[UILabel alloc]init];
     secLabel.font = [UIFont systemFontOfSize:13];
     secLabel.textColor = [UIColor whiteColor];
     secLabel.text = @"地温";
+    
+    secLabel.tag = 351;
     
     firView.frame = CGRectMake(HDAutoWidth(510), HDAutoHeight(45), HDAutoWidth(20), HDAutoWidth(20));
     firLabel.frame = CGRectMake(HDAutoWidth(540), HDAutoHeight(45), HDAutoWidth(60), HDAutoHeight(30));
@@ -348,6 +372,55 @@
     
     
 }
+
+-(void)changeTitle{
+
+    UILabel *label = (UILabel *)[self viewWithTag:350];
+    label.text = @"气湿";
+    UILabel *label2 = (UILabel *)[self viewWithTag:351];
+    label2.text = @"地湿";
+}
+
+
+
+
+-(CGFloat)getSpaceLabelHeight:(NSString*)str withFont:(UIFont*)font withWidth:(CGFloat)width {
+    NSMutableParagraphStyle *paraStyle = [[NSMutableParagraphStyle alloc] init];
+    paraStyle.lineBreakMode = NSLineBreakByCharWrapping;
+    paraStyle.alignment = NSTextAlignmentLeft;
+    paraStyle.lineSpacing = HDAutoHeight(6);
+    paraStyle.hyphenationFactor = 1.0;
+    paraStyle.firstLineHeadIndent = 0.0;
+    paraStyle.paragraphSpacingBefore = 0.0;
+    paraStyle.headIndent = 0;
+    paraStyle.tailIndent = 0;
+    NSDictionary *dic = @{NSFontAttributeName:font, NSParagraphStyleAttributeName:paraStyle, NSKernAttributeName:@1.5f
+                          };
+    
+    CGSize size = [str boundingRectWithSize:CGSizeMake(width, [ [ UIScreen mainScreen ] bounds ].size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:dic context:nil].size;
+    return size.height;
+}
+
+-(void)setLabelSpace:(UILabel*)label withValue:(NSString*)str withFont:(UIFont*)font {
+    NSMutableParagraphStyle *paraStyle = [[NSMutableParagraphStyle alloc] init];
+    paraStyle.lineBreakMode = NSLineBreakByCharWrapping;
+    paraStyle.alignment = NSTextAlignmentLeft;
+    paraStyle.lineSpacing = HDAutoHeight(6); //设置行间距
+    paraStyle.hyphenationFactor = 1.0;
+    paraStyle.firstLineHeadIndent = 0.0;
+    paraStyle.paragraphSpacingBefore = 0.0;
+    paraStyle.headIndent = 0;
+    paraStyle.tailIndent = 0;
+    //设置字间距 NSKernAttributeName:@1.5f
+    NSDictionary *dic = @{NSFontAttributeName:font, NSParagraphStyleAttributeName:paraStyle, NSKernAttributeName:@1.5f
+                          };
+    
+    NSAttributedString *attributeStr = [[NSAttributedString alloc] initWithString:str attributes:dic];
+    label.attributedText = attributeStr;
+}
+
+
+
 
 
 @end

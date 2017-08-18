@@ -9,6 +9,7 @@
 #import "SelectionViewController.h"
 #import "PlantCell.h"
 #import "StatisticsTableViewCell.h"
+#import "PlantBaseModel.h"
 
 @interface SelectionViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -23,10 +24,26 @@
 
 @end
 
-@implementation SelectionViewController
+@implementation SelectionViewController{
+    int fertilizer;
+    int plant;
+    int protect;
+    PercentModel *model;
+    int Count;
+    NSMutableArray *dataArr;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    dataArr = [NSMutableArray array];
+    
+    fertilizer = 0;
+    plant = 0;
+    protect = 0;
+    
+    Count = 1;
+    
     self.view.backgroundColor = [UIColor whiteColor];
     [self creatTitleAndBackBtn];
     
@@ -110,13 +127,17 @@
         make.height.equalTo(@(HDAutoHeight(300)));
     }];
     UILabel *label1 = [self mylabel];
-    label1.text = @"种植品种: 西红柿";
+    label1.tag = 200;
+    label1.text = @"种植品种: ";
     UILabel *label2 = [self mylabel];
-    label2.text = @"占地面积: 10亩";
+    label2.tag = 201;
+    label2.text = @"占地面积: ";
     UILabel *label3 = [self mylabel];
-    label3.text = @"大棚类型: 某某类型";
+    label3.tag = 202;
+    label3.text = @"大棚类型: ";
     UILabel *label4 = [self mylabel];
-    label4.text = @"创建时间: 2017-05-02";
+    label4.tag = 203;
+    label4.text = @"创建时间: ";
     
     [_firstView addSubview:label1];
     [_firstView addSubview:label2];
@@ -178,6 +199,9 @@
     //    _plantTableView.frame = self.view.frame;
     _plantTableView.showsVerticalScrollIndicator = NO;
     
+//    _plantTableView.panGestureRecognizer.delegate = self;
+    
+//    _plantTableView.scrollEnabled = false;
     
     [self.view addSubview:_plantTableView];
     [_plantTableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -195,6 +219,10 @@
 -(void)refresh{
     NSLog(@"下拉刷新");
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        Count = 1;
+        [self requestCircleDataWithGid];
+        [self requestList];
+        
         [_plantTableView.mj_header endRefreshing];
     });
     
@@ -202,6 +230,9 @@
 -(void)loadMore{
     NSLog(@"上拉加载");
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        Count++;
+        [self requestCircleDataWithGid];
+        [self requestList];
         [_plantTableView.mj_footer endRefreshing];
     });
 }
@@ -211,12 +242,14 @@
     if(section == 0){
         return 1;
     }
-    return 2;
+    PlantBaseModel *baseModel = dataArr[section-1];
+    NSArray *arr = baseModel.arr;
+    return arr.count;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     
-    return 3;
+    return dataArr.count+1;
 }
 
 
@@ -228,6 +261,11 @@
         if(cell == nil){
             cell = [[StatisticsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+           
+
+        }
+        if(model){
+            cell.model = model;
         }
         return cell;
     }
@@ -241,6 +279,43 @@
         //        [cell setLeftColor:[UIColor blueColor]];
     }
     //    [cell creatConView];
+    
+    PlantBaseModel *baseModel = dataArr[indexPath.section-1];
+    PlantModel *model2 = baseModel.arr[indexPath.row];
+    
+    
+    
+    int typeMark = [model2.typeStr intValue];
+    switch (typeMark) {
+        case 1:{
+            [cell setLeftColor:UIColorFromHex(0x4db366)];
+            //            model.typeStr = @"种植";
+            break;
+        }
+        case 2:{
+            [cell setLeftColor:UIColorFromHex(0x795548)];
+            //            model.typeStr = @"施肥";
+            break;
+        }
+            
+        case 3:{
+            [cell setLeftColor:UIColorFromHex(0x2196f3)];
+            //            model.typeStr = @"植保";
+            break;
+        }
+            
+        case 4:{
+            [cell setLeftColor:UIColorFromHex(0xffc107)];
+            //            model.typeStr = @"采收";
+            break;
+        }
+            
+            
+        default:
+            break;
+    }
+    
+    cell.model = model2;
     
     return cell;
 }
@@ -295,6 +370,185 @@
 -(CGFloat)tableView:(UITableView*)tableView heightForFooterInSection:(NSInteger)section
 {
     return 0.01;
+}
+
+-(void)setPengID:(NSString *)pengID{
+    _pengID = pengID;
+    Count = 1;
+    [self requestData];
+    [self requestCircleDataWithGid];
+    [self requestList];
+}
+
+-(void)requestData{
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getPengDetailWithPengID:_pengID WithCallBack:^(int state, id data, NSString *msg) {
+       
+        if(state == 2000){
+            NSLog(@"成功");
+            
+            NSDictionary *dic = data;
+            NSString *str1 = dic[@"variety_name"];
+            NSString *str2 = dic[@"area"];
+            int num2 = [str2 intValue];
+            NSString *str3 = dic[@"type_name"];
+            NSString *str4 = dic[@"build"];
+            
+            UILabel *label1 = [self.view viewWithTag:200];
+            label1.text = [NSString stringWithFormat:@"种植品种: %@",str1];
+            UILabel *label2 = [self.view viewWithTag:201];
+            label2.text = [NSString stringWithFormat:@"占地面积: %d亩",num2];
+            UILabel *label3 = [self.view viewWithTag:202];
+            label3.text = [NSString stringWithFormat:@"大棚类型: %@",str3];
+            UILabel *label4 = [self.view viewWithTag:203];
+            label4.text = [NSString stringWithFormat:@"创建时间: %@",str4];
+            
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
+    
+}
+
+-(void)requestCircleDataWithGid{
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getPengPayWithGid:_pengID AndCallBack:^(int state, id data, NSString *msg) {
+      
+        if(state == 2000){
+            NSLog(@"成功");
+            
+            NSDictionary *dic = data;
+            fertilizer = [dic[@"fertilizer"]intValue];
+            plant = [dic[@"plant"]intValue];
+            protect = [dic[@"protect"]intValue];
+            
+            int total = fertilizer + plant + protect;
+            
+            double per1 = (double)fertilizer/total*100;
+            double per2 = (double)plant/total*100;
+            double per3 = (double)protect/total*100;
+            
+            NSArray *nameArr1 = [NSArray arrayWithObjects:@"施肥",@"种植",@"植保", nil];
+            
+            NSMutableArray *nameArr = [NSMutableArray array];
+            
+            NSArray *perArr1 = [NSArray arrayWithObjects:[NSNumber numberWithDouble:per1],[NSNumber numberWithDouble:per2],[NSNumber numberWithDouble:per3], nil];
+            
+            NSMutableArray *perArr = [NSMutableArray array];
+            
+            UIColor *color1 = UIColorFromHex(0x795548);
+            UIColor *color2 = UIColorFromHex(0x4db366);
+            UIColor *color3 = UIColorFromHex(0x2196f3);
+            
+            NSArray *colorArr1 = [NSArray arrayWithObjects:color1,color2,color3, nil];
+            
+            NSMutableArray *colorArr = [NSMutableArray array];
+
+            
+            if(per1 == 0){
+                
+                [nameArr addObject:@"施肥"];
+                [perArr addObject:[NSNumber numberWithDouble:per1]];
+                [colorArr addObject:color1];
+                
+            }
+            if(per2 == 0){
+                [nameArr addObject:@"种植"];
+                [perArr addObject:[NSNumber numberWithDouble:per2]];
+                [colorArr addObject:color2];
+
+               
+            }
+            if(per3 == 0){
+                [nameArr addObject:@"植保"];
+                [perArr addObject:[NSNumber numberWithDouble:per3]];
+                [colorArr addObject:color3];
+
+              
+            }
+            
+            if(nameArr.count==0){
+                [MBProgressHUD showSuccess:@"暂无大棚支出记录"];
+                return;
+            }
+            
+            model = [[PercentModel alloc]init];
+            
+            model.nameArr = nameArr;
+            model.percentArr = perArr;
+            model.title = @"大棚支出记录";
+            
+            model.colorArr  = colorArr;
+            
+            [_plantTableView reloadData];
+//            percentArr = [NSArray arrayWithObjects:[NSNumber numberWithDouble:20.0],[NSNumber numberWithDouble:30.0],[NSNumber numberWithDouble:40.0],[NSNumber numberWithDouble:10.0], nil];
+//            dataArr = [NSArray arrayWithObjects:@"土豆",@"黄瓜",@"西红柿",@"白菜", nil];
+            
+            
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
+    
+}
+
+-(void)requestList{
+    
+    if(Count == 1){
+        dataArr = [NSMutableArray array];
+    }
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getPengListWithGid:_pengID AndPage:Count WithCallBack:^(int state, id data, NSString *msg) {
+        
+        if(state == 2000){
+            NSLog(@"成功");
+            NSArray *arr = data[@"data"];
+            for (int i = 0 ; i<arr.count; i++) {
+                
+                
+                NSDictionary *dic = arr[i];
+                
+                PlantBaseModel *baseModel = [[PlantBaseModel alloc]init];
+                
+                baseModel.arr = [NSMutableArray array];
+                
+                baseModel.name = dic[@"name"];
+                NSArray *arr2 = dic[@"plant"];
+                //                baseModel.arr = arr2;
+                
+                for(int j=0;j<arr2.count;j++){
+                    
+                    NSDictionary *dic2 = arr2[j];
+                    
+                    PlantModel *model2 = [[PlantModel alloc]init];
+                    model2.dateStr = dic2[@"week"];
+                    model2.timeStr = dic2[@"time"];
+                    model2.nameStr = dic2[@"title"];
+                    model2.typeStr = dic2[@"plant_type_id"];
+                    model2.numberStr = dic2[@"total_amount"];
+                    model2.extraStr = dic2[@"variety_name"];
+                    
+                    model2.pengID = dic2[@"gid"];
+                    [baseModel.arr addObject:model2];
+                }
+                
+                [dataArr addObject:baseModel];
+                
+            }
+            
+            [_plantTableView reloadData];
+            
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
+    
 }
 
 

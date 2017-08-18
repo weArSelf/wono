@@ -181,6 +181,375 @@
         }
     }];
     
+}
+
+-(void)getMainPengWithFid:(NSString *)fid AndCallBack:(AllCallBack)callback{
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:fid forKey:@"fid"];
+    [[BaseInterfaceModel shareInstance] sendData:API_GreenHouse parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+}
+
+-(void)getFarmStuffWithFid:(NSString *)fid WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:fid forKey:@"fid"];
+    [[BaseInterfaceModel shareInstance] sendData:API_FarmEmployees parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+}
+
+-(void)farmDeleteEmployeeWithFid:(NSString *)fid AndUid:(NSString *)uid WithCallBack:(AllCallBack)callback{
+
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:fid forKey:@"fid"];
+    [param setObject:uid forKey:@"uid"];
+    [[BaseInterfaceModel shareInstance] sendData:API_DeleteEmployees parameters:param type:ENRT_DELETE success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+}
+
+-(void)farmAddStuffWithFid:(NSString *)fid AndUid:(NSString *)uid WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:fid forKey:@"fid"];
+    [param setObject:uid forKey:@"uid"];
+    [[BaseInterfaceModel shareInstance] sendData:API_AddEmployees parameters:param type:ENRT_POST success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+
+    
+}
+
+
+-(void)getPengWithFid:(NSString *)fid AndCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:fid forKey:@"fid"];
+    [[BaseInterfaceModel shareInstance] sendData:API_GetPeng parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+}
+
+
+-(void)getPengWithCatPid:(NSString *)pid AndCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:pid forKey:@"pid"];
+    [[BaseInterfaceModel shareInstance] sendData:API_GetPengCat parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+}
+
+-(void)getPengTypeCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_GetPengType parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+}
+
+-(void)DeletePengWithFid:(NSString *)fid AndGid:(NSString *)gid WithCallBack:(AllCallBack)callback{
+
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:fid forKey:@"fid"];
+    [param setObject:gid forKey:@"gid"];
+    [[BaseInterfaceModel shareInstance] sendData:API_DeletePeng parameters:param type:ENRT_DELETE success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+
+
+}
+
+-(void)AddPengWithFid:(NSString *)fid AndImei:(NSString *)imei AndName:(NSString *)name AndType:(NSString *)type AndUids:(NSString *)arr AndVarID:(NSString *)varId WithCallBack:(AllCallBack)callback{
+
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:fid forKey:@"fid"];
+    [param setObject:imei forKey:@"imei"];
+    [param setObject:name forKey:@"name"];
+    [param setObject:type forKey:@"type"];
+    [param setObject:arr forKey:@"uids"];
+    [param setObject:varId forKey:@"varieties_id"];
+    [[BaseInterfaceModel shareInstance] sendData:API_AddPeng parameters:param type:ENRT_POST success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+}
+
+-(void)getPengDetailWithGid:(NSString *)gid AndType:(NSString *)type WithCallBack:(AllCallBack)callback{
+
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:gid forKey:@"gid"];
+    [param setObject:type forKey:@"type"];
+    [[BaseInterfaceModel shareInstance] sendData:API_GetGreenDetail parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+    
+    NSString *code = responseObject[@"code"];
+    NSString *msg = responseObject[@"msg"];
+    NSString *data = responseObject[@"data"];
+    if (callback) {
+        callback([code intValue], data, msg);
+    }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+
+
+}
+
+-(void)updatePengAlertWithModel:(SetModel *)model WithCallBack:(AllCallBack)callback{
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:model.needID forKey:@"gid"];
+    
+    [param setObject:model.airMax forKey:@"high_air_temp"];
+    [param setObject:model.airMin forKey:@"low_air_temp"];
+    
+    [param setObject:model.air2Max forKey:@"high_air_humidity"];
+    [param setObject:model.air2Min forKey:@"low_air_humidity"];
+    
+    [param setObject:model.landMax forKey:@"high_ground_temp"];
+    [param setObject:model.landMin forKey:@"low_ground_temp"];
+    
+    [param setObject:model.land2Max forKey:@"high_ground_humidity"];
+    [param setObject:model.land2Min forKey:@"low_ground_humidity"];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_UpdateAlert parameters:param type:ENRT_PUT success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+}
+
+-(void)getMainPlantWithModel:(MainPlantModel *)model WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:model.date forKey:@"date"];
+    
+    [param setObject:model.fid forKey:@"fid"];
+    NSString *page = [NSString stringWithFormat:@"%d",model.page];
+    [param setObject:page forKey:@"page"];
+    NSString *perPage = [NSString stringWithFormat:@"%d",model.per_page];
+    [param setObject:perPage forKey:@"per_page"];
+    
+    [param setObject:model.uid forKey:@"uid"];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_GetPlant parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+
+    
+}
+
+-(void)getPengDetailWithPengID:(NSString *)needID WithCallBack:(AllCallBack)callback{
+
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:needID forKey:@"id"];
+    [[BaseInterfaceModel shareInstance] sendData:API_getPengDetail parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+
+}
+
+-(void)getPengPayWithGid:(NSString *)gid AndCallBack:(AllCallBack)callback{
+
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:gid forKey:@"gid"];
+    [[BaseInterfaceModel shareInstance] sendData:API_GetPengPay parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+}
+
+-(void)getPengListWithGid:(NSString *)gid AndPage:(int)page WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    
+    NSString *pa = [NSString stringWithFormat:@"%d",page];
+    
+    
+    [param setObject:gid forKey:@"gid"];
+    [param setObject:pa forKey:@"page"];
+    [param setObject:@"10" forKey:@"per_page"];
+//    [pa setValue:@"10" forKey:@"per_page"];
+    [[BaseInterfaceModel shareInstance] sendData:API_GetPengList parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
     
 }
 

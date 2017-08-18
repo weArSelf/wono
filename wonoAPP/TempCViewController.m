@@ -27,17 +27,22 @@
 
 @implementation TempCViewController{
     NSMutableArray *dataArr;
+    
+    NSMutableArray *FdataArr;
+    NSMutableArray *NdataArr;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    FdataArr = [NSMutableArray array];
+    NdataArr = [NSMutableArray array];
+    
     self.view.backgroundColor = [UIColor whiteColor];
     [self creatTitleAndBackBtn];
     [self createRight];
     [self createBackGround];
-    [self createZXview];
-    [self createZXview2];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -206,13 +211,16 @@
     
     NSLog(@"测试");
     if (sender.selectedSegmentIndex == 0) {
+        [self GetDataWithType:@"1"];
         NSLog(@"1");
     }else if (sender.selectedSegmentIndex == 1){
+        [self GetDataWithType:@"2"];
         NSLog(@"2");
 //        [self createZXview3];
         //记得remove对应tag的view再重新添加
         
     }else if (sender.selectedSegmentIndex == 2){
+        [self GetDataWithType:@"3"];
         NSLog(@"3");
     }
     
@@ -225,43 +233,49 @@
 }
 
 -(void)createZXview{
+    
+    MyZView *view = [self.view viewWithTag:201];
+    if(view){
+        [view removeFromSuperview];
+    }
+    
     MyZView *Zview = [[MyZView alloc]initWithFrame:CGRectMake(0, 64,APP_CONTENT_WIDTH,HDAutoHeight(550))];
     
     Zview.tag = 201;
     
-    PointModel *model = [[PointModel alloc]init];
-    model.Height = 34;
-    
-    model.firstBottomStr = @"描述";
-    
-    model.Height2 = 20;
-    
-    model.nextBottomStr = @"描述";
-    
-    model.lineName = @"时间";
-    
-    PointModel *model2 = [[PointModel alloc]init];
-    model2.Height = 30;
-    
-    model2.Height2 = 20;
-    
-    model2.firstBottomStr = @"唉唉";
-    
-    model2.nextBottomStr = @"问问";
-    
-    model2.lineName = @"时间";
-
-    
-    dataArr = [NSMutableArray array];
-    [dataArr addObject:model];
-    [dataArr addObject:model2];
-    [dataArr addObject:model];
-    [dataArr addObject:model2];
-    [dataArr addObject:model];
-    [dataArr addObject:model2];
-    [dataArr addObject:model];
-    
-    Zview.dataArr = dataArr;
+//    PointModel *model = [[PointModel alloc]init];
+//    model.Height = 34;
+//    
+//    model.firstBottomStr = @"描述";
+//    
+//    model.Height2 = 20;
+//    
+//    model.nextBottomStr = @"描述";
+//    
+//    model.lineName = @"时间";
+//    
+//    PointModel *model2 = [[PointModel alloc]init];
+//    model2.Height = 30;
+//    
+//    model2.Height2 = 20;
+//    
+//    model2.firstBottomStr = @"唉唉";
+//    
+//    model2.nextBottomStr = @"问问";
+//    
+//    model2.lineName = @"时间";
+//
+//    
+//    dataArr = [NSMutableArray array];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model2];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model2];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model2];
+//    [dataArr addObject:model];
+//    
+    Zview.dataArr = FdataArr;
     
     [self.view addSubview:Zview];
     
@@ -269,74 +283,80 @@
 
 -(void)createZXview2{
     
+    MyZView *view = [self.view viewWithTag:202];
+    if(view){
+        [view removeFromSuperview];
+    }
     
-    PointModel *model = [[PointModel alloc]init];
+//    PointModel *model = [[PointModel alloc]init];
+//    
+//    
+//    model.Height = 34;
+//    
+//    model.firstBottomStr = @"描述";
+//    
+//    model.Height2 = 20;
+//    
+//    model.nextBottomStr = @"描述";
+//    
+//    model.lineName = @"时间";
+//    
+//    PointModel *model2 = [[PointModel alloc]init];
+//    model2.Height = 30;
+//    
+//    model2.Height2 = 20;
+//    
+//    model2.firstBottomStr = @"唉唉";
+//    
+//    model2.nextBottomStr = @"问问";
+//    
+//    model2.lineName = @"时间";
+//    
+//    
+//    dataArr = [NSMutableArray array];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model2];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model2];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model2];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model2];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model2];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model2];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model2];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model2];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model2];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model2];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model2];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model2];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model2];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model2];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model2];
+//    [dataArr addObject:model];
+//    
     
-    
-    model.Height = 34;
-    
-    model.firstBottomStr = @"描述";
-    
-    model.Height2 = 20;
-    
-    model.nextBottomStr = @"描述";
-    
-    model.lineName = @"时间";
-    
-    PointModel *model2 = [[PointModel alloc]init];
-    model2.Height = 30;
-    
-    model2.Height2 = 20;
-    
-    model2.firstBottomStr = @"唉唉";
-    
-    model2.nextBottomStr = @"问问";
-    
-    model2.lineName = @"时间";
-    
-    
-    dataArr = [NSMutableArray array];
-    [dataArr addObject:model];
-    [dataArr addObject:model2];
-    [dataArr addObject:model];
-    [dataArr addObject:model2];
-    [dataArr addObject:model];
-    [dataArr addObject:model2];
-    [dataArr addObject:model];
-    [dataArr addObject:model];
-    [dataArr addObject:model2];
-    [dataArr addObject:model];
-    [dataArr addObject:model2];
-    [dataArr addObject:model];
-    [dataArr addObject:model2];
-    [dataArr addObject:model];
-    [dataArr addObject:model];
-    [dataArr addObject:model2];
-    [dataArr addObject:model];
-    [dataArr addObject:model2];
-    [dataArr addObject:model];
-    [dataArr addObject:model2];
-    [dataArr addObject:model];
-    [dataArr addObject:model];
-    [dataArr addObject:model2];
-    [dataArr addObject:model];
-    [dataArr addObject:model2];
-    [dataArr addObject:model];
-    [dataArr addObject:model2];
-    [dataArr addObject:model];
-    [dataArr addObject:model];
-    [dataArr addObject:model2];
-    [dataArr addObject:model];
-    [dataArr addObject:model2];
-    [dataArr addObject:model];
-    [dataArr addObject:model2];
-    [dataArr addObject:model];
-    
-    
-    MyZView *Zview = [[MyZView alloc]initWithFrame:CGRectMake(0, 64 +HDAutoHeight(550), APP_CONTENT_WIDTH, HDAutoHeight(550)) AndData:dataArr];
+    MyZView *Zview = [[MyZView alloc]initWithFrame:CGRectMake(0, 64 +HDAutoHeight(550), APP_CONTENT_WIDTH, HDAutoHeight(550)) AndData:NdataArr];
     
     
     Zview.tag = 202;
+    
+    [Zview changeTitle];
     
     [self.view addSubview:Zview];
     
@@ -357,7 +377,160 @@
     }];
 }
 
+-(void)setNeedID:(int)needID{
+    _needID = needID;
+    
+    FdataArr = [NSMutableArray array];
+    NdataArr = [NSMutableArray array];
+    
+    NSString *str = [NSString stringWithFormat:@"%d",_needID];
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getPengDetailWithGid:str AndType:@"1" WithCallBack:^(int state, id data, NSString *msg) {
+       
+        if(state == 2000){
+            NSLog(@"成功");
+            
+            NSArray *arr = data;
+            
+            for(int i=0;i<arr.count;i++){
+                
+                NSDictionary *dic = arr[i];
+                
+                NSDictionary *dic1 = dic[@"air_temp"];
+                int tem1 = [dic1[@"value"]intValue];
+                
+                NSDictionary *dic2 = dic[@"ground_temp"];
+                int tem2 = [dic2[@"value"]intValue];
+                
+                NSDictionary *dic3 = dic[@"air_humidity"];
+                int tem3 = [dic3[@"value"]intValue];
+                
+                NSDictionary *dic4 = dic[@"ground_humidity"];
+                int tem4 = [dic4[@"value"]intValue];
+                
+                PointModel *model = [[PointModel alloc]init];
+                model.Height = tem1;
+                
+                model.firstBottomStr = [NSString stringWithFormat:@"%d°C",tem1];
+                
+                model.Height2 = tem2;
+                
+                model.nextBottomStr = [NSString stringWithFormat:@"%d°C",tem2];
+                
+                model.lineName = dic[@"created_at"];
+                
+                PointModel *model2 = [[PointModel alloc]init];
+                model2.Height = tem3;
+                
+                model2.firstBottomStr = [NSString stringWithFormat:@"%d°C",tem3];
+                
+                model2.Height2 = tem4;
+                
+                model2.nextBottomStr = [NSString stringWithFormat:@"%d°C",tem4];
+                
+                model2.lineName = dic[@"created_at"];
+                
+                
+                [FdataArr addObject:model];
+                [NdataArr addObject:model2];
 
+                
+            }
+            
+            [self createZXview];
+            [self createZXview2];
+            
+            
+            
+            
+        }
+        
+        if(state<2000){
+            [MBProgressHUD showError:msg];
+            
+        }
+        
+    }];
+    
+}
+
+
+-(void)GetDataWithType:(NSString *)type{
+    
+    
+    FdataArr = [NSMutableArray array];
+    NdataArr = [NSMutableArray array];
+    
+    NSString *str = [NSString stringWithFormat:@"%d",_needID];
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getPengDetailWithGid:str AndType:type WithCallBack:^(int state, id data, NSString *msg) {
+        
+        if(state == 2000){
+            NSLog(@"成功");
+            
+            NSArray *arr = data;
+            
+            for(int i=0;i<arr.count;i++){
+                
+                NSDictionary *dic = arr[i];
+                
+                NSDictionary *dic1 = dic[@"air_temp"];
+                int tem1 = [dic1[@"value"]intValue];
+                
+                NSDictionary *dic2 = dic[@"ground_temp"];
+                int tem2 = [dic2[@"value"]intValue];
+                
+                NSDictionary *dic3 = dic[@"air_humidity"];
+                int tem3 = [dic3[@"value"]intValue];
+                
+                NSDictionary *dic4 = dic[@"ground_humidity"];
+                int tem4 = [dic4[@"value"]intValue];
+                
+                PointModel *model = [[PointModel alloc]init];
+                model.Height = tem1;
+                
+                model.firstBottomStr = [NSString stringWithFormat:@"%d°C",tem1];
+                
+                model.Height2 = tem2;
+                
+                model.nextBottomStr = [NSString stringWithFormat:@"%d°C",tem2];
+                
+                model.lineName = dic[@"created_at"];
+                
+                PointModel *model2 = [[PointModel alloc]init];
+                model2.Height = tem3;
+                
+                model2.firstBottomStr = [NSString stringWithFormat:@"%d°C",tem3];
+                
+                model2.Height2 = tem4;
+                
+                model2.nextBottomStr = [NSString stringWithFormat:@"%d°C",tem4];
+                
+                model2.lineName = dic[@"created_at"];
+                
+                
+                [FdataArr addObject:model];
+                [NdataArr addObject:model2];
+                
+                
+            }
+            
+            [self createZXview];
+            [self createZXview2];
+            
+            
+            
+            
+        }
+        
+        if(state<2000){
+            [MBProgressHUD showError:msg];
+            
+        }
+        
+    }];
+    
+}
 
 
 

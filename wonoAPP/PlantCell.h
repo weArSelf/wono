@@ -15,6 +15,8 @@
 
 -(void)setLeftColor:(UIColor *)color;
 
--(void)setPlantModel:(PlantModel *)model;
+//-(void)setPlantModel:(PlantModel *)model;
+
+@property (nonatomic,strong) PlantModel *model;
 
 @end

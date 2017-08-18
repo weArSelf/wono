@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PercentModel.h"
 
 @interface StatisticsTableViewCell : UITableViewCell
+
+@property (nonatomic,strong)PercentModel *model;
 
 @end

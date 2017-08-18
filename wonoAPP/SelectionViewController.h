@@ -10,4 +10,7 @@
 
 @interface SelectionViewController : UIViewController
 
+@property (nonatomic,strong) NSString *pengID;
+
+
 @end

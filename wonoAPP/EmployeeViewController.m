@@ -30,10 +30,13 @@
 @implementation EmployeeViewController{
     int count;
     BOOL changeMark;
+    NSMutableArray *dataArr;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    dataArr = [NSMutableArray array];
+    
     count = 5;
     changeMark = false;
     // Do any additional setup after loading the view.
@@ -42,6 +45,42 @@
     self.view.backgroundColor = [UIColor whiteColor];
     [self createTable];
     [self createAddBtn];
+   
+
+}
+
+
+-(void)requestStuff{
+    
+    NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getFarmStuffWithFid:str WithCallBack:^(int state, id data, NSString *msg) {
+        if(state == 2000){
+            NSArray *arr = data;
+            dataArr = [NSMutableArray array];
+            for (int i=0; i<arr.count; i++) {
+                NSDictionary *dic = arr[i];
+                SearchModel *model = [[SearchModel alloc]init];
+                model.imageUrl = dic[@"avatar"];
+                model.name = dic[@"username"];
+                model.phoneNum = dic[@"greenHouse"];
+                model.stufID = dic[@"id"];
+                
+                [dataArr addObject:model];
+                
+            }
+            
+            [_stuffTableView reloadData];
+            
+        }
+        
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+        
+        
+    }];
 
 }
 
@@ -51,7 +90,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    [self requestStuff];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
 }
 
@@ -211,20 +250,18 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return count;
+    return dataArr.count;
     
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *cellIdentifier = @"cellIdentifier";
     StuffTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
+//    if (cell == nil) {
         cell = [[StuffTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        cell.changeMark = changeMark;
-        
-        
+    
         
         cell.changeMark = changeMark;
         
@@ -238,22 +275,61 @@
             
             NSIndexPath *index = [_stuffTableView indexPathForCell:cell];
             
-            count--;
+            SearchModel *nowModel = dataArr[indexPath.row];
+//            count--;
             
-            if(count == 0){
-                [_stuffTableView reloadData];
-            }else{
-                [_stuffTableView beginUpdates];
-                [_stuffTableView deleteRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationAutomatic];
-                [_stuffTableView endUpdates];
-            }
+            NSString *title = [NSString stringWithFormat:@"是否删除员工%@?",nowModel.name];
+            
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:title preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                NSLog(@"确定");
+             
+                NSString *fid = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
+                [[InterfaceSingleton shareInstance].interfaceModel farmDeleteEmployeeWithFid:fid AndUid:nowModel.stufID WithCallBack:^(int state, id data, NSString *msg) {
+                    if(state == 2000){
+                        
+                        [MBProgressHUD showSuccess:@"删除成功"];
+                        [dataArr removeObjectAtIndex:indexPath.row];
+                        
+                        
+                        if(dataArr.count == 0){
+                            [_stuffTableView reloadData];
+                        }else{
+                            [_stuffTableView beginUpdates];
+                            [_stuffTableView deleteRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationAutomatic];
+                            [_stuffTableView endUpdates];
+                        }
+                        
+                    }
+                    if(state<2000){
+                        [MBProgressHUD showSuccess:msg];
+                    }
+                }];
+
+                
+            }];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                NSLog(@"取消");
+            }];
+            [alertC addAction:cancel];
+            [alertC addAction:confirm];
+            [self presentViewController:alertC animated:YES completion:nil];
+            
+            
+            
+            
+            
+            
+            
             
             
             
         }];
         //        [cell setLeftColor:[UIColor blueColor]];
-    }
+//    }
     cell.tag = 300 +indexPath.row;
+    SearchModel *model = dataArr[indexPath.row];
+    cell.searchModel = model;
     //    [cell creatConView];
     
     return cell;

@@ -14,7 +14,8 @@ typedef NS_ENUM(NSInteger,ENUM_NetWorkRequestType)  //网络请求类型
 {
     ENRT_POST,
     ENRT_GET,
-    ENRT_PUT
+    ENRT_PUT,
+    ENRT_DELETE
 };
 
 

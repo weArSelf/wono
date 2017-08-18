@@ -27,7 +27,7 @@
         //        self.backgroundColor = [UIColor greenColor];
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
         [self createContent];
-        [self createModel];
+//        [self createModel];
         
         self.selectMark = NO;
 //        [self creatSubViews];
@@ -61,11 +61,7 @@
     
 }
 
--(void)setModel:(SetModel *)model{
-    _model = model;
-    
-    
-}
+
 
 -(NSAttributedString *)attrWithStr:(NSString *)str{
     NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc]initWithString:str];
@@ -74,23 +70,45 @@
     
     [attStr addAttribute:NSForegroundColorAttributeName value:MainColor range:range];
     
+    NSRange range2 = [[attStr string]rangeOfString:@"气湿"];
+    
+    [attStr addAttribute:NSForegroundColorAttributeName value:MainColor range:range2];
+    
+    NSRange range3 = [[attStr string]rangeOfString:@"地温"];
+    
+    [attStr addAttribute:NSForegroundColorAttributeName value:MainColor range:range3];
+    
+    NSRange range4 = [[attStr string]rangeOfString:@"地湿"];
+    
+    [attStr addAttribute:NSForegroundColorAttributeName value:MainColor range:range4];
+    
     return attStr;
 }
 
 -(void)createModel{
     
     UILabel *nameLabel = [self myLabel];
-    nameLabel.text = @"黄瓜大棚";
+    nameLabel.text = _model.name;
     UILabel *label1 = [self myLabel2];
     
+//    if (<#condition#>) {
+//        <#statements#>
+//    }
     
-    label1.attributedText =  [self attrWithStr:@"暂无≤安全气温≤暂无"];
+    
+    
+    NSString *str = [NSString stringWithFormat:@"%@≤安全气温≤%@",_model.airMin,_model.airMax];
+    NSString *str2 = [NSString stringWithFormat:@"%@≤安全地温≤%@",_model.landMin,_model.landMax];
+    NSString *str3 = [NSString stringWithFormat:@"%@≤安全气湿≤%@",_model.air2Min,_model.air2Max];
+    NSString *str4 = [NSString stringWithFormat:@"%@≤安全地湿≤%@",_model.land2Min,_model.land2Max];
+    
+    label1.attributedText =  [self attrWithStr:str];
     UILabel *label2 = [self myLabel2];
-    label2.attributedText =  [self attrWithStr:@"暂无≤安全气温≤暂无"];
+    label2.attributedText =  [self attrWithStr:str2];
     UILabel *label3 = [self myLabel2];
-    label3.attributedText =  [self attrWithStr:@"暂无≤安全气温≤暂无"];
+    label3.attributedText =  [self attrWithStr:str3];
     UILabel *label4 = [self myLabel2];
-    label4.attributedText =  [self attrWithStr:@"暂无≤安全气温≤暂无"];
+    label4.attributedText =  [self attrWithStr:str4];
     
     [_ConView addSubview:nameLabel];
     [_ConView addSubview:label1];
@@ -160,5 +178,13 @@
     self.selectMark = false;
     
 }
+
+-(void)setModel:(SetModel *)model{
+    _model = model;
+    
+    [self createModel];
+    
+}
+
 
 @end

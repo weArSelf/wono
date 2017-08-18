@@ -33,14 +33,49 @@
 
 @implementation SetTempViewController{
     NSMutableArray *numberDataArr;
+    NSMutableArray *dataArr;
+    
+    SetModel *SelModel;
+    NSMutableDictionary *selDic;
+    
+    int a1;
+    int a2;
+    
+    int b1;
+    int b2;
+    
+    int c1;
+    int c2;
+    
+    int d1;
+    int d2;
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    a1 = -50;
+    a2 = -50;
+    
+    b1 = -50;
+    b2 = -50;
+    
+    c1 = -50;
+    c2 = -50;
+    
+    d1 = -50;
+    d2 = -50;
+    
+    selDic = [NSMutableDictionary dictionary];
+    
+    SelModel = [[SetModel alloc]init];
+    
+    dataArr = [NSMutableArray array];
+    
     numberDataArr = [NSMutableArray array];
     
-    for(int i = 0;i<=35;i++){
+    for(int i = -10;i<=40;i++){
         NSString *str = [NSString stringWithFormat:@"%d",i];
         [numberDataArr addObject:str];
     }
@@ -54,6 +89,99 @@
     [self createNextHead];
     
     [self createDetail];
+    [self requestData];
+}
+
+-(void)requestData{
+    NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
+
+    [[InterfaceSingleton shareInstance].interfaceModel getPengWithFid:str AndCallBack:^(int state, id data, NSString *msg) {
+        
+        if(state == 2000){
+            NSLog(@"成功");
+            
+            dataArr = [NSMutableArray array];
+            
+            NSArray *arr = data;
+            
+            for(int i=0;i<arr.count;i++){
+                
+                NSDictionary *dic = arr[i];
+                
+                SetModel *model = [[SetModel alloc]init];
+                
+                model.name = dic[@"name"];
+                model.needID = dic[@"id"];
+                NSDictionary *dic1 = dic[@"monitor_threshold"];
+                
+                if([dic1[@"high_air_temp"]intValue]!=-1000){
+                
+                    model.airMax = dic1[@"high_air_temp"];
+                }else{
+                    model.airMax = @"暂无";
+                }
+                if([dic1[@"low_air_temp"]intValue]!=-1000){
+                    
+
+                model.airMin = dic1[@"low_air_temp"];
+                }else{
+                    model.airMin = @"暂无";
+                }
+                
+                if([dic1[@"high_ground_temp"]intValue]!=-1000){
+                    
+
+                model.landMax = dic1[@"high_ground_temp"];
+                }else{
+                    model.landMax = @"暂无";
+                }
+
+                if([dic1[@"low_ground_temp"]intValue]!=-1000){
+                    
+                model.landMin = dic1[@"low_ground_temp"];
+                }else{
+                    model.landMin = @"暂无";
+                }
+                if([dic1[@"high_air_humidity"]intValue]!=-1000){
+                    
+                model.air2Max = dic1[@"high_air_humidity"];
+                }else{
+                    model.air2Max = @"暂无";
+                }
+                if([dic1[@"low_air_humidity"]intValue]!=-1000){
+                    
+                model.air2Min = dic1[@"low_air_humidity"];
+                }else{
+                    model.air2Min = @"暂无";
+                }
+                if([dic1[@"high_ground_humidity"]intValue]!=-1000){
+                    
+                model.land2Max = dic1[@"high_ground_humidity"];
+                }else{
+                    model.land2Max = @"暂无";
+                }
+                if([dic1[@"low_ground_humidity"]intValue]!=-1000){
+                    
+                model.land2Min = dic1[@"low_ground_humidity"];
+                }else{
+                    model.land2Min = @"暂无";
+                }
+                
+                [dataArr addObject:model];
+            }
+            
+            [_selectTableView reloadData];
+            
+            
+            
+            
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -80,6 +208,55 @@
 
 -(void)SaveClick{
     NSLog(@"点击保存");
+    
+    NSArray *arr = [selDic allValues];
+    
+    if(arr.count==0){
+        [MBProgressHUD showSuccess:@"请选择要设置的大棚"];
+        return;
+    }
+    
+    NSString *str = [self objArrayToJSON:arr];
+    SelModel.needID = str;
+    
+    [[InterfaceSingleton shareInstance].interfaceModel updatePengAlertWithModel:SelModel WithCallBack:^(int state, id data, NSString *msg) {
+        
+        if(state == 2000){
+            NSLog(@"成功");
+            [MBProgressHUD showSuccess:@"设置成功"];
+            
+            [self requestData];
+            
+            selDic = [NSDictionary dictionary];
+            
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
+    
+}
+
+
+//把多个json字符串转为一个json字符串
+- (NSString *)objArrayToJSON:(NSArray *)array {
+    
+    NSString *jsonStr = @"[";
+    
+    for (NSInteger i = 0; i < array.count; ++i) {
+        if (i != 0) {
+            jsonStr = [jsonStr stringByAppendingString:@","];
+        }
+        
+        int a = [array[i]intValue];
+        NSString *str = [NSString stringWithFormat:@"%d",a];
+        
+        jsonStr = [jsonStr stringByAppendingString:str];
+    }
+    jsonStr = [jsonStr stringByAppendingString:@"]"];
+    
+    return jsonStr;
 }
 
 -(void)creatTitleAndBackBtn{
@@ -360,21 +537,461 @@
     NSLog(@"%ld被点击了",(long)label.tag);
     [CDZPicker showPickerInView:self.view withStrings:numberDataArr confirm:^(NSArray<NSString *> *stringArray) {
 //        self.label.text = stringArray.firstObject;
+        
+//        int res = [stringArray.firstObject intValue];
+        
+        switch (label.tag) {
+            case 101:{
+                a1 = [stringArray.firstObject intValue];
+                
+                if(a2!=-50){
+                    if(a1>a2){
+                        
+                        int qwe = a1;
+                        a1 = a2;
+                        a2 = qwe;
+                        
+                        UILabel *label2 = [self.view viewWithTag:102];
+                        
+                        NSString *str = [NSString stringWithFormat:@"%d",a2];
+                        NSString *str2 = label2.text;
+                        str2 = [str2 substringToIndex:8];
+                        
+                        NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                        
+                        NSRange range = NSMakeRange(str2.length-2, str.length+4);
+                        
+                        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
+                        [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+                        
+                        
+                        label2.attributedText = title;
+
+                        
+                        SelModel.airMax = [NSString stringWithFormat:@"%d",a2];
+                        
+                    }
+                }
+                
+                
+                NSString *str = [NSString stringWithFormat:@"%d",a1];
+                NSString *str2 = label.text;
+                str2 = [str2 substringToIndex:8];
+                
+                NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                
+                NSRange range = NSMakeRange(str2.length-2, str.length+4);
+                
+                NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
+                [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+                
+                
+                label.attributedText = title;
+
+                
+                
+                SelModel.airMin = [NSString stringWithFormat:@"%d",a1];
+                 break;
+            }
+            case 102:{
+                
+                
+                a2 = [stringArray.firstObject intValue];
+                
+                if(a1!=-50){
+                    if(a1>a2){
+                        
+                        int qwe = a1;
+                        a1 = a2;
+                        a2 = qwe;
+                        
+                        UILabel *label2 = [self.view viewWithTag:101];
+                        
+                        NSString *str = [NSString stringWithFormat:@"%d",a1];
+                        NSString *str2 = label2.text;
+                        str2 = [str2 substringToIndex:8];
+                        
+                        NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                        
+                        NSRange range = NSMakeRange(str2.length-2, str.length+4);
+                        
+                        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
+                        [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+                        
+                        
+                        label2.attributedText = title;
+                        
+                        
+                        SelModel.airMin = [NSString stringWithFormat:@"%d",a1];
+                        
+                    }
+                }
+                
+                
+                NSString *str = [NSString stringWithFormat:@"%d",a2];
+                NSString *str2 = label.text;
+                str2 = [str2 substringToIndex:8];
+                
+                NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                
+                NSRange range = NSMakeRange(str2.length-2, str.length+4);
+                
+                NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
+                [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+                
+                
+                label.attributedText = title;
+                
+                
+                
+                SelModel.airMax = [NSString stringWithFormat:@"%d",a2];
+
+                
+                
+                break;
+            }
+            case 201:{
+                
+                
+                b1 = [stringArray.firstObject intValue];
+                
+                if(b2!=-50){
+                    if(b1>b2){
+                        
+                        int qwe = b1;
+                        b1 = b2;
+                        b2 = qwe;
+                        
+                        UILabel *label2 = [self.view viewWithTag:202];
+                        
+                        NSString *str = [NSString stringWithFormat:@"%d",b2];
+                        NSString *str2 = label2.text;
+                        str2 = [str2 substringToIndex:8];
+                        
+                        NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                        
+                        NSRange range = NSMakeRange(str2.length-2, str.length+4);
+                        
+                        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
+                        [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+                        
+                        
+                        label2.attributedText = title;
+                        
+                        SelModel.landMax = [NSString stringWithFormat:@"%d",b2];
+                    }
+                }
+                
+                
+                NSString *str = [NSString stringWithFormat:@"%d",b1];
+                NSString *str2 = label.text;
+                str2 = [str2 substringToIndex:8];
+                
+                NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                
+                NSRange range = NSMakeRange(str2.length-2, str.length+4);
+                
+                NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
+                [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+                
+                
+                label.attributedText = title;
+
+                
+                SelModel.landMin = [NSString stringWithFormat:@"%d",b1];
+                
+                break;
+            }
+            case 202:{
+                
+                b2 = [stringArray.firstObject intValue];
+                
+                if(b1!=-50){
+                    if(b1>b2){
+                        
+                        int qwe = b1;
+                        b1 = b2;
+                        b2 = qwe;
+                        
+                        UILabel *label2 = [self.view viewWithTag:201];
+                        
+                        NSString *str = [NSString stringWithFormat:@"%d",b1];
+                        NSString *str2 = label2.text;
+                        str2 = [str2 substringToIndex:8];
+                        
+                        NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                        
+                        NSRange range = NSMakeRange(str2.length-2, str.length+4);
+                        
+                        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
+                        [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+                        
+                        
+                        label2.attributedText = title;
+                        
+                        
+                        SelModel.landMin = [NSString stringWithFormat:@"%d",b1];
+                        
+                    }
+                }
+                
+                
+                NSString *str = [NSString stringWithFormat:@"%d",b2];
+                NSString *str2 = label.text;
+                str2 = [str2 substringToIndex:8];
+                
+                NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                
+                NSRange range = NSMakeRange(str2.length-2, str.length+4);
+                
+                NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
+                [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+                
+                
+                label.attributedText = title;
+                
+                
+                
+                SelModel.landMax = [NSString stringWithFormat:@"%d",b2];
+                
+                break;
+            }
+            case 301:{
+                
+                
+                c1 = [stringArray.firstObject intValue];
+                
+                if(c2!=-50){
+                    if(c1>c2){
+                        
+                        int qwe = c1;
+                        c1 = c2;
+                        c2 = qwe;
+                        
+                        UILabel *label2 = [self.view viewWithTag:302];
+                        
+                        NSString *str = [NSString stringWithFormat:@"%d",c2];
+                        NSString *str2 = label2.text;
+                        str2 = [str2 substringToIndex:8];
+                        
+                        NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                        
+                        NSRange range = NSMakeRange(str2.length-2, str.length+4);
+                        
+                        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
+                        [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+                        
+                        
+                        label2.attributedText = title;
+                        
+                        SelModel.air2Max = [NSString stringWithFormat:@"%d",c2];
+                        
+                    }
+                }
+                
+                
+                NSString *str = [NSString stringWithFormat:@"%d",c1];
+                NSString *str2 = label.text;
+                str2 = [str2 substringToIndex:8];
+                
+                NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                
+                NSRange range = NSMakeRange(str2.length-2, str.length+4);
+                
+                NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
+                [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+                
+                
+                label.attributedText = title;
+
+                
+                SelModel.air2Min = [NSString stringWithFormat:@"%d",c1];
+                
+                break;
+            }
+            case 302:{
+                
+                c2 = [stringArray.firstObject intValue];
+                
+                if(c1!=-50){
+                    if(c1>c2){
+                        
+                        int qwe = c1;
+                        c1 = c2;
+                        c2 = qwe;
+                        
+                        UILabel *label2 = [self.view viewWithTag:301];
+                        
+                        NSString *str = [NSString stringWithFormat:@"%d",c1];
+                        NSString *str2 = label2.text;
+                        str2 = [str2 substringToIndex:8];
+                        
+                        NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                        
+                        NSRange range = NSMakeRange(str2.length-2, str.length+4);
+                        
+                        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
+                        [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+                        
+                        
+                        label2.attributedText = title;
+                        
+                        
+                        SelModel.air2Min = [NSString stringWithFormat:@"%d",a1];
+                        
+                    }
+                }
+                
+                
+                NSString *str = [NSString stringWithFormat:@"%d",c2];
+                NSString *str2 = label.text;
+                str2 = [str2 substringToIndex:8];
+                
+                NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                
+                NSRange range = NSMakeRange(str2.length-2, str.length+4);
+                
+                NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
+                [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+                
+                
+                label.attributedText = title;
+                
+                
+                
+                SelModel.air2Max = [NSString stringWithFormat:@"%d",c2];
+                
+                break;
+            }
+            case 401:{
+                
+                
+                d1 = [stringArray.firstObject intValue];
+                
+                if(d2!=-50){
+                    if(d1>d2){
+                        
+                        int qwe = d1;
+                        d1 = d2;
+                        d2 = qwe;
+                        
+                        UILabel *label2 = [self.view viewWithTag:402];
+                        
+                        NSString *str = [NSString stringWithFormat:@"%d",d2];
+                        NSString *str2 = label2.text;
+                        str2 = [str2 substringToIndex:8];
+                        
+                        NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                        
+                        NSRange range = NSMakeRange(str2.length-2, str.length+4);
+                        
+                        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
+                        [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+                        
+                        
+                        label2.attributedText = title;
+                        
+                        SelModel.land2Max = [NSString stringWithFormat:@"%d",d2];
+                        
+                    }
+                }
+                
+                
+                NSString *str = [NSString stringWithFormat:@"%d",d1];
+                NSString *str2 = label.text;
+                str2 = [str2 substringToIndex:8];
+                
+                NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                
+                NSRange range = NSMakeRange(str2.length-2, str.length+4);
+                
+                NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
+                [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+                
+                
+                label.attributedText = title;
+
+                SelModel.land2Min = [NSString stringWithFormat:@"%d",d1];
+                
+                break;
+            }
+            case 402:{
+                
+                d2 = [stringArray.firstObject intValue];
+                
+                if(d1!=-50){
+                    if(d1>d2){
+                        
+                        int qwe = d1;
+                        d1 = d2;
+                        d2 = qwe;
+                        
+                        UILabel *label2 = [self.view viewWithTag:401];
+                        
+                        NSString *str = [NSString stringWithFormat:@"%d",d1];
+                        NSString *str2 = label2.text;
+                        str2 = [str2 substringToIndex:8];
+                        
+                        NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                        
+                        NSRange range = NSMakeRange(str2.length-2, str.length+4);
+                        
+                        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
+                        [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+                        
+                        
+                        label2.attributedText = title;
+                        
+                        
+                        SelModel.land2Min = [NSString stringWithFormat:@"%d",d1];
+                        
+                    }
+                }
+                
+                
+                NSString *str = [NSString stringWithFormat:@"%d",d2];
+                NSString *str2 = label.text;
+                str2 = [str2 substringToIndex:8];
+                
+                NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                
+                NSRange range = NSMakeRange(str2.length-2, str.length+4);
+                
+                NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
+                [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+                
+                
+                label.attributedText = title;
+                
+                
+                
+                SelModel.land2Max = [NSString stringWithFormat:@"%d",d2];
+                
+                break;
+            }
+                
+               
+                
+            default:
+                break;
+        }
+        
+        
         NSLog(@"点击");
         
-        NSString *str = stringArray.firstObject;
-        NSString *str2 = label.text;
-        str2 = [str2 substringToIndex:8];
-        
-        NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
-        
-        NSRange range = NSMakeRange(str2.length-2, str.length+4);
-        
-        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
-        [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
-        
-        
-        label.attributedText = title;
+//        NSString *str = stringArray.firstObject;
+//        NSString *str2 = label.text;
+//        str2 = [str2 substringToIndex:8];
+//        
+//        NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+//        
+//        NSRange range = NSMakeRange(str2.length-2, str.length+4);
+//        
+//        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:result];
+//        [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+//        
+//        
+//        label.attributedText = title;
     }cancel:^{
         //your code
         NSLog(@"取消");
@@ -436,16 +1053,21 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 3;
+    return dataArr.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *cellIdentifier = @"cellIdentifier";
     TempSetTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
+//    if (cell == nil) {
         cell = [[TempSetTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         //        [cell setLeftColor:[UIColor blueColor]];
-    }
+//    }
+    
+    SetModel *model = dataArr[indexPath.row];
+    
+    cell.model = model;
+    
     //    [cell creatConView];
     
     return cell;
@@ -458,15 +1080,25 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"点击");
     
+    
+    SetModel *nowModel = dataArr[indexPath.row];
+    NSString *needID = nowModel.needID;
+    
 //    static NSString *cellIdentifier = @"cellIdentifier";
 //    TempSetTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     TempSetTableViewCell * cell = (TempSetTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     
     if(cell.selectMark == false){
         [cell changeColor];
+        
+        [selDic setObject:needID forKey:needID];
     }else{
         [cell changeBackColor];
+        
+        [selDic removeObjectForKey:needID];
     }
+    
+    
     
 }
 

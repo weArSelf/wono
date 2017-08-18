@@ -13,9 +13,14 @@
 @property(nonatomic,strong) UIColor *leftColor;
 @property(nonatomic,strong) NSString *dateStr;
 @property(nonatomic,strong) NSString *timeStr;
-@property(nonatomic,strong) NSString *imageUrl;
+//@property(nonatomic,strong) NSString *imageUrl;
 @property(nonatomic,strong) NSString *nameStr;
 @property(nonatomic,strong) NSString *typeStr;
+
 @property(nonatomic,strong) NSString *numberStr;
+
+@property(nonatomic,strong) NSString *extraStr;
+
+@property(nonatomic,strong) NSString *pengID;
 
 @end

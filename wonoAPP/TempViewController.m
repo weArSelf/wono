@@ -67,10 +67,14 @@
     CLLocationCoordinate2D needLocate;
     int loadMark;
     TempModel *model;
+    NSMutableArray *dataArr;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    dataArr = [NSMutableArray array];
+    
     model = [[TempModel alloc]init];
     // Do any additional setup after loading the view.
     loadMark = 0;
@@ -83,11 +87,90 @@
     [_headView layoutIfNeeded];
     [self.view layoutIfNeeded];
     
+     _contentTabel.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(requestData)];
     
-//    [self createIndicator];
-//    [self getLocate];
+    [self createIndicator];
+    [self getLocate];
     
     
+    [self requestData];
+    
+}
+
+
+-(void)requestData{
+    NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
+    [[InterfaceSingleton shareInstance].interfaceModel getMainPengWithFid:str AndCallBack:^(int state, id data, NSString *msg) {
+        
+         [_contentTabel.mj_header endRefreshing];
+        
+        if(state == 2000){
+            NSLog(@"成功");
+            
+           
+            
+            dataArr = [NSMutableArray array];
+            
+            NSArray *arr = data;
+            
+            for (int i = 0; i<arr.count; i++) {
+                MainTempModel *model2 = [[MainTempModel alloc]init];
+                NSDictionary *dic = arr[i];
+                NSDictionary *reDic = dic[@"monitor_data"];
+                
+                model2.name = dic[@"name"];
+                model2.extra = dic[@"imei"];
+                model2.cat = dic[@"type_name"];
+                model2.stuf = dic[@"employee_name"];
+                model2.state = [dic[@"status"]intValue];
+                model2.pengID = [dic[@"id"]intValue];
+                if(reDic.count != 0){
+                    model2.time = reDic[@"created_at"];
+                    NSDictionary *dic1 = reDic[@"air_temp"];
+                    model2.temp1 = dic1[@"value"];
+                    model2.temp1sign = [dic1[@"threshold"] intValue];
+                    
+                    NSDictionary *dic2 = reDic[@"air_humidity"];
+                    model2.temp2 = dic2[@"value"];
+                    model2.temp2sign = [dic2[@"threshold"] intValue];
+                    
+                    NSDictionary *dic3 = reDic[@"ground_temp"];
+                    model2.temp3 = dic3[@"value"];
+                    model2.temp3sign = [dic3[@"threshold"] intValue];
+                    
+                    NSDictionary *dic4 = reDic[@"ground_humidity"];
+                    model2.temp4 = dic4[@"value"];
+                    model2.temp4sign = [dic4[@"threshold"] intValue];
+                    
+                   
+                }else{
+                    model2.time = @"";
+//                    NSDictionary *dic1 = reDic[@"air_temp"];
+                    model2.temp1 = @"";
+                    model2.temp1sign = 0;
+                    
+//                    NSDictionary *dic2 = reDic[@"air_humidity"];
+                    model2.temp2 = @"";
+                    model2.temp2sign = 0;
+                    
+//                    NSDictionary *dic3 = reDic[@"ground_temp"];
+                    model2.temp3 = @"";
+                    model2.temp3sign = 0;
+                    
+//                    NSDictionary *dic4 = reDic[@"ground_humidity"];
+                    model2.temp4 = @"";
+                    model2.temp4sign = 0;
+                }
+                 [dataArr addObject:model2];
+            }
+            
+            [_contentTabel reloadData];
+            
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+    }];
 }
 
 
@@ -357,7 +440,7 @@
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
         make.top.equalTo(_tempControlLabel.mas_bottom).offset(HDAutoHeight(8));
-        make.bottom.equalTo(self.view.mas_bottom).offset(-64);
+        make.bottom.equalTo(self.view.mas_bottom);
     }];
     
     //    _wonoTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
@@ -367,7 +450,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
 
-    return 2;
+    return dataArr.count;
     
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -378,6 +461,8 @@
         //        [cell setLeftColor:[UIColor blueColor]];
     }
     //    [cell creatConView];
+    MainTempModel *model2 = dataArr[indexPath.row];
+    cell.model = model2;
     
     return cell;
 }
@@ -390,7 +475,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"点击了");
     
+    MainTempModel *nowModel = dataArr[indexPath.row];
+    
+    int needId = nowModel.pengID;
+    
     TempCViewController *tempC = [[TempCViewController alloc]init];
+    tempC.needID = needId;
     
     tempC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:tempC animated:YES];

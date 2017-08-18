@@ -46,6 +46,7 @@
     [self creatTitleAndBackBtn];
     [self createSaveBtn];
     [self createCon];
+//    [self requestData];
 }
 
 
@@ -339,5 +340,7 @@
 - (void)textViewDidChange:(UITextView *)textView{
     NSLog(@"%@",textView.text);
 }
+
+
 
 @end

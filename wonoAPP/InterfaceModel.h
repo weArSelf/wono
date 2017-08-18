@@ -8,6 +8,8 @@
 
 #import "BaseInterfaceModel.h"
 #import "CompleteModel.h"
+#import "SetModel.h"
+#import "MainPlantModel.h"
 
 typedef void(^AllCallBack)(int state, id data, NSString *msg);
 
@@ -29,5 +31,38 @@ typedef void(^AllCallBack)(int state, id data, NSString *msg);
 -(void)searchForUserPhone:(NSString *)phone WithCallBack:(AllCallBack)callback;
 
 -(void)getMyFarmWithCallBack:(AllCallBack)callback;
+
+
+
+-(void)getMainPengWithFid:(NSString *)fid AndCallBack:(AllCallBack)callback;
+
+-(void)getFarmStuffWithFid:(NSString *)fid WithCallBack:(AllCallBack)callback;
+
+-(void)farmDeleteEmployeeWithFid:(NSString *)fid AndUid:(NSString *)uid WithCallBack:(AllCallBack)callback;
+
+-(void)farmAddStuffWithFid:(NSString *)fid AndUid:(NSString *)uid WithCallBack:(AllCallBack)callback;
+
+
+-(void)getPengWithFid:(NSString *)fid AndCallBack:(AllCallBack)callback;
+
+-(void)getPengWithCatPid:(NSString *)pid AndCallBack:(AllCallBack)callback;
+
+-(void)getPengTypeCallBack:(AllCallBack)callback;
+
+-(void)DeletePengWithFid:(NSString *)fid AndGid:(NSString *)gid WithCallBack:(AllCallBack)callback;
+
+-(void)AddPengWithFid:(NSString *)fid AndImei:(NSString *)imei AndName:(NSString *)name AndType:(NSString *)type AndUids:(NSString *)arr AndVarID:(NSString *)varId WithCallBack:(AllCallBack)callback;
+
+-(void)getPengDetailWithGid:(NSString *)gid AndType:(NSString *)type WithCallBack:(AllCallBack)callback;
+
+-(void)updatePengAlertWithModel:(SetModel *)model WithCallBack:(AllCallBack)callback;
+
+-(void)getMainPlantWithModel:(MainPlantModel *)model WithCallBack:(AllCallBack)callback;
+
+-(void)getPengDetailWithPengID:(NSString *)needID WithCallBack:(AllCallBack)callback;
+
+-(void)getPengPayWithGid:(NSString *)gid AndCallBack:(AllCallBack)callback;
+
+-(void)getPengListWithGid:(NSString *)gid AndPage:(int)page WithCallBack:(AllCallBack)callback;
 
 @end

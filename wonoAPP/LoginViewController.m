@@ -196,8 +196,10 @@
                     NSDictionary *dic = (NSDictionary *)data;
                     
                     NSString *token = dic[@"token"];
+                    NSString *fid = dic[@"fid"];
                     
                     [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"token"];
+                    [[NSUserDefaults standardUserDefaults] setObject:fid forKey:@"fid"];
                     
                     int status = [dic[@"status"]intValue];
                     if(status == 0 ){
@@ -208,13 +210,15 @@
                         //正常状态
                         [MBProgressHUD showSuccess:@"登陆成功"];
                         
+                        [[NSUserDefaults standardUserDefaults]setObject:@"login" forKey:@"loginMark"];
+                        [[NSUserDefaults standardUserDefaults]synchronize];
                         dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.5* NSEC_PER_SEC);
                         
                         dispatch_after(delayTime, dispatch_get_main_queue(), ^{
                             BaseTabBarController *base = [[BaseTabBarController alloc]init];
                             appDelegate.window.rootViewController = base;
                             
-                            [[NSUserDefaults standardUserDefaults]setObject:@"login" forKey:@"loginMark"];
+                            
                         });
 
                         

@@ -144,7 +144,7 @@
     [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_ConView.mas_left).offset(HDAutoWidth(35));
         make.centerY.equalTo(_ConView.mas_centerY);
-        make.width.equalTo(@(HDAutoWidth(100)));
+        make.width.equalTo(@(HDAutoWidth(200)));
         make.height.equalTo(@(HDAutoHeight(60)));
     }];
     
@@ -175,6 +175,35 @@
     }];
     
     
+    
+}
+
+
+-(void)setModel:(PengModel *)model{
+    _model = model;
+    _nameLabel.text = model.pengName;
+    _contentLabel.text = model.contentStr;
+    int state = [model.status intValue];
+    switch (state) {
+        case 1:{
+            _stateLabel.text = @"正常";
+            _stateLabel.textColor = [UIColor blackColor];
+            break;
+        }
+        case 2:{
+            _stateLabel.text = @"异常";
+            _stateLabel.textColor = [UIColor orangeColor];
+            break;
+        }
+        case 3:{
+            _stateLabel.text = @"报警";
+            _stateLabel.textColor = [UIColor redColor];
+            break;
+        }
+            
+        default:
+            break;
+    }
     
 }
 

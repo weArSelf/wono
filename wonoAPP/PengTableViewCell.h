@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PengModel.h"
 
 @interface PengTableViewCell : UITableViewCell
 
 @property (nonatomic,copy) void(^cellClickBlock)(PengTableViewCell *cell);
 
 @property (nonatomic) BOOL changeMark;
+
+@property (nonatomic,strong) PengModel *model;
 
 @end

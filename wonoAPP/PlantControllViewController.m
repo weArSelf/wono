@@ -15,8 +15,11 @@
 
 #import "AddViewController.h"
 
+#import "ScreenDetailViewController.h"
+#import "ScreenDetailModel.h"
+#import "PlantBaseModel.h"
 
-@interface PlantControllViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface PlantControllViewController ()<UITableViewDelegate,UITableViewDataSource,ScreenDetailDelegate>
 
 @property (nonatomic,strong) UIButton *selectBtn;
 
@@ -35,11 +38,23 @@
 @implementation PlantControllViewController{
     UIButton *leftBtn;
     UIButton *rightBtn;
+    NSMutableArray *dataArr;
+    int Count;
+    NSString *selID;
+    
+    NSString *type;
+    NSString *typeContent;
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 //    [self setBtn];
+    type = @"0";
+    
+    selID = @"-10";
+    dataArr = [NSMutableArray array];
+    Count = 1;
     
     [self CreateTitleLabelWithText:@"种植管理"];
     [self createHeadView];
@@ -47,6 +62,8 @@
     self.view.backgroundColor = [UIColor whiteColor];
     [self createWork];
     // Do any additional setup after loading the view.
+    
+    [self requestData];
 }
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -96,14 +113,30 @@
 
 -(void)refresh{
     NSLog(@"下拉刷新");
+    Count = 1;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if([type isEqualToString:@"0"]){
+            [self requestData];
+        }else if ([type isEqualToString:@"1"]){
+            [self requestDataWithStufStr:typeContent];
+        }else if ([type isEqualToString:@"2"]){
+            [self requestDataWithTime:typeContent];
+        }
         [_plantTableView.mj_header endRefreshing];
     });
 
 }
 -(void)loadMore{
     NSLog(@"上拉加载");
+    Count++;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if([type isEqualToString:@"0"]){
+            [self requestData];
+        }else if ([type isEqualToString:@"1"]){
+            [self requestDataWithStufStr:typeContent];
+        }else if ([type isEqualToString:@"2"]){
+            [self requestDataWithTime:typeContent];
+        }
         [_plantTableView.mj_footer endRefreshing];
     });
 
@@ -124,12 +157,14 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
 
-    return 2;
+    PlantBaseModel *baseModel = dataArr[section];
+    NSArray *arr = baseModel.arr;
+    return arr.count;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     
-    return 3;
+    return dataArr.count;
 }
 
 
@@ -142,6 +177,43 @@
 //        [cell setLeftColor:[UIColor blueColor]];
     }
 //    [cell creatConView];
+    
+    PlantBaseModel *baseModel = dataArr[indexPath.section];
+    PlantModel *model = baseModel.arr[indexPath.row];
+    
+   
+    
+    int typeMark = [model.typeStr intValue];
+    switch (typeMark) {
+        case 1:{
+            [cell setLeftColor:UIColorFromHex(0x4db366)];
+//            model.typeStr = @"种植";
+            break;
+        }
+        case 2:{
+            [cell setLeftColor:UIColorFromHex(0x795548)];
+//            model.typeStr = @"施肥";
+            break;
+        }
+
+        case 3:{
+            [cell setLeftColor:UIColorFromHex(0x2196f3)];
+//            model.typeStr = @"植保";
+            break;
+        }
+
+        case 4:{
+            [cell setLeftColor:UIColorFromHex(0xffc107)];
+//            model.typeStr = @"采收";
+            break;
+        }
+
+            
+        default:
+            break;
+    }
+    
+    cell.model = model;
     
     return cell;
 }
@@ -188,7 +260,17 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"点击了");
+    PlantBaseModel *baseModel = dataArr[indexPath.section];
+    PlantModel *model = baseModel.arr[indexPath.row];
+    
+    NSString *needID = model.pengID;
+    
     SelectionViewController *sec = [[SelectionViewController alloc]init];
+    
+    sec.pengID = needID;
+    
+    sec.hidesBottomBarWhenPushed = YES;
+    
     [self.navigationController pushViewController:sec animated:YES];
 }
 
@@ -212,12 +294,21 @@
     leftBtn = [[UIButton alloc]init];
     [leftBtn addTarget:self action:@selector(leftClick) forControlEvents:UIControlEventTouchUpInside];
     [leftBtn setTitle:@"按员工" forState:UIControlStateNormal];
-    [leftBtn setBackgroundColor:UIColorFromHex(0x4db366)];
+    [leftBtn setBackgroundColor:[UIColor whiteColor]];
+//    UIColorFromHex(0x4db366)
+    
+//    leftBtn.layer.masksToBounds = YES;
+//    leftBtn.layer.borderColor = UIColorFromHex(0x4db366).CGColor;
+//    leftBtn.layer.borderWidth = 1;
+    
     leftBtn.titleLabel.font = [UIFont systemFontOfSize:15];
-    [leftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [leftBtn setTitleColor:UIColorFromHex(0x4db366) forState:UIControlStateNormal];
     [_headView addSubview:leftBtn];
     
     rightBtn = [[UIButton alloc]init];
+//    rightBtn.layer.masksToBounds = YES;
+//    rightBtn.layer.borderColor = UIColorFromHex(0x4db366).CGColor;
+//    rightBtn.layer.borderWidth = 1;
     [rightBtn addTarget:self action:@selector(rightClick) forControlEvents:UIControlEventTouchUpInside];
     [rightBtn setTitle:@"按时间" forState:UIControlStateNormal];
     [rightBtn setBackgroundColor:[UIColor whiteColor]];
@@ -233,18 +324,44 @@
     }];
     [rightBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(_headView.mas_right);
-        make.width.equalTo(@(APP_CONTENT_WIDTH/2));
+        make.left.equalTo(@(APP_CONTENT_WIDTH/2));
         make.top.equalTo(_headView.mas_top).offset(0.5);
         make.bottom.equalTo(_headView.mas_bottom);
     }];
+    
+    UIView *view = [[UIView alloc]init];
+    view.backgroundColor = UIColorFromHex(0x4db366);
+    
+    view.alpha = 0.3;
+    
+    [_headView addSubview:view];
+    
+    [view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(_headView.mas_centerX);
+        make.width.equalTo(@(1));
+        make.height.equalTo(leftBtn.mas_height);
+        make.centerY.equalTo(leftBtn.mas_centerY);
+    }];
+    
 }
 
 -(void)leftClick{
     NSLog(@"点击按员工");
-    [rightBtn setTitleColor:UIColorFromHex(0x4db366) forState:UIControlStateNormal];
-    rightBtn.backgroundColor = [UIColor whiteColor];
-    [leftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    leftBtn.backgroundColor = UIColorFromHex(0x4db366);
+    
+//    [rightBtn setTitleColor:UIColorFromHex(0x4db366) forState:UIControlStateNormal];
+//    rightBtn.backgroundColor = [UIColor whiteColor];
+//    [leftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    leftBtn.backgroundColor = UIColorFromHex(0x4db366);
+    
+    ScreenDetailViewController *sc = [[ScreenDetailViewController alloc]init];
+    
+    sc.delegate = self;
+    
+    sc.hidesBottomBarWhenPushed = YES;
+    
+    
+    [self.navigationController pushViewController:sc animated:YES];
+    
 }
 
 -(void)rightClick{
@@ -253,6 +370,9 @@
     _datepicker = [[WSDatePickerView alloc] initWithDateStyle:DateStyleShowYearMonthDay CompleteBlock:^(NSDate *startDate) {
         NSString *date = [startDate stringWithFormat:@"yyyy-MM-dd"];
         NSLog(@"时间： %@",date);
+        
+        Count = 1;
+        [self requestDataWithTime:date];
         
         _SelDate = startDate;
         
@@ -308,10 +428,278 @@
     NSLog(@"点击去工作");
     
     AddViewController *add = [[AddViewController alloc]init];
+    add.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:add animated:YES];
 //    WorkViewController *wor = [[WorkViewController alloc]init];
 //    [self.navigationController pushViewController:wor animated:YES];
     
 }
+
+-(void)requestData{
+    
+    type = @"0";
+
+    NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
+    MainPlantModel *model = [[MainPlantModel alloc]init];
+    model.fid = str;
+    model.page = Count;
+    
+//    int zxc = [selID intValue];
+//    if(zxc!=-10){
+//        model.uid = selID;
+//    }
+    
+    if(Count == 1){
+        dataArr = [NSMutableArray array];
+    }
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getMainPlantWithModel:model WithCallBack:^(int state, id data, NSString *msg) {
+        if(state == 2000){
+            NSLog(@"成功");
+            NSArray *arr = data[@"data"];
+            for (int i = 0 ; i<arr.count; i++) {
+                
+                
+                NSDictionary *dic = arr[i];
+                
+                PlantBaseModel *baseModel = [[PlantBaseModel alloc]init];
+                
+                baseModel.arr = [NSMutableArray array];
+                
+                baseModel.name = dic[@"name"];
+                NSArray *arr2 = dic[@"plant"];
+//                baseModel.arr = arr2;
+                
+                for(int j=0;j<arr2.count;j++){
+                    
+                    NSDictionary *dic2 = arr2[j];
+                    
+                    PlantModel *model = [[PlantModel alloc]init];
+                    model.dateStr = dic2[@"week"];
+                    model.timeStr = dic2[@"time"];
+                    model.nameStr = dic2[@"title"];
+                    model.typeStr = dic2[@"plant_type_id"];
+                    model.numberStr = dic2[@"total_amount"];
+                    model.extraStr = dic2[@"variety_name"];
+                    
+                    model.pengID = dic2[@"gid"];
+                    
+                    [baseModel.arr addObject:model];
+                }
+                
+                [dataArr addObject:baseModel];
+
+            }
+            
+            [_plantTableView reloadData];
+            
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+    }];
+
+}
+
+-(void)selectWithDic:(NSDictionary *)dic{
+    
+    [rightBtn setTitleColor:UIColorFromHex(0x4db366) forState:UIControlStateNormal];
+    rightBtn.backgroundColor = [UIColor whiteColor];
+    [leftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    leftBtn.backgroundColor = UIColorFromHex(0x4db366);
+    
+    NSArray *arr = [dic allValues];
+    
+    Count = 1;
+    if(arr.count == 0){
+        
+        [self requestData];
+        
+    }else{
+    
+        NSString *str = [self objArrayToJSON:arr];
+        [self requestDataWithStufStr:str];
+        
+    }
+    
+    
+    
+}
+
+
+- (NSString *)objArrayToJSON:(NSArray *)array {
+    
+    NSString *jsonStr = @"[";
+    
+    for (NSInteger i = 0; i < array.count; ++i) {
+        ScreenDetailModel *model = array[i];
+        NSString *str = model.needId;
+        int a = [str intValue];
+        NSString *res = [NSString stringWithFormat:@"%d",a];
+        if (i != 0) {
+            jsonStr = [jsonStr stringByAppendingString:@","];
+        }
+        jsonStr = [jsonStr stringByAppendingString:res];
+    }
+    jsonStr = [jsonStr stringByAppendingString:@"]"];
+    
+    return jsonStr;
+}
+
+
+//-(void)selectWithDic:(ScreenDetailModel *)model{
+//    
+////    if([model.needId intValue]==-10){
+//    
+//    selID = model.needId;
+//        Count = 1;
+//        [self requestData];
+//        
+////    }else{
+////    
+////        Count = 1;
+////        [self requestDataWithStufID:model.needId];
+////        
+////    }
+//    
+//}
+-(void)requestDataWithStufStr:(NSString *)stufStr{
+    
+    type = @"1";
+    typeContent = stufStr;
+    
+    NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
+    MainPlantModel *model = [[MainPlantModel alloc]init];
+    model.fid = str;
+    model.page = Count;
+    model.uid = stufStr;
+    
+    
+//    int zxc = [selID intValue];
+//    if(zxc!=-10){
+//        model.uid = selID;
+//    }
+    
+    if(Count == 1){
+        dataArr = [NSMutableArray array];
+    }
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getMainPlantWithModel:model WithCallBack:^(int state, id data, NSString *msg) {
+        if(state == 2000){
+            NSLog(@"成功");
+            NSArray *arr = data[@"data"];
+            for (int i = 0 ; i<arr.count; i++) {
+                
+                
+                NSDictionary *dic = arr[i];
+                
+                PlantBaseModel *baseModel = [[PlantBaseModel alloc]init];
+                
+                baseModel.arr = [NSMutableArray array];
+                
+                baseModel.name = dic[@"name"];
+                NSArray *arr2 = dic[@"plant"];
+                //                baseModel.arr = arr2;
+                
+                for(int j=0;j<arr2.count;j++){
+                    
+                    NSDictionary *dic2 = arr2[j];
+                    
+                    PlantModel *model = [[PlantModel alloc]init];
+                    model.dateStr = dic2[@"week"];
+                    model.timeStr = dic2[@"time"];
+                    model.nameStr = dic2[@"title"];
+                    model.typeStr = dic2[@"plant_type_id"];
+                    model.numberStr = dic2[@"total_amount"];
+                    model.extraStr = dic2[@"variety_name"];
+                    
+                    model.pengID = dic2[@"gid"];
+                    [baseModel.arr addObject:model];
+                }
+                
+                [dataArr addObject:baseModel];
+                
+            }
+            
+            [_plantTableView reloadData];
+            
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+    }];
+    
+}
+-(void)requestDataWithTime:(NSString *)time{
+    
+    
+    type = @"2";
+    
+    typeContent = time;
+    
+    NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
+    MainPlantModel *model = [[MainPlantModel alloc]init];
+    model.fid = str;
+    model.page = Count;
+    model.date = time;
+    
+    
+    //    int zxc = [selID intValue];
+    //    if(zxc!=-10){
+    //        model.uid = selID;
+    //    }
+    
+    if(Count == 1){
+        dataArr = [NSMutableArray array];
+    }
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getMainPlantWithModel:model WithCallBack:^(int state, id data, NSString *msg) {
+        if(state == 2000){
+            NSLog(@"成功");
+            NSArray *arr = data[@"data"];
+            for (int i = 0 ; i<arr.count; i++) {
+                
+                
+                NSDictionary *dic = arr[i];
+                
+                PlantBaseModel *baseModel = [[PlantBaseModel alloc]init];
+                
+                baseModel.arr = [NSMutableArray array];
+                
+                baseModel.name = dic[@"name"];
+                NSArray *arr2 = dic[@"plant"];
+                //                baseModel.arr = arr2;
+                
+                for(int j=0;j<arr2.count;j++){
+                    
+                    NSDictionary *dic2 = arr2[j];
+                    
+                    PlantModel *model = [[PlantModel alloc]init];
+                    model.dateStr = dic2[@"week"];
+                    model.timeStr = dic2[@"time"];
+                    model.nameStr = dic2[@"title"];
+                    model.typeStr = dic2[@"plant_type_id"];
+                    model.numberStr = dic2[@"total_amount"];
+                    model.extraStr = dic2[@"variety_name"];
+                    
+                    model.pengID = dic2[@"gid"];
+                    [baseModel.arr addObject:model];
+                }
+                
+                [dataArr addObject:baseModel];
+                
+            }
+            
+            [_plantTableView reloadData];
+            
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+    }];
+    
+}
+
+
 
 @end

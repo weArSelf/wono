@@ -13,6 +13,7 @@
 #import "ZhongZhiViewController.h"
 
 #import "WSDatePickerView.h"
+#import "AddModel.h"
 
 @interface AddViewController ()
 
@@ -32,23 +33,29 @@
 
 @implementation AddViewController
 {
-    NSMutableArray *pengData;
+    AddModel *pengData;
     UIButton *selcBtn;
     CGFloat bottomY;
     UIButton *typeSelcBtn;
     float typeIndex;
+    
+    int nowSel;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    nowSel = -1;
+    
     typeIndex = 0;
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
     [self creatTitleAndBackBtn];
     [self createTime];
     [self createNextBtn];
-    [self createContent];
-    [self createType];
+//    [self createContent];
+//    [self createType];
+    [self requestData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -176,10 +183,22 @@
 -(void)SaveClick{
     NSLog(@"点击下一步");
     
+    
     int index = typeIndex;
     switch (index) {
         case 1:{
             ZhongZhiViewController *zhongzhi = [[ZhongZhiViewController alloc]init];
+            
+            AddDetailModel *model = [[AddDetailModel alloc]init];
+            
+            NSString *name = pengData.nameArr[nowSel];
+            NSString *varID = pengData.variID[nowSel];
+            
+            model.varName = name;
+            model.varID = varID;
+            
+            zhongzhi.model = model;
+            
             [self.navigationController pushViewController:zhongzhi animated:YES];
              break;
         }
@@ -218,14 +237,14 @@
         make.width.equalTo(@(HDAutoWidth(280)));
     }];
     
-    pengData = [NSMutableArray arrayWithObjects:@"黄瓜大棚",@"西瓜大棚",@"X瓜大棚",@"黄瓜大棚",@"黄瓜大棚",@"黄瓜大棚", nil];
-    
+//    pengData = [NSMutableArray arrayWithObjects:@"黄瓜大棚",@"西瓜大棚",@"X瓜大棚",@"黄瓜大棚",@"黄瓜大棚",@"黄瓜大棚", nil];
+    NSArray *nameArr = pengData.nameArr;
     [selecLabel layoutIfNeeded];
     [self.view layoutIfNeeded];
-    for (int i=0; i<pengData.count; i++) {
+    for (int i=0; i<nameArr.count; i++) {
         UIButton *btn = [[UIButton alloc]init];
         btn.titleLabel.font = [UIFont systemFontOfSize:13];
-        [btn setTitle:pengData[i] forState:UIControlStateNormal];
+        [btn setTitle:nameArr[i] forState:UIControlStateNormal];
         [btn setTitleColor:UIColorFromHex(0x9fa0a0) forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
         btn.tag = 200+i;
@@ -245,6 +264,9 @@
     }
 }
 -(void)pengClick:(UIButton *)btn{
+    
+    nowSel = btn.tag-200;
+    
     NSLog(@"%ld", (long)btn.tag);
     if(selcBtn == nil){
         selcBtn = btn;
@@ -261,7 +283,7 @@
     
     UILabel *typeLabel = [self mylabel];
     typeLabel.text = @"类型:";
-    typeLabel.frame = CGRectMake(HDAutoWidth(30), bottomY+HDAutoHeight(20), HDAutoWidth(280), HDAutoHeight(30));
+    typeLabel.frame = CGRectMake(HDAutoWidth(30), bottomY+HDAutoHeight(40), HDAutoWidth(280), HDAutoHeight(30));
     [self.view addSubview:typeLabel];
     
     UIButton *btn1 = [[UIButton alloc]init];
@@ -356,6 +378,39 @@
     
     [_datepicker show];
     
+    
+}
+
+-(void)requestData{
+    NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
+    [[InterfaceSingleton shareInstance].interfaceModel getPengWithFid:str AndCallBack:^(int state, id data, NSString *msg) {
+//        pengData = [NSMutableArray array];
+        if(state == 2000){
+            NSLog(@"成功");
+            AddModel *model = [[AddModel alloc]init];
+            NSArray *arr = data;
+            for (int i=0; i<arr.count; i++) {
+                NSDictionary *dic = arr[i];
+                
+                [model.nameArr addObject:dic[@"name"]];
+                [model.needIDArr addObject:dic[@"id"]];
+                
+                [model.variName addObject:@"variety_name"];
+                [model.variID addObject:@"varieties_id"];
+                
+            }
+            
+            pengData = model;
+            [self createContent];
+            [self createType];
+            
+            
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
     
 }
 

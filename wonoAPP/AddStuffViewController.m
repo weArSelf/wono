@@ -65,7 +65,7 @@
                 model.imageUrl = dic[@"avatar"];
                 model.name = dic[@"username"];
                 model.phoneNum = dic[@"mobile"];
-                
+                model.stufID = dic[@"id"];
                 [dataArr addObject:model];
             }
             
@@ -289,6 +289,49 @@
     return 0.01;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    [_mainTextField resignFirstResponder];
+    
+    SearchModel *model = dataArr[indexPath.row];
+    
+    NSString *title = [NSString stringWithFormat:@"是否添加员工%@?",model.name];
+    
+    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:title preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSLog(@"确定");
+        NSString *fid = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
+        [[InterfaceSingleton shareInstance].interfaceModel farmAddStuffWithFid:fid AndUid:model.stufID WithCallBack:^(int state, id data, NSString *msg) {
+           
+            if(state == 2000){
+                [MBProgressHUD showSuccess:@"添加成功"];
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            if(state<2000){
+                [MBProgressHUD showSuccess:msg];
+            }
+            
+        }];
+        
+        
+        
+    }];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        NSLog(@"取消");
+    }];
+    [alertC addAction:cancel];
+    [alertC addAction:confirm];
+    [self presentViewController:alertC animated:YES completion:nil];
+    
+}
 
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    if ([touch.view isKindOfClass:[UITableView class]]) {
+        return YES;
+    }
+    
+    return  NO;
+}
 
 @end

@@ -14,4 +14,6 @@
 @property (nonatomic,strong) NSMutableArray *dataArr;
 - (instancetype)initWithFrame:(CGRect)frame AndData:(NSMutableArray *)arr;
 
+-(void)changeTitle;
+
 @end

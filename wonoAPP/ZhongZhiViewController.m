@@ -56,7 +56,7 @@
     [self creatTitleAndBackBtn];
     [self createSaveBtn];
     [self createCon];
-    [self createTime];
+//    [self createTime];
 }
 
 
@@ -296,6 +296,21 @@
 //    [self.view addSubview:nowView];
     
     [_addTextView setValue:@100 forKey:@"limit"];
+    
+    [_addLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view).offset(HDAutoWidth(40));
+        make.height.equalTo(@(HDAutoHeight(32)));
+        make.top.equalTo(_perTextView.mas_bottom).offset(HDAutoHeight(20));
+        make.width.equalTo(@(HDAutoWidth(150)));
+    }];
+    [_addTextView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_perTextView.mas_bottom).offset(HDAutoHeight(20));
+        make.height.equalTo(@(HDAutoHeight(330)));
+        make.width.equalTo(@(HDAutoWidth(530)));
+        make.left.equalTo(_catDetailLabel.mas_left);
+    }];
+
+    
 }
 
 //-(void)labelClick:(UITapGestureRecognizer *)recognizer{
@@ -387,14 +402,15 @@
     }];
     
     
+    
     [_addLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(HDAutoWidth(40));
         make.height.equalTo(@(HDAutoHeight(32)));
-        make.top.equalTo(titletimeLabel.mas_bottom).offset(HDAutoHeight(20));
+        make.top.equalTo(_perTextView.mas_bottom).offset(HDAutoHeight(20));
         make.width.equalTo(@(HDAutoWidth(150)));
     }];
     [_addTextView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_timeLabel.mas_bottom).offset(HDAutoHeight(20));
+        make.top.equalTo(_perTextView.mas_bottom).offset(HDAutoHeight(20));
         make.height.equalTo(@(HDAutoHeight(330)));
         make.width.equalTo(@(HDAutoWidth(530)));
         make.left.equalTo(_catDetailLabel.mas_left);
@@ -439,6 +455,12 @@
     _datepicker.doneButtonColor = UIColorFromHex(0x3fb36f);//确定按钮的颜色
     
     [_datepicker show];
+    
+    
+}
+
+-(void)setModel:(AddDetailModel *)model{
+    _model = model;
     
     
 }

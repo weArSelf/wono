@@ -14,4 +14,6 @@
 @property (nonatomic,strong) NSString *name;
 @property (nonatomic,strong) NSString *phoneNum;
 
+@property (nonatomic,strong) NSString *stufID;
+
 @end

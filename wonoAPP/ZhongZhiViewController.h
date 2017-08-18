@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AddDetailModel.h"
 
 @interface ZhongZhiViewController : UIViewController
+
+@property (nonatomic,strong) AddDetailModel *model;
 
 @end

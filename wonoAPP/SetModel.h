@@ -24,5 +24,6 @@
 @property (nonatomic,strong) NSString *land2Max;
 @property (nonatomic,strong) NSString *land2Min;
 
+@property (nonatomic,strong) NSString *needID;
 
 @end

@@ -201,4 +201,54 @@
     
 }
 
+-(void)setModel:(PlantModel *)model{
+    _model = model;
+    
+    _dateLabel.text = model.dateStr;
+    _timeLabel.text = model.timeStr;
+    
+    _nameLabel.text = model.nameStr;
+    
+    int a = [model.typeStr intValue];
+    
+    switch (a) {
+        case 1:{
+            _typeLabel.text = @"种植";
+            break;
+        }
+        case 2:{
+            _typeLabel.text = @"施肥";
+            break;
+        }
+        case 3:{
+            _typeLabel.text = @"植保";
+            break;
+        }
+        case 4:{
+            _typeLabel.text = @"采收";
+            break;
+        }
+            
+        default:
+            break;
+    }
+    
+//    NSString *str = [NSString stringWithFormat:@"%d",a];
+    
+    int b = [model.numberStr intValue];
+    
+   
+    NSString *qwe = [NSString stringWithFormat:@"%d",b];
+    
+    _numberLabel.text = qwe;
+    
+    if(b<0){
+        _numberLabel.textColor = [UIColor redColor];
+    }else{
+        _numberLabel.textColor = [UIColor grayColor];
+    }
+    
+    _typeContentLabel.text = model.extraStr;
+}
+
 @end

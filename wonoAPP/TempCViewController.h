@@ -10,4 +10,6 @@
 
 @interface TempCViewController : UIViewController
 
+@property (nonatomic) int  needID;
+
 @end

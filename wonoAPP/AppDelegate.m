@@ -40,8 +40,15 @@
     self.window.backgroundColor = [UIColor whiteColor];
     
 //    [[NSUserDefaults standardUserDefaults]setObject:@"login" forKey:@"loginMark"];
+    [[NSUserDefaults standardUserDefaults]synchronize];
     NSString *mark = [[NSUserDefaults standardUserDefaults]objectForKey:@"loginMark"];
-    
+    NSLog(@"%@", mark);
+    if(mark == nil){
+        mark = [[NSUserDefaults standardUserDefaults]objectForKey:@"loginMark"];
+    }
+    if(mark == nil){
+        mark = [[NSUserDefaults standardUserDefaults]objectForKey:@"loginMark"];
+    }
     if([mark isEqualToString:@"login"]){
     
         self.base = [[BaseTabBarController alloc]init];

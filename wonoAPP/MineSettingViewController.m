@@ -199,7 +199,7 @@
             UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"是否确认注销" preferredStyle:UIAlertControllerStyleAlert];
              UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                  [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"loginMark"];
-                 
+                 [[NSUserDefaults standardUserDefaults]synchronize];
                  LoginViewController *login = [[LoginViewController alloc]init];
                  UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:login];
                  nav.navigationBarHidden = YES;
