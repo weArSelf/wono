@@ -10,4 +10,6 @@
 
 @interface WorkViewController : UIViewController
 
+@property (nonatomic,strong) PlantAddModel *model;
+
 @end

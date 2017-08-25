@@ -77,7 +77,7 @@
     
     [_chartView animateWithXAxisDuration:1.4 easingOption:ChartEasingOptionEaseOutBack];
     
-    NSArray *arr = _model.colorArr;
+    NSArray *arr = _model.nameArr;
     [self setDataCount:arr.count range:100];
     
     [self.chartView mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -128,9 +128,9 @@
         
         float realX = BorX + (self.width - BorX*2)*i/(_dataArr.count-1);
         
-        if(_dataArr.count>10){
+//        if(_dataArr.count>10){
             realX = BorX + i*(self.width - BorX*2)/(9);
-        }
+//        }
         
         
         
@@ -253,9 +253,9 @@
         
         float realX = BorX + (self.width - BorX*2)*i/(_dataArr.count-1);
         
-        if(_dataArr.count>10){
+//        if(_dataArr.count>10){
             realX = BorX + i*(self.width - BorX*2)/(9);
-        }
+//        }
         
         CGPoint nowP = CGPointMake(realX, HDAutoHeight(60)+(self.height-HDAutoHeight(140))*(50-nowM.Height2)/60);
         

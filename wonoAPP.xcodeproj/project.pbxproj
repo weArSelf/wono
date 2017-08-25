@@ -68,6 +68,8 @@
 		A8246A251F149C5400CFD65A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8246A241F149C5400CFD65A /* LoginViewController.m */; };
 		A8246A281F14C25A00CFD65A /* CompleteInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8246A271F14C25A00CFD65A /* CompleteInfoViewController.m */; };
 		A8246A2B1F17448300CFD65A /* AgreementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8246A2A1F17448300CFD65A /* AgreementViewController.m */; };
+		A89990D71F4EB4A000D15005 /* MyZview2.m in Sources */ = {isa = PBXBuildFile; fileRef = A89990D61F4EB4A000D15005 /* MyZview2.m */; };
+		A89990DC1F4FC10D00D15005 /* MyPieView.m in Sources */ = {isa = PBXBuildFile; fileRef = A89990DB1F4FC10D00D15005 /* MyPieView.m */; };
 		A8A11D261F1852DB008CA39A /* ForgetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A11D251F1852DB008CA39A /* ForgetViewController.m */; };
 		A8A11D2B1F18532D008CA39A /* HDTimerBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A11D2A1F18532D008CA39A /* HDTimerBtn.m */; };
 		A8A11D2F1F1863A6008CA39A /* BaseNavViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A11D2E1F1863A6008CA39A /* BaseNavViewController.m */; };
@@ -109,6 +111,12 @@
 		A8BC31471F3C428900BD6E76 /* ZhengZeSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = A8BC31461F3C428900BD6E76 /* ZhengZeSupport.m */; };
 		A8BC314C1F3D599300BD6E76 /* CompleteModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8BC314B1F3D599300BD6E76 /* CompleteModel.m */; };
 		A8BC314F1F41326300BD6E76 /* SearchModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8BC314E1F41326300BD6E76 /* SearchModel.m */; };
+		A8C0D9EB1F4A70FE000AD2D8 /* PlantAddModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8C0D9EA1F4A70FE000AD2D8 /* PlantAddModel.m */; };
+		A8C0D9F01F4AAE03000AD2D8 /* PlantTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8C0D9EF1F4AAE03000AD2D8 /* PlantTypeViewController.m */; };
+		A8C0D9F31F4AB958000AD2D8 /* ShifeiTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8C0D9F21F4AB958000AD2D8 /* ShifeiTypeViewController.m */; };
+		A8C0D9F81F4BE29F000AD2D8 /* UITableView+JRTableViewPlaceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = A8C0D9F71F4BE29F000AD2D8 /* UITableView+JRTableViewPlaceHolder.m */; };
+		A8C0D9FB1F4C11ED000AD2D8 /* MapSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8C0D9FA1F4C11ED000AD2D8 /* MapSearchViewController.m */; };
+		A8C0DA0F1F4D69B4000AD2D8 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8C0DA0E1F4D69B4000AD2D8 /* UserNotifications.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -295,6 +303,10 @@
 		A8246A271F14C25A00CFD65A /* CompleteInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompleteInfoViewController.m; sourceTree = "<group>"; };
 		A8246A291F17448300CFD65A /* AgreementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgreementViewController.h; sourceTree = "<group>"; };
 		A8246A2A1F17448300CFD65A /* AgreementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgreementViewController.m; sourceTree = "<group>"; };
+		A89990D51F4EB4A000D15005 /* MyZview2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyZview2.h; sourceTree = "<group>"; };
+		A89990D61F4EB4A000D15005 /* MyZview2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyZview2.m; sourceTree = "<group>"; };
+		A89990DA1F4FC10D00D15005 /* MyPieView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPieView.h; sourceTree = "<group>"; };
+		A89990DB1F4FC10D00D15005 /* MyPieView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPieView.m; sourceTree = "<group>"; };
 		A8A11D241F1852DB008CA39A /* ForgetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForgetViewController.h; sourceTree = "<group>"; };
 		A8A11D251F1852DB008CA39A /* ForgetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForgetViewController.m; sourceTree = "<group>"; };
 		A8A11D291F18532D008CA39A /* HDTimerBtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HDTimerBtn.h; sourceTree = "<group>"; };
@@ -372,6 +384,20 @@
 		A8BC314B1F3D599300BD6E76 /* CompleteModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompleteModel.m; sourceTree = "<group>"; };
 		A8BC314D1F41326300BD6E76 /* SearchModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchModel.h; sourceTree = "<group>"; };
 		A8BC314E1F41326300BD6E76 /* SearchModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchModel.m; sourceTree = "<group>"; };
+		A8C0D9E91F4A70FE000AD2D8 /* PlantAddModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlantAddModel.h; sourceTree = "<group>"; };
+		A8C0D9EA1F4A70FE000AD2D8 /* PlantAddModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlantAddModel.m; sourceTree = "<group>"; };
+		A8C0D9EE1F4AAE03000AD2D8 /* PlantTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlantTypeViewController.h; sourceTree = "<group>"; };
+		A8C0D9EF1F4AAE03000AD2D8 /* PlantTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlantTypeViewController.m; sourceTree = "<group>"; };
+		A8C0D9F11F4AB958000AD2D8 /* ShifeiTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShifeiTypeViewController.h; sourceTree = "<group>"; };
+		A8C0D9F21F4AB958000AD2D8 /* ShifeiTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShifeiTypeViewController.m; sourceTree = "<group>"; };
+		A8C0D9F41F4BDB14000AD2D8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		A8C0D9F51F4BDB14000AD2D8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		A8C0D9F61F4BE29F000AD2D8 /* UITableView+JRTableViewPlaceHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+JRTableViewPlaceHolder.h"; sourceTree = "<group>"; };
+		A8C0D9F71F4BE29F000AD2D8 /* UITableView+JRTableViewPlaceHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+JRTableViewPlaceHolder.m"; sourceTree = "<group>"; };
+		A8C0D9F91F4C11ED000AD2D8 /* MapSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapSearchViewController.h; sourceTree = "<group>"; };
+		A8C0D9FA1F4C11ED000AD2D8 /* MapSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapSearchViewController.m; sourceTree = "<group>"; };
+		A8C0DA0D1F4D67F1000AD2D8 /* wonoAPP.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = wonoAPP.entitlements; sourceTree = "<group>"; };
+		A8C0DA0E1F4D69B4000AD2D8 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		C19FD802BF9A56E1A918136F /* Pods-wonoAPP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wonoAPP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-wonoAPP/Pods-wonoAPP.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -380,6 +406,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8C0DA0F1F4D69B4000AD2D8 /* UserNotifications.framework in Frameworks */,
 				A8ADF1BB1F13182700781E06 /* Pods_wonoAPP.framework in Frameworks */,
 				A8ADF1B51F13181A00781E06 /* Charts.framework in Frameworks */,
 				61EB95DFE3F818790E70A887 /* Pods_wonoAPP.framework in Frameworks */,
@@ -415,6 +442,7 @@
 		61A6C4C5A854E62D512BADD4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A8C0DA0E1F4D69B4000AD2D8 /* UserNotifications.framework */,
 				A8ADF1BA1F13182700781E06 /* Pods_wonoAPP.framework */,
 				7E1A5ADF071EE1E73AE6E7C8 /* Pods_wonoAPP.framework */,
 			);
@@ -426,6 +454,10 @@
 			children = (
 				A821F4A91F21C43B0040846E /* StatisticsTableViewCell.h */,
 				A821F4AA1F21C43B0040846E /* StatisticsTableViewCell.m */,
+				A89990D51F4EB4A000D15005 /* MyZview2.h */,
+				A89990D61F4EB4A000D15005 /* MyZview2.m */,
+				A89990DA1F4FC10D00D15005 /* MyPieView.h */,
+				A89990DB1F4FC10D00D15005 /* MyPieView.m */,
 			);
 			name = view;
 			sourceTree = "<group>";
@@ -513,6 +545,8 @@
 		A82469FA1F14625600CFD65A /* Support Tools */ = {
 			isa = PBXGroup;
 			children = (
+				A8C0D9F61F4BE29F000AD2D8 /* UITableView+JRTableViewPlaceHolder.h */,
+				A8C0D9F71F4BE29F000AD2D8 /* UITableView+JRTableViewPlaceHolder.m */,
 				A821F5521F3442E60040846E /* KBTabbar.h */,
 				A821F5531F3442E60040846E /* KBTabbar.m */,
 				A821F53F1F32C1390040846E /* CustomActionSheet.h */,
@@ -567,6 +601,10 @@
 				A821F51F1F2EFA350040846E /* ZhongZhiViewController.m */,
 				A8A94F6B1F4537F800D9BBA2 /* ScreenDetailViewController.h */,
 				A8A94F6C1F4537F800D9BBA2 /* ScreenDetailViewController.m */,
+				A8C0D9EE1F4AAE03000AD2D8 /* PlantTypeViewController.h */,
+				A8C0D9EF1F4AAE03000AD2D8 /* PlantTypeViewController.m */,
+				A8C0D9F11F4AB958000AD2D8 /* ShifeiTypeViewController.h */,
+				A8C0D9F21F4AB958000AD2D8 /* ShifeiTypeViewController.m */,
 			);
 			name = "种植管理";
 			sourceTree = "<group>";
@@ -574,6 +612,7 @@
 		A8246A011F14667700CFD65A /* 数据统计 */ = {
 			isa = PBXGroup;
 			children = (
+				A89990DD1F4FC31500D15005 /* model */,
 				A821F4A61F21C4130040846E /* view */,
 				A8246A191F146F9200CFD65A /* StatisticsViewController.h */,
 				A8246A1A1F146F9200CFD65A /* StatisticsViewController.m */,
@@ -677,6 +716,8 @@
 				A8A11D591F1EEAE3008CA39A /* MapViewController.m */,
 				A8A11D5C1F1F5E72008CA39A /* RegeistViewController.h */,
 				A8A11D5D1F1F5E72008CA39A /* RegeistViewController.m */,
+				A8C0D9F91F4C11ED000AD2D8 /* MapSearchViewController.h */,
+				A8C0D9FA1F4C11ED000AD2D8 /* MapSearchViewController.m */,
 			);
 			name = "登录注册";
 			sourceTree = "<group>";
@@ -692,6 +733,15 @@
 				A8A11D341F189F1B008CA39A /* BaseViewController.m */,
 			);
 			name = Base;
+			sourceTree = "<group>";
+		};
+		A89990DD1F4FC31500D15005 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				A8A94F771F46983A00D9BBA2 /* PercentModel.h */,
+				A8A94F781F46983A00D9BBA2 /* PercentModel.m */,
+			);
+			name = model;
 			sourceTree = "<group>";
 		};
 		A8A11D2C1F185334008CA39A /* View */ = {
@@ -723,12 +773,12 @@
 				A8A94F721F4562CD00D9BBA2 /* MainPlantModel.m */,
 				A8A94F741F4572C000D9BBA2 /* PlantBaseModel.h */,
 				A8A94F751F4572C000D9BBA2 /* PlantBaseModel.m */,
-				A8A94F771F46983A00D9BBA2 /* PercentModel.h */,
-				A8A94F781F46983A00D9BBA2 /* PercentModel.m */,
 				A8A94F7A1F46D73000D9BBA2 /* AddModel.h */,
 				A8A94F7B1F46D73000D9BBA2 /* AddModel.m */,
 				A8A94F7D1F46E3C700D9BBA2 /* AddDetailModel.h */,
 				A8A94F7E1F46E3C700D9BBA2 /* AddDetailModel.m */,
+				A8C0D9E91F4A70FE000AD2D8 /* PlantAddModel.h */,
+				A8C0D9EA1F4A70FE000AD2D8 /* PlantAddModel.m */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -783,6 +833,7 @@
 		A8ADF1611F0F841100781E06 /* wonoAPP */ = {
 			isa = PBXGroup;
 			children = (
+				A8C0DA0D1F4D67F1000AD2D8 /* wonoAPP.entitlements */,
 				A8BC31481F3C42A900BD6E76 /* 正则表达式 */,
 				A821F5771F39A3C50040846E /* web封装 */,
 				A8246A1F1F1470E600CFD65A /* Base */,
@@ -952,6 +1003,14 @@
 						DevelopmentTeam = UKT4L53925;
 						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					A8ADF1771F0F841200781E06 = {
 						CreatedOnToolsVersion = 8.3.3;
@@ -1104,6 +1163,7 @@
 				A8A94F6A1F42A40F00D9BBA2 /* PengTypeModel.m in Sources */,
 				A8A11D481F1CA217008CA39A /* SelectionViewController.m in Sources */,
 				A821F5111F2B06BD0040846E /* FZHPickerView.m in Sources */,
+				A8C0D9F01F4AAE03000AD2D8 /* PlantTypeViewController.m in Sources */,
 				A8246A0D1F1467DC00CFD65A /* JXTCacher.m in Sources */,
 				A821F5201F2EFA350040846E /* ZhongZhiViewController.m in Sources */,
 				A821F4B21F2598C50040846E /* TempTableViewCell.m in Sources */,
@@ -1116,18 +1176,22 @@
 				A821F5321F31B1270040846E /* ChangePswViewController.m in Sources */,
 				A8A11D421F1C6A29008CA39A /* WonoCircleTableViewCell.m in Sources */,
 				A8A11D351F189F1B008CA39A /* BaseViewController.m in Sources */,
+				A8C0D9FB1F4C11ED000AD2D8 /* MapSearchViewController.m in Sources */,
 				A821F52C1F3177CC0040846E /* AboutViewController.m in Sources */,
 				A8ADF16A1F0F841200781E06 /* ViewController.m in Sources */,
 				A8BC31471F3C428900BD6E76 /* ZhengZeSupport.m in Sources */,
 				A8ADF1971F0F84DB00781E06 /* File.swift in Sources */,
 				A8246A1E1F146FA800CFD65A /* PlantControllViewController.m in Sources */,
+				A8C0D9F31F4AB958000AD2D8 /* ShifeiTypeViewController.m in Sources */,
 				A821F51A1F2EDA190040846E /* ShifeiViewController.m in Sources */,
 				A8246A251F149C5400CFD65A /* LoginViewController.m in Sources */,
 				A821F5861F3AA29B0040846E /* PengAddViewController.m in Sources */,
 				A8A94F6D1F4537F800D9BBA2 /* ScreenDetailViewController.m in Sources */,
+				A89990DC1F4FC10D00D15005 /* MyPieView.m in Sources */,
 				A8A11D261F1852DB008CA39A /* ForgetViewController.m in Sources */,
 				A8A11D391F18A929008CA39A /* PlantCell.m in Sources */,
 				A821F5631F3801070040846E /* MyFarmViewController.m in Sources */,
+				A8C0D9EB1F4A70FE000AD2D8 /* PlantAddModel.m in Sources */,
 				A8A94F7F1F46E3C700D9BBA2 /* AddDetailModel.m in Sources */,
 				A8A11D551F1DF058008CA39A /* WSDatePickerView.m in Sources */,
 				A8ADF1671F0F841200781E06 /* AppDelegate.m in Sources */,
@@ -1182,10 +1246,12 @@
 				A821F55A1F34637D0040846E /* PengTableViewCell.m in Sources */,
 				A8A94F731F4562CD00D9BBA2 /* MainPlantModel.m in Sources */,
 				A8246A121F146EE400CFD65A /* MineViewController.m in Sources */,
+				A89990D71F4EB4A000D15005 /* MyZview2.m in Sources */,
 				A8A11D531F1DF058008CA39A /* NSDate+Extension.m in Sources */,
 				A821F4AE1F21F4560040846E /* UIImage+Scale.m in Sources */,
 				A821F56F1F386A670040846E /* CustomLabel.m in Sources */,
 				A821F4BE1F26D50B0040846E /* MoreTempViewController.m in Sources */,
+				A8C0D9F81F4BE29F000AD2D8 /* UITableView+JRTableViewPlaceHolder.m in Sources */,
 				A8246A151F146F0100CFD65A /* WonoCircleViewController.m in Sources */,
 				A821F5541F3442E60040846E /* KBTabbar.m in Sources */,
 			);
@@ -1232,6 +1298,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				A8ADF16C1F0F841200781E06 /* Base */,
+				A8C0D9F41F4BDB14000AD2D8 /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -1240,6 +1307,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				A8ADF1711F0F841200781E06 /* Base */,
+				A8C0D9F51F4BDB14000AD2D8 /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -1251,6 +1319,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -1300,6 +1369,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -1346,6 +1416,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = wonoAPP/wonoAPP.entitlements;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = UKT4L53925;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/wonoApp/WonoPrefixHeader.pch";
@@ -1368,6 +1439,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = wonoAPP/wonoAPP.entitlements;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = UKT4L53925;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/wonoApp/WonoPrefixHeader.pch";

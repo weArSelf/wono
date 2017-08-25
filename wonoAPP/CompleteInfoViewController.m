@@ -92,7 +92,20 @@
     [self createAddress];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(searchChange:) name:@"searchChange" object:nil];
+    
 }
+
+-(void)searchChange:(NSNotification *)noti{
+    NSDictionary *dic = (NSDictionary *)[noti object];
+
+    NSString *lat = dic[@"lat"];
+    NSString *lont = dic[@"lont"];
+    _adrLabel.text = dic[@"name"];
+    
+    NSLog(@"%@  %@  %@", dic[@"name"],lat,lont);
+}
+
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -624,16 +637,7 @@
 }
 
 
--(void)confirmWithName:(NSString *)name AndLongitude:(NSString *)longitude AndLatitude:(NSString *)latitude{
-    
-    NSLog(@"%@  %@  %@", name,longitude,latitude);
-    
-    _adrLabel.text = name;
-    
-    
-    
-    
-}
+
 
 
 
@@ -652,21 +656,22 @@
     if (_nameTextField.isFirstResponder) {
         return;
     }
-    [_addressLabel layoutIfNeeded];
-    [self.view layoutIfNeeded];
-    NSDictionary *userInfo = [aNotification userInfo];
-    NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-    CGRect keyboardRect = [aValue CGRectValue];
-    height = keyboardRect.size.height;
-    CGFloat realHeight = height - (APP_CONTENT_HEIGHT - _addressLabel.y);
-//    float raiseHeight =  CGRectGetMaxY(self.farmLabel.frame)-height;
-    [UIView animateWithDuration:0.3 animations:^{
-        self.view.transform =CGAffineTransformMakeTranslation(0, -realHeight);
-        
-    } completion:^(BOOL finished) {
-        
-    }];
-    
+    if(_farmTextField.isFirstResponder){
+        [_addressLabel layoutIfNeeded];
+        [self.view layoutIfNeeded];
+        NSDictionary *userInfo = [aNotification userInfo];
+        NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+        CGRect keyboardRect = [aValue CGRectValue];
+        height = keyboardRect.size.height;
+        CGFloat realHeight = height - (APP_CONTENT_HEIGHT - _addressLabel.y);
+    //    float raiseHeight =  CGRectGetMaxY(self.farmLabel.frame)-height;
+        [UIView animateWithDuration:0.3 animations:^{
+            self.view.transform =CGAffineTransformMakeTranslation(0, -realHeight);
+            
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
     NSLog(@"aaa");
 }
 - (void)keyboardWillHide:(NSNotification *)aNotification
@@ -731,6 +736,18 @@
         make.width.equalTo(@(100));
         make.height.equalTo(@(40));
     }];
+    
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(BackClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_headView.mas_left);
+        make.right.equalTo(_backBtn.mas_right).offset(HDAutoWidth(40));
+        make.top.equalTo(_headView.mas_top);
+        make.bottom.equalTo(_headView.mas_bottom);
+    }];
 }
 
 -(void)BackClick{
@@ -788,6 +805,18 @@
 //        }
 //        
 //    }
+    
+}
+
+
+-(void)confirmWithName:(NSString *)name AndLongitude:(NSString *)longitude AndLatitude:(NSString *)latitude AndCity:(NSString *)city AndAddress:(NSString *)address{
+    
+    NSLog(@"%@  %@  %@", name,longitude,latitude);
+    
+    _adrLabel.text = name;
+    
+    
+    
     
 }
 

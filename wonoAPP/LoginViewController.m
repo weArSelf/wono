@@ -177,8 +177,13 @@
     
 //    CompleteInfoViewController *com = [[CompleteInfoViewController alloc]init];
 //    [self.navigationController pushViewController:com animated:YES];
-//    
+//    return;
 
+    if([_phoneTextField.text isEqualToString:@""]){
+        [MBProgressHUD showSuccess:@"手机号不能为空"];
+        return;
+    }
+    
     BOOL res = [ZhengZeSupport isMobileNumber:_phoneTextField.text];
     
     if(res == true){

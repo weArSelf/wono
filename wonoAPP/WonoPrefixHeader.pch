@@ -9,6 +9,11 @@
 #ifndef WonoPrefixHeader_pch
 #define WonoPrefixHeader_pch
 
+//个推
+#define kGtAppId           @"yT0mbrHFOu7AuApcISQPk4"
+#define kGtAppKey          @"CNZAE9O3fi5NjHmrXiHWQ4"
+#define kGtAppSecret       @"AH26zwUqnN6SXwICqgiHF7"
+
 //log打印所在类及行数
 #define NSLog(FORMAT,...)   NSLog(@"%@ (Line:%d): %@",[[[NSString stringWithFormat:@"%s",__FILE__] componentsSeparatedByString:@"/"] lastObject], __LINE__,[NSString stringWithFormat:FORMAT, ##__VA_ARGS__])
 //颜色
@@ -54,7 +59,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #define TempCode            @"ca9c310b53d749658ac57a062a391cf3"
 //ae7c78a506de4f5d8b27828cd68f1751
 
-#define UserId            @"123"
+
 
 // Include any system framework and library headers here that should be included in all compilation units.
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
@@ -68,6 +73,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #import "NSObject+JKCoding.h"
 
 #import "JXTCacher.h"
+
+#import "UITableView+JRTableViewPlaceHolder.h"
+//#import "UITableView+JRTableViewPlaceHolder"
 
 #define TIMEOUTINTERRVAL 30.0
 

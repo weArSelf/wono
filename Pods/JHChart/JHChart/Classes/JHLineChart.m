@@ -2,7 +2,7 @@
 //  JHLineChart.m
 //  JHChartDemo
 //
-//  Created by cjatech-简豪 on 16/4/10.
+//  Created by 简豪 on 16/4/10.
 //  Copyright © 2016年 JH. All rights reserved.
 //
 
@@ -57,6 +57,9 @@
         _showValueLeadingLine = YES;
         _valueFontSize = 8.0;
         _showPointDescription = YES;
+        _drawPathFromXIndex = 0;
+        _showDoubleYLevelLine = NO;
+        self.animationDuration = 2.0;
 //        _contentFillColorArr = @[[UIColor lightGrayColor]];
         [self configChartXAndYLength];
         [self configChartOrigin];
@@ -93,6 +96,9 @@
         {
             _perXLen = (_xLength-kXandYSpaceForSuperView)/(_xLineDataArr.count-1);
             _perYlen = (_yLength-kXandYSpaceForSuperView)/_yLineDataArr.count;
+            if (_showDoubleYLevelLine) {
+                _perYlen = (_yLength-kXandYSpaceForSuperView)/[_yLineDataArr[0] count];
+            }
         }
             break;
         case JHLineChartQuadrantTypeFirstAndSecondQuardrant:
@@ -197,14 +203,11 @@
             }
             
         if (max<=10&&max>5) {
-                
-                
             for (NSInteger i = 0; i<5; i++) {
                     
-                    [arr addObject:[NSString stringWithFormat:@"%ld",(i+1)*2]];
+                [arr addObject:[NSString stringWithFormat:@"%ld",(i+1)*2]];
                 [minArr addObject:[NSString stringWithFormat:@"-%ld",(i+1)*2]];
-
-                }
+            }
                 
         }else if(max>10&&max<=100){
             
@@ -224,9 +227,6 @@
             }
             
         }
-
-        
-            
             _yLineDataArr = @[[arr copy],[minArr copy]];
             
             
@@ -385,6 +385,10 @@
     
 }
 
+-(void)setContentInsets:(UIEdgeInsets)contentInsets{
+    [super setContentInsets:contentInsets];
+    [self configChartOrigin];
+}
 
 /**
  *  构建折线图原点
@@ -432,6 +436,10 @@
             if (_showYLine) {
                   [self drawLineWithContext:context andStarPoint:self.chartOrigin andEndPoint:P_M(self.chartOrigin.x,self.chartOrigin.y-_yLength) andIsDottedLine:NO andColor:self.xAndYLineColor];
             }
+            
+            if (_showDoubleYLevelLine) {
+                [self drawLineWithContext:context andStarPoint:P_M(self.chartOrigin.x+_xLength, self.chartOrigin.y) andEndPoint:P_M(self.chartOrigin.x + _xLength,self.chartOrigin.y-_yLength) andIsDottedLine:NO andColor:self.xAndYLineColor];
+            }
           
             if (_xLineDataArr.count>0) {
                 CGFloat xPace = (_xLength-kXandYSpaceForSuperView)/(_xLineDataArr.count-1);
@@ -459,22 +467,60 @@
                 
             }
             
-            if (_yLineDataArr.count>0) {
-                CGFloat yPace = (_yLength - kXandYSpaceForSuperView)/(_yLineDataArr.count);
-                for (NSInteger i = 0; i<_yLineDataArr.count; i++) {
-                    CGPoint p = P_M(self.chartOrigin.x, self.chartOrigin.y - (i+1)*yPace);
-                    
-                    CGFloat len = [self sizeOfStringWithMaxSize:CGSizeMake(CGFLOAT_MAX, 30) textFont:self.yDescTextFontSize aimString:_yLineDataArr[i]].width;
-                    CGFloat hei = [self sizeOfStringWithMaxSize:CGSizeMake(CGFLOAT_MAX, 30) textFont:self.yDescTextFontSize aimString:_yLineDataArr[i]].height;
-                    if (_showYLevelLine) {
-                         [self drawLineWithContext:context andStarPoint:p andEndPoint:P_M(self.contentInsets.left+_xLength, p.y) andIsDottedLine:YES andColor:self.xAndYLineColor];
+            
+            if (_showDoubleYLevelLine) {
+                NSArray *leftArray = nil;
+                NSArray *rightArray = nil;
+                NSAssert(_yLineDataArr.count == 2 && [_yLineDataArr[0] isKindOfClass:[NSArray class]] && [_yLineDataArr[1] isKindOfClass:[NSArray class]] , @"when property showDoubleYLevelLine is true,you must define yLineDataArr as @[@[@1,@2,@3],@[@5,@10,@10]]");
+                leftArray = _yLineDataArr[0];
+                rightArray = _yLineDataArr[1];
+                NSAssert(leftArray.count == rightArray.count && leftArray.count > 0, @"when property showDoubleYLevelLine is true,leftArray.count == rightArray.count");
+                if(leftArray.count == rightArray.count && leftArray.count > 0){
+                    CGFloat yPace = (_yLength - kXandYSpaceForSuperView)/(leftArray.count);
+                    for (NSInteger i = 0; i<leftArray.count; i++) {
+                        CGPoint p = P_M(self.chartOrigin.x, self.chartOrigin.y - (i+1)*yPace);
                         
-                    }else{
-                        [self drawLineWithContext:context andStarPoint:p andEndPoint:P_M(p.x+3, p.y) andIsDottedLine:NO andColor:self.xAndYLineColor];
+                        CGFloat len = [self sizeOfStringWithMaxSize:CGSizeMake(CGFLOAT_MAX, 30) textFont:self.yDescTextFontSize aimString:leftArray[i]].width;
+                        CGFloat hei = [self sizeOfStringWithMaxSize:CGSizeMake(CGFLOAT_MAX, 30) textFont:self.yDescTextFontSize aimString:leftArray[i]].height;
+                        if (_showYLevelLine) {
+                            [self drawLineWithContext:context andStarPoint:p andEndPoint:P_M(self.contentInsets.left+_xLength, p.y) andIsDottedLine:YES andColor:self.xAndYLineColor];
+                            
+                        }else{
+                            [self drawLineWithContext:context andStarPoint:p andEndPoint:P_M(p.x+3, p.y) andIsDottedLine:NO andColor:self.xAndYLineColor];
+                        }
+                        [self drawText:[NSString stringWithFormat:@"%@",leftArray[i]] andContext:context atPoint:P_M(p.x-len-3, p.y-hei / 2) WithColor:_xAndYNumberColor andFontSize:self.yDescTextFontSize];
+                        
+                        p = P_M(self.chartOrigin.x + _xLength, p.y);
+                        len = [self sizeOfStringWithMaxSize:CGSizeMake(CGFLOAT_MAX, 30) textFont:self.yDescTextFontSize aimString:rightArray[i]].width;
+                        hei = [self sizeOfStringWithMaxSize:CGSizeMake(CGFLOAT_MAX, 30) textFont:self.yDescTextFontSize aimString:rightArray[i]].height;
+                    
+                        [self drawText:[NSString stringWithFormat:@"%@",rightArray[i]] andContext:context atPoint:P_M(p.x + 3, p.y-hei / 2) WithColor:_xAndYNumberColor andFontSize:self.yDescTextFontSize];
+                        
+
+                        
                     }
-                    [self drawText:[NSString stringWithFormat:@"%@",_yLineDataArr[i]] andContext:context atPoint:P_M(p.x-len-3, p.y-hei / 2) WithColor:_xAndYNumberColor andFontSize:self.yDescTextFontSize];
+                }
+                
+            }else{
+                if (_yLineDataArr.count>0) {
+                    CGFloat yPace = (_yLength - kXandYSpaceForSuperView)/(_yLineDataArr.count);
+                    for (NSInteger i = 0; i<_yLineDataArr.count; i++) {
+                        CGPoint p = P_M(self.chartOrigin.x, self.chartOrigin.y - (i+1)*yPace);
+                        
+                        CGFloat len = [self sizeOfStringWithMaxSize:CGSizeMake(CGFLOAT_MAX, 30) textFont:self.yDescTextFontSize aimString:_yLineDataArr[i]].width;
+                        CGFloat hei = [self sizeOfStringWithMaxSize:CGSizeMake(CGFLOAT_MAX, 30) textFont:self.yDescTextFontSize aimString:_yLineDataArr[i]].height;
+                        if (_showYLevelLine) {
+                            [self drawLineWithContext:context andStarPoint:p andEndPoint:P_M(self.contentInsets.left+_xLength, p.y) andIsDottedLine:YES andColor:self.xAndYLineColor];
+                            
+                        }else{
+                            [self drawLineWithContext:context andStarPoint:p andEndPoint:P_M(p.x+3, p.y) andIsDottedLine:NO andColor:self.xAndYLineColor];
+                        }
+                        [self drawText:[NSString stringWithFormat:@"%@",_yLineDataArr[i]] andContext:context atPoint:P_M(p.x-len-3, p.y-hei / 2) WithColor:_xAndYNumberColor andFontSize:self.yDescTextFontSize];
+                    }
                 }
             }
+            
+            
             
         }break;
         case JHLineChartQuadrantTypeFirstAndSecondQuardrant:{
@@ -546,7 +592,7 @@
             [self drawLineWithContext:context andStarPoint:self.chartOrigin andEndPoint:P_M(self.contentInsets.left+_xLength, self.chartOrigin.y) andIsDottedLine:NO andColor:self.xAndYLineColor];
             
             if (_showYLine) {
-                [self drawLineWithContext:context andStarPoint:P_M(self.contentInsets.left,CGRectGetHeight(self.frame)-self.contentInsets.bottom) andEndPoint:P_M(self.chartOrigin.x,self.contentInsets.top) andIsDottedLine:NO andColor:self.xAndYLineColor];
+                [self drawLineWithContext:context andStarPoint:P_M(self.contentInsets.left,CGRectGetHeight(self.frame)-self.contentInsets.bottom) andEndPoint:P_M(self.contentInsets.left,self.contentInsets.top) andIsDottedLine:NO andColor:self.xAndYLineColor];
             }
             
             if (_xLineDataArr.count>0) {
@@ -707,6 +753,8 @@
  *  动画展示路径
  */
 -(void)showAnimation{
+    [self configChartXAndYLength];
+    [self configChartOrigin];
     [self configPerXAndPerY];
     [self configValueDataArray];
     [self drawAnimation];
@@ -745,11 +793,16 @@
     
     switch (_lineChartQuadrantType) {
         case JHLineChartQuadrantTypeFirstQuardrant:{
-            _perValue = _perYlen/[[_yLineDataArr firstObject] floatValue];
+            if (_showDoubleYLevelLine) {
+                _perValue = _perYlen/[[_yLineDataArr[0] firstObject] floatValue];
+            }else{
+                _perValue = _perYlen/[[_yLineDataArr firstObject] floatValue];
+            }
+            
             
             for (NSArray *valueArr in _valueArr) {
                 NSMutableArray *dataMArr = [NSMutableArray array];
-                for (NSInteger i = 0; i<valueArr.count; i++) {
+                for (NSInteger i = _drawPathFromXIndex; i<valueArr.count; i++) {
                     
                     CGPoint p = P_M(i*_perXLen+self.chartOrigin.x,self.contentInsets.top + _yLength - [valueArr[i] floatValue]*_perValue);
                     NSValue *value = [NSValue valueWithCGPoint:p];
@@ -758,7 +811,21 @@
                 [_drawDataArr addObject:[dataMArr copy]];
                 
             }
-
+            
+            if (_showDoubleYLevelLine) {
+                CGFloat scale = [_yLineDataArr[0][0] floatValue] / [_yLineDataArr[1][0] floatValue];
+                for (NSArray *valueArr in _valueBaseRightYLineArray) {
+                    NSMutableArray *dataMArr = [NSMutableArray array];
+                    for (NSInteger i = _drawPathFromXIndex; i<valueArr.count; i++) {
+                        CGPoint p = P_M(i*_perXLen+self.chartOrigin.x,self.contentInsets.top + _yLength - [valueArr[i] floatValue]*_perValue*scale);
+                        NSValue *value = [NSValue valueWithCGPoint:p];
+                        [dataMArr addObject:value];
+                    }
+                    
+                    [_drawDataArr addObject:[dataMArr copy]];
+                    
+                }
+            }
             
         }break;
         case JHLineChartQuadrantTypeFirstAndSecondQuardrant:{
@@ -797,7 +864,7 @@
             _perValue = _perYlen/[[_yLineDataArr[0] firstObject] floatValue];
             for (NSArray *valueArr in _valueArr) {
                 NSMutableArray *dataMArr = [NSMutableArray array];
-                for (NSInteger i = 0; i<valueArr.count; i++) {
+                for (NSInteger i = _drawPathFromXIndex; i<valueArr.count; i++) {
                     
                     CGPoint p = P_M(i*_perXLen+self.chartOrigin.x,self.chartOrigin.y - [valueArr[i] floatValue]*_perValue);
                     NSValue *value = [NSValue valueWithCGPoint:p];
@@ -960,11 +1027,15 @@
     
     ani.toValue = @1;
     
-    ani.duration = 2.0;
+    ani.duration = self.animationDuration;
     
     ani.delegate = self;
     
-    [shapeLayer addAnimation:ani forKey:NSStringFromSelector(@selector(strokeEnd))];
+    if (ani.duration > 0) {
+        [shapeLayer addAnimation:ani forKey:NSStringFromSelector(@selector(strokeEnd))];
+    }else{
+        ani = nil;
+    }
     
     [self.layer addSublayer:shapeLayer];
     [_layerArr addObject:shapeLayer];

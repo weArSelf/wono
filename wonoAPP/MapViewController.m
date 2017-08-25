@@ -18,6 +18,9 @@
 #import <BaiduMapAPI_Map/BMKMapView.h>//只引入所需的单个头文件
 #define BMK_KEY @"kClOFMdxGkzAgIr6MEfGF8cgGWMjqx02"//百度地图的key
 
+#import "MapSearchViewController.h"
+
+
 
 @interface MapViewController ()<CLLocationManagerDelegate,BMKGeneralDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,BMKMapViewDelegate,BMKPoiSearchDelegate,BMKSuggestionSearchDelegate,UITableViewDelegate,UITableViewDataSource>
 
@@ -55,11 +58,22 @@
     
     int selectItem;
     CLLocationCoordinate2D region;
+    
+    NSString *resName;
+//    CLLocationCoordinate2D resSel;
+    NSString *citiCode;
+    
+    NSString *resCity;
+    
+    NSString *resAddress;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    citiCode = @"-1";
     // Do any additional setup after loading the view.
+    resName = @"";
     lat = @"";
     lont = @"";
     selectItem = -1;
@@ -121,12 +135,22 @@
 }
 -(void)searchClick{
     NSLog(@"调到搜索页面");
-    [MBProgressHUD showSuccess:@"敬请期待"];
+    int re = [citiCode intValue];
+    if(re<0){
+        [MBProgressHUD showSuccess:@"加载数据中，请重试"];
+        return;
+    }
+    MapSearchViewController *con = [[MapSearchViewController alloc]init];
+    con.city = citiCode;
+    [self.navigationController pushViewController:con animated:YES];
+    
+//    [MBProgressHUD showSuccess:@"敬请期待"];
 }
 -(void)reginClick{
     
+//    _annotation.coordinate = region;
+    _mapView.centerCoordinate = region;
     _annotation.coordinate = region;
-    
     
     NSString *latitude = [NSString stringWithFormat:@"%f",region.latitude];
     NSString *longitude = [NSString stringWithFormat:@"%f",region.longitude];
@@ -270,6 +294,18 @@
         make.width.equalTo(@(100));
         make.height.equalTo(@(40));
     }];
+    
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(BackClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_headView.mas_left);
+        make.right.equalTo(_backBtn.mas_right).offset(HDAutoWidth(40));
+        make.top.equalTo(_headView.mas_top);
+        make.bottom.equalTo(_headView.mas_bottom);
+    }];
 }
 
 -(void)BackClick{
@@ -356,8 +392,9 @@
 {
     
     //发起反向地理编码检索
-    lat = latitude;
-    lont = longitude;
+//    lat = latitude;
+//    lont = longitude;
+    
     CLLocationCoordinate2D coor;
     coor.latitude = [latitude doubleValue];
     coor.longitude = [longitude doubleValue];
@@ -419,10 +456,13 @@
 {
     
     if (error == BMK_SEARCH_NO_ERROR) {
+        citiCode = result.cityCode;
         NSString *address1 = result.address; // result.addressDetail ///层次化地址信息
         NSLog(@"我的位置在 %@",address1);
         _annotation.title = address1;
         _locationLabel.text = address1;
+//        BMKPoiInfo
+        
         //保存位置信息到模型
 //        [self.userLocationInfoModel saveLocationInfoWithBMKReverseGeoCodeResult:result];
         
@@ -537,7 +577,18 @@
      _mapView.centerCoordinate = model.pt;
     _annotation.coordinate = model.pt;
     
+//    resSel = model.pt;
     
+    CLLocationCoordinate2D re = model.pt;
+    
+//    lont = re.longitude;
+    lat = [NSString stringWithFormat:@"%f",re.latitude];
+    lont = [NSString stringWithFormat:@"%f",re.longitude];
+    resName = model.name;
+    
+    resCity = model.city;
+    
+    resAddress = model.address;
 }
 
 
@@ -559,6 +610,9 @@
 
 - (void)mapView:(BMKMapView *)mapView onClickedMapBlank:(CLLocationCoordinate2D)coordinate{
     NSLog(@"aaa");
+    lont = @"";
+    lat = @"";
+    resName = @"";
     _locationLabel.text = @"检索中...";
     NSLog(@"onClickedMapBlank-latitude==%f,longitude==%f",coordinate.latitude,coordinate.longitude);
     NSString* showmeg = [NSString stringWithFormat:@"您点击了地图空白处(blank click).\r\n当前经度:%f,当前纬度:%f,\r\nZoomLevel=%d;RotateAngle=%d;OverlookAngle=%d", coordinate.longitude,coordinate.latitude,
@@ -636,8 +690,19 @@
 -(void)locationClick{
     NSLog(@"点击确定");
     
-    if ([self.delegate respondsToSelector:@selector(confirmWithName:AndLongitude:AndLatitude:)]) {
-        [self.delegate confirmWithName:@"注意添加数据" AndLongitude:lont AndLatitude:lat];
+    if([lont isEqualToString:@""]){
+        [MBProgressHUD showSuccess:@"请选择地点"];
+        return;
+    }
+    if([lat isEqualToString:@""]){
+        [MBProgressHUD showSuccess:@"请选择地点"];
+        return;
+    }
+    
+    
+    
+    if ([self.delegate respondsToSelector:@selector(confirmWithName:AndLongitude:AndLatitude:AndCity: AndAddress:)]) {
+        [self.delegate confirmWithName:resName AndLongitude:lont AndLatitude:lat AndCity:resCity AndAddress:resAddress];
     }
     [self.navigationController popViewControllerAnimated:YES];
 }

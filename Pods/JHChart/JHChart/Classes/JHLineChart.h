@@ -2,7 +2,7 @@
 //  JHLineChart.h
 //  JHChartDemo
 //
-//  Created by cjatech-简豪 on 16/4/10.
+//  Created by 简豪 on 16/4/10.
 //  Copyright © 2016年 JH. All rights reserved.
 //
 
@@ -204,6 +204,21 @@ typedef NS_ENUM(NSInteger,JHLineChartQuadrantType){
  */
 @property (nonatomic , assign)CGFloat xDescriptionAngle;
 
+/*!
+ * if showDoubleYLevelLine is true ,this chart will show two y levelLine.Default is NO;
+ */
+@property (nonatomic , assign)BOOL showDoubleYLevelLine;
+
+/*!
+ * if showDoubleYLevelLine is true ,this chart will display others vlaues from this Array;
+ */
+@property (nonatomic , strong)NSArray * valueBaseRightYLineArray;
+
+/*!
+ * it will draw path start will point valueArray[drawPathFromXIndex];Default 0;Action:this property only take effect when chart type in JHLineChartQuadrantTypeFirstQuardrant and
+  JHLineChartQuadrantTypeFirstAndFouthQuardrant;
+ */
+@property (nonatomic , assign)NSInteger drawPathFromXIndex;
 /**
  *  Custom initialization method
  *
@@ -213,6 +228,7 @@ typedef NS_ENUM(NSInteger,JHLineChartQuadrantType){
  */
 -(instancetype)initWithFrame:(CGRect)frame
             andLineChartType:(JHLineChartType)lineChartType;
+
 
 
 

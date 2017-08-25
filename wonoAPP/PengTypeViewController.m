@@ -81,12 +81,26 @@
         make.width.equalTo(@(300));
         make.height.equalTo(@(40));
     }];
+    
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(BackClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_headView.mas_left);
+        make.right.equalTo(_backBtn.mas_right).offset(HDAutoWidth(40));
+        make.top.equalTo(_headView.mas_top);
+        make.bottom.equalTo(_headView.mas_bottom);
+    }];
 }
 
 -(void)BackClick{
     NSLog(@"点击返回");
     [self.navigationController popViewControllerAnimated:YES];
     
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"catChange" object:nil];
+
 //    for (UIViewController *controller in self.navigationController.viewControllers) {
 //        if ([controller isKindOfClass:[PengAddViewController class]]) {
 //            PengAddViewController *A =(PengAddViewController *)controller;

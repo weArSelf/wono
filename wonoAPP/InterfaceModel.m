@@ -198,7 +198,7 @@
         
     } failure:^(id task, NSError *error) {
         if (callback) {
-            callback(2001, nil, @"网络错误");
+            callback(3001, nil, @"网络错误");
         }
     }];
 }
@@ -549,8 +549,169 @@
             callback(2001, nil, @"网络错误");
         }
     }];
+}
+
+-(void)PostPlantWithModel:(PlantAddModel *)model WithCallBack:(AllCallBack)callback{
+    
+     NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    
+    
+    [param setObject:model.resTime forKey:@"time"];//待定
+    
+    
+    
+    if([model.type isEqualToString:@"1"]){
+//        NSMutableDictionary *param = [NSMutableDictionary dictionary];
+        [param setObject:model.amount forKey:@"amount"];
+        [param setObject:model.gid forKey:@"gid"];
+        [param setObject:model.note forKey:@"note"];
+        [param setObject:model.type forKey:@"type"];
+        [param setObject:model.price forKey:@"unit_price"];
+        [param setObject:model.varId forKey:@"variety_id"];
+    }else if([model.type isEqualToString:@"2"]){
+//        NSMutableDictionary *param = [NSMutableDictionary dictionary];
+        [param setObject:model.totalAmount forKey:@"total_amount"];
+        [param setObject:model.gid forKey:@"gid"];
+        [param setObject:model.note forKey:@"note"];
+        [param setObject:model.type forKey:@"type"];
+        [param setObject:model.varId forKey:@"variety_id"];
+    }else if([model.type isEqualToString:@"3"]){
+//        NSMutableDictionary *param = [NSMutableDictionary dictionary];
+        [param setObject:model.totalAmount forKey:@"total_amount"];
+        [param setObject:model.gid forKey:@"gid"];
+        [param setObject:model.note forKey:@"note"];
+        [param setObject:model.type forKey:@"type"];
+        [param setObject:model.varId forKey:@"variety_id"];
+    }else if([model.type isEqualToString:@"4"]){
+       
+        [param setObject:model.amount forKey:@"amount"];
+        [param setObject:model.gid forKey:@"gid"];
+        [param setObject:model.note forKey:@"note"];
+        [param setObject:model.type forKey:@"type"];
+        [param setObject:model.price forKey:@"unit_price"];
+        [param setObject:model.unitType forKey:@"unit_type"];
+        [param setObject:model.varId forKey:@"variety_id"];
+    }
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_PostPlant parameters:param type:ENRT_POST success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+
+    
+}
+
+
+-(void)getPengWithCatPid:(NSString *)pid WithType:(NSString *)type AndCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:pid forKey:@"pid"];
+    [param setObject:type forKey:@"type"];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_GetPengCat parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+}
+
+-(void)GetjiWithFid:(NSString *)fid WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:fid forKey:@"fid"];
+    
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_Getji parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+
+    
+}
+
+-(void)GetNianWithFid:(NSString *)fid AndType:(NSString *)type WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:fid forKey:@"fid"];
+    [param setObject:type forKey:@"type"];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_Getnian parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
     
     
 }
+
+-(void)GetZongWithFid:(NSString *)fid WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:fid forKey:@"fid"];
+    
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_Getzong parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+    
+}
+
+
 
 @end

@@ -247,7 +247,9 @@
     }else{
         _numberLabel.textColor = [UIColor grayColor];
     }
-    
+    if(a == 4){
+        _numberLabel.textColor = MainColor;
+    }
     _typeContentLabel.text = model.extraStr;
 }
 

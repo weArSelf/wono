@@ -31,11 +31,13 @@
     PercentModel *model;
     int Count;
     NSMutableArray *dataArr;
+    
+    bool dataMark;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    dataMark = false;
     dataArr = [NSMutableArray array];
     
     fertilizer = 0;
@@ -60,11 +62,7 @@
 }
 
 
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-//    [[NSNotificationCenter defaultCenter]postNotificationName:@"AppearMiddle" object:nil];
-    
-}
+
 
 
 -(void)creatTitleAndBackBtn{
@@ -101,12 +99,27 @@
         make.height.equalTo(@(26));
     }];
     
+    
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(_headView.mas_centerX);
         make.centerY.equalTo(_backBtn.mas_centerY);
         make.width.equalTo(@(100));
         make.height.equalTo(@(40));
     }];
+    
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(BackClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_headView.mas_left);
+        make.right.equalTo(_backBtn.mas_right).offset(HDAutoWidth(40));
+        make.top.equalTo(_headView.mas_top);
+        make.bottom.equalTo(_headView.mas_bottom);
+    }];
+
+    
 }
 
 -(void)BackClick{
@@ -213,7 +226,31 @@
     
     _plantTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
     _plantTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMore)];
+    [_plantTableView layoutIfNeeded];
+    [self.view layoutIfNeeded];
     
+    [_plantTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
+        [_plantTableView setScrollEnabled:NO];
+        UIView *view = [[UIView alloc]initWithFrame:_plantTableView.bounds];
+        view.backgroundColor = [UIColor whiteColor];
+        
+        UILabel *label = [[UILabel alloc]init];
+        label.text = @"加载数据中...";
+        label.font = [UIFont systemFontOfSize:16];
+        label.textColor = MainColor;
+        label.textAlignment = NSTextAlignmentCenter;
+        label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(190), 300, HDAutoHeight(60));
+        
+        view.backgroundColor = [UIColor whiteColor];
+        [view addSubview:label];
+        
+        return view;
+    } normalBlock:^(UITableView * _Nonnull sender) {
+        [_plantTableView setScrollEnabled:YES];
+    }];
+    [_plantTableView reloadData];
+    
+    _plantTableView.mj_footer.hidden = YES;
 }
 
 -(void)refresh{
@@ -239,6 +276,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
+    if(dataMark == false){
+        return 0;
+    }
     if(section == 0){
         return 1;
     }
@@ -447,21 +487,21 @@
             NSMutableArray *colorArr = [NSMutableArray array];
 
             
-            if(per1 == 0){
+            if(per1 != 0){
                 
                 [nameArr addObject:@"施肥"];
                 [perArr addObject:[NSNumber numberWithDouble:per1]];
                 [colorArr addObject:color1];
                 
             }
-            if(per2 == 0){
+            if(per2 != 0){
                 [nameArr addObject:@"种植"];
                 [perArr addObject:[NSNumber numberWithDouble:per2]];
                 [colorArr addObject:color2];
 
                
             }
-            if(per3 == 0){
+            if(per3 != 0){
                 [nameArr addObject:@"植保"];
                 [perArr addObject:[NSNumber numberWithDouble:per3]];
                 [colorArr addObject:color3];
@@ -506,6 +546,8 @@
         
         if(state == 2000){
             NSLog(@"成功");
+            dataMark = YES;
+            _plantTableView.mj_footer.hidden = YES;
             NSArray *arr = data[@"data"];
             for (int i = 0 ; i<arr.count; i++) {
                 

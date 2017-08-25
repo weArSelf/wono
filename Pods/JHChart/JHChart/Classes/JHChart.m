@@ -2,7 +2,7 @@
 //  JHChart.m
 //  JHChartDemo
 //
-//  Created by cjatech-简豪 on 16/4/10.
+//  Created by 简豪 on 16/4/10.
 //  Copyright © 2016年 JH. All rights reserved.
 //
 
@@ -20,6 +20,7 @@
         self.xAndYLineColor = [UIColor darkGrayColor];
         self.contentInsets = UIEdgeInsetsMake(10, 20, 10, 10);
         self.chartOrigin = P_M(self.contentInsets.left, CGRectGetHeight(self.frame) - self.contentInsets.bottom);
+        self.animationDuration = 2.0;
     }
     return self;
 }

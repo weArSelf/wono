@@ -24,7 +24,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.titleLabel.font = [UIFont systemFontOfSize:14];
-        [self setTitle:@"获取验证码" forState:UIControlStateNormal];
+        [self setTitle:@"     获取验证码" forState:UIControlStateNormal];
         self.enabled = YES;
         [self setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
         [self setBackgroundColor:[UIColor clearColor]];

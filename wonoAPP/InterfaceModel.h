@@ -10,6 +10,7 @@
 #import "CompleteModel.h"
 #import "SetModel.h"
 #import "MainPlantModel.h"
+#import "PlantAddModel.h"
 
 typedef void(^AllCallBack)(int state, id data, NSString *msg);
 
@@ -64,5 +65,15 @@ typedef void(^AllCallBack)(int state, id data, NSString *msg);
 -(void)getPengPayWithGid:(NSString *)gid AndCallBack:(AllCallBack)callback;
 
 -(void)getPengListWithGid:(NSString *)gid AndPage:(int)page WithCallBack:(AllCallBack)callback;
+
+-(void)PostPlantWithModel:(PlantAddModel *)model WithCallBack:(AllCallBack)callback;
+
+-(void)getPengWithCatPid:(NSString *)pid WithType:(NSString *)type AndCallBack:(AllCallBack)callback;
+
+-(void)GetjiWithFid:(NSString *)fid WithCallBack:(AllCallBack)callback;
+
+-(void)GetNianWithFid:(NSString *)fid AndType:(NSString *)type WithCallBack:(AllCallBack)callback;
+
+-(void)GetZongWithFid:(NSString *)fid WithCallBack:(AllCallBack)callback;
 
 @end

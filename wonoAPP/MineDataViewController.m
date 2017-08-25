@@ -10,6 +10,8 @@
 #import "ChangeNameViewController.h"
 #import "CustomActionSheet.h"
 
+#import "QiniuUploader.h"
+
 @interface MineDataViewController ()<UITableViewDelegate,UITableViewDataSource,CustomActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @property (nonatomic,strong)UIView *headView;
@@ -23,6 +25,7 @@
 @implementation MineDataViewController{
     NSArray *dataArr;
     NSMutableArray *contArr;
+    QiniuUploader *uploader;
 }
 
 
@@ -40,6 +43,53 @@
     [contArr addObject:@"男"];
     
     [self createTable];
+    
+    
+    
+}
+
+
+-(void)aboutQiniu{
+    
+////    [InterfaceSingleton shareInstance]
+//    
+//    [QiniuToken registerWithScope:@"temp" SecretKey:@"BgAL_Qv9FQuSBkVgO3OT5xBvlicd3QZavH4MmmOY" Accesskey:@"dYkTLlS1bhKjdAybruNp5i-RlbtQlFHUn1io6Jra"];
+//    
+//    NSString *uploadToken = [[QiniuToken sharedQiniuToken] uploadToken];
+//    //    [[QiniuUploader sharedUploader] setMaxConcurrentNumber:3];
+//    
+//    UIImage *image = [UIImage imageNamed:@"BW10"];
+//    
+//    
+//    
+//    uploader = [QiniuUploader sharedUploader];
+//    
+//    QiniuFile *file = [[QiniuFile alloc] initWithFileData:UIImageJPEGRepresentation(image, 1.0f)];
+//    file.key = @"我的图片2331";
+//    [uploader addFile:file];
+//    
+//    
+//    
+//    [uploader setUploadOneFileSucceeded:^(NSInteger index, NSString *key, NSDictionary *info){
+//        
+//        NSLog(@"aaa");
+//    }];
+//    //    [uploader setUploadOneFileSucceeded:UploadOneFileSucceededBlock _Nullable uploadOneFileSucceeded]
+//    
+//    [uploader setUploadOneFileFailed:^(NSInteger index, NSError * _Nullable error){
+//        NSLog(@"bbb");
+//    }];
+//    
+//    [uploader setUploadOneFileProgress:^(NSInteger index, NSProgress *process){
+//        NSLog(@"index:%ld process:%@", index, process);
+//    }];
+//    
+//    [uploader setUploadAllFilesComplete:^(void){
+//        NSLog(@"complete");
+//    }];
+//    
+//    [uploader startUploadWithAccessToken:uploadToken];
+
     
 }
 
@@ -90,6 +140,18 @@
         make.centerY.equalTo(_backBtn.mas_centerY);
         make.width.equalTo(@(100));
         make.height.equalTo(@(40));
+    }];
+    
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(BackClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_headView.mas_left);
+        make.right.equalTo(_backBtn.mas_right).offset(HDAutoWidth(40));
+        make.top.equalTo(_headView.mas_top);
+        make.bottom.equalTo(_headView.mas_bottom);
     }];
 }
 

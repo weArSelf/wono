@@ -11,6 +11,8 @@
 
 #import "CDZPicker.h"
 #import "LimitInput.h"
+#import "PengTypeModel.h"
+#import "ShifeiTypeViewController.h"
 
 @interface ShifeiViewController ()<UITextViewDelegate>
 
@@ -36,7 +38,8 @@
 @end
 
 @implementation ShifeiViewController{
-    
+    NSMutableArray *nexArr;
+    PengTypeModel *SeModel;
 }
 
 - (void)viewDidLoad {
@@ -45,7 +48,22 @@
     self.view.backgroundColor = [UIColor whiteColor];
     [self creatTitleAndBackBtn];
     [self createSaveBtn];
-    [self createCon];
+    
+    [self getdata];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(Change:) name:@"catChange" object:nil];
+    
+}
+
+-(void)Change:(NSNotification *)noti{
+    if(noti.object){
+        SeModel = (PengTypeModel *)noti.object;
+        _catDetailLabel.text = SeModel.typeName;
+    }else{
+        SeModel = nil;
+        _catDetailLabel.text = @"";
+    }
+    
 }
 
 
@@ -77,6 +95,34 @@
 //    [_perTextView resignFirstResponder];
     [_addTextView resignFirstResponder];
     NSLog(@"点击提交");
+    if([_moneyTextView.text isEqualToString:@""]){
+        [MBProgressHUD showSuccess:@"请完善信息"];
+        return;
+    }
+    
+    if(SeModel.typeId == nil){
+        [MBProgressHUD showSuccess:@"请选择种类"];
+        return;
+    }
+    _model.varId = SeModel.typeId;
+    _model.totalAmount = _moneyTextView.text;
+    _model.note = _addTextView.text;
+    
+    
+    
+    [[InterfaceSingleton shareInstance].interfaceModel PostPlantWithModel:_model WithCallBack:^(int state, id data, NSString *msg) {
+        
+        if(state == 2000){
+            NSLog(@"成功");
+            [MBProgressHUD showSuccess:@"提交成功"];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
+    
 }
 
 -(void)creatTitleAndBackBtn{
@@ -119,6 +165,18 @@
         make.width.equalTo(@(100));
         make.height.equalTo(@(40));
     }];
+    
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(BackClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_headView.mas_left);
+        make.right.equalTo(_backBtn.mas_right).offset(HDAutoWidth(40));
+        make.top.equalTo(_headView.mas_top);
+        make.bottom.equalTo(_headView.mas_bottom);
+    }];
 }
 
 -(void)BackClick{
@@ -137,9 +195,19 @@
     _catLabel.textColor = UIColorFromHex(0x000000);
     [self.view addSubview:_catLabel];
     _catDetailLabel = [[UILabel alloc]init];
-    _catDetailLabel.text = @"蔬菜>西红柿>小西红柿";
-    _catDetailLabel.font = [UIFont systemFontOfSize:13];
+    _catDetailLabel.text = @"点击选择种类";
     _catDetailLabel.textColor = UIColorFromHex(0x9fa0a0);
+    _catDetailLabel.font = [UIFont systemFontOfSize:14];
+    _catDetailLabel.textAlignment = NSTextAlignmentCenter;
+    _catDetailLabel.layer.masksToBounds = YES;
+    _catDetailLabel.layer.cornerRadius = 5;
+    _catDetailLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    _catDetailLabel.layer.borderWidth = 1;
+    _catDetailLabel.userInteractionEnabled = YES;
+    UITapGestureRecognizer *labelTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelClick:)];
+    [_catDetailLabel addGestureRecognizer:labelTapGestureRecognizer];
+
+    
     [self.view addSubview:_catDetailLabel];
     
     [_catLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -151,8 +219,8 @@
     [_catDetailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_catLabel.mas_right).offset(HDAutoWidth(10));
         make.centerY.equalTo(_catLabel.mas_centerY);
-        make.height.equalTo(_catLabel.mas_height);
-        make.width.equalTo(@(HDAutoWidth(500)));
+        make.height.equalTo(@(HDAutoHeight(68)));
+        make.width.equalTo(@(HDAutoWidth(320)));
     }];
     
     _moneyLabel = [[UILabel alloc]init];
@@ -261,5 +329,76 @@
 - (void)textViewDidChange:(UITextView *)textView{
     NSLog(@"%@",textView.text);
 }
+
+-(void)setModel:(PlantAddModel *)model{
+    _model = model;
+    [self createCon];
+//    _catDetailLabel.text = _model.varName;
+    
+}
+
+-(void)labelClick:(UITapGestureRecognizer *)recognizer{
+    UILabel *label=(UILabel*)recognizer.view;
+    NSLog(@"%ld被点击了",(long)label.tag);
+    ShifeiTypeViewController *plant = [[ShifeiTypeViewController alloc]init];
+    plant.NowdataArr = nexArr;
+    [self.navigationController pushViewController:plant animated:YES];
+    
+    //    NSArray *arr = [NSArray arrayWithObjects:@"苹果",@"香蕉",@"橘子",@"苹果",@"苹果", nil];
+    //
+    //    [CDZPicker showPickerInView:self.view withStrings:arr confirm:^(NSArray<NSString *> *stringArray) {
+    //        //        self.label.text = stringArray.firstObject;
+    //        NSLog(@"点击");
+    //
+    //        //        NSString *str = stringArray.firstObject;
+    //        //        NSString *str2 = label.text;
+    //        //        str2 = [str2 substringToIndex:8];
+    //        //
+    //        //        NSString *result = [NSString stringWithFormat:@"%@%@°C",str2,str];
+    //        //
+    //        label.text = stringArray.firstObject;
+    //    }cancel:^{
+    //        //your code
+    //        NSLog(@"取消");
+    //        
+    //    }];
+    
+}
+
+
+-(void)getdata{
+    //    [[InterfaceSingleton shareInstance].interfaceModel getPengWithCatPid:@"0" AndCallBack:^(int state, id data, NSString *msg) {
+    //
+    //        NSLog(@"aaa");
+    //    }];
+    nexArr = [[NSMutableArray alloc]init];
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getPengWithCatPid:@"0" WithType:@"2" AndCallBack:^(int state, id data, NSString *msg) {
+        
+        if(state == 2000){
+            NSLog(@"成功");
+            
+            NSArray *arr = data;
+            
+            for (int i=0; i<arr.count; i++) {
+                NSDictionary *dic = arr[i];
+                PengTypeModel *models = [[PengTypeModel alloc]init];
+                models.typeName = dic[@"name"];
+                models.typeId = dic[@"id"];
+                
+                [nexArr addObject:models];
+            }
+            
+            
+            
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
+    
+}
+
 
 @end

@@ -8,6 +8,7 @@
 
 #import "ForgetViewController.h"
 #import "HDTimerBtn.h"
+#import "ZhengZeSupport.h"
 
 @interface ForgetViewController ()<UITextFieldDelegate>
 
@@ -40,11 +41,14 @@
 
 @end
 
-@implementation ForgetViewController
+@implementation ForgetViewController{
+    NSString *phoneNum;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    phoneNum = @"";
     [self creatTitleAndBackBtn];
     [self createUI];
     
@@ -92,6 +96,18 @@
         make.width.equalTo(@(100));
         make.height.equalTo(@(40));
     }];
+    
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(BackClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_headView.mas_left);
+        make.right.equalTo(_backBtn.mas_right).offset(HDAutoWidth(40));
+        make.top.equalTo(_headView.mas_top);
+        make.bottom.equalTo(_headView.mas_bottom);
+    }];
 }
 
 
@@ -131,7 +147,7 @@
     [self.view addSubview:_phoneNumimaVLine];
     
     //验证码
-    _verificationCodeTextF = [[UITextField alloc] initWithFrame:CGRectMake(45+30, CGRectGetMaxY(_phoneNumimaVLine.frame) +20, APP_CONTENT_WIDTH - 284/2 - 60  -15, 30)];
+    _verificationCodeTextF = [[UITextField alloc] initWithFrame:CGRectMake(45+30, CGRectGetMaxY(_phoneNumimaVLine.frame) +20, APP_CONTENT_WIDTH - 284/2 - 60  -15-(HDAutoWidth(260) - 80), 30)];
     
     _verificationCodeTextF.backgroundColor = [UIColor clearColor];
     _verificationCodeTextF.contentMode = UIViewContentModeCenter;
@@ -161,7 +177,7 @@
     [self.view addSubview:_imaVLineverificationCode];
     
     //获取验证码时间
-    self.timerBtn = [[HDTimerBtn alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_verificationCodeTextF.frame) + 5 + 10,CGRectGetMinY( _verificationCodeTextF.frame),80, 30)];
+    self.timerBtn = [[HDTimerBtn alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_verificationCodeTextF.frame) + 5 + 10,CGRectGetMinY( _verificationCodeTextF.frame),HDAutoWidth(300), 30)];
     [self.timerBtn addTarget:self action:@selector(getVerificationCode:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.timerBtn];
     
@@ -236,7 +252,7 @@
                                                            38)];
     [_btnLogin addTarget:self action:@selector(registerBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     _btnLogin.titleLabel.textAlignment = NSTextAlignmentCenter;
-//    _btnLogin.backgroundColor = [UIColor lightGrayColor];
+    //    _btnLogin.backgroundColor = [UIColor lightGrayColor];
     _btnLogin.layer.cornerRadius = 18;
     [_btnLogin setTitle:@"完成" forState:UIControlStateNormal];
     _btnLogin.backgroundColor = UIColorFromHex(0x3aa566);
@@ -244,66 +260,142 @@
     _btnLogin.layer.shadowOpacity = 0.3f;
     _btnLogin.layer.shadowRadius =18;
     _btnLogin.layer.shadowOffset = CGSizeMake(5,5);
-
-    [self.view addSubview:_btnLogin];
-//    _btnLogin.enabled = NO;
-//    _btnLogin.alpha = 0.2;
     
-//    //注册协议
-//    _termsButton = [[UIButton alloc] init];
-//    [_termsButton setTitleColor:UIColorFromRGB(130, 130, 130) forState:UIControlStateNormal];
-//    _termsButton.titleLabel.font = [UIFont systemFontOfSize:12];
-//    [_termsButton addTarget:self action:@selector(termsButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:_termsButton];
-//    
-//    NSString *btnTitle = @"已阅读并通过《注册协议》";
-//    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:btnTitle];
-//    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-//    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [btnTitle length])];
-//    [attributedString addAttribute:(NSString *)NSForegroundColorAttributeName
-//                             value:[UIColor lightGrayColor]
-//                             range:NSMakeRange(6, 6)];
-//    [_termsButton setAttributedTitle:attributedString forState:UIControlStateNormal];
-//    
-//    WS(ws);
-//    [_termsButton mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.bottom.equalTo(ws.view).offset(-49);
-//        make.centerX.equalTo(ws.view.mas_centerX);
-//        make.width.equalTo(@(300));
-//    }];
+    [self.view addSubview:_btnLogin];
+    //    _btnLogin.enabled = NO;
+    //    _btnLogin.alpha = 0.2;
+    
+    //    //注册协议
+    //    _termsButton = [[UIButton alloc] init];
+    //    [_termsButton setTitleColor:UIColorFromRGB(130, 130, 130) forState:UIControlStateNormal];
+    //    _termsButton.titleLabel.font = [UIFont systemFontOfSize:12];
+    //    [_termsButton addTarget:self action:@selector(termsButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    //    [self.view addSubview:_termsButton];
+    //
+    //    NSString *btnTitle = @"已阅读并通过《注册协议》";
+    //    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:btnTitle];
+    //    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    //    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [btnTitle length])];
+    //    [attributedString addAttribute:(NSString *)NSForegroundColorAttributeName
+    //                             value:[UIColor lightGrayColor]
+    //                             range:NSMakeRange(6, 6)];
+    //    [_termsButton setAttributedTitle:attributedString forState:UIControlStateNormal];
+    //
+    //    WS(ws);
+    //    [_termsButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    //        make.bottom.equalTo(ws.view).offset(-49);
+    //        make.centerX.equalTo(ws.view.mas_centerX);
+    //        make.width.equalTo(@(300));
+    //    }];
 }
 
 
 #pragma mark - textfield delegate
 - (void)textFieldEditChanged:(UITextField *)textField{
-
-
+    
+    NSLog(@"输入改变");
+    if(textField == _textfPhoneNum){
+        
+        NSString *str = textField.text;
+        
+        if(str.length>11){
+            _textfPhoneNum.text = phoneNum;
+            
+            [MBProgressHUD showSuccess:@"手机号应为11位"];
+        }else{
+            phoneNum = str;
+        }
+        
+    }
+    
+    
 }
 
 //获取验证码
 -(void)getVerificationCode:(HDTimerBtn *)btn{
     
     NSLog(@"获取验证码");
-//    //判断手机号是不是11位
-//    if (_textfPhoneNum.text.length != 11) {
-//        //[self showHUDInView:self.view justWithText:phoneNumCountIllegal disMissAfterDelay:2.0];
-//        return;
-//    }
-//    //    [btn addTimer];
-//    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(getSMS:) object:btn];
-//    [self performSelector:@selector(getSMS:) withObject:btn afterDelay:0.2f];
+    //判断手机号是不是11位
+    BOOL phoneB = [ZhengZeSupport isMobileNumber:_textfPhoneNum.text];
+    if (phoneB == false) {
+        //[self showHUDInView:self.view justWithText:phoneNumCountIllegal disMissAfterDelay:2.0];
+        [MBProgressHUD showSuccess:@"请输入正确的手机号"];
+        return;
+    }
+    [btn addTimer];
+    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(getSMS) object:btn];
+    [self performSelector:@selector(getSMS) withObject:btn afterDelay:0.2f];
+}
+
+-(void)getSMS{
+    [[InterfaceSingleton shareInstance].interfaceModel getMsgWithPhoneNumber:_textfPhoneNum.text WithCallBack:^(int state, id data, NSString *msg) {
+        
+        if(state == 2000){
+            NSLog(@"获取成功");
+            [MBProgressHUD showSuccess:@"验证码发送成功"];
+        }else{
+            [MBProgressHUD showSuccess:msg];
+        }
+        NSLog(@"111");
+    }];
 }
 
 - (void)registerBtnClick:(id)sender{
     NSLog(@"点击完成");
-}
-
-//注册协议
-- (void)termsButtonClick:(id)sender
-{
-    NSLog(@"注册协议");
     
-   
+    BOOL mark = [ZhengZeSupport isMobileNumber:_textfPhoneNum.text];
+    
+    if(mark == false){
+        [MBProgressHUD showSuccess:@"手机号不符合规则"];
+        return;
+    }
+    
+    if(_textfPassWord.text.length<6){
+        [MBProgressHUD showSuccess:@"密码长度小于6位"];
+        return;
+    }
+    
+    if(![_textfPassWord.text isEqualToString:_textVerificationPassWord.text]){
+        [MBProgressHUD showSuccess:@"两次密码输入不一致"];
+        return;
+    }
+    
+    if([_verificationCodeTextF.text isEqualToString: @""]){
+        [MBProgressHUD showSuccess:@"验证码不能为空"];
+        return;
+    }
+    
+    
+    
+    [[InterfaceSingleton shareInstance].interfaceModel userRegisWithUserMobile:_textfPhoneNum.text AndPsw:_textfPassWord.text AndMessageReceive:_verificationCodeTextF.text WithCallBack:^(int state, id data, NSString *msg) {
+        
+        
+        
+        if(state == 2000){
+            NSLog(@"成功");
+            [MBProgressHUD showSuccess:@"注册成功"];
+            
+            NSDictionary *dic = (NSDictionary *)data;
+            
+//            NSString *token = dic[@"token"];
+            
+//            [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"token"];
+            
+//            CompleteInfoViewController *com = [[CompleteInfoViewController alloc]init];
+//            
+//            [self.navigationController pushViewController:com animated:YES];
+            
+            //            [self.navigationController popViewControllerAnimated:YES];
+        }else{
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+        NSLog(@"111");
+        
+    }];
+    
+    
+    
 }
 
 -(void)BackClick{

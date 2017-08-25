@@ -63,7 +63,7 @@ static NSString *const kHeWeatherAPI   = @"https://api.heweather.com/x3/weather?
 
 
 //-(void)setModel:(TempModel *)model{
-//    
+//
 //    self.model = model;
 //    
 //}
@@ -94,7 +94,17 @@ static NSString *const kHeWeatherAPI   = @"https://api.heweather.com/x3/weather?
         make.width.equalTo(@(HDAutoWidth(120)));
         make.height.equalTo(@(HDAutoWidth(120)));
     }];
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(backClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:hubBtn];
     
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_backBtn.mas_left).offset(-HDAutoWidth(40));
+        make.right.equalTo(_backBtn.mas_right).offset(HDAutoWidth(30));
+        make.top.equalTo(_backBtn.mas_top).offset(-HDAutoHeight(20));
+        make.bottom.equalTo(_backBtn.mas_bottom).offset(HDAutoHeight(20));;
+    }];
     
 }
 

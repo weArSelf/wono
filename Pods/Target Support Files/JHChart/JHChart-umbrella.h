@@ -13,6 +13,8 @@
 #import "JHChart.h"
 #import "JHChartHeader.h"
 #import "JHColumnChart.h"
+#import "JHColumnItem.h"
+#import "JHIndexPath.h"
 #import "JHLineChart.h"
 #import "JHPieChart.h"
 #import "JHPieForeBGView.h"

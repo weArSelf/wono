@@ -10,10 +10,14 @@
 
 @interface PercentModel : NSObject
 
-@property (nonatomic,strong) NSArray *nameArr;
+
 @property (nonatomic,strong) NSArray *percentArr;
 @property (nonatomic,strong) NSArray *colorArr;
-
 @property (nonatomic,strong) NSString *title;
+
+
+@property (nonatomic,strong) NSArray *nameArr;
+@property (nonatomic) float total;
+@property (nonatomic,strong) NSArray *amountArr;
 
 @end

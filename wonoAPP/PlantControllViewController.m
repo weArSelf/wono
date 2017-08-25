@@ -21,6 +21,10 @@
 
 @interface PlantControllViewController ()<UITableViewDelegate,UITableViewDataSource,ScreenDetailDelegate>
 
+@property (nonatomic,strong)UIView *headView2;
+@property (nonatomic,strong)UILabel *titleLabel;
+@property (nonatomic,strong)UIButton *backBtn;
+
 @property (nonatomic,strong) UIButton *selectBtn;
 
 @property (nonatomic,strong) UITableView *plantTableView;
@@ -55,20 +59,70 @@
     selID = @"-10";
     dataArr = [NSMutableArray array];
     Count = 1;
-    
-    [self CreateTitleLabelWithText:@"种植管理"];
+    [self creatTitleAndBackBtn];
+//    [self CreateTitleLabelWithText:@"种植管理"];
     [self createHeadView];
     [self createTabelview];
+    _plantTableView.mj_footer.hidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     [self createWork];
     // Do any additional setup after loading the view.
     
-    [self requestData];
+    
 }
+
+-(void)creatTitleAndBackBtn{
+    
+    _headView2 = [[UIView alloc]init];
+    _headView2.backgroundColor = UIColorFromHex(0x3fb36f);
+    _headView2.alpha = 0.8;
+    [self.view addSubview:_headView2];
+    _titleLabel = [[UILabel alloc]init];
+    _titleLabel.text = @"种植管理";
+    _titleLabel.textColor = [UIColor whiteColor];
+    _titleLabel.font = [UIFont systemFontOfSize:18];
+    _titleLabel.textAlignment = NSTextAlignmentCenter;
+    [_headView2 addSubview:_titleLabel];
+    
+    _backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_backBtn setImage:[UIImage imageNamed:@"0-返回"] forState:UIControlStateNormal];
+//    [_backBtn addTarget:self action:@selector(BackClick) forControlEvents:UIControlEventTouchUpInside];
+    _backBtn.contentMode = UIViewContentModeScaleAspectFit;
+    //    _backBtn.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+    [_headView2 addSubview:_backBtn];
+    
+    _backBtn.hidden = YES;
+    
+    [_headView2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left);
+        make.top.equalTo(self.view.mas_top);
+        make.right.equalTo(self.view.mas_right);
+        make.height.equalTo(@(64));
+    }];
+    
+    [_backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_headView2.mas_left).offset(15);
+        make.top.equalTo(_headView2.mas_top).offset(24);
+        make.width.equalTo(@(26));
+        make.height.equalTo(@(26));
+    }];
+    
+    [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(_headView2.mas_centerX);
+        make.centerY.equalTo(_backBtn.mas_centerY);
+        make.width.equalTo(@(100));
+        make.height.equalTo(@(40));
+    }];
+    
+    
+}
+
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    [self requestData];
+//    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 -(void)setBtn{
     
@@ -93,7 +147,7 @@
     _plantTableView.dataSource = self;
     _plantTableView.delegate = self;
 //    _plantTableView.showsVerticalScrollIndicator = NO;
-    _plantTableView.backgroundColor = [UIColor clearColor];
+    _plantTableView.backgroundColor = [UIColor whiteColor];
 //    _plantTableView.frame = self.view.frame;
    _plantTableView.showsVerticalScrollIndicator = NO;
    
@@ -109,6 +163,26 @@
     _plantTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
     _plantTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMore)];
     
+    [self.view layoutIfNeeded];
+    [_plantTableView layoutIfNeeded];
+    [_plantTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
+        [_plantTableView setScrollEnabled:NO];
+        UIView *view = [[UIView alloc]initWithFrame:_plantTableView.bounds];
+        view.backgroundColor = [UIColor whiteColor];
+        
+        UILabel *label = [[UILabel alloc]init];
+        label.text = @"加载数据中...";
+        label.font = [UIFont systemFontOfSize:16];
+        label.textColor = MainColor;
+        label.textAlignment = NSTextAlignmentCenter;
+        label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(390), 300, HDAutoHeight(60));
+        [view addSubview:label];
+        
+        return view;
+    } normalBlock:^(UITableView * _Nonnull sender) {
+        [_plantTableView setScrollEnabled:YES];
+    }];
+    [_plantTableView reloadData];
 }
 
 -(void)refresh{
@@ -491,6 +565,7 @@
 
             }
             
+            _plantTableView.mj_footer.hidden = NO;
             [_plantTableView reloadData];
             
         }

@@ -49,4 +49,12 @@
 #define API_GetPengPay                      @"greenhouse/bill"
 #define API_GetPengList                     @"plant/detail"
 
+#define API_PostPlant                       @"plant"
+
+#define API_GetZhibao                       @"greenhouse/varieties"
+
+#define API_Getji                           @"plant/bill/year"
+#define API_Getnian                         @"plant/bill"
+#define API_Getzong                         @"plant/bill/greens"
+
 #endif /* key_h */

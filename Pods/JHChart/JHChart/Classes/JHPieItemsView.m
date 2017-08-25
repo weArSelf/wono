@@ -2,12 +2,12 @@
 //  JHPieItemsView.m
 //  JHCALayer
 //
-//  Created by cjatech-简豪 on 16/4/28.
+//  Created by 简豪 on 16/4/28.
 //  Copyright © 2016年 JH. All rights reserved.
 //
 
 #import "JHPieItemsView.h"
-@interface JHPieItemsView ()
+@interface JHPieItemsView ()<CAAnimationDelegate>
 
 @property (nonatomic,assign) CGFloat beginAngle;
 @property (nonatomic,assign) CGFloat endAngle;
@@ -19,15 +19,47 @@
     
     if (self = [super initWithFrame:frame]) {
         
-        
+        _hasClick = NO;
         _beginAngle = beginAngle;
         _endAngle = endAngle;
         _fillColor = fillColor;
         
-        [self configBaseLayer];
-        
     }
         return self;
+}
+
+- (void)itemDidClickWithRediusChange:(CGFloat)length{
+    [_shapeLayer removeFromSuperlayer];
+    _shapeLayer = [CAShapeLayer layer];
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    _hasClick = !_hasClick;
+    if (_hasClick) {
+        _shapeLayer.lineWidth = self.frame.size.width + length * 2;
+        
+    }else{
+        _shapeLayer.lineWidth = self.frame.size.width;
+        
+    }
+    if (_hasClick) {
+        [path addArcWithCenter:CGPointMake(self.frame.size.width/2, self.frame.size.height/2) radius:self.frame.size.width/2 + length  startAngle:_beginAngle endAngle:_endAngle clockwise:YES];
+        
+
+    }else{
+        [path addArcWithCenter:CGPointMake(self.frame.size.width/2, self.frame.size.height/2) radius:self.frame.size.width/2 startAngle:_beginAngle endAngle:_endAngle clockwise:YES];
+        
+  
+    }
+    
+    
+    _shapeLayer.path = path.CGPath;
+    
+    
+    _shapeLayer.strokeColor = _fillColor.CGColor;
+    _shapeLayer.fillColor = [UIColor yellowColor].CGColor;
+    _shapeLayer.borderColor = [UIColor clearColor].CGColor;
+    
+
+    [self.layer addSublayer:_shapeLayer];
 }
 
 - (void)configBaseLayer{
@@ -46,15 +78,26 @@
     [self.layer addSublayer:_shapeLayer];
     
     CABasicAnimation *basic = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    basic.duration = 1.1;
+    
+    basic.duration = self.animationDuration;
     basic.fromValue = @(0.1f);
     basic.toValue = @(1.0f);
+    basic.delegate = self;
     [_shapeLayer addAnimation:basic forKey:@"basic"];
     
+}
+
+-(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag{
+        if (_delegate) {
+            [_delegate pieChart:self animationDidEnd:flag];
+        }
     
 }
 
 
+- (void)showAnimation{
+    [self configBaseLayer];
+}
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     NSLog(@"touch%ld",self.tag);

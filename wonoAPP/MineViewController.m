@@ -20,6 +20,10 @@
 
 @interface MineViewController ()<UITableViewDelegate,UITableViewDataSource>
 
+@property (nonatomic,strong)UIView *headView2;
+@property (nonatomic,strong)UILabel *titleLabel;
+@property (nonatomic,strong)UIButton *backBtn;
+
 @property (nonatomic,strong) UIView *headView;
 @property (nonatomic,strong) UIButton *headImgBtn;
 @property (nonatomic,strong) UILabel *nameLabel;
@@ -36,7 +40,8 @@
 //    dataArr = [NSArray arrayWithObjects:@"我的收藏",@"修改密码",@"意见反馈",@"关于沃农",@"注销账号", nil];
     dataArr = [NSArray arrayWithObjects:@"我的收藏",@"管理员工",@"管理大棚",@"我的农场",@"设置",nil];
     // Do any additional setup after loading the view.
-    [self CreateTitleLabelWithText:@"我的"];
+//    [self CreateTitleLabelWithText:@"我的"];
+    [self creatTitleAndBackBtn];
     [self createHead];
     [self createTable];
 }
@@ -44,7 +49,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
 }
 
 
@@ -222,7 +227,54 @@
 //    [self.navigationController pushViewController:nameVC animated:YES];
     
     MineDataViewController *mineDataVC = [[MineDataViewController alloc]init];
+    mineDataVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:mineDataVC animated:YES];
 }
 
+
+-(void)creatTitleAndBackBtn{
+    
+    _headView2 = [[UIView alloc]init];
+    _headView2.backgroundColor = UIColorFromHex(0x3fb36f);
+    _headView2.alpha = 0.8;
+    [self.view addSubview:_headView2];
+    _titleLabel = [[UILabel alloc]init];
+    _titleLabel.text = @"我的";
+    _titleLabel.textColor = [UIColor whiteColor];
+    _titleLabel.font = [UIFont systemFontOfSize:18];
+    _titleLabel.textAlignment = NSTextAlignmentCenter;
+    [_headView2 addSubview:_titleLabel];
+    
+    _backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_backBtn setImage:[UIImage imageNamed:@"0-返回"] forState:UIControlStateNormal];
+    //    [_backBtn addTarget:self action:@selector(BackClick) forControlEvents:UIControlEventTouchUpInside];
+    _backBtn.contentMode = UIViewContentModeScaleAspectFit;
+    //    _backBtn.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+    [_headView2 addSubview:_backBtn];
+    
+    _backBtn.hidden = YES;
+    
+    [_headView2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left);
+        make.top.equalTo(self.view.mas_top);
+        make.right.equalTo(self.view.mas_right);
+        make.height.equalTo(@(64));
+    }];
+    
+    [_backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_headView2.mas_left).offset(15);
+        make.top.equalTo(_headView2.mas_top).offset(24);
+        make.width.equalTo(@(26));
+        make.height.equalTo(@(26));
+    }];
+    
+    [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(_headView2.mas_centerX);
+        make.centerY.equalTo(_backBtn.mas_centerY);
+        make.width.equalTo(@(100));
+        make.height.equalTo(@(40));
+    }];
+    
+   
+}
 @end

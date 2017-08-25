@@ -10,7 +10,8 @@
 @protocol MyLocationDelegate <NSObject>
 
 //- (void)bannerImageClicked:(NSInteger)index ;
-- (void)confirmWithName:(NSString *)name AndLongitude:(NSString *)longitude AndLatitude:(NSString *)latitude;
+//- (void)confirmWithName:(NSString *)name AndLongitude:(NSString *)longitude AndLatitude:(NSString *)latitude;
+- (void)confirmWithName:(NSString *)name AndLongitude:(NSString *)longitude AndLatitude:(NSString *)latitude AndCity:(NSString *)city AndAddress:(NSString *)address;
 @end
 
 @interface MapViewController : UIViewController

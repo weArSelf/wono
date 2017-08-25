@@ -88,7 +88,7 @@
     
     [self requestType];
     
-    [self createBlusTooth];
+//    [self createBlusTooth];
     
     [self createOtherLabel];
     
@@ -136,6 +136,13 @@
 -(void)changeTitle:(NSNotification *)noti{
     
 //    UIColor *receiveColor=(UIColor *)[notification object];
+    
+    if([noti object] == nil){
+        _catLabelContent.text = @"未选择类型";
+        nowPlantTypeId = @"";
+        return;
+    }
+    
     PengTypeModel *model = (PengTypeModel *)[noti object];
     
     NSString *newStr = model.typeName;
@@ -314,6 +321,18 @@
         make.width.equalTo(@(100));
         make.height.equalTo(@(40));
     }];
+    
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(BackClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_headView.mas_left);
+        make.right.equalTo(_backBtn.mas_right).offset(HDAutoWidth(40));
+        make.top.equalTo(_headView.mas_top);
+        make.bottom.equalTo(_headView.mas_bottom);
+    }];
 }
 
 -(void)BackClick{
@@ -464,6 +483,7 @@
 }
 
 -(void)catClick{
+    
     
     [[InterfaceSingleton shareInstance].interfaceModel getPengWithCatPid:@"0" AndCallBack:^(int state, id data, NSString *msg) {
        

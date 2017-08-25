@@ -11,6 +11,6 @@
 
 @interface ZhongZhiViewController : UIViewController
 
-@property (nonatomic,strong) AddDetailModel *model;
+@property (nonatomic,strong) PlantAddModel *model;
 
 @end

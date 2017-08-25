@@ -45,7 +45,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     [self creatTitleAndBackBtn];
     [self createSaveBtn];
-    [self createCon];
+//    [self createCon];
 //    [self requestData];
 }
 
@@ -78,6 +78,44 @@
     [_perTextView resignFirstResponder];
     [_addTextView resignFirstResponder];
     NSLog(@"点击提交");
+    
+    
+    if([_moneyTextView.text isEqualToString:@""]||[_perTextView.text isEqualToString:@""]){
+        [MBProgressHUD showSuccess:@"请完善信息"];
+        return;
+    }
+    if([_model.unitType isEqualToString:@"-1"]){
+        [MBProgressHUD showSuccess:@"请填写单位"];
+        return;
+    }
+    
+    _model.amount = _moneyTextView.text;
+    _model.price = _perTextView.text;
+    _model.note = _addTextView.text;
+    
+    
+//    [param setObject:model.amount forKey:@"amount"];
+
+//    [param setObject:model.note forKey:@"note"];
+//    [param setObject:model.type forKey:@"type"];
+//    [param setObject:model.price forKey:@"unit_price"];
+//    [param setObject:model.unitType forKey:@"unit_type"];
+
+    
+    [[InterfaceSingleton shareInstance].interfaceModel PostPlantWithModel:_model WithCallBack:^(int state, id data, NSString *msg) {
+        
+        if(state == 2000){
+            NSLog(@"成功");
+            [MBProgressHUD showSuccess:@"提交成功"];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
+
+    
 }
 
 -(void)creatTitleAndBackBtn{
@@ -120,6 +158,18 @@
         make.width.equalTo(@(100));
         make.height.equalTo(@(40));
     }];
+    
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(BackClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_headView.mas_left);
+        make.right.equalTo(_backBtn.mas_right).offset(HDAutoWidth(40));
+        make.top.equalTo(_headView.mas_top);
+        make.bottom.equalTo(_headView.mas_bottom);
+    }];
 }
 
 -(void)BackClick{
@@ -133,7 +183,7 @@
 
 -(void)createCon{
     _catLabel = [[UILabel alloc]init];
-    _catLabel.text = @"* 品种:";
+    _catLabel.text = @"品种:";
     _catLabel.font = [UIFont systemFontOfSize:13];
     _catLabel.textColor = UIColorFromHex(0x000000);
     [self.view addSubview:_catLabel];
@@ -157,19 +207,19 @@
     }];
     
     _moneyLabel = [[UILabel alloc]init];
-    _moneyLabel.text = @"* 总金额:";
+    _moneyLabel.text = @"总金额:";
     _moneyLabel.font = [UIFont systemFontOfSize:13];
     _moneyLabel.textColor = UIColorFromHex(0x000000);
     [self.view addSubview:_moneyLabel];
     
     _perLabel = [[UILabel alloc]init];
-    _perLabel.text = @"* 单价:";
+    _perLabel.text = @"单价:";
     _perLabel.font = [UIFont systemFontOfSize:13];
     _perLabel.textColor = UIColorFromHex(0x000000);
     [self.view addSubview:_perLabel];
     
     _addLabel = [[UILabel alloc]init];
-    _addLabel.text = @"* 备注信息:";
+    _addLabel.text = @"备注信息:";
     _addLabel.font = [UIFont systemFontOfSize:13];
     _addLabel.textColor = UIColorFromHex(0x000000);
     [self.view addSubview:_addLabel];
@@ -285,7 +335,7 @@
 //    fzpickerView.proTitleList = @[@[@"g",@"kg",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10"]];
     nowView.textColor = UIColorFromHex(0x9fa0a0);
     nowView.text = @"单位";
-    nowView.font = [UIFont systemFontOfSize:14];
+    nowView.font = [UIFont systemFontOfSize:12];
     nowView.textAlignment = NSTextAlignmentCenter;
     nowView.layer.masksToBounds = YES;
     nowView.layer.cornerRadius = 5;
@@ -304,11 +354,26 @@
     UILabel *label=(UILabel*)recognizer.view;
     NSLog(@"%ld被点击了",(long)label.tag);
     
-    NSArray *arr = [NSArray arrayWithObjects:@"g",@"kg",@"qq",@"ww",@"ee", nil];
+    NSArray *arr = [NSArray arrayWithObjects:@"kg",@"吨",@"只", nil];
     
     [CDZPicker showPickerInView:self.view withStrings:arr confirm:^(NSArray<NSString *> *stringArray) {
         //        self.label.text = stringArray.firstObject;
         NSLog(@"点击");
+        
+        NSString *str = stringArray.firstObject;
+        
+        if([str isEqualToString:@"kg"]){
+            _model.unitType = @"1";
+        }
+        if([str isEqualToString:@"吨"]){
+            _model.unitType = @"2";
+        }
+
+        if([str isEqualToString:@"只"]){
+            _model.unitType = @"3";
+        }
+
+        
         
 //        NSString *str = stringArray.firstObject;
 //        NSString *str2 = label.text;
@@ -341,6 +406,13 @@
     NSLog(@"%@",textView.text);
 }
 
+-(void)setModel:(PlantAddModel *)model{
+    _model = model;
+    [self createCon];
+    _catDetailLabel.text = _model.varName;
+    _model.unitType = @"-1";
+    
+}
 
 
 @end

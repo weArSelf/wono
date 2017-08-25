@@ -55,7 +55,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     [self creatTitleAndBackBtn];
     [self createSaveBtn];
-    [self createCon];
+    
 //    [self createTime];
 }
 
@@ -88,6 +88,30 @@
     [_perTextView resignFirstResponder];
     [_addTextView resignFirstResponder];
     NSLog(@"点击提交");
+    
+    if([_moneyTextView.text isEqualToString:@""]||[_perTextView.text isEqualToString:@""]){
+        [MBProgressHUD showSuccess:@"请完善信息"];
+        return;
+    }
+    
+    _model.price = _perTextView.text;
+    _model.amount = _moneyTextView.text;
+    _model.note = _addTextView.text;
+    
+    
+    [[InterfaceSingleton shareInstance].interfaceModel PostPlantWithModel:_model WithCallBack:^(int state, id data, NSString *msg) {
+       
+        if(state == 2000){
+            NSLog(@"成功");
+            [MBProgressHUD showSuccess:@"提交成功"];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
+    
 }
 
 -(void)creatTitleAndBackBtn{
@@ -129,6 +153,18 @@
         make.centerY.equalTo(_backBtn.mas_centerY);
         make.width.equalTo(@(100));
         make.height.equalTo(@(40));
+    }];
+    
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(BackClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_headView.mas_left);
+        make.right.equalTo(_backBtn.mas_right).offset(HDAutoWidth(40));
+        make.top.equalTo(_headView.mas_top);
+        make.bottom.equalTo(_headView.mas_bottom);
     }];
 }
 
@@ -459,8 +495,10 @@
     
 }
 
--(void)setModel:(AddDetailModel *)model{
+-(void)setModel:(PlantAddModel *)model{
     _model = model;
+    [self createCon];
+    _catDetailLabel.text = _model.varName;
     
     
 }

@@ -15,6 +15,7 @@
 #import "WSDatePickerView.h"
 #import "AddModel.h"
 
+
 @interface AddViewController ()
 
 @property (nonatomic,strong)UIView *headView;
@@ -40,11 +41,13 @@
     float typeIndex;
     
     int nowSel;
+    PlantAddModel *Pmodel;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    Pmodel = [[PlantAddModel alloc]init];
+    Pmodel.resTime = @"-1";
     nowSel = -1;
     
     typeIndex = 0;
@@ -104,6 +107,18 @@
         make.width.equalTo(@(100));
         make.height.equalTo(@(40));
     }];
+    
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(BackClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_headView.mas_left);
+        make.right.equalTo(_backBtn.mas_right).offset(HDAutoWidth(40));
+        make.top.equalTo(_headView.mas_top);
+        make.bottom.equalTo(_headView.mas_bottom);
+    }];
 }
 
 -(void)BackClick{
@@ -114,10 +129,11 @@
 
 -(void)createTime{
     UILabel *titletimeLabel = [self mylabel];
+//    titletimeLabel.alpha = 0;
     titletimeLabel.text = @"时间:";
     [self.view addSubview:titletimeLabel];
     _timeLabel = [self mylabel];
-    
+//    _timeLabel.alpha = 0;
     //创建富文本
     NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:@"  添加"];
     //NSTextAttachment可以将要插入的图片作为特殊字符处理
@@ -183,37 +199,62 @@
 -(void)SaveClick{
     NSLog(@"点击下一步");
     
+    if(nowSel<0){
+        [MBProgressHUD showSuccess:@"请选择大棚"];
+        return;
+    }
+    if([Pmodel.resTime isEqualToString:@"-1"]){
+        [MBProgressHUD showSuccess:@"请选择时间"];
+        return;
+    }
+    
+    
+    Pmodel.gid = pengData.needIDArr[nowSel];
+    
+    Pmodel.varId = pengData.variID[nowSel];
+    
+    Pmodel.varName = pengData.variName[nowSel];
+
     
     int index = typeIndex;
     switch (index) {
         case 1:{
+            Pmodel.type = @"1";
+            
             ZhongZhiViewController *zhongzhi = [[ZhongZhiViewController alloc]init];
             
-            AddDetailModel *model = [[AddDetailModel alloc]init];
+//            AddDetailModel *model = [[AddDetailModel alloc]init];
             
-            NSString *name = pengData.nameArr[nowSel];
-            NSString *varID = pengData.variID[nowSel];
+//            NSString *name = pengData.nameArr[nowSel];
+//            NSString *varID = pengData.variID[nowSel];
+//            
+//            model.varName = name;
+//            model.varID = varID;
             
-            model.varName = name;
-            model.varID = varID;
-            
-            zhongzhi.model = model;
+            zhongzhi.model = Pmodel;
             
             [self.navigationController pushViewController:zhongzhi animated:YES];
              break;
         }
         case 2:{
+            Pmodel.type = @"2";
             ShifeiViewController *shifei = [[ShifeiViewController alloc]init];
+            shifei.model = Pmodel;
             [self.navigationController pushViewController:shifei animated:YES];
         }
             break;
         case 3:{
+            Pmodel.type = @"3";
             ZhiBaoViewController *zhibao = [[ZhiBaoViewController alloc]init];
+            zhibao.model = Pmodel;
+            
             [self.navigationController pushViewController:zhibao animated:YES];
         }
             break;
         case 4:{
+            Pmodel.type = @"4";
             WorkViewController *work = [[WorkViewController alloc]init];
+            work.model = Pmodel;
             [self.navigationController pushViewController:work animated:YES];
         }
             break;
@@ -236,7 +277,14 @@
         make.height.equalTo(@(HDAutoHeight(40)));
         make.width.equalTo(@(HDAutoWidth(280)));
     }];
+    [selecLabel layoutIfNeeded];
+    [self.view layoutIfNeeded];
+    UIScrollView *scroll = [[UIScrollView alloc]init];
     
+    scroll.frame = CGRectMake(0, selecLabel.y+selecLabel.height+HDAutoHeight(20), SCREEN_WIDTH, HDAutoHeight(520));
+    
+//    scroll.backgroundColor = [UIColor redColor];
+    [self.view addSubview:scroll];
 //    pengData = [NSMutableArray arrayWithObjects:@"黄瓜大棚",@"西瓜大棚",@"X瓜大棚",@"黄瓜大棚",@"黄瓜大棚",@"黄瓜大棚", nil];
     NSArray *nameArr = pengData.nameArr;
     [selecLabel layoutIfNeeded];
@@ -257,13 +305,14 @@
         //每行的第几个
         int k = i/2;
         //第几行
-        btn.frame = CGRectMake(selecLabel.x +HDAutoWidth(360)*j, selecLabel.y+selecLabel.height+HDAutoHeight(20)+HDAutoHeight(100)*k, HDAutoWidth(320), HDAutoHeight(80));
-        [self.view addSubview:btn];
-        
-        bottomY = selecLabel.y+selecLabel.height+HDAutoHeight(20)+HDAutoHeight(90)*k +HDAutoHeight(80);
+        btn.frame = CGRectMake(selecLabel.x +HDAutoWidth(360)*j, HDAutoHeight(100)*k, HDAutoWidth(320), HDAutoHeight(80));
+        [scroll addSubview:btn];
+        scroll.contentSize = CGSizeMake(SCREEN_WIDTH, HDAutoHeight(100)*k+HDAutoHeight(80));
     }
+    bottomY = scroll.bottom;
 }
 -(void)pengClick:(UIButton *)btn{
+    
     
     nowSel = btn.tag-200;
     
@@ -349,6 +398,8 @@
         NSString *date = [startDate stringWithFormat:@"yyyy-MM-dd"];
         NSLog(@"时间： %@",date);
         
+        Pmodel.resTime = date;
+        
         _SelDate = startDate;
         
         //创建富文本
@@ -395,8 +446,8 @@
                 [model.nameArr addObject:dic[@"name"]];
                 [model.needIDArr addObject:dic[@"id"]];
                 
-                [model.variName addObject:@"variety_name"];
-                [model.variID addObject:@"varieties_id"];
+                [model.variName addObject:dic[@"variety_name"]];
+                [model.variID addObject:dic[@"varieties_id"]];
                 
             }
             

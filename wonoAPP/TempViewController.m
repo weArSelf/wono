@@ -14,6 +14,7 @@
 
 #import "SetTempViewController.h"
 #import "TempCViewController.h"
+#import "LoginViewController.h"
 
 //#import "LoadingView.h"
 
@@ -28,7 +29,13 @@
 #import <BaiduMapAPI_Map/BMKMapView.h>//只引入所需的单个头文件
 #define BMK_KEY @"kClOFMdxGkzAgIr6MEfGF8cgGWMjqx02"//百度地图的key
 
+#include <GeTuiSdk.h>
+
 @interface TempViewController ()<UITableViewDelegate,UITableViewDataSource,CLLocationManagerDelegate,BMKGeneralDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate>
+
+@property (nonatomic,strong)UIView *headView2;
+@property (nonatomic,strong)UILabel *titleLabel;
+@property (nonatomic,strong)UIButton *backBtn;
 
 @property (nonatomic,strong) UIView *headView;
 
@@ -72,6 +79,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self creatTitleAndBackBtn];
     
     dataArr = [NSMutableArray array];
     
@@ -79,7 +87,7 @@
     // Do any additional setup after loading the view.
     loadMark = 0;
     self.view.backgroundColor = [UIColor whiteColor];
-    [self CreateTitleLabelWithText:@"WONO让数据驱动农业"];
+//    [self CreateTitleLabelWithText:@"WONO让数据驱动农业"];
     [self createHead];
     [self creatNextHead];
     [self createTabel];
@@ -89,20 +97,73 @@
     
      _contentTabel.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(requestData)];
     
-    [self createIndicator];
-    [self getLocate];
+//    [self createIndicator];
+//    [self getLocate];
     
-    
+    [self loadCatch];
     [self requestData];
+    
+//    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0/*延迟执行时间*/ * NSEC_PER_SEC));
+//    
+//    dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+//        NSString *clientID = [GeTuiSdk clientId];
+//        NSLog(@"%@",clientID);
+//    });
+    
     
 }
 
+-(void)loadCatch{
+    
+    
+    
+    [[JXTCacher cacher] objectForKey:@"firstCat" userId:@"login" achive:^(JXTCacher *cacher, id obj, CacheError error) {
+        if (obj && error == 0) {  //local or cache have data
+            //                self.dataSource = obj;
+            //                [self.tbView reloadData];
+            
+            dataArr = obj;
+            
+            [_contentTabel reloadData];
+            NSLog(@"yes");
+        }
+    }];
+    
+    }
 
 -(void)requestData{
     NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
     [[InterfaceSingleton shareInstance].interfaceModel getMainPengWithFid:str AndCallBack:^(int state, id data, NSString *msg) {
         
          [_contentTabel.mj_header endRefreshing];
+        
+//        [MBProgressHUD showSuccess:msg];
+        if(state == 2001){
+            
+            dataArr = [NSMutableArray array];
+            [_contentTabel reloadData];
+            return;
+        }
+        
+        if(state == 999||state == 3001){
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"登录已过期" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"重新登录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"loginMark"];
+                [[NSUserDefaults standardUserDefaults]synchronize];
+                LoginViewController *login = [[LoginViewController alloc]init];
+                UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:login];
+                nav.navigationBarHidden = YES;
+                
+                appDelegate.window.rootViewController = nav;
+                
+            }];
+            [alertC addAction:confirmAct];
+            [self presentViewController:alertC animated:YES completion:nil];
+            
+            return;
+        }
+        
         
         if(state == 2000){
             NSLog(@"成功");
@@ -164,6 +225,10 @@
                  [dataArr addObject:model2];
             }
             
+            [[JXTCacher cacher]setObject:dataArr forKey:@"firstCat" userId:@"login" useArchive:YES setted:^(JXTCacher *cacher, CacheError error) {
+                
+            }];
+            
             [_contentTabel reloadData];
             
         }
@@ -215,7 +280,7 @@
     [super viewWillAppear:animated];
     
     NSLog(@"我显示了");
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
 }
 
 -(void)createHead{
@@ -825,6 +890,49 @@
     
 }
 
+-(void)creatTitleAndBackBtn{
+    
+    _headView2 = [[UIView alloc]init];
+    _headView2.backgroundColor = UIColorFromHex(0x3fb36f);
+    _headView2.alpha = 0.8;
+    [self.view addSubview:_headView2];
+    _titleLabel = [[UILabel alloc]init];
+    _titleLabel.text = @"WONO让数据驱动农业";
+    _titleLabel.textColor = [UIColor whiteColor];
+    _titleLabel.font = [UIFont systemFontOfSize:18];
+    _titleLabel.textAlignment = NSTextAlignmentCenter;
+    [_headView2 addSubview:_titleLabel];
+    
+    _backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_backBtn setImage:[UIImage imageNamed:@"0-返回"] forState:UIControlStateNormal];
+    //    [_backBtn addTarget:self action:@selector(BackClick) forControlEvents:UIControlEventTouchUpInside];
+    _backBtn.contentMode = UIViewContentModeScaleAspectFit;
+    //    _backBtn.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+    [_headView2 addSubview:_backBtn];
+    
+    _backBtn.hidden = YES;
+    
+    [_headView2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left);
+        make.top.equalTo(self.view.mas_top);
+        make.right.equalTo(self.view.mas_right);
+        make.height.equalTo(@(64));
+    }];
+    
+    [_backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_headView2.mas_left).offset(15);
+        make.top.equalTo(_headView2.mas_top).offset(24);
+        make.width.equalTo(@(26));
+        make.height.equalTo(@(26));
+    }];
+    
+    [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(_headView2.mas_centerX);
+        make.centerY.equalTo(_backBtn.mas_centerY);
+        make.width.equalTo(@(350));
+        make.height.equalTo(@(40));
+    }];
+}
 
 
 

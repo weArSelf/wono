@@ -2,12 +2,22 @@
 //  JHPieChart.h
 //  JHCALayer
 //
-//  Created by cjatech-简豪 on 16/5/3.
+//  Created by 简豪 on 16/5/3.
 //  Copyright © 2016年 JH. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import "JHChart.h"
+typedef  NS_ENUM(NSInteger,JHPieChartAnimationType){
+    JHPieChartAnimationNormalType = 0,//Default
+    JHPieChartAnimationByOrder = 1
+};
+
+typedef NS_ENUM(NSInteger,JHPieChartDidClickType) {
+    JHPieChartDidClickNormalType = 0,//Default
+    JHPieChartDidClickTranslateToBig = 1
+};
+
 @interface JHPieChart : JHChart
 
 /**
@@ -39,5 +49,13 @@
  */
 @property (nonatomic,assign) BOOL showDescripotion;
 
+/*!
+ * Default is JHPieChartAnimationNormalType
+ */
+@property (nonatomic , assign)JHPieChartAnimationType animationType;
 
+/*!
+ * Default is JHPieChartDidClickNormalType;
+ */
+@property (nonatomic , assign)JHPieChartDidClickType didClickType;
 @end

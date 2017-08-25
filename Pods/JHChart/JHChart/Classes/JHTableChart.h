@@ -10,17 +10,18 @@
  *                                                           *
                             表格
  *                                                           *
- *                                                              *
+ *                                                           *
  ************************************************************/
 
 
 #import "JHChart.h"
+@class JHTableChart;
 @protocol JHTableChartDelegate<NSObject>
 @optional
 ///具体的表格数据填充内容 （不包含表头和属性解释行）
-- (UIView *)viewForContentAtRow:(NSInteger)row column:(NSInteger)column subRow:(NSInteger)subRow contentSize:(CGSize)contentSize;
-- (UIView *)viewForPropertyAtColumn:(NSInteger)column contentSize:(CGSize)contentSize;
-- (UIView *)viewForTableHeaderWithContentSize:(CGSize)contentSize;
+- (UIView *)tableChart:(JHTableChart *)chart viewForContentAtRow:(NSInteger)row column:(NSInteger)column subRow:(NSInteger)subRow contentSize:(CGSize)contentSize;
+- (UIView *)tableChart:(JHTableChart *)chart viewForPropertyAtColumn:(NSInteger)column contentSize:(CGSize)contentSize;
+- (UIView *)tableChart:(JHTableChart *)chart viewForTableHeaderWithContentSize:(CGSize)contentSize;
 @end
 @interface JHTableChart : JHChart
 /**
@@ -64,17 +65,44 @@
  */
 @property (nonatomic, assign) CGFloat minHeightItems;
 
+/**
+ *  Table data font , default : [UIFont systemFontOfSize:15]
+ */
+@property (nonatomic, strong) UIFont * bodyTextFont;
 
 /**
  *  Table data display color
  */
 @property (nonatomic, strong) UIColor * bodyTextColor;
 
+/**
+ *  Color of each column data, use 'bodyTextColor' instead if you want to display only one color
+ */
+@property (nonatomic, strong) NSArray * bodyTextColorArr;
 
+/**
+ *  The column header font, equals to 'bodyTextFont' if it's set to nil
+ */
+@property (nonatomic, strong) UIFont * colTitleFont;
 /**
  *  The column header name, the first column horizontal statement, need to use | segmentation
  */
 @property (nonatomic, strong) NSArray * colTitleArr;
+
+/**
+ *  The column header color, use 'bodyTextColor' instead if header and body are the same
+ */
+@property (nonatomic, strong) UIColor * colTitleColor;
+
+/**
+ *  Color of each column header, use 'colTitleColor' instead if you want to display only one color
+ */
+@property (nonatomic, strong) NSArray * colTitleColorArr;
+
+/**
+ *  The column header height, use 'minHeightItems' instead if it's set to 0
+ */
+@property (nonatomic, assign) CGFloat colTitleHeight;
 
 /**
  *  Anyway, the ranks of name statement, if it is necessary to fill out a two data

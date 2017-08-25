@@ -10,4 +10,6 @@
 
 @interface ShifeiViewController : UIViewController
 
+@property (nonatomic,strong) PlantAddModel *model;
+
 @end

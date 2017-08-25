@@ -2,13 +2,14 @@
 //  JHColumnChart.m
 //  JHChartDemo
 //
-//  Created by cjatech-简豪 on 16/5/10.
+//  Created by 简豪 on 16/5/10.
 //  Copyright © 2016年 JH. All rights reserved.
 //
 
 #import "JHColumnChart.h"
 #import <objc/runtime.h>
-@interface JHColumnChart ()<CAAnimationDelegate>
+#import "JHColumnItem.h"
+@interface JHColumnChart ()<CAAnimationDelegate,JHColumnItemActionDelegate>
 
 //背景图
 @property (nonatomic,strong)UIScrollView *BGScrollView;
@@ -155,8 +156,15 @@
     for (NSArray *arr in _valueArr) {
         
         for (id number in arr) {
-            
-            CGFloat currentNumber = [NSString stringWithFormat:@"%@",number].floatValue;
+            CGFloat currentNumber = 0;
+
+            if ([number isKindOfClass:[NSArray class]]) {
+                for (id sub in number) {
+                    currentNumber += [NSString stringWithFormat:@"%@",sub].floatValue;
+                };
+            }else{
+                currentNumber = [NSString stringWithFormat:@"%@",number].floatValue;
+            }
             if (currentNumber>max) {
                 max = currentNumber;
             }
@@ -174,7 +182,7 @@
     }
     
     _maxHeight += 4;
-    _perHeight = (CGRectGetHeight(self.frame) - 30 - _originSize.y)/_maxHeight;
+    _perHeight = (CGRectGetHeight(self.frame) - 30 - _originSize.y - self.contentInsets.top)/_maxHeight;
     
     
 }
@@ -187,7 +195,7 @@
     _columnWidth = (_columnWidth<=0?30:_columnWidth);
     NSInteger count = _valueArr.count * [_valueArr[0] count];
     _typeSpace = (_typeSpace<=0?15:_typeSpace);
-    _maxWidth = count * _columnWidth + _valueArr.count * _typeSpace + _typeSpace + 40;
+    _maxWidth = count * _columnWidth + _valueArr.count * _typeSpace + _typeSpace + 40 + _drawFromOriginX;
     self.BGScrollView.contentSize = CGSizeMake(_maxWidth, 0);
     self.BGScrollView.backgroundColor = _bgVewBackgoundColor;
     
@@ -320,7 +328,7 @@
             
             CGSize size = [_xShowInfoText[i] boundingRectWithSize:CGSizeMake(wid, MAXFLOAT) options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingTruncatesLastVisibleLine attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:self.xDescTextFontSize]} context:nil].size;
             
-            textLayer.frame = CGRectMake( i * (count * _columnWidth + _typeSpace) + _typeSpace + _originSize.x, CGRectGetHeight(self.frame) - _originSize.y+5,wid, size.height);
+            textLayer.frame = CGRectMake( i * (count * _columnWidth + _typeSpace) + _typeSpace + _originSize.x+ _drawFromOriginX, CGRectGetHeight(self.frame) - _originSize.y+5,wid, size.height);
             textLayer.string = _xShowInfoText[i];
             textLayer.contentsScale = [UIScreen mainScreen].scale;
             UIFont *font = [UIFont systemFontOfSize:self.xDescTextFontSize];
@@ -355,28 +363,41 @@
         NSArray *arr = _valueArr[i];
 
         for (NSInteger j = 0; j<arr.count; j++) {
-            CGFloat height =[arr[j] floatValue] *_perHeight;
-
-            UIView *itemsView = [UIView new];
-            NSIndexPath *path = [NSIndexPath indexPathForRow:j inSection:i];
-            objc_setAssociatedObject(itemsView, "indexPath", path,OBJC_ASSOCIATION_COPY_NONATOMIC);
-            [self.showViewArr addObject:itemsView];
-            itemsView.frame = CGRectMake((i * arr.count + j)*_columnWidth + i*_typeSpace+_originSize.x + _typeSpace, CGRectGetHeight(self.frame) - _originSize.y-1, _columnWidth, 0);
-            if (_delegate) {
-                [itemsView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(itemClick:)]];
+            CGFloat height = 0;
+            id colors = nil;
+            if ([arr[j] isKindOfClass:[NSArray class]]) {
+                NSAssert([_columnBGcolorsArr[j]isKindOfClass:[NSArray class]] &&_columnBGcolorsArr.count >= arr.count , @"when current columnItem is  component，you must offer a NSArray type for item's color");
+                colors = _columnBGcolorsArr[j];
+                for (id obj in arr[j]) {
+                    height += [obj floatValue];
+                }
+                height = height * _perHeight;
+            }else{
+                height =[arr[j] floatValue] *_perHeight;
+                colors = (_columnBGcolorsArr.count<arr.count?[UIColor greenColor]:_columnBGcolorsArr[j]);
+                if ([colors isKindOfClass:[NSArray class]] && [colors count] > 0) {
+                    colors = colors[0];
+                }
             }
+            JHColumnItem *itemsView = [[JHColumnItem alloc] initWithFrame:CGRectMake((i * arr.count + j)*_columnWidth + i*_typeSpace+_originSize.x + _typeSpace, CGRectGetHeight(self.frame) - height - _originSize.y -1, _columnWidth, height) perHeight:_perHeight valueArray:arr[j] colors:colors];
+            itemsView.clipsToBounds = YES;
+            itemsView.delegate = self;
+            NSIndexPath *path = [NSIndexPath indexPathForRow:j inSection:i];
+            itemsView.index = path;
+            [self.showViewArr addObject:itemsView];
+            itemsView.frame = CGRectMake((i * arr.count + j)*_columnWidth + i*_typeSpace+_originSize.x + _typeSpace + _drawFromOriginX, CGRectGetHeight(self.frame) - _originSize.y-1, _columnWidth, 0);
+
             if (_isShowLineChart) {
                 NSString *value = [NSString stringWithFormat:@"%@",_lineValueArray[i]];
                 float valueFloat =[value floatValue];
                 NSValue *lineValue = [NSValue valueWithCGPoint:P_M(CGRectGetMaxX(itemsView.frame) - _columnWidth / 2, CGRectGetHeight(self.frame) - valueFloat * _perHeight - _originSize.y -1)];
                 [self.drawLineValue addObject:lineValue];
             }
-            
-            
-            itemsView.backgroundColor = (UIColor *)(_columnBGcolorsArr.count<arr.count?[UIColor greenColor]:_columnBGcolorsArr[j]);
+            [self.BGScrollView addSubview:itemsView];
+
             [UIView animateWithDuration:1 animations:^{
                 
-                 itemsView.frame = CGRectMake((i * arr.count + j)*_columnWidth + i*_typeSpace+_originSize.x + _typeSpace, CGRectGetHeight(self.frame) - height - _originSize.y -1, _columnWidth, height);
+                 itemsView.frame = CGRectMake((i * arr.count + j)*_columnWidth + i*_typeSpace+_originSize.x + _typeSpace + _drawFromOriginX, CGRectGetHeight(self.frame) - height - _originSize.y -1, _columnWidth, height);
                 
             } completion:^(BOOL finished) {
                 /*        动画结束后添加提示文字         */
@@ -385,12 +406,14 @@
                     CATextLayer *textLayer = [CATextLayer layer];
                     
                     [self.layerArr addObject:textLayer];
-                    NSString *str = [NSString stringWithFormat:@"%@",arr[j]];
+                    NSString *str = [NSString stringWithFormat:@"%0.2f",height / _perHeight];
                     
-                    CGSize size = [str boundingRectWithSize:CGSizeMake(_columnWidth, MAXFLOAT) options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingTruncatesLastVisibleLine attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:9]} context:nil].size;
+                    CGSize size = [str boundingRectWithSize:CGSizeMake(MAXFLOAT, 20) options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingTruncatesLastVisibleLine attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:9]} context:nil].size;
                     
-                    textLayer.frame = CGRectMake((i * arr.count + j)*_columnWidth + i*_typeSpace+_originSize.x + _typeSpace, CGRectGetHeight(self.frame) - height - _originSize.y -3 - size.height, _columnWidth, size.height);
-                    
+                    textLayer.frame = CGRectMake(CGRectGetMinX(itemsView.frame), CGRectGetMinY(itemsView.frame) - size.height - 5,size.width, size.height);
+                    CGPoint center = textLayer.position;
+                    center.x = itemsView.center.x;
+                    textLayer.position = center;
                     textLayer.string = str;
                     
                     textLayer.fontSize = 9.0;
@@ -443,7 +466,6 @@
                 
             }];
             
-            [self.BGScrollView addSubview:itemsView];
             
 
         }
@@ -452,8 +474,8 @@
 }
 
 - (void)itemClick:(UITapGestureRecognizer *)sender{
-    if ([_delegate respondsToSelector:@selector(columnItem:didClickAtIndexRow:)]) {
-        [_delegate columnItem:sender.view didClickAtIndexRow:objc_getAssociatedObject(sender.view, "indexPath")];
+    if ([_delegate respondsToSelector:@selector(columnChart:columnItem:didClickAtIndexRow:)]) {
+        [_delegate columnChart:self columnItem:sender.view didClickAtIndexRow:objc_getAssociatedObject(sender.view, "indexPath")];
     }
 }
 
@@ -491,7 +513,6 @@
                     [self.layerArr addObject:roundLayer];
                         [self.BGScrollView.layer addSublayer:roundLayer];
                         
-
                     
                 }
                 
@@ -504,6 +525,18 @@
     
 }
 
+
+-(void)columnItem:(JHColumnItem *)item didClickAtIndexPath:(JHIndexPath *)indexPath{
+    if (_delegate) {
+        if ([_delegate respondsToSelector:@selector(columnChart:columnItem:didClickAtIndexPath:)]) {
+            [_delegate columnChart:self columnItem:item didClickAtIndexPath:indexPath];
+        }
+        
+        if ([_delegate respondsToSelector:@selector(columnChart:columnItem:didClickAtIndexRow:)]) {
+            [_delegate columnChart:self columnItem:item didClickAtIndexRow:item.index];
+        }
+    }
+}
 
 
 
