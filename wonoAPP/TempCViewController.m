@@ -535,7 +535,9 @@
             
             
         }
-        
+        if(state == 2001){
+            [MBProgressHUD showSuccess:@"暂无数据"];
+        }
         if(state<2000){
             [MBProgressHUD showError:msg];
             

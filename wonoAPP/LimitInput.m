@@ -68,6 +68,11 @@ IMPLEMENT_PROPERTY(UITextView)
     
     NSNumber *number = [textField valueForKey:PROPERTY_NAME];
     if (number && textField.text.length > [number integerValue] && textField.markedTextRange == nil) {
+        
+        int qwe = [number intValue];
+        NSString *str = [NSString stringWithFormat:@"不得超过%d个字",qwe];
+        [MBProgressHUD showSuccess:str];
+        
         textField.text = [textField.text substringWithRange: NSMakeRange(0, [number integerValue])];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"acceptLimitLength" object: textField];
     }
@@ -80,6 +85,10 @@ IMPLEMENT_PROPERTY(UITextView)
     
     NSNumber *number = [textView valueForKey:PROPERTY_NAME];
     if (number && textView.text.length > [number integerValue] && textView.markedTextRange == nil) {
+        int qwe = [number intValue];
+        NSString *str = [NSString stringWithFormat:@"不得超过%d个字",qwe];
+        [MBProgressHUD showSuccess:str];
+        
         textView.text = [textView.text substringWithRange: NSMakeRange(0, [number integerValue])];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"acceptLimitLength" object: textView];
     }

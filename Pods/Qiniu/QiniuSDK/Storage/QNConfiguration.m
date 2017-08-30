@@ -85,7 +85,7 @@ static QNDnsManager *initDns(QNConfigurationBuilder *builder) {
 
 - (instancetype)init {
     if (self = [super init]) {
-        _zone = [QNZone zone0];
+        _zone = [QNZone zone1];
         _chunkSize = 256 * 1024;
         _putThreshold = 512 * 1024;
         _retryMax = 2;

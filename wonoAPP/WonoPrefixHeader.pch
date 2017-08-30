@@ -75,6 +75,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #import "JXTCacher.h"
 
 #import "UITableView+JRTableViewPlaceHolder.h"
+
+#import <UMMobClick/MobClick.h>
 //#import "UITableView+JRTableViewPlaceHolder"
 
 #define TIMEOUTINTERRVAL 30.0

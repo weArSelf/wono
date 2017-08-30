@@ -52,7 +52,7 @@
 }
 
 -(void)requestData{
-    
+    [_contentTabel.mj_header beginRefreshing];
     [[InterfaceSingleton shareInstance].interfaceModel getMyFarmWithCallBack:^(int state, id data, NSString *msg) {
         
         if(state == 2000){

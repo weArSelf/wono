@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol changeNameDelegate <NSObject>
+
+-(void)nameChangedWithName:(NSString *)name;
+
+@end
+
 @interface ChangeNameViewController : UIViewController
+
+@property (nonatomic,weak) id<changeNameDelegate>delegate;
+
+@property (nonatomic,strong) NSString *needName;
 
 @end

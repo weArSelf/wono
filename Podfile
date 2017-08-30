@@ -16,7 +16,7 @@ target 'wonoAPP' do
     pod 'JHChart'
     pod 'GLChart'
     pod 'BabyBluetooth','~> 0.7.0'
-    pod 'QiniuUpload'
+#    pod 'QiniuUpload'
 #    pod 'BaiduMobStat'
     pod 'UMengAnalytics'
 end

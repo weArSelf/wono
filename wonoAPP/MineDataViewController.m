@@ -9,10 +9,10 @@
 #import "MineDataViewController.h"
 #import "ChangeNameViewController.h"
 #import "CustomActionSheet.h"
+#import "QNUploader.h"
+//#import "QiniuUploader.h"
 
-#import "QiniuUploader.h"
-
-@interface MineDataViewController ()<UITableViewDelegate,UITableViewDataSource,CustomActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface MineDataViewController ()<UITableViewDelegate,UITableViewDataSource,CustomActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,QNUploaderDelegate,changeNameDelegate>
 
 @property (nonatomic,strong)UIView *headView;
 @property (nonatomic,strong)UILabel *titleLabel;
@@ -25,7 +25,7 @@
 @implementation MineDataViewController{
     NSArray *dataArr;
     NSMutableArray *contArr;
-    QiniuUploader *uploader;
+
 }
 
 
@@ -37,63 +37,120 @@
     dataArr = [NSArray arrayWithObjects:@"修改头像",@"手机号",@"昵称",@"性别",nil];
     
     contArr = [NSMutableArray array];
-    [contArr addObject:@"imageUrl"];
-    [contArr addObject:@"13111111111"];
-    [contArr addObject:@"qweqwe"];
-    [contArr addObject:@"男"];
+    [contArr addObject:@""];
+    [contArr addObject:@""];
+    [contArr addObject:@""];
+    [contArr addObject:@""];
     
     [self createTable];
     
     
+    [self requestData];
+//    [self aboutQiniu];
+    
+    
+}
+
+-(void)requestData{
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getUserInfoWithCallBack:^(int state, id data, NSString *msg) {
+        
+        if(state == 2000){
+            NSDictionary *dic= data;
+            NSString *imageUrl = dic[@"avatar"];
+            
+//            if(![imageUrl isEqualToString:@""]){
+//                imageUrl = [NSString stringWithFormat:@"http://ospirz9dn.bkt.clouddn.com/%@",imageUrl];
+//            }
+            
+            NSString *phone = dic[@"mobile"];
+            NSString *name = dic[@"username"];
+            NSString *sex;
+            int se = [dic[@"sex"]intValue];
+            if(se == 1){
+                sex = @"男";
+            }else{
+                sex = @"女";
+            }
+            contArr = [NSMutableArray array];
+            [contArr addObject:imageUrl];
+            [contArr addObject:phone];
+            [contArr addObject:name];
+            [contArr addObject:sex];
+            
+            
+            [_contentTableView reloadData];
+            
+        }else{
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
     
 }
 
 
--(void)aboutQiniu{
+-(void)uploadWithImage:(UIImage *)image{
     
-////    [InterfaceSingleton shareInstance]
-//    
-//    [QiniuToken registerWithScope:@"temp" SecretKey:@"BgAL_Qv9FQuSBkVgO3OT5xBvlicd3QZavH4MmmOY" Accesskey:@"dYkTLlS1bhKjdAybruNp5i-RlbtQlFHUn1io6Jra"];
-//    
-//    NSString *uploadToken = [[QiniuToken sharedQiniuToken] uploadToken];
-//    //    [[QiniuUploader sharedUploader] setMaxConcurrentNumber:3];
-//    
-//    UIImage *image = [UIImage imageNamed:@"BW10"];
-//    
-//    
-//    
-//    uploader = [QiniuUploader sharedUploader];
-//    
-//    QiniuFile *file = [[QiniuFile alloc] initWithFileData:UIImageJPEGRepresentation(image, 1.0f)];
-//    file.key = @"我的图片2331";
-//    [uploader addFile:file];
-//    
-//    
-//    
-//    [uploader setUploadOneFileSucceeded:^(NSInteger index, NSString *key, NSDictionary *info){
-//        
-//        NSLog(@"aaa");
-//    }];
-//    //    [uploader setUploadOneFileSucceeded:UploadOneFileSucceededBlock _Nullable uploadOneFileSucceeded]
-//    
-//    [uploader setUploadOneFileFailed:^(NSInteger index, NSError * _Nullable error){
-//        NSLog(@"bbb");
-//    }];
-//    
-//    [uploader setUploadOneFileProgress:^(NSInteger index, NSProgress *process){
-//        NSLog(@"index:%ld process:%@", index, process);
-//    }];
-//    
-//    [uploader setUploadAllFilesComplete:^(void){
-//        NSLog(@"complete");
-//    }];
-//    
-//    [uploader startUploadWithAccessToken:uploadToken];
+    
+    
+    QNUploader *uploader = [[QNUploader alloc] initWithUploadType:EQTT_Pic];
+    uploader.delegate = self;
+    
+    NSString *name = [NSString stringWithFormat:@"%@.png",[self createGUID]];
+    
+//    UIImage *image = [UIImage imageNamed:@"年度收入与支出"];
+    
+    NSData *data = UIImageJPEGRepresentation(image,0.1);
+    
+    [uploader addTaskWithFileData:data FileName:name];
 
     
 }
 
+-(void)UploadSuccessWithFileName:(NSString *)fileName{
+    [MBProgressHUD showSuccess:@"上传成功"];
+    NSLog(@"aaa");
+    
+    NSString *imageUrl = [NSString stringWithFormat:@"http://ospirz9dn.bkt.clouddn.com/%@",fileName];
+    contArr[0] = imageUrl;
+    [_contentTableView reloadData];
+    
+    
+    [[InterfaceSingleton shareInstance].interfaceModel updateUserInfoWithAvatar:imageUrl AndSex:nil AndName:nil AndCallBack:^(int state, id data, NSString *msg) {
+        
+        if(state == 2000){
+            [MBProgressHUD showSuccess:@"修改成功"];
+            
+            
+        }else{
+        
+            [MBProgressHUD showSuccess:msg];
+            
+        }
+        
+        
+        
+    }];
+    
+    
+}
 
+-(void)UploadFailedWithFileName:(NSString *)fileName{
+    [MBProgressHUD showSuccess:@"上传失败"];
+    NSLog(@"bbb");
+}
+
+
+
+- (NSString *)createGUID{
+    CFUUIDRef uuid_ref = CFUUIDCreate(NULL);
+    CFStringRef uuid_string_ref= CFUUIDCreateString(NULL, uuid_ref);
+    CFRelease(uuid_ref);
+    NSString *uuid = [NSString stringWithString:(__bridge NSString*)uuid_string_ref];
+    CFRelease(uuid_string_ref);
+    return uuid;
+}
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -239,10 +296,19 @@
             UIImageView *headImgView = [[UIImageView alloc]init];
             headImgView.tag = 200+indexPath.row;
 //            [headImgView sd_setImageWithURL:contArr[indexPath.row]];
-            headImgView.backgroundColor = [UIColor greenColor];
-            headImgView.contentMode = UIViewContentModeScaleAspectFit;
+            
+            NSString *url = contArr[0];
+            NSURL *rurl = [NSURL URLWithString:url];
+            
+            
+            
+            [headImgView sd_setImageWithURL:rurl placeholderImage:[UIImage imageNamed:@"默认头像"]];
+            
+//            headImgView.backgroundColor = [UIColor greenColor];
+//            headImgView.contentMode = UIViewContentModeScaleToFill;
 //            headImgView.image = [UIImage imageNamed:@"我的-selected"];
             headImgView.layer.cornerRadius = HDAutoWidth(35);
+            headImgView.layer.masksToBounds = YES;
             [cell.contentView addSubview:headImgView];
             [headImgView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.width.equalTo(@(HDAutoWidth(70)));
@@ -347,8 +413,13 @@
 //            ChangePswViewController *ChangeVc = [[ChangePswViewController alloc]init];
 //            [self.navigationController pushViewController:ChangeVc animated:YES];
             ChangeNameViewController *nameVC = [[ChangeNameViewController alloc]init];
+            nameVC.delegate = self;
+            
+            nameVC.needName = contArr[indexPath.row];
+            
             [self.navigationController pushViewController:nameVC animated:YES];
             break;
+            
             
         }
         case 3:{
@@ -373,6 +444,20 @@
     NSLog(@"%ld",(long)indexPath.row);
 }
 
+
+-(void)nameChangedWithName:(NSString *)name{
+
+    contArr[2] = name;
+    
+    [_contentTableView reloadData];
+    
+    
+    
+    
+    
+}
+
+
 #pragma mark UIActionSheetDelegate
 
 - (void)actionSheet:(CustomActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -382,14 +467,34 @@
     
         switch (buttonIndex) {
             case 0:{
-                UILabel *label = (UILabel *)[_contentTableView viewWithTag:203];
-                label.text = @"男";
+                
+                [[InterfaceSingleton shareInstance].interfaceModel updateUserInfoWithAvatar:nil AndSex:@"1" AndName:nil AndCallBack:^(int state, id data, NSString *msg) {
+                    if(state == 2000){
+                        [MBProgressHUD showSuccess:@"修改成功"];
+                        UILabel *label = (UILabel *)[_contentTableView viewWithTag:203];
+                        label.text = @"男";
+                    }else{
+                        [MBProgressHUD showSuccess:msg];
+                    }
+                    
+                   
+
+                }];
+                
             }
                 break;
             case 1:{
-                UILabel *label = (UILabel *)[_contentTableView viewWithTag:203];
-                label.text = @"女";
-            }
+                
+                [[InterfaceSingleton shareInstance].interfaceModel updateUserInfoWithAvatar:nil AndSex:@"2" AndName:nil AndCallBack:^(int state, id data, NSString *msg) {
+                    if(state == 2000){
+                        [MBProgressHUD showSuccess:@"修改成功"];
+                        UILabel *label = (UILabel *)[_contentTableView viewWithTag:203];
+                        label.text = @"女";
+                    }else{
+                        [MBProgressHUD showSuccess:msg];
+                    }
+                }];
+                            }
                 break;
                 
             default:
@@ -439,6 +544,11 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     UIImage *newImage = [info objectForKey:@"UIImagePickerControllerEditedImage"];
+    
+    if(newImage!=nil){
+    
+        [self uploadWithImage:newImage];
+    }
 //    UIImage *resizeImage = [newImage imageEqualRatioScaledToSize:CGSizeMake(150, 150)];
 //    [self savaClicked:resizeImage];
     [picker dismissViewControllerAnimated:YES completion:nil];

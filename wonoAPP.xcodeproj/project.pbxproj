@@ -85,6 +85,11 @@
 		A8A11D561F1DF058008CA39A /* WSDatePickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A8A11D521F1DF058008CA39A /* WSDatePickerView.xib */; };
 		A8A11D5A1F1EEAE3008CA39A /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A11D591F1EEAE3008CA39A /* MapViewController.m */; };
 		A8A11D5E1F1F5E72008CA39A /* RegeistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A11D5D1F1F5E72008CA39A /* RegeistViewController.m */; };
+		A8A5018C1F53C30200595B67 /* BBFlashCtntLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A5018B1F53C30200595B67 /* BBFlashCtntLabel.m */; };
+		A8A5018F1F53F3BD00595B67 /* ToAskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A5018E1F53F3BD00595B67 /* ToAskViewController.m */; };
+		A8A501971F54FDF900595B67 /* HDQiNiuOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A501921F54FDF900595B67 /* HDQiNiuOperation.m */; };
+		A8A501981F54FDF900595B67 /* QNOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A501941F54FDF900595B67 /* QNOperation.m */; };
+		A8A501991F54FDF900595B67 /* QNUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A501961F54FDF900595B67 /* QNUploader.m */; };
 		A8A94F621F41856E00D9BBA2 /* MainTempModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F611F41856E00D9BBA2 /* MainTempModel.m */; };
 		A8A94F671F428BAD00D9BBA2 /* PengModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F661F428BAD00D9BBA2 /* PengModel.m */; };
 		A8A94F6A1F42A40F00D9BBA2 /* PengTypeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F691F42A40F00D9BBA2 /* PengTypeModel.m */; };
@@ -336,6 +341,16 @@
 		A8A11D591F1EEAE3008CA39A /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		A8A11D5C1F1F5E72008CA39A /* RegeistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegeistViewController.h; sourceTree = "<group>"; };
 		A8A11D5D1F1F5E72008CA39A /* RegeistViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegeistViewController.m; sourceTree = "<group>"; };
+		A8A5018A1F53C30200595B67 /* BBFlashCtntLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBFlashCtntLabel.h; sourceTree = "<group>"; };
+		A8A5018B1F53C30200595B67 /* BBFlashCtntLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBFlashCtntLabel.m; sourceTree = "<group>"; };
+		A8A5018D1F53F3BD00595B67 /* ToAskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToAskViewController.h; sourceTree = "<group>"; };
+		A8A5018E1F53F3BD00595B67 /* ToAskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToAskViewController.m; sourceTree = "<group>"; };
+		A8A501911F54FDF900595B67 /* HDQiNiuOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HDQiNiuOperation.h; sourceTree = "<group>"; };
+		A8A501921F54FDF900595B67 /* HDQiNiuOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HDQiNiuOperation.m; sourceTree = "<group>"; };
+		A8A501931F54FDF900595B67 /* QNOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QNOperation.h; sourceTree = "<group>"; };
+		A8A501941F54FDF900595B67 /* QNOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QNOperation.m; sourceTree = "<group>"; };
+		A8A501951F54FDF900595B67 /* QNUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QNUploader.h; sourceTree = "<group>"; };
+		A8A501961F54FDF900595B67 /* QNUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QNUploader.m; sourceTree = "<group>"; };
 		A8A94F601F41856E00D9BBA2 /* MainTempModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTempModel.h; sourceTree = "<group>"; };
 		A8A94F611F41856E00D9BBA2 /* MainTempModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTempModel.m; sourceTree = "<group>"; };
 		A8A94F651F428BAD00D9BBA2 /* PengModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PengModel.h; sourceTree = "<group>"; };
@@ -545,6 +560,8 @@
 		A82469FA1F14625600CFD65A /* Support Tools */ = {
 			isa = PBXGroup;
 			children = (
+				A8A501901F54FDE900595B67 /* QiNiu */,
+				A8A501871F53C2DC00595B67 /* 滚动label */,
 				A8C0D9F61F4BE29F000AD2D8 /* UITableView+JRTableViewPlaceHolder.h */,
 				A8C0D9F71F4BE29F000AD2D8 /* UITableView+JRTableViewPlaceHolder.m */,
 				A821F5521F3442E60040846E /* KBTabbar.h */,
@@ -644,6 +661,8 @@
 				A8A11D3E1F1C69ED008CA39A /* view */,
 				A8246A131F146F0100CFD65A /* WonoCircleViewController.h */,
 				A8246A141F146F0100CFD65A /* WonoCircleViewController.m */,
+				A8A5018D1F53F3BD00595B67 /* ToAskViewController.h */,
+				A8A5018E1F53F3BD00595B67 /* ToAskViewController.m */,
 			);
 			name = "沃农圈";
 			sourceTree = "<group>";
@@ -806,6 +825,28 @@
 			children = (
 			);
 			name = WSDaePickerView;
+			sourceTree = "<group>";
+		};
+		A8A501871F53C2DC00595B67 /* 滚动label */ = {
+			isa = PBXGroup;
+			children = (
+				A8A5018A1F53C30200595B67 /* BBFlashCtntLabel.h */,
+				A8A5018B1F53C30200595B67 /* BBFlashCtntLabel.m */,
+			);
+			name = "滚动label";
+			sourceTree = "<group>";
+		};
+		A8A501901F54FDE900595B67 /* QiNiu */ = {
+			isa = PBXGroup;
+			children = (
+				A8A501911F54FDF900595B67 /* HDQiNiuOperation.h */,
+				A8A501921F54FDF900595B67 /* HDQiNiuOperation.m */,
+				A8A501931F54FDF900595B67 /* QNOperation.h */,
+				A8A501941F54FDF900595B67 /* QNOperation.m */,
+				A8A501951F54FDF900595B67 /* QNUploader.h */,
+				A8A501961F54FDF900595B67 /* QNUploader.m */,
+			);
+			name = QiNiu;
 			sourceTree = "<group>";
 		};
 		A8ADF1561F0F841100781E06 = {
@@ -1176,6 +1217,7 @@
 				A821F5321F31B1270040846E /* ChangePswViewController.m in Sources */,
 				A8A11D421F1C6A29008CA39A /* WonoCircleTableViewCell.m in Sources */,
 				A8A11D351F189F1B008CA39A /* BaseViewController.m in Sources */,
+				A8A5018F1F53F3BD00595B67 /* ToAskViewController.m in Sources */,
 				A8C0D9FB1F4C11ED000AD2D8 /* MapSearchViewController.m in Sources */,
 				A821F52C1F3177CC0040846E /* AboutViewController.m in Sources */,
 				A8ADF16A1F0F841200781E06 /* ViewController.m in Sources */,
@@ -1194,6 +1236,7 @@
 				A8C0D9EB1F4A70FE000AD2D8 /* PlantAddModel.m in Sources */,
 				A8A94F7F1F46E3C700D9BBA2 /* AddDetailModel.m in Sources */,
 				A8A11D551F1DF058008CA39A /* WSDatePickerView.m in Sources */,
+				A8A501971F54FDF900595B67 /* HDQiNiuOperation.m in Sources */,
 				A8ADF1671F0F841200781E06 /* AppDelegate.m in Sources */,
 				A821F4B91F25E6900040846E /* CABasicAnimation+Category.m in Sources */,
 				A8A11D451F1C7FCB008CA39A /* WonoCircleModel.m in Sources */,
@@ -1227,9 +1270,11 @@
 				A821F4BB1F25E6900040846E /* LoadingView.m in Sources */,
 				A8246A221F14710C00CFD65A /* BaseTabBarController.m in Sources */,
 				A821F5601F34754A0040846E /* UIImageView+ForScrollView.m in Sources */,
+				A8A501991F54FDF900595B67 /* QNUploader.m in Sources */,
 				A821F51D1F2EE1A10040846E /* ZhiBaoViewController.m in Sources */,
 				A8A11D5A1F1EEAE3008CA39A /* MapViewController.m in Sources */,
 				A821F5231F2F06A30040846E /* TempCViewController.m in Sources */,
+				A8A501981F54FDF900595B67 /* QNOperation.m in Sources */,
 				A821F5291F3012230040846E /* PointModel.m in Sources */,
 				A821F4FE1F288D6A0040846E /* SetModel.m in Sources */,
 				A821F5081F29BE790040846E /* CDZPickerComponentObject.m in Sources */,
@@ -1247,6 +1292,7 @@
 				A8A94F731F4562CD00D9BBA2 /* MainPlantModel.m in Sources */,
 				A8246A121F146EE400CFD65A /* MineViewController.m in Sources */,
 				A89990D71F4EB4A000D15005 /* MyZview2.m in Sources */,
+				A8A5018C1F53C30200595B67 /* BBFlashCtntLabel.m in Sources */,
 				A8A11D531F1DF058008CA39A /* NSDate+Extension.m in Sources */,
 				A821F4AE1F21F4560040846E /* UIImage+Scale.m in Sources */,
 				A821F56F1F386A670040846E /* CustomLabel.m in Sources */,

@@ -7,6 +7,7 @@
 //
 
 #import "StuffTableViewCell.h"
+#import "BBFlashCtntLabel.h"
 
 
 @interface StuffTableViewCell()
@@ -18,10 +19,12 @@
 @property(nonatomic,strong) UIImageView *headImageView;
 @property(nonatomic,strong) UILabel *nameLabel;
 
-@property(nonatomic,strong) UILabel *contentLabel;
+//@property(nonatomic,strong) UILabel *contentLabel;
 
 
 @property (nonatomic,strong) UIButton *hubBtn;
+
+@property (nonatomic,strong) BBFlashCtntLabel *conLabel;
 
 @end
 
@@ -159,17 +162,21 @@
         make.height.equalTo(@(HDAutoHeight(60)));
     }];
     
-    _contentLabel = [[UILabel alloc]init];
-    _contentLabel.text = @"大棚1·大棚2·大棚3";
-    _contentLabel.textColor = UIColorFromHex(0x9fa0a0);
-    _contentLabel.font = [UIFont systemFontOfSize:13];
-    [_ConView addSubview:_contentLabel];
-    [_contentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_nameLabel.mas_right).offset(HDAutoWidth(40));
-        make.centerY.equalTo(_ConView.mas_centerY);
-        make.right.equalTo(_ConView.mas_right).offset(HDAutoWidth(20));
-        make.height.equalTo(@(HDAutoHeight(60)));
-    }];
+    [_nameLabel layoutIfNeeded];
+    [_ConView layoutIfNeeded];
+    [self layoutIfNeeded];
+    _conLabel = [[BBFlashCtntLabel alloc]initWithFrame:CGRectMake(_nameLabel.x+_nameLabel.width+HDAutoWidth(40), _nameLabel.y, HDAutoWidth(400), HDAutoHeight(60))];
+    _conLabel.text = @"大棚1·大棚2·大棚3";
+    _conLabel.speed = -1;
+    _conLabel.textColor = UIColorFromHex(0x9fa0a0);
+    _conLabel.font = [UIFont systemFontOfSize:13];
+    [_ConView addSubview:_conLabel];
+//    [_conLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(_nameLabel.mas_right).offset(HDAutoWidth(40));
+//        make.centerY.equalTo(_ConView.mas_centerY);
+//        make.right.equalTo(_ConView.mas_right).offset(HDAutoWidth(20));
+//        make.height.equalTo(@(HDAutoHeight(60)));
+//    }];
     
     
     
@@ -184,7 +191,7 @@
     [_headImageView sd_setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"选中-农场主"]];
     _nameLabel.text = _searchModel.name;
     
-    _contentLabel.text = _searchModel.phoneNum;
+    _conLabel.text = _searchModel.phoneNum;
     
 }
 

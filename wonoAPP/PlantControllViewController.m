@@ -67,6 +67,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     [self createWork];
     // Do any additional setup after loading the view.
+    [self requestData];
     
     
 }
@@ -121,7 +122,13 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
-    [self requestData];
+    
+    _plantTableView.alpha = 0;
+    [UIView animateWithDuration:0.5 animations:^{
+        _plantTableView.alpha = 1;
+    }];
+    
+//    [self requestData];
 //    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 -(void)setBtn{
@@ -139,8 +146,9 @@
 }
 
 -(void)createTabelview{
-    
-    _plantTableView = [[UITableView alloc]initWithFrame:self.view.frame style:UITableViewStyleGrouped];
+    [_headView layoutIfNeeded];
+    [self.view layoutIfNeeded];
+    _plantTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, _headView.y+5, SCREEN_WIDTH, SCREEN_HEIGHT - _headView.y-5 -49) style:UITableViewStyleGrouped];
 //    [_plantTableView registerClass:[PlantCell class] forHeaderFooterViewReuseIdentifier:@"plantCell"];
     _plantTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 //    _plantTableView.allowsSelection = NO;
@@ -166,7 +174,7 @@
     [self.view layoutIfNeeded];
     [_plantTableView layoutIfNeeded];
     [_plantTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
-        [_plantTableView setScrollEnabled:NO];
+//        [_plantTableView setScrollEnabled:NO];
         UIView *view = [[UIView alloc]initWithFrame:_plantTableView.bounds];
         view.backgroundColor = [UIColor whiteColor];
         
@@ -178,6 +186,7 @@
         label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(390), 300, HDAutoHeight(60));
         [view addSubview:label];
         
+        
         return view;
     } normalBlock:^(UITableView * _Nonnull sender) {
         [_plantTableView setScrollEnabled:YES];
@@ -188,22 +197,28 @@
 -(void)refresh{
     NSLog(@"下拉刷新");
     Count = 1;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if([type isEqualToString:@"0"]){
-            [self requestData];
-        }else if ([type isEqualToString:@"1"]){
-            [self requestDataWithStufStr:typeContent];
-        }else if ([type isEqualToString:@"2"]){
-            [self requestDataWithTime:typeContent];
-        }
-        [_plantTableView.mj_header endRefreshing];
-    });
+    [_plantTableView.mj_header beginRefreshing];
+    if([type isEqualToString:@"0"]){
+        [self requestData];
+    }else if ([type isEqualToString:@"1"]){
+        [self requestDataWithStufStr:typeContent];
+    }else if ([type isEqualToString:@"2"]){
+        [self requestDataWithTime:typeContent];
+    }
+    
+    
+//    [_plantTableView.mj_header endRefreshing];
+//    [_plantTableView.mj_footer endRefreshing];
+    
+//    [self.view layoutIfNeeded];
+//    [_plantTableView layoutIfNeeded];
+
 
 }
 -(void)loadMore{
     NSLog(@"上拉加载");
     Count++;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if([type isEqualToString:@"0"]){
             [self requestData];
         }else if ([type isEqualToString:@"1"]){
@@ -211,8 +226,8 @@
         }else if ([type isEqualToString:@"2"]){
             [self requestDataWithTime:typeContent];
         }
-        [_plantTableView.mj_footer endRefreshing];
-    });
+    
+//    });
 
     
 }
@@ -456,6 +471,9 @@
         rightBtn.backgroundColor = UIColorFromHex(0x4db366);
         
     }];
+    NSDate *date = [NSDate date];
+    _datepicker.maxLimitDate = date;
+    
     if(_SelDate != nil){
         [_datepicker getNowDate:_SelDate animated:YES];
     }
@@ -528,8 +546,12 @@
     }
     
     [[InterfaceSingleton shareInstance].interfaceModel getMainPlantWithModel:model WithCallBack:^(int state, id data, NSString *msg) {
+        [_plantTableView.mj_header endRefreshing];
+        [_plantTableView.mj_footer endRefreshing];
         if(state == 2000){
             NSLog(@"成功");
+            
+
             NSArray *arr = data[@"data"];
             for (int i = 0 ; i<arr.count; i++) {
                 
@@ -567,6 +589,35 @@
             
             _plantTableView.mj_footer.hidden = NO;
             [_plantTableView reloadData];
+            
+        }else{
+            
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [self.view layoutIfNeeded];
+                [_plantTableView layoutIfNeeded];
+                [_plantTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
+                    //                [_plantTableView setScrollEnabled:NO];
+                    UIView *view = [[UIView alloc]initWithFrame:_plantTableView.bounds];
+                    view.backgroundColor = [UIColor whiteColor];
+                    
+                    UILabel *label = [[UILabel alloc]init];
+                    label.text = @"暂无数据";
+                    label.font = [UIFont systemFontOfSize:16];
+                    label.textColor = MainColor;
+                    label.textAlignment = NSTextAlignmentCenter;
+                    label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(390), 300, HDAutoHeight(60));
+                    [view addSubview:label];
+                    
+                    
+                    return view;
+                } normalBlock:^(UITableView * _Nonnull sender) {
+                    [_plantTableView setScrollEnabled:YES];
+                }];
+                [_plantTableView reloadData];
+
+            });
             
         }
         if(state<2000){
@@ -660,8 +711,11 @@
     }
     
     [[InterfaceSingleton shareInstance].interfaceModel getMainPlantWithModel:model WithCallBack:^(int state, id data, NSString *msg) {
+        [_plantTableView.mj_header endRefreshing];
+        [_plantTableView.mj_footer endRefreshing];
         if(state == 2000){
             NSLog(@"成功");
+
             NSArray *arr = data[@"data"];
             for (int i = 0 ; i<arr.count; i++) {
                 
@@ -698,6 +752,32 @@
             
             [_plantTableView reloadData];
             
+        }else{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [self.view layoutIfNeeded];
+                [_plantTableView layoutIfNeeded];
+                [_plantTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
+                    //                [_plantTableView setScrollEnabled:NO];
+                    UIView *view = [[UIView alloc]initWithFrame:_plantTableView.bounds];
+                    view.backgroundColor = [UIColor whiteColor];
+                    
+                    UILabel *label = [[UILabel alloc]init];
+                    label.text = @"暂无数据";
+                    label.font = [UIFont systemFontOfSize:16];
+                    label.textColor = MainColor;
+                    label.textAlignment = NSTextAlignmentCenter;
+                    label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(390), 300, HDAutoHeight(60));
+                    [view addSubview:label];
+                    
+                    
+                    return view;
+                } normalBlock:^(UITableView * _Nonnull sender) {
+                    [_plantTableView setScrollEnabled:YES];
+                }];
+                [_plantTableView reloadData];
+                
+            });
         }
         if(state<2000){
             [MBProgressHUD showSuccess:msg];
@@ -727,10 +807,19 @@
     if(Count == 1){
         dataArr = [NSMutableArray array];
     }
+//    UIView *view = (UIView *)[_plantTableView viewWithTag:450];
+//    
+//    UILabel *label = (UILabel *)[view viewWithTag:444];
+//    label.text = @"暂无数据，请重试。";
+    
+   
     
     [[InterfaceSingleton shareInstance].interfaceModel getMainPlantWithModel:model WithCallBack:^(int state, id data, NSString *msg) {
+        [_plantTableView.mj_header endRefreshing];
+        [_plantTableView.mj_footer endRefreshing];
         if(state == 2000){
             NSLog(@"成功");
+
             NSArray *arr = data[@"data"];
             for (int i = 0 ; i<arr.count; i++) {
                 
@@ -767,7 +856,38 @@
             
             [_plantTableView reloadData];
             
+        }else{
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [self.view layoutIfNeeded];
+                [_plantTableView layoutIfNeeded];
+                [_plantTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
+                    //                [_plantTableView setScrollEnabled:NO];
+                    UIView *view = [[UIView alloc]initWithFrame:_plantTableView.bounds];
+                    view.backgroundColor = [UIColor whiteColor];
+                    
+                    UILabel *label = [[UILabel alloc]init];
+                    label.text = @"暂无数据";
+                    label.font = [UIFont systemFontOfSize:16];
+                    label.textColor = MainColor;
+                    label.textAlignment = NSTextAlignmentCenter;
+                    label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(390), 300, HDAutoHeight(60));
+                    [view addSubview:label];
+                    
+                    
+                    return view;
+                } normalBlock:^(UITableView * _Nonnull sender) {
+                    [_plantTableView setScrollEnabled:YES];
+                }];
+                [_plantTableView reloadData];
+                
+            });
+
+            
         }
+        
+        
         if(state<2000){
             [MBProgressHUD showSuccess:msg];
         }

@@ -27,6 +27,11 @@
 
 @property (nonatomic,strong) UILabel *secTitleLabel;
 
+@property (nonatomic,strong) UIView *mainView;
+
+@property (nonatomic,strong) UIButton *needBtn;
+
+@property (nonatomic,strong) UILabel *MLabel;
 
 @end
 
@@ -56,11 +61,30 @@
     [self RequestYueNian];
     [self RequestYueNian2];
     [self requestTotalData];
+    
+    _mainView = [[UIView alloc]initWithFrame:CGRectMake(0, 40, SCREEN_WIDTH, HDAutoHeight(150))];
+    _mainView.backgroundColor = [UIColor whiteColor];
+    
+    UILabel *label = [[UILabel alloc]init];
+    label.text = @"加载数据中...";
+    label.font = [UIFont systemFontOfSize:16];
+    label.textColor = MainColor;
+    label.textAlignment = NSTextAlignmentCenter;
+    label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(390), 300, HDAutoHeight(60));
+    
+    [_mainView addSubview:label];
+    _MLabel = label;
+    
+    [_mainScroll addSubview:_mainView];
+    
+
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
+    
 //    [self requestData];
     //    [self.navigationController setNavigationBarHidden:NO animated:YES];
    
@@ -117,13 +141,38 @@
 //    _mainScroll.backgroundColor = [UIColor redColor];
     _mainScroll.frame = CGRectMake(0, 64, SCREEN_WIDTH, SCREEN_HEIGHT-64-49);
     [self.view addSubview:_mainScroll];
+    
+    MJRefreshGifHeader *header = [MJRefreshGifHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
+    
+    
+    [header setTitle:@"下拉可以刷新" forState:MJRefreshStateIdle];
+    [header setTitle:@"松开立即刷新" forState:MJRefreshStatePulling];
+    [header setTitle:@"正在刷新..." forState:MJRefreshStateRefreshing];
+    
+   
+    _mainScroll.mj_header = header;
+}
+-(void)refresh{
+    [_mainScroll.mj_header beginRefreshing];
+    _MLabel.text = @"加载数据中...";
+    
+    [self requestCircleData];
+    [self RequestYueNian];
+    [self RequestYueNian2];
+    [self requestTotalData];
+    
+    
+
 }
 
 -(void)requestCircleData{
     NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
     [[InterfaceSingleton shareInstance].interfaceModel GetjiWithFid:str WithCallBack:^(int state, id data, NSString *msg) {
+        [_mainScroll.mj_header endRefreshing];
         if(state == 2000){
             NSLog(@"成功");
+            
+            _mainView.alpha = 0;
             
             lineData = [NSMutableArray array];
             
@@ -184,6 +233,15 @@
             botView.frame = CGRectMake(0, 255, SCREEN_WIDTH, 1);
             [_mainScroll addSubview:botView];
             
+            _mainScroll.alpha = 0;
+            [UIView animateWithDuration:0.5 animations:^{
+                _mainScroll.alpha = 1;
+            }];
+            
+            
+            
+        }else{
+            _MLabel.text = @"暂无数据";
         }
         if(state<2000){
             [MBProgressHUD showSuccess:msg];
@@ -199,6 +257,8 @@
     _secTitleLabel.font = [UIFont systemFontOfSize:14];
     _secTitleLabel.frame = CGRectMake(HDAutoWidth(25), 255+HDAutoHeight(20), HDAutoWidth(250), HDAutoHeight(60));
     
+    _secTitleLabel.alpha = 0;
+    
     [_mainScroll addSubview:_secTitleLabel];
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn addTarget:self action:@selector(changeClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -208,9 +268,15 @@
     btn.imageView.contentMode = UIViewContentModeScaleAspectFit;
     btn.selected = NO;
     [_mainScroll addSubview:btn];
+    
+    btn.alpha = 0;
+    _needBtn = btn;
+
 }
 -(void)changeClick:(UIButton *)btn{
-    
+    [MobClick startSession:nil];
+    [MobClick event:@"check"];
+//    [MobClick event:@"login" durations:10];
     MyPieView *pie1 = [_mainScroll viewWithTag:301];
     MyPieView *pie2 = [_mainScroll viewWithTag:302];
     MyPieView *pie3 = [_mainScroll viewWithTag:401];
@@ -249,6 +315,17 @@
     NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
     [[InterfaceSingleton shareInstance].interfaceModel GetNianWithFid:str AndType:@"1" WithCallBack:^(int state, id data, NSString *msg) {
         if(state == 2000){
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [UIView animateWithDuration:0.5 animations:^{
+                    _secTitleLabel.alpha = 1;
+                    _needBtn.alpha = 1;
+                }];
+
+            });
+            
+            
             NSLog(@"成功");
             NSDictionary *dic = data;
             NSArray *arr1 = dic[@"in"];
@@ -274,13 +351,25 @@
             model.amountArr = amountArr;
             model.total = total;
             
-            MyPieView *pieV = [[MyPieView alloc]init];
+            dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC);
             
-            pieV.tag = 301;
-            
-            pieV.frame = CGRectMake(0, 255+HDAutoHeight(80), SCREEN_WIDTH, HDAutoHeight(450));
-            pieV.model = model;
-            [_mainScroll addSubview:pieV];
+            dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+                
+                MyPieView *pieV = (MyPieView *)[self.view viewWithTag:301];
+                
+                if(pieV != nil){
+                    [pieV removeFromSuperview];
+                }
+                
+                pieV = [[MyPieView alloc]init];
+                
+                pieV.tag = 301;
+                
+                pieV.frame = CGRectMake(0, 255+HDAutoHeight(80), SCREEN_WIDTH, HDAutoHeight(450));
+                pieV.model = model;
+                [_mainScroll addSubview:pieV];
+            });
+           
             
             PercentModel *model2 = [[PercentModel alloc]init];
             nameArr = [NSMutableArray array];
@@ -310,21 +399,34 @@
             [mulColorArr addObject:color3];
             model2.colorArr = mulColorArr;
             
-            MyPieView *pieV2 = [[MyPieView alloc]init];
-            
-            pieV2.tag = 302;
-            
-            pieV2.frame = CGRectMake(0, 255+HDAutoHeight(530), SCREEN_WIDTH, HDAutoHeight(450));
-            pieV2.model = model2;
-            [_mainScroll addSubview:pieV2];
             
             
             
-            UIView *botView = [[UIView alloc]init];
-            botView.backgroundColor = [UIColor grayColor];
-            botView.alpha = 0.3;
-            botView.frame = CGRectMake(0, 255+HDAutoHeight(530)+HDAutoHeight(450), SCREEN_WIDTH, 1);
-            [_mainScroll addSubview:botView];
+            dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+                
+                MyPieView *pieV2 = (MyPieView *)[self.view viewWithTag:302];
+                
+                if(pieV2 != nil){
+                    [pieV2 removeFromSuperview];
+                }
+                
+                pieV2 = [[MyPieView alloc]init];
+                
+                pieV2.tag = 302;
+                
+                pieV2.frame = CGRectMake(0, 255+HDAutoHeight(530), SCREEN_WIDTH, HDAutoHeight(450));
+                pieV2.model = model2;
+                [_mainScroll addSubview:pieV2];
+                UIView *botView = [[UIView alloc]init];
+                botView.backgroundColor = [UIColor grayColor];
+                botView.alpha = 0.3;
+                botView.frame = CGRectMake(0, 255+HDAutoHeight(530)+HDAutoHeight(450), SCREEN_WIDTH, 1);
+                [_mainScroll addSubview:botView];
+
+            });
+
+            
+           
             
 //            _mainScroll.contentSize = CGSizeMake(SCREEN_WIDTH, 255+HDAutoHeight(530)+HDAutoHeight(450)+10);
         }
@@ -365,13 +467,23 @@
             model.nameArr = nameArr;
             model.amountArr = amountArr;
             model.total = total;
+             dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC);
+            dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+
+                MyPieView *pieV = (MyPieView *)[self.view viewWithTag:401];
+                
+                if(pieV != nil){
+                    [pieV removeFromSuperview];
+                }
+                
+                pieV = [[MyPieView alloc]init];
+                pieV.tag = 401;
+                
+                pieV.frame = CGRectMake(SCREEN_WIDTH, 255+HDAutoHeight(80), SCREEN_WIDTH, HDAutoHeight(450));
+                pieV.model = model;
+                [_mainScroll addSubview:pieV];
+            });
             
-            MyPieView *pieV = [[MyPieView alloc]init];
-            pieV.tag = 401;
-            
-            pieV.frame = CGRectMake(SCREEN_WIDTH, 255+HDAutoHeight(80), SCREEN_WIDTH, HDAutoHeight(450));
-            pieV.model = model;
-            [_mainScroll addSubview:pieV];
             
             PercentModel *model2 = [[PercentModel alloc]init];
             nameArr = [NSMutableArray array];
@@ -401,7 +513,13 @@
             [mulColorArr addObject:color3];
             model2.colorArr = mulColorArr;
             
-            MyPieView *pieV2 = [[MyPieView alloc]init];
+            MyPieView *pieV2 = (MyPieView *)[self.view viewWithTag:402];
+            
+            if(pieV2 != nil){
+                [pieV2 removeFromSuperview];
+            }
+            
+            pieV2 = [[MyPieView alloc]init];
             
             pieV2.tag = 402;
             
@@ -451,9 +569,13 @@
             dmodel.nameArr = dnameArr;
             dmodel.amountArr = damountArr;
             dmodel.total = total;
+            MyPieView *dpieV = (MyPieView *)[self.view viewWithTag:501];
             
-            MyPieView *dpieV = [[MyPieView alloc]init];
-            dpieV.tag = 401;
+            if(dpieV != nil){
+                [dpieV removeFromSuperview];
+            }
+            dpieV = [[MyPieView alloc]init];
+            dpieV.tag = 501;
             
             dpieV.frame = CGRectMake(0, 255+HDAutoHeight(530)+HDAutoHeight(460), SCREEN_WIDTH, HDAutoHeight(450));
             dpieV.model = dmodel;
@@ -492,8 +614,14 @@
             model.amountArr = amountArr;
             model.total = total;
             
-            MyPieView *pieV = [[MyPieView alloc]init];
-            pieV.tag = 401;
+            MyPieView *pieV = (MyPieView *)[self.view viewWithTag:502];
+            
+            if(pieV != nil){
+                [pieV removeFromSuperview];
+            }
+            
+            pieV = [[MyPieView alloc]init];
+            pieV.tag = 502;
             
             pieV.frame = CGRectMake(0, 255+HDAutoHeight(530)+HDAutoHeight(460)+HDAutoHeight(460), SCREEN_WIDTH, HDAutoHeight(450));
             pieV.model = model;
@@ -527,9 +655,15 @@
 //            [mulColorArr addObject:color3];
 //            model2.colorArr = mulColorArr;
             
-            MyPieView *pieV2 = [[MyPieView alloc]init];
+            MyPieView *pieV2 = (MyPieView *)[self.view viewWithTag:503];
             
-            pieV2.tag = 402;
+            if(pieV2 != nil){
+                [pieV2 removeFromSuperview];
+            }
+            
+            pieV2 = [[MyPieView alloc]init];
+            
+            pieV2.tag = 503;
             
             pieV2.frame = CGRectMake(0, 255+HDAutoHeight(530)+HDAutoHeight(460)+HDAutoHeight(450)+HDAutoHeight(460), SCREEN_WIDTH, HDAutoHeight(450));
             pieV2.model = model2;

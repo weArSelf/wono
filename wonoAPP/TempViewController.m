@@ -141,7 +141,32 @@
         if(state == 2001){
             
             dataArr = [NSMutableArray array];
-            [_contentTabel reloadData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [_contentTabel jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
+                    //        [_plantTableView setScrollEnabled:NO];
+                    UIView *view = [[UIView alloc]initWithFrame:_contentTabel.bounds];
+                    view.backgroundColor = [UIColor whiteColor];
+                    
+                    UILabel *label = [[UILabel alloc]init];
+                    label.text = @"暂无数据";
+                    label.font = [UIFont systemFontOfSize:16];
+                    label.textColor = MainColor;
+                    label.textAlignment = NSTextAlignmentCenter;
+                    label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(390), 300, HDAutoHeight(60));
+                    [view addSubview:label];
+                    
+                    
+                    return view;
+                } normalBlock:^(UITableView * _Nonnull sender) {
+                    [_contentTabel setScrollEnabled:YES];
+                }];
+                //            [_plantTableView reloadData];
+                
+                
+                [_contentTabel reloadData];
+            });
+           
             return;
         }
         
@@ -484,6 +509,7 @@
 -(void)setTempClick{
     NSLog(@"点击设置预警值");
     SetTempViewController *cont = [[SetTempViewController alloc]init];
+    cont.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:cont animated:YES];
     
 }
@@ -507,6 +533,8 @@
         make.top.equalTo(_tempControlLabel.mas_bottom).offset(HDAutoHeight(8));
         make.bottom.equalTo(self.view.mas_bottom);
     }];
+    
+    
     
     //    _wonoTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
     //    _wonoTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMore)];

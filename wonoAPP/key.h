@@ -57,4 +57,11 @@
 #define API_Getnian                         @"plant/bill"
 #define API_Getzong                         @"plant/bill/greens"
 
+#define API_ForgetPwd                       @"auth/forget/password"
+
+#define API_GetQiNiuToken                   @"qiniu/token"
+
+#define API_RefreshUser                     @"user/update"
+#define API_GetUser                         @"user"
+
 #endif /* key_h */

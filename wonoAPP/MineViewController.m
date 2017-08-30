@@ -17,6 +17,7 @@
 #import "PengViewController.h"
 #import "MyFarmViewController.h"
 #import "MyCollectionViewController.h"
+#import <SDWebImage/UIButton+WebCache.h>
 
 @interface MineViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -44,12 +45,44 @@
     [self creatTitleAndBackBtn];
     [self createHead];
     [self createTable];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    [self requestData];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
+}
+
+-(void)requestData{
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getUserInfoWithCallBack:^(int state, id data, NSString *msg) {
+      
+        if(state == 2000){
+            
+            NSLog(@"成功");
+            
+            NSDictionary *dic = data;
+            NSString *imageUrl = dic[@"avatar"];
+            
+            NSString *name = dic[@"username"];
+            
+            _nameLabel.text = name;
+            
+            NSURL *ur = [NSURL URLWithString:imageUrl];
+            
+            [self.headImgBtn sd_setImageWithURL:ur forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"默认头像"]];
+            
+//            [_headImgBtn setImage:[UIImage imageNamed:@"默认头像"] forState:UIControlStateNormal];
+            
+            
+        
+        }else{
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
+
 }
 
 
@@ -72,9 +105,11 @@
     _headImgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _headImgBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
 //    _headImgBtn.image = [UIImage imageNamed:@"选中-农场主"];
-    [_headImgBtn setImage:[UIImage imageNamed:@"选中-农场主"] forState:UIControlStateNormal];
+    [_headImgBtn setImage:[UIImage imageNamed:@"默认头像"] forState:UIControlStateNormal];
     [_headImgBtn addTarget:self action:@selector(selImg) forControlEvents:UIControlEventTouchUpInside];
     _headImgBtn.layer.cornerRadius = HDAutoHeight(70);
+    _headImgBtn.layer.masksToBounds = YES;
+    _headImgBtn.imageView.contentMode = UIViewContentModeScaleToFill;
     [_headView addSubview:_headImgBtn];
     [_headImgBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(_headView.mas_centerX);
@@ -83,17 +118,17 @@
         make.height.equalTo(@(HDAutoHeight(140)));
     }];
     _nameLabel = [[UILabel alloc]init];
-    _nameLabel.text = @"昵称";
-    _nameLabel.font = [UIFont systemFontOfSize:13];
-    _nameLabel.textColor = UIColorFromHex(0x4db366);
+    _nameLabel.text = @"";
+    _nameLabel.font = [UIFont systemFontOfSize:14];
+    _nameLabel.textColor = [UIColor grayColor];
     _nameLabel.backgroundColor = [UIColor clearColor];
     _nameLabel.textAlignment = NSTextAlignmentCenter;
     [_headView addSubview:_nameLabel];
     [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(_headView.mas_centerX);
         make.width.equalTo(@(100));
-        make.height.equalTo(@(HDAutoHeight(50)));
-        make.bottom.equalTo(_headView.mas_bottom).offset(-HDAutoHeight(10));
+        make.height.equalTo(@(HDAutoHeight(40)));
+        make.bottom.equalTo(_headView.mas_bottom).offset(-HDAutoHeight(5));
     }];
 }
 

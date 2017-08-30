@@ -76,4 +76,12 @@ typedef void(^AllCallBack)(int state, id data, NSString *msg);
 
 -(void)GetZongWithFid:(NSString *)fid WithCallBack:(AllCallBack)callback;
 
+-(void)forgetPwdWithMobile:(NSString *)mobile AndMessage:(NSString *)msg AndPwd:(NSString *)password WithCallBack:(AllCallBack)callback;
+
+-(void)getQiNiuTokenWithCallBack:(AllCallBack)callback;
+
+-(void)updateUserInfoWithAvatar:(NSString *)ava AndSex:(NSString *)sex AndName:(NSString *)name AndCallBack:(AllCallBack)callback;
+
+-(void)getUserInfoWithCallBack:(AllCallBack)callback;
+
 @end

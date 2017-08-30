@@ -9,7 +9,7 @@
 #import "ChangeNameViewController.h"
 
 
-@interface ChangeNameViewController ()
+@interface ChangeNameViewController ()<UITextFieldDelegate>
 
 @property (nonatomic,strong)UIView *headView;
 @property (nonatomic,strong)UILabel *titleLabel;
@@ -32,6 +32,10 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     [self createTextField];
+    
+    _nextBtn.enabled = NO;
+    [_nextBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+//    _nextBtn.titleLabel.textColor = [UIColor grayColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -115,14 +119,45 @@
         make.height.equalTo(@(HDAutoHeight(26)));
         make.width.equalTo(@(HDAutoWidth(150)));
     }];
+    
 }
 
 -(void)SaveClick{
     NSLog(@"点击确认修改");
+    if([_nameTextField.text isEqualToString:@""]){
+        [MBProgressHUD showSuccess:@"昵称不能为空"];
+        return;
+    }
+    [[InterfaceSingleton shareInstance].interfaceModel updateUserInfoWithAvatar:nil AndSex:nil AndName:_nameTextField.text AndCallBack:^(int state, id data, NSString *msg) {
+       
+        if(state == 2000){
+            [MBProgressHUD showSuccess:@"修改成功"];
+            if([self.delegate respondsToSelector:@selector(nameChangedWithName:)]){
+                [self.delegate nameChangedWithName:_nameTextField.text];
+            }
+            
+            [self.navigationController popViewControllerAnimated:YES];
+        }else{
+            
+            [MBProgressHUD showSuccess:msg];
+            
+        }
+        
+        
+    }];
+    
+    
+}
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    [_nameTextField resignFirstResponder];
+    
 }
 
 -(void)createTextField{
     _nameTextField = [[UITextField alloc]init];
+    
+    _nameTextField.text = _needName;
+    
     _nameTextField.placeholder = @"请输入昵称";
     
     _nameTextField.layer.cornerRadius = 5;
@@ -137,6 +172,8 @@
     
     _nameTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
+    _nameTextField.delegate = self;
+    
     UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, HDAutoWidth(15), HDAutoHeight(70))];
     _nameTextField.leftView = paddingView;
     _nameTextField.leftViewMode = UITextFieldViewModeAlways;
@@ -150,5 +187,43 @@
         make.height.equalTo(@(HDAutoHeight(70)));
     }];
 }
+
+-(void)setNeedName:(NSString *)needName{
+    _needName = needName;
+//    _nameTextField.text = _needName;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    // 当点击键盘的返回键（右下角）时，执行该方法。
+    // 一般用来隐藏键盘
+    [textField resignFirstResponder];
+    //主要是[receiver resignFirstResponder]在哪调用就能把receiver对应的键盘往下收
+    return YES;
+}
+
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;
+{
+    //string就是此时输入的那个字符 textField就是此时正在输入的那个输入框 返回YES就是可以改变输入框的值 NO相反
+    
+    NSString * toBeString = [textField.text stringByReplacingCharactersInRange:range withString:string]; //得到输入框的内容
+    if([toBeString isEqualToString:self.needName]){
+        _nextBtn.enabled = NO;
+        [_nextBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+//        _nextBtn.titleLabel.textColor = [UIColor grayColor];
+    }else{
+        _nextBtn.enabled = YES;
+        [_nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//        _nextBtn.titleLabel.textColor = [UIColor whiteColor];
+    }
+    
+    
+       return YES;
+}
+
+
+
+
 
 @end

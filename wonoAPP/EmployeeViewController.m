@@ -269,7 +269,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *cellIdentifier = @"cellIdentifier";
     StuffTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-//    if (cell == nil) {
+    if (cell == nil) {
         cell = [[StuffTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
@@ -277,68 +277,73 @@
         
         cell.changeMark = changeMark;
         
-        [cell setCellClickBlock:^(StuffTableViewCell *cell){
-//            NSLog(@"%ld", (long)tag);
+               //        [cell setLeftColor:[UIColor blueColor]];
+    }
+    
+    
+    [cell setCellClickBlock:^(StuffTableViewCell *cell){
+        //            NSLog(@"%ld", (long)tag);
+        
+        
+        
+        
+        //            [_stuffTableView reloadData];
+        
+        NSIndexPath *index = [_stuffTableView indexPathForCell:cell];
+        
+        SearchModel *nowModel = dataArr[indexPath.row];
+        //            count--;
+        
+        NSString *title = [NSString stringWithFormat:@"是否删除员工%@?",nowModel.name];
+        
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:title preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            NSLog(@"确定");
             
-          
-            
-            
-//            [_stuffTableView reloadData];
-            
-            NSIndexPath *index = [_stuffTableView indexPathForCell:cell];
-            
-            SearchModel *nowModel = dataArr[indexPath.row];
-//            count--;
-            
-            NSString *title = [NSString stringWithFormat:@"是否删除员工%@?",nowModel.name];
-            
-            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:title preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSLog(@"确定");
-             
-                NSString *fid = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
-                [[InterfaceSingleton shareInstance].interfaceModel farmDeleteEmployeeWithFid:fid AndUid:nowModel.stufID WithCallBack:^(int state, id data, NSString *msg) {
-                    if(state == 2000){
-                        
-                        [MBProgressHUD showSuccess:@"删除成功"];
-                        [dataArr removeObjectAtIndex:indexPath.row];
-                        
-                        
-                        if(dataArr.count == 0){
-                            [_stuffTableView reloadData];
-                        }else{
-                            [_stuffTableView beginUpdates];
-                            [_stuffTableView deleteRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationAutomatic];
-                            [_stuffTableView endUpdates];
-                        }
-                        
+            NSString *fid = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
+            [[InterfaceSingleton shareInstance].interfaceModel farmDeleteEmployeeWithFid:fid AndUid:nowModel.stufID WithCallBack:^(int state, id data, NSString *msg) {
+                if(state == 2000){
+                    
+                    [MBProgressHUD showSuccess:@"删除成功"];
+                    [dataArr removeObjectAtIndex:indexPath.row];
+                    
+                    
+                    if(dataArr.count == 0){
+                        [_stuffTableView reloadData];
+                    }else{
+                        [_stuffTableView beginUpdates];
+                        [_stuffTableView deleteRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        [_stuffTableView endUpdates];
+                        [_stuffTableView reloadData];
                     }
-                    if(state<2000){
-                        [MBProgressHUD showSuccess:msg];
-                    }
-                }];
-
-                
+                    
+                }
+                if(state<2000){
+                    [MBProgressHUD showSuccess:msg];
+                }
             }];
-            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                NSLog(@"取消");
-            }];
-            [alertC addAction:cancel];
-            [alertC addAction:confirm];
-            [self presentViewController:alertC animated:YES completion:nil];
-            
-            
-            
-            
-            
-            
-            
-            
             
             
         }];
-        //        [cell setLeftColor:[UIColor blueColor]];
-//    }
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            NSLog(@"取消");
+        }];
+        [alertC addAction:cancel];
+        [alertC addAction:confirm];
+        [self presentViewController:alertC animated:YES completion:nil];
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    }];
+
+    
     cell.tag = 300 +indexPath.row;
     SearchModel *model = dataArr[indexPath.row];
     cell.searchModel = model;

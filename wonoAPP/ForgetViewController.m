@@ -365,34 +365,16 @@
         return;
     }
     
-    
-    
-    [[InterfaceSingleton shareInstance].interfaceModel userRegisWithUserMobile:_textfPhoneNum.text AndPsw:_textfPassWord.text AndMessageReceive:_verificationCodeTextF.text WithCallBack:^(int state, id data, NSString *msg) {
-        
-        
-        
+    [[InterfaceSingleton shareInstance].interfaceModel forgetPwdWithMobile:_textfPhoneNum.text AndMessage:_verificationCodeTextF.text AndPwd:_textfPassWord.text WithCallBack:^(int state, id data, NSString *msg) {
         if(state == 2000){
-            NSLog(@"成功");
-            [MBProgressHUD showSuccess:@"注册成功"];
-            
-            NSDictionary *dic = (NSDictionary *)data;
-            
-//            NSString *token = dic[@"token"];
-            
-//            [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"token"];
-            
-//            CompleteInfoViewController *com = [[CompleteInfoViewController alloc]init];
-//            
-//            [self.navigationController pushViewController:com animated:YES];
-            
-            //            [self.navigationController popViewControllerAnimated:YES];
-        }else{
+            [MBProgressHUD showSuccess:@"修改密码成功"];
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        if(state<2000){
             [MBProgressHUD showSuccess:msg];
         }
-        
-        NSLog(@"111");
-        
     }];
+    
     
     
     

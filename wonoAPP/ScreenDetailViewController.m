@@ -261,7 +261,9 @@
             
             
         }
-        
+        if(state == 2001){
+            [MBProgressHUD showSuccess:@"暂无员工"];
+        }
         if(state < 2000){
             [MBProgressHUD showSuccess:msg];
         }

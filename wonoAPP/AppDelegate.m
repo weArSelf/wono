@@ -28,6 +28,8 @@
 #import <GeTuiSdk.h>
 #import <UserNotifications/UserNotifications.h>
 
+#import <UMMobClick/MobClick.h>
+
 //#import <BaiduMobStat/BaiduMobStat.h>
 
 @interface AppDelegate ()<UIApplicationDelegate,BMKGeneralDelegate,GeTuiSdkDelegate,UNUserNotificationCenterDelegate>
@@ -100,6 +102,12 @@
     
     
 //    [[BaiduMobStat defaultStat] startWithAppId:Statis_KEY];
+    
+    UMConfigInstance.appKey = @"599fdc4c4544cb433a0009e8";
+    UMConfigInstance.channelId = @"App Store";
+//    UMConfigInstance.eSType = E_UM_GAME; //仅适用于游戏场景，应用统计不用设置
+    
+    [MobClick startWithConfigure:UMConfigInstance];//配置以上参数后调用此方法初始化SDK！
     
     return YES;
 }

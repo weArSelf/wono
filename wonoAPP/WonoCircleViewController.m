@@ -8,6 +8,7 @@
 
 #import "WonoCircleViewController.h"
 #import "WonoCircleTableViewCell.h"
+#import "ToAskViewController.h"
 
 //#import <BaiduMobStat/BaiduMobStat.h>
 
@@ -178,6 +179,10 @@
 
 -(void)workClick{
     NSLog(@"点击了提问");
+    
+    ToAskViewController *asdVC = [[ToAskViewController alloc]init];
+    asdVC.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:asdVC animated:YES];
 }
 
 -(void)creatTitleAndBackBtn{

@@ -712,6 +712,103 @@
     
 }
 
+-(void)forgetPwdWithMobile:(NSString *)mobile AndMessage:(NSString *)msg AndPwd:(NSString *)password WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:mobile forKey:@"mobile"];
+    [param setObject:msg forKey:@"msg_code"];
+    [param setObject:password forKey:@"password"];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_ForgetPwd parameters:param type:ENRT_POST success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+}
 
+-(void)getQiNiuTokenWithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+   
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_GetQiNiuToken parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+
+    
+}
+
+-(void)updateUserInfoWithAvatar:(NSString *)ava AndSex:(NSString *)sex AndName:(NSString *)name AndCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    
+    [param setObject:ava forKey:@"avatar"];
+    [param setObject:sex forKey:@"sex"];
+    [param setObject:name forKey:@"username"];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_RefreshUser parameters:param type:ENRT_POST success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+}
+
+-(void)getUserInfoWithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_GetUser parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+
+    
+}
 
 @end
