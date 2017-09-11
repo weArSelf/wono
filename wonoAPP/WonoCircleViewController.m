@@ -9,6 +9,9 @@
 #import "WonoCircleViewController.h"
 #import "WonoCircleTableViewCell.h"
 #import "ToAskViewController.h"
+#import "ToAnswerViewController.h"
+#import "WonoCircleDetailViewController.h"
+#import "MessageViewController.h"
 
 //#import <BaiduMobStat/BaiduMobStat.h>
 
@@ -26,17 +29,181 @@
 
 @end
 
-@implementation WonoCircleViewController
+@implementation WonoCircleViewController{
+    
+    NSMutableArray *dataArr;
+    int page;
+    
+    BOOL ChangeMark;
+    
+    NSMutableArray *askArr;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    ChangeMark = true;
+    page = 1;
+    dataArr = [NSMutableArray array];
+    askArr = [NSMutableArray array];
     self.view.backgroundColor = [UIColor whiteColor];
     [self creatTitleAndBackBtn];
     [self setBtn];
 ////    [self CreateTitleLabelWithText:@"农知道"];
     [self creatTable];
     [self createWork];
+    
+    
+    [self requesData];
+    
+    _wonoTableView.mj_header =[MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
+    _wonoTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(requestMore)];
 //    [[BaiduMobStat defaultStat] eventStart:@"login" eventLabel:@"登录"];
+    [self makePlaceHolderWithTitle:@"加载数据中..."];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(refresh) name:@"wonoCircleRe" object:nil];
+}
+
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+
+-(void)makePlaceHolderWithTitle:(NSString *)title{
+    
+    [self.view layoutIfNeeded];
+    [_wonoTableView layoutIfNeeded];
+    [_wonoTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
+        //        [_plantTableView setScrollEnabled:NO];
+        UIView *view = [[UIView alloc]initWithFrame:_wonoTableView.bounds];
+        view.backgroundColor = [UIColor whiteColor];
+        
+        UILabel *label = [[UILabel alloc]init];
+        label.text = title;
+        label.font = [UIFont systemFontOfSize:16];
+        label.textColor = MainColor;
+        label.textAlignment = NSTextAlignmentCenter;
+        label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(390), 300, HDAutoHeight(60));
+        [view addSubview:label];
+        
+        
+        return view;
+    } normalBlock:^(UITableView * _Nonnull sender) {
+        [_wonoTableView setScrollEnabled:YES];
+    }];
+    [_wonoTableView reloadData];
+
+    
+}
+
+-(void)refresh{
+    page = 1;
+//    _wonoTableView = [[UITableView alloc]init];
+    
+//    _wonoTableView.
+    
+    for(int i=0;i<dataArr.count;i++){
+        NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
+//        NSString *cellIdentifier = [NSString stringWithFormat:@"identy%d",i];
+        WonoCircleTableViewCell *cell = [_wonoTableView cellForRowAtIndexPath:path];
+        if(cell == nil){
+            break;
+        }
+        cell.changeMark = @"1";
+    }
+    dataArr = [NSMutableArray array];
+    askArr = [NSMutableArray array];
+    ChangeMark = true;
+    [self requesData];
+    
+}
+-(void)requestMore{
+    page++;
+    [self requesData];
+
+    
+}
+
+-(void)requesData{
+    [[InterfaceSingleton shareInstance].interfaceModel GetAllAskWithCallBackWithPage:page AndCallBack:^(int state, id data, NSString *msg) {
+        [_wonoTableView.mj_header endRefreshing];
+        [_wonoTableView.mj_footer endRefreshing];
+        [self makePlaceHolderWithTitle:@"暂无数据"];
+        if(state == 2000){
+            NSLog(@"aa");
+            NSArray *arr = data[@"data"];
+            
+            if(arr.count == 0){
+                if(page!=1){
+                    page--;
+                }
+            }
+
+            
+            for (int i=0; i<arr.count; i++) {
+                NSDictionary *dic = arr[i];
+                WonoCircleModel *model = [[WonoCircleModel alloc]init];
+                model.titleStr = dic[@"title"];
+                model.contentStr = dic[@"content"];
+                NSArray *imageArr = dic[@"pic_urls"];
+                if(imageArr.count != 0){
+                    model.imgUrl = imageArr[0];
+                }
+                model.positionStr = dic[@"location"];
+                model.answerCount = dic[@"answer_count"];
+                model.askId = dic[@"id"];
+                
+                if([model.contentStr isEqualToString:@""]&&model.imgUrl == nil){
+                    model.type = 1;
+                }
+                if(![model.contentStr isEqualToString:@""]&&model.imgUrl == nil){
+                    model.type = 2;
+                }
+                if([model.contentStr isEqualToString:@""]&&model.imgUrl != nil){
+                    model.type = 3;
+                }
+                if(![model.contentStr isEqualToString:@""]&&model.imgUrl != nil){
+                    model.type = 4;
+                }
+                
+                [dataArr addObject:model];
+                
+                
+            
+                
+                
+                
+            }
+            
+            [_wonoTableView reloadData];
+            
+        }
+        
+        
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+
+    }];
+    
+   
+    
+    
+//    for (int i=1; i<5; i++) {
+//        WonoCircleModel *model = [[WonoCircleModel alloc]init];
+//        model.type = i;
+//        model.titleStr = @"啊啊啊啊啊啊啊啊？";
+//        model.contentStr = @"啊啊啊啊啊啊啊啊？啊啊啊啊啊啊啊啊？啊啊啊啊啊啊啊啊？啊啊啊啊啊啊啊啊？啊啊啊啊啊啊啊啊？啊啊啊啊啊啊啊啊？";
+//        model.imgUrl = @"http://ospirz9dn.bkt.clouddn.com/8990AC7D-8679-4BC8-A125-8DCF381C036B.png";
+//        model.positionStr = @"地点地点地点地点地点";
+//        model.answerCount = @"10";
+//        model.askId = @"233";
+//        [dataArr addObject:model];
+//    }
+//   
+////    [dataArr addObject:model];
+////    [dataArr addObject:model];
+////    [dataArr addObject:model];
+//    [_wonoTableView reloadData];
 }
 
 
@@ -88,6 +255,10 @@
 
 -(void)askClick{
     NSLog(@"点击消息");
+    MessageViewController *msVc = [[MessageViewController alloc]init];
+    msVc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:msVc animated:YES];
+    
 }
 
 -(void)creatTable{
@@ -118,29 +289,108 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
 
-    return 2;
+    return dataArr.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return HDAutoHeight(520);
+    WonoCircleModel *model = dataArr[indexPath.row];
+    
+    CGFloat height = 0;
+    
+    switch (model.type) {
+        case 1:{
+            height = HDAutoHeight(270);
+            break;
+        }
+        case 2:{
+            height = HDAutoHeight(310);
+            break;
+        }
+        case 3:{
+            height = HDAutoHeight(550);
+            break;
+        }
+        case 4:{
+            height = HDAutoHeight(630);
+            break;
+        }
+            
+        default:
+            break;
+    }
+    
+    return height;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 1;
+    return 0.01;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *cellIdentifier = @"cellIdentifier";
+    
+    NSString *cellIdentifier = [NSString stringWithFormat:@"identy%ld",(long)indexPath.row];
     WonoCircleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
         cell = [[WonoCircleTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        
+        WonoCircleModel *model = dataArr[indexPath.row];
+        cell.model = model;
         //        [cell setLeftColor:[UIColor blueColor]];
     }
+    
+    if([cell.changeMark isEqualToString:@"1"]){
+        NSLog(@"aaa");
+        
+        cell = [[WonoCircleTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        WonoCircleModel *model = dataArr[indexPath.row];
+        cell.model = model;
+        cell.changeMark = @"0";
+    }
+    
+//    if(ChangeMark == true){
+//        cell = [[WonoCircleTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+//        
+//        WonoCircleModel *model = dataArr[indexPath.row];
+//        cell.model = model;
+//    }
+    
+    if(indexPath.row == dataArr.count-1){
+        ChangeMark = false;
+    }
+    
     //    [cell creatConView];
+
+//    WonoCircleModel *Remodel = dataArr[indexPath.row];
+//    int askId = [Remodel.askId intValue];
+//    WonoCircleModel *model = cell.model;
+//    int reAskID = [model.askId intValue];
+//    if(askId != reAskID){
+//        cell = [[WonoCircleTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+//        
+//        cell.model = Remodel;
+//    }
+//    
+    
+    cell.cellBlock = ^(NSDictionary *dic) {
+        NSLog(@"aaa");
+        NSString *needID = dic[@"ID"];
+        ToAnswerViewController *ans = [[ToAnswerViewController alloc]init];
+        ans.askID = needID;
+        ans.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:ans animated:YES];
+        
+    };
     
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"点击");
+    
+    WonoCircleModel *model = dataArr[indexPath.row];
+    
+    WonoCircleDetailViewController *detailVc = [[WonoCircleDetailViewController alloc]init];
+    detailVc.qid = model.askId;
+    detailVc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:detailVc animated:YES];
 }
 
 

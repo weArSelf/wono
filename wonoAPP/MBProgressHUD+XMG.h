@@ -25,4 +25,5 @@
 + (MBProgressHUD *)showNormalMessage:(NSString *)message;
 + (MBProgressHUD *)showlongNormalMessage:(NSString *)message;
 + (MBProgressHUD *)showNormalMessage:(NSString *)message toView:(UIView *)view;
++ (void)showLongSuccess:(NSString *)success toView:(UIView *)view;
 @end

@@ -48,6 +48,10 @@
     
     NSString *type;
     NSString *typeContent;
+    NSString *SelTime;
+    
+    int upCount;
+    int donwCount;
     
 }
 
@@ -157,7 +161,7 @@
 //    _plantTableView.showsVerticalScrollIndicator = NO;
     _plantTableView.backgroundColor = [UIColor whiteColor];
 //    _plantTableView.frame = self.view.frame;
-   _plantTableView.showsVerticalScrollIndicator = NO;
+   _plantTableView.showsVerticalScrollIndicator = YES;
    
     
     [self.view addSubview:_plantTableView];
@@ -176,7 +180,7 @@
     [_plantTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
 //        [_plantTableView setScrollEnabled:NO];
         UIView *view = [[UIView alloc]initWithFrame:_plantTableView.bounds];
-        view.backgroundColor = [UIColor whiteColor];
+        view.backgroundColor = [UIColor clearColor];
         
         UILabel *label = [[UILabel alloc]init];
         label.text = @"加载数据中...";
@@ -541,6 +545,7 @@
 //        model.uid = selID;
 //    }
     
+    
     if(Count == 1){
         dataArr = [NSMutableArray array];
     }
@@ -590,17 +595,22 @@
             _plantTableView.mj_footer.hidden = NO;
             [_plantTableView reloadData];
             
+            _plantTableView.alpha = 0;
+            [UIView animateWithDuration:0.5 animations:^{
+                _plantTableView.alpha = 1;
+            }];
+            
         }else{
             
+            dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3/*延迟执行时间*/ * NSEC_PER_SEC);
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
+            dispatch_after(delayTime, dispatch_get_main_queue(), ^{
                 [self.view layoutIfNeeded];
                 [_plantTableView layoutIfNeeded];
                 [_plantTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
                     //                [_plantTableView setScrollEnabled:NO];
                     UIView *view = [[UIView alloc]initWithFrame:_plantTableView.bounds];
-                    view.backgroundColor = [UIColor whiteColor];
+                    view.backgroundColor = [UIColor clearColor];
                     
                     UILabel *label = [[UILabel alloc]init];
                     label.text = @"暂无数据";
@@ -616,7 +626,6 @@
                     [_plantTableView setScrollEnabled:YES];
                 }];
                 [_plantTableView reloadData];
-
             });
             
         }
@@ -628,6 +637,11 @@
 }
 
 -(void)selectWithDic:(NSDictionary *)dic{
+    
+    _plantTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
+    _plantTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMore)];
+    
+    _plantTableView.mj_footer.hidden = YES;
     
     [rightBtn setTitleColor:UIColorFromHex(0x4db366) forState:UIControlStateNormal];
     rightBtn.backgroundColor = [UIColor whiteColor];
@@ -691,6 +705,7 @@
 //}
 -(void)requestDataWithStufStr:(NSString *)stufStr{
     
+    
     type = @"1";
     typeContent = stufStr;
     
@@ -750,17 +765,22 @@
                 
             }
             
+            if(dataArr.count>0){
+                _plantTableView.mj_footer.hidden = NO;
+            }
+            
             [_plantTableView reloadData];
             
         }else{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
+            dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3/*延迟执行时间*/ * NSEC_PER_SEC));
+            
+            dispatch_after(delayTime, dispatch_get_main_queue(), ^{
                 [self.view layoutIfNeeded];
                 [_plantTableView layoutIfNeeded];
                 [_plantTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
                     //                [_plantTableView setScrollEnabled:NO];
                     UIView *view = [[UIView alloc]initWithFrame:_plantTableView.bounds];
-                    view.backgroundColor = [UIColor whiteColor];
+                    view.backgroundColor = [UIColor clearColor];
                     
                     UILabel *label = [[UILabel alloc]init];
                     label.text = @"暂无数据";
@@ -776,8 +796,8 @@
                     [_plantTableView setScrollEnabled:YES];
                 }];
                 [_plantTableView reloadData];
-                
             });
+           
         }
         if(state<2000){
             [MBProgressHUD showSuccess:msg];
@@ -787,6 +807,7 @@
 }
 -(void)requestDataWithTime:(NSString *)time{
     
+    SelTime = time;
     
     type = @"2";
     
@@ -856,16 +877,196 @@
             
             [_plantTableView reloadData];
             
+            upCount = 1;
+            donwCount = 2;
+            
+            MJRefreshGifHeader *header = [MJRefreshGifHeader headerWithRefreshingTarget:self refreshingAction:@selector(Rrefresh)];
+            
+            [header setTitle:@"上拉可加载较新时间段内容" forState:MJRefreshStateIdle];
+            [header setTitle:@"松开查看较新时间段内容" forState:MJRefreshStatePulling];
+            [header setTitle:@"正在刷新..." forState:MJRefreshStateRefreshing];
+
+            
+            _plantTableView.mj_header = header;
+            
+            MJRefreshAutoGifFooter *footer = [MJRefreshAutoGifFooter footerWithRefreshingTarget:self refreshingAction:@selector(RrefreshMore)];
+                        [footer setTitle:@"下拉可查看以往时间段内容" forState:MJRefreshStateIdle];
+            [footer setTitle:@"松开查看以往时间段内容" forState:MJRefreshStatePulling];
+            [footer setTitle:@"正在刷新..." forState:MJRefreshStateRefreshing];
+
+            _plantTableView.mj_footer = footer;
+            
+            
+            
         }else{
             
-            dispatch_async(dispatch_get_main_queue(), ^{
+//            dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3/*延迟执行时间*/ * NSEC_PER_SEC);
+//            
+//            dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+//                [self.view layoutIfNeeded];
+//                [_plantTableView layoutIfNeeded];
+//                [_plantTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
+//                    //                [_plantTableView setScrollEnabled:NO];
+//                    UIView *view = [[UIView alloc]initWithFrame:_plantTableView.bounds];
+//                    view.backgroundColor = [UIColor whiteColor];
+//                    
+//                    UILabel *label = [[UILabel alloc]init];
+//                    label.text = @"暂无数据";
+//                    label.font = [UIFont systemFontOfSize:16];
+//                    label.textColor = MainColor;
+//                    label.textAlignment = NSTextAlignmentCenter;
+//                    label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(390), 300, HDAutoHeight(60));
+//                    [view addSubview:label];
+//                    
+//                    
+//                    return view;
+//                } normalBlock:^(UITableView * _Nonnull sender) {
+//                    [_plantTableView setScrollEnabled:YES];
+//                }];
+//                [_plantTableView reloadData];
+//            });
+           
+            upCount = 1;
+            donwCount = 2;
+            
+            MJRefreshGifHeader *header = [MJRefreshGifHeader headerWithRefreshingTarget:self refreshingAction:@selector(Rrefresh)];
+            
+            
+            [header setTitle:@"下拉可查看较新时间段内容" forState:MJRefreshStateIdle];
+            [header setTitle:@"松开查看较新时间段内容" forState:MJRefreshStatePulling];
+            [header setTitle:@"正在刷新..." forState:MJRefreshStateRefreshing];
+            
+            _plantTableView.mj_header = header;
+            
+            MJRefreshAutoGifFooter *footer = [MJRefreshAutoGifFooter footerWithRefreshingTarget:self refreshingAction:@selector(RrefreshMore)];
+            [footer setTitle:@"上拉可加载以往时间段内容" forState:MJRefreshStateIdle];
+            [footer setTitle:@"松开查看以往时间段内容" forState:MJRefreshStatePulling];
+            [footer setTitle:@"正在刷新..." forState:MJRefreshStateRefreshing];
+            _plantTableView.mj_footer = footer;
+
+        }
+        
+        _plantTableView.mj_footer.hidden = NO;
+        
+    }];
+    
+}
+
+
+-(void)RrefreshMore{
+    NSLog(@"123");
+    
+    NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
+    MainPlantModel *model = [[MainPlantModel alloc]init];
+    model.fid = str;
+    model.page = upCount;
+    model.date = SelTime;
+
+    
+    
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getOldMainPlantWithModel:model WithCallBack:^(int state, id data, NSString *msg) {
+        [_plantTableView.mj_header endRefreshing];
+        [_plantTableView.mj_footer endRefreshing];
+        if(state == 2000){
+            NSLog(@"成功");
+            
+//            NSMutableArray *needArr = [NSMutableArray array];
+            NSArray *arr = data[@"data"];
+            
+            if(arr.count == 0){
                 
+                if(upCount != 1){
+                    upCount --;
+                }
+                dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3/*延迟执行时间*/ * NSEC_PER_SEC);
+                dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+                    [self.view layoutIfNeeded];
+                    [_plantTableView layoutIfNeeded];
+                    [_plantTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
+                        //                [_plantTableView setScrollEnabled:NO];
+                        UIView *view = [[UIView alloc]initWithFrame:_plantTableView.bounds];
+                        view.backgroundColor = [UIColor clearColor];
+                        
+                        UILabel *label = [[UILabel alloc]init];
+                        label.text = @"暂无数据";
+                        label.font = [UIFont systemFontOfSize:16];
+                        label.textColor = MainColor;
+                        label.textAlignment = NSTextAlignmentCenter;
+                        label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(390), 300, HDAutoHeight(60));
+                        [view addSubview:label];
+                        
+                        
+                        return view;
+                    } normalBlock:^(UITableView * _Nonnull sender) {
+                        [_plantTableView setScrollEnabled:YES];
+                    }];
+                    [_plantTableView reloadData];
+
+                });
+                
+                
+                
+                return;
+                
+            }
+            
+            
+            for (int i = 0 ; i<arr.count; i++) {
+                
+                
+                NSDictionary *dic = arr[i];
+                
+                PlantBaseModel *baseModel = [[PlantBaseModel alloc]init];
+                
+                baseModel.arr = [NSMutableArray array];
+                
+                baseModel.name = dic[@"name"];
+                NSArray *arr2 = dic[@"plant"];
+                //                baseModel.arr = arr2;
+                
+                for(int j=0;j<arr2.count;j++){
+                    
+                    NSDictionary *dic2 = arr2[j];
+                    
+                    PlantModel *model = [[PlantModel alloc]init];
+                    model.dateStr = dic2[@"week"];
+                    model.timeStr = dic2[@"time"];
+                    model.nameStr = dic2[@"title"];
+                    model.typeStr = dic2[@"plant_type_id"];
+                    model.numberStr = dic2[@"total_amount"];
+                    model.extraStr = dic2[@"variety_name"];
+                    
+                    model.pengID = dic2[@"gid"];
+                    [baseModel.arr addObject:model];
+                }
+                
+                [dataArr addObject:baseModel];
+                
+            }
+            
+//            [needArr addObjectsFromArray:dataArr];
+//            dataArr = needArr;
+            
+            
+            [_plantTableView reloadData];
+            
+            upCount++;
+            
+        }else{
+            
+            if(upCount != 1){
+                upCount --;
+            }
+            dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3/*延迟执行时间*/ * NSEC_PER_SEC);
+            
+            dispatch_after(delayTime, dispatch_get_main_queue(), ^{
                 [self.view layoutIfNeeded];
                 [_plantTableView layoutIfNeeded];
                 [_plantTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
                     //                [_plantTableView setScrollEnabled:NO];
                     UIView *view = [[UIView alloc]initWithFrame:_plantTableView.bounds];
-                    view.backgroundColor = [UIColor whiteColor];
+                    view.backgroundColor = [UIColor clearColor];
                     
                     UILabel *label = [[UILabel alloc]init];
                     label.text = @"暂无数据";
@@ -881,9 +1082,10 @@
                     [_plantTableView setScrollEnabled:YES];
                 }];
                 [_plantTableView reloadData];
-                
-            });
 
+            });
+            
+            
             
         }
         
@@ -893,8 +1095,171 @@
         }
     }];
     
+    
+    
+    
+
 }
 
+-(void)Rrefresh{
+    NSLog(@"234");
+    
+    NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
+    MainPlantModel *model = [[MainPlantModel alloc]init];
+    model.fid = str;
+    model.page = donwCount;
+    model.date = SelTime;
+
+    
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getMainPlantWithModel:model WithCallBack:^(int state, id data, NSString *msg) {
+        [_plantTableView.mj_header endRefreshing];
+        [_plantTableView.mj_footer endRefreshing];
+        if(state == 2000){
+            NSLog(@"成功");
+            
+            NSMutableArray *needArr = [NSMutableArray array];
+            
+            NSArray *arr = data[@"data"];
+            
+            if(arr.count == 0){
+                
+                if(donwCount != 2){
+                    donwCount --;
+                }
+                dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3/*延迟执行时间*/ * NSEC_PER_SEC);
+                
+                dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+                    [self.view layoutIfNeeded];
+                    [_plantTableView layoutIfNeeded];
+                    [_plantTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
+                        //                [_plantTableView setScrollEnabled:NO];
+                        UIView *view = [[UIView alloc]initWithFrame:_plantTableView.bounds];
+                        view.backgroundColor = [UIColor clearColor];
+                        
+                        UILabel *label = [[UILabel alloc]init];
+                        label.text = @"暂无数据";
+                        label.font = [UIFont systemFontOfSize:16];
+                        label.textColor = MainColor;
+                        label.textAlignment = NSTextAlignmentCenter;
+                        label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(390), 300, HDAutoHeight(60));
+                        [view addSubview:label];
+                        
+                        
+                        return view;
+                    } normalBlock:^(UITableView * _Nonnull sender) {
+                        [_plantTableView setScrollEnabled:YES];
+                    }];
+                    [_plantTableView reloadData];
+
+                });
+               
+                
+                return;
+                
+            }
+            
+            donwCount++;
+            
+            for (int i = 0 ; i<arr.count; i++) {
+                
+                
+                NSDictionary *dic = arr[i];
+                
+                PlantBaseModel *baseModel = [[PlantBaseModel alloc]init];
+                
+                baseModel.arr = [NSMutableArray array];
+                
+                baseModel.name = dic[@"name"];
+                NSArray *arr2 = dic[@"plant"];
+                //                baseModel.arr = arr2;
+                
+                for(int j=0;j<arr2.count;j++){
+                    
+                    NSDictionary *dic2 = arr2[j];
+                    
+                    PlantModel *model = [[PlantModel alloc]init];
+                    model.dateStr = dic2[@"week"];
+                    model.timeStr = dic2[@"time"];
+                    model.nameStr = dic2[@"title"];
+                    model.typeStr = dic2[@"plant_type_id"];
+                    model.numberStr = dic2[@"total_amount"];
+                    model.extraStr = dic2[@"variety_name"];
+                    
+                    model.pengID = dic2[@"gid"];
+                    [baseModel.arr addObject:model];
+                }
+                
+                [needArr addObject:baseModel];
+                
+            }
+            
+            int Con = needArr.count;
+            
+            [needArr addObjectsFromArray:dataArr];
+            dataArr = needArr;
+            
+            [_plantTableView reloadData];
+            
+            [_plantTableView layoutIfNeeded];
+            [self.view layoutIfNeeded];
+            
+            
+            
+            NSIndexPath * dayOne = [NSIndexPath indexPathForRow:NSNotFound inSection:Con];
+//            [_plantTableView scrollToRowAtIndexPath:dayOne atScrollPosition:UITableViewScrollPositionTop animated:NO];
+            [_plantTableView scrollToRowAtIndexPath:dayOne atScrollPosition:UITableViewScrollPositionTop animated:NO];
+            [_plantTableView flashScrollIndicators];
+           
+            
+        }else{
+            donwCount--;
+            
+            dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3/*延迟执行时间*/ * NSEC_PER_SEC);
+            
+            dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+                [self.view layoutIfNeeded];
+                [_plantTableView layoutIfNeeded];
+                [_plantTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
+                    //                [_plantTableView setScrollEnabled:NO];
+                    UIView *view = [[UIView alloc]initWithFrame:_plantTableView.bounds];
+                    view.backgroundColor = [UIColor clearColor];
+                    
+                    UILabel *label = [[UILabel alloc]init];
+                    label.text = @"暂无数据";
+                    label.font = [UIFont systemFontOfSize:16];
+                    label.textColor = MainColor;
+                    label.textAlignment = NSTextAlignmentCenter;
+                    label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(390), 300, HDAutoHeight(60));
+                    [view addSubview:label];
+                    
+                    
+                    return view;
+                } normalBlock:^(UITableView * _Nonnull sender) {
+                    [_plantTableView setScrollEnabled:YES];
+                }];
+                [_plantTableView reloadData];
+
+            });
+            
+            
+            
+            
+        }
+        
+        
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+    }];
+    
+
+    
+    
+//    [_plantTableView.mj_header endRefreshing];
+//    [_plantTableView.mj_footer endRefreshing];
+
+}
 
 
 @end

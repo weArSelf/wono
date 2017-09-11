@@ -54,6 +54,7 @@
     [super viewWillAppear:animated];
     [self requestData];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteUnClick" object:nil];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -163,6 +164,18 @@
         make.centerY.equalTo(_titleLabel.mas_centerY);
         make.right.equalTo(_headView.mas_right).offset(-HDAutoWidth(20));
         make.height.equalTo(@(HDAutoHeight(26)));
+        make.width.equalTo(@(HDAutoWidth(150)));
+    }];
+    
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(SaveClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_titleLabel.mas_centerY);
+        make.right.equalTo(_headView.mas_right);
+        make.height.equalTo(_headView.mas_height);
         make.width.equalTo(@(HDAutoWidth(150)));
     }];
 }
@@ -327,9 +340,22 @@
 
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteUnClick" object:nil];
-    _nextBtn.selected = NO;
-    [self changeBtnBack];
+    
+//    if(_nextBtn.selected == NO){
+//        changeMark = true;
+//        _nextBtn.selected = YES;
+//        [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteClick" object:nil];
+//        [self changeBtn];
+//    }else{
+        _nextBtn.selected = NO;
+        changeMark = false;
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteUnClick" object:nil];
+        [self changeBtnBack];
+//    }
+    
+//    [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteUnClick" object:nil];
+//    _nextBtn.selected = NO;
+//    [self changeBtnBack];
     
 }
 

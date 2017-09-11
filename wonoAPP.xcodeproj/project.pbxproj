@@ -90,6 +90,18 @@
 		A8A501971F54FDF900595B67 /* HDQiNiuOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A501921F54FDF900595B67 /* HDQiNiuOperation.m */; };
 		A8A501981F54FDF900595B67 /* QNOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A501941F54FDF900595B67 /* QNOperation.m */; };
 		A8A501991F54FDF900595B67 /* QNUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A501961F54FDF900595B67 /* QNUploader.m */; };
+		A8A5019C1F56870100595B67 /* WonoCircleMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A5019B1F56870100595B67 /* WonoCircleMainViewController.m */; };
+		A8A5019F1F56A18600595B67 /* ToAnswerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A5019E1F56A18600595B67 /* ToAnswerViewController.m */; };
+		A8A501A51F58F94900595B67 /* UIImageView+MHFacebookImageViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A501A11F58F94900595B67 /* UIImageView+MHFacebookImageViewer.m */; };
+		A8A501A61F58F94900595B67 /* MHFacebookImageViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A501A31F58F94900595B67 /* MHFacebookImageViewer.m */; };
+		A8A501A91F593B0400595B67 /* WonoCircleDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A501A81F593B0400595B67 /* WonoCircleDetailViewController.m */; };
+		A8A501AC1F59541F00595B67 /* WonoAnswerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A501AB1F59541F00595B67 /* WonoAnswerModel.m */; };
+		A8A501AF1F5D285300595B67 /* WonoAskModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A501AE1F5D285300595B67 /* WonoAskModel.m */; };
+		A8A501B21F5D28D800595B67 /* WonoAskTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A501B11F5D28D800595B67 /* WonoAskTableViewCell.m */; };
+		A8A501B51F5E34D100595B67 /* WonoAnswerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A501B41F5E34D100595B67 /* WonoAnswerTableViewCell.m */; };
+		A8A501B91F5E9D7300595B67 /* CMInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A501B81F5E9D7300595B67 /* CMInputView.m */; };
+		A8A501BC1F5F9BED00595B67 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A501BB1F5F9BED00595B67 /* MessageViewController.m */; };
+		A8A501BF1F5FC29D00595B67 /* MessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A501BE1F5FC29D00595B67 /* MessageModel.m */; };
 		A8A94F621F41856E00D9BBA2 /* MainTempModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F611F41856E00D9BBA2 /* MainTempModel.m */; };
 		A8A94F671F428BAD00D9BBA2 /* PengModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F661F428BAD00D9BBA2 /* PengModel.m */; };
 		A8A94F6A1F42A40F00D9BBA2 /* PengTypeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F691F42A40F00D9BBA2 /* PengTypeModel.m */; };
@@ -351,6 +363,30 @@
 		A8A501941F54FDF900595B67 /* QNOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QNOperation.m; sourceTree = "<group>"; };
 		A8A501951F54FDF900595B67 /* QNUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QNUploader.h; sourceTree = "<group>"; };
 		A8A501961F54FDF900595B67 /* QNUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QNUploader.m; sourceTree = "<group>"; };
+		A8A5019A1F56870100595B67 /* WonoCircleMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WonoCircleMainViewController.h; sourceTree = "<group>"; };
+		A8A5019B1F56870100595B67 /* WonoCircleMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WonoCircleMainViewController.m; sourceTree = "<group>"; };
+		A8A5019D1F56A18600595B67 /* ToAnswerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToAnswerViewController.h; sourceTree = "<group>"; };
+		A8A5019E1F56A18600595B67 /* ToAnswerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToAnswerViewController.m; sourceTree = "<group>"; };
+		A8A501A11F58F94900595B67 /* UIImageView+MHFacebookImageViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+MHFacebookImageViewer.m"; sourceTree = "<group>"; };
+		A8A501A21F58F94900595B67 /* UIImageView+MHFacebookImageViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+MHFacebookImageViewer.h"; sourceTree = "<group>"; };
+		A8A501A31F58F94900595B67 /* MHFacebookImageViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MHFacebookImageViewer.m; sourceTree = "<group>"; };
+		A8A501A41F58F94900595B67 /* MHFacebookImageViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MHFacebookImageViewer.h; sourceTree = "<group>"; };
+		A8A501A71F593B0400595B67 /* WonoCircleDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WonoCircleDetailViewController.h; sourceTree = "<group>"; };
+		A8A501A81F593B0400595B67 /* WonoCircleDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WonoCircleDetailViewController.m; sourceTree = "<group>"; };
+		A8A501AA1F59541F00595B67 /* WonoAnswerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WonoAnswerModel.h; sourceTree = "<group>"; };
+		A8A501AB1F59541F00595B67 /* WonoAnswerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WonoAnswerModel.m; sourceTree = "<group>"; };
+		A8A501AD1F5D285300595B67 /* WonoAskModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WonoAskModel.h; sourceTree = "<group>"; };
+		A8A501AE1F5D285300595B67 /* WonoAskModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WonoAskModel.m; sourceTree = "<group>"; };
+		A8A501B01F5D28D800595B67 /* WonoAskTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WonoAskTableViewCell.h; sourceTree = "<group>"; };
+		A8A501B11F5D28D800595B67 /* WonoAskTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WonoAskTableViewCell.m; sourceTree = "<group>"; };
+		A8A501B31F5E34D100595B67 /* WonoAnswerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WonoAnswerTableViewCell.h; sourceTree = "<group>"; };
+		A8A501B41F5E34D100595B67 /* WonoAnswerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WonoAnswerTableViewCell.m; sourceTree = "<group>"; };
+		A8A501B71F5E9D7300595B67 /* CMInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMInputView.h; sourceTree = "<group>"; };
+		A8A501B81F5E9D7300595B67 /* CMInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMInputView.m; sourceTree = "<group>"; };
+		A8A501BA1F5F9BED00595B67 /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
+		A8A501BB1F5F9BED00595B67 /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageViewController.m; sourceTree = "<group>"; };
+		A8A501BD1F5FC29D00595B67 /* MessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageModel.h; sourceTree = "<group>"; };
+		A8A501BE1F5FC29D00595B67 /* MessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageModel.m; sourceTree = "<group>"; };
 		A8A94F601F41856E00D9BBA2 /* MainTempModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTempModel.h; sourceTree = "<group>"; };
 		A8A94F611F41856E00D9BBA2 /* MainTempModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTempModel.m; sourceTree = "<group>"; };
 		A8A94F651F428BAD00D9BBA2 /* PengModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PengModel.h; sourceTree = "<group>"; };
@@ -560,6 +596,8 @@
 		A82469FA1F14625600CFD65A /* Support Tools */ = {
 			isa = PBXGroup;
 			children = (
+				A8A501B61F5E9D6000595B67 /* 自适应高度textview */,
+				A8A501A01F58F93A00595B67 /* 详细查看图片 */,
 				A8A501901F54FDE900595B67 /* QiNiu */,
 				A8A501871F53C2DC00595B67 /* 滚动label */,
 				A8C0D9F61F4BE29F000AD2D8 /* UITableView+JRTableViewPlaceHolder.h */,
@@ -663,6 +701,14 @@
 				A8246A141F146F0100CFD65A /* WonoCircleViewController.m */,
 				A8A5018D1F53F3BD00595B67 /* ToAskViewController.h */,
 				A8A5018E1F53F3BD00595B67 /* ToAskViewController.m */,
+				A8A5019A1F56870100595B67 /* WonoCircleMainViewController.h */,
+				A8A5019B1F56870100595B67 /* WonoCircleMainViewController.m */,
+				A8A5019D1F56A18600595B67 /* ToAnswerViewController.h */,
+				A8A5019E1F56A18600595B67 /* ToAnswerViewController.m */,
+				A8A501A71F593B0400595B67 /* WonoCircleDetailViewController.h */,
+				A8A501A81F593B0400595B67 /* WonoCircleDetailViewController.m */,
+				A8A501BA1F5F9BED00595B67 /* MessageViewController.h */,
+				A8A501BB1F5F9BED00595B67 /* MessageViewController.m */,
 			);
 			name = "沃农圈";
 			sourceTree = "<group>";
@@ -807,6 +853,10 @@
 			children = (
 				A8A11D401F1C6A29008CA39A /* WonoCircleTableViewCell.h */,
 				A8A11D411F1C6A29008CA39A /* WonoCircleTableViewCell.m */,
+				A8A501B01F5D28D800595B67 /* WonoAskTableViewCell.h */,
+				A8A501B11F5D28D800595B67 /* WonoAskTableViewCell.m */,
+				A8A501B31F5E34D100595B67 /* WonoAnswerTableViewCell.h */,
+				A8A501B41F5E34D100595B67 /* WonoAnswerTableViewCell.m */,
 			);
 			name = view;
 			sourceTree = "<group>";
@@ -816,6 +866,12 @@
 			children = (
 				A8A11D431F1C7FCB008CA39A /* WonoCircleModel.h */,
 				A8A11D441F1C7FCB008CA39A /* WonoCircleModel.m */,
+				A8A501AA1F59541F00595B67 /* WonoAnswerModel.h */,
+				A8A501AB1F59541F00595B67 /* WonoAnswerModel.m */,
+				A8A501AD1F5D285300595B67 /* WonoAskModel.h */,
+				A8A501AE1F5D285300595B67 /* WonoAskModel.m */,
+				A8A501BD1F5FC29D00595B67 /* MessageModel.h */,
+				A8A501BE1F5FC29D00595B67 /* MessageModel.m */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -847,6 +903,26 @@
 				A8A501961F54FDF900595B67 /* QNUploader.m */,
 			);
 			name = QiNiu;
+			sourceTree = "<group>";
+		};
+		A8A501A01F58F93A00595B67 /* 详细查看图片 */ = {
+			isa = PBXGroup;
+			children = (
+				A8A501A11F58F94900595B67 /* UIImageView+MHFacebookImageViewer.m */,
+				A8A501A21F58F94900595B67 /* UIImageView+MHFacebookImageViewer.h */,
+				A8A501A31F58F94900595B67 /* MHFacebookImageViewer.m */,
+				A8A501A41F58F94900595B67 /* MHFacebookImageViewer.h */,
+			);
+			name = "详细查看图片";
+			sourceTree = "<group>";
+		};
+		A8A501B61F5E9D6000595B67 /* 自适应高度textview */ = {
+			isa = PBXGroup;
+			children = (
+				A8A501B71F5E9D7300595B67 /* CMInputView.h */,
+				A8A501B81F5E9D7300595B67 /* CMInputView.m */,
+			);
+			name = "自适应高度textview";
 			sourceTree = "<group>";
 		};
 		A8ADF1561F0F841100781E06 = {
@@ -1201,6 +1277,7 @@
 				A821F53E1F32AEBF0040846E /* MineDataViewController.m in Sources */,
 				A8BC31421F3C329000BD6E76 /* PengTypeViewController.m in Sources */,
 				A821F5751F3955CA0040846E /* MyCollectionViewController.m in Sources */,
+				A8A501B91F5E9D7300595B67 /* CMInputView.m in Sources */,
 				A8A94F6A1F42A40F00D9BBA2 /* PengTypeModel.m in Sources */,
 				A8A11D481F1CA217008CA39A /* SelectionViewController.m in Sources */,
 				A821F5111F2B06BD0040846E /* FZHPickerView.m in Sources */,
@@ -1209,6 +1286,7 @@
 				A821F5201F2EFA350040846E /* ZhongZhiViewController.m in Sources */,
 				A821F4B21F2598C50040846E /* TempTableViewCell.m in Sources */,
 				A821F50E1F2AFFC00040846E /* UITextView+Placeholder.m in Sources */,
+				A8A5019F1F56A18600595B67 /* ToAnswerViewController.m in Sources */,
 				A821F4BA1F25E6900040846E /* catergory.swift in Sources */,
 				A8A94F7C1F46D73000D9BBA2 /* AddModel.m in Sources */,
 				A821F52F1F319AEF0040846E /* ChangeNameViewController.m in Sources */,
@@ -1219,6 +1297,7 @@
 				A8A11D351F189F1B008CA39A /* BaseViewController.m in Sources */,
 				A8A5018F1F53F3BD00595B67 /* ToAskViewController.m in Sources */,
 				A8C0D9FB1F4C11ED000AD2D8 /* MapSearchViewController.m in Sources */,
+				A8A501AC1F59541F00595B67 /* WonoAnswerModel.m in Sources */,
 				A821F52C1F3177CC0040846E /* AboutViewController.m in Sources */,
 				A8ADF16A1F0F841200781E06 /* ViewController.m in Sources */,
 				A8BC31471F3C428900BD6E76 /* ZhengZeSupport.m in Sources */,
@@ -1232,7 +1311,9 @@
 				A89990DC1F4FC10D00D15005 /* MyPieView.m in Sources */,
 				A8A11D261F1852DB008CA39A /* ForgetViewController.m in Sources */,
 				A8A11D391F18A929008CA39A /* PlantCell.m in Sources */,
+				A8A501B21F5D28D800595B67 /* WonoAskTableViewCell.m in Sources */,
 				A821F5631F3801070040846E /* MyFarmViewController.m in Sources */,
+				A8A501AF1F5D285300595B67 /* WonoAskModel.m in Sources */,
 				A8C0D9EB1F4A70FE000AD2D8 /* PlantAddModel.m in Sources */,
 				A8A94F7F1F46E3C700D9BBA2 /* AddDetailModel.m in Sources */,
 				A8A11D551F1DF058008CA39A /* WSDatePickerView.m in Sources */,
@@ -1242,6 +1323,7 @@
 				A8A11D451F1C7FCB008CA39A /* WonoCircleModel.m in Sources */,
 				A821F50B1F2AD1030040846E /* WorkViewController.m in Sources */,
 				A8BC314C1F3D599300BD6E76 /* CompleteModel.m in Sources */,
+				A8A501BC1F5F9BED00595B67 /* MessageViewController.m in Sources */,
 				A8ADF1641F0F841100781E06 /* main.m in Sources */,
 				A8A94F621F41856E00D9BBA2 /* MainTempModel.m in Sources */,
 				A821F4F81F2842070040846E /* ZXView.m in Sources */,
@@ -1259,11 +1341,13 @@
 				A8A11D541F1DF058008CA39A /* UIView+Extension.m in Sources */,
 				A8A11D2B1F18532D008CA39A /* HDTimerBtn.m in Sources */,
 				A8A94F701F4546BD00D9BBA2 /* ScreenDetailModel.m in Sources */,
+				A8A501A91F593B0400595B67 /* WonoCircleDetailViewController.m in Sources */,
 				A8246A2B1F17448300CFD65A /* AgreementViewController.m in Sources */,
 				A821F5571F34618C0040846E /* PengViewController.m in Sources */,
 				A8A94F761F4572C000D9BBA2 /* PlantBaseModel.m in Sources */,
 				A821F4FB1F2878360040846E /* SetTempViewController.m in Sources */,
 				A821F5691F3844C40040846E /* NeedSelectionViewController.m in Sources */,
+				A8A5019C1F56870100595B67 /* WonoCircleMainViewController.m in Sources */,
 				A821F5381F31C47E0040846E /* EmployeeViewController.m in Sources */,
 				A821F5011F28975C0040846E /* TempSetTableViewCell.m in Sources */,
 				A821F5721F394FBF0040846E /* AddStuffViewController.m in Sources */,
@@ -1279,7 +1363,10 @@
 				A821F4FE1F288D6A0040846E /* SetModel.m in Sources */,
 				A821F5081F29BE790040846E /* CDZPickerComponentObject.m in Sources */,
 				A821F5141F2B1EE40040846E /* LimitInput.m in Sources */,
+				A8A501BF1F5FC29D00595B67 /* MessageModel.m in Sources */,
 				A821F5351F31BC970040846E /* CallBackViewController.m in Sources */,
+				A8A501B51F5E34D100595B67 /* WonoAnswerTableViewCell.m in Sources */,
+				A8A501A61F58F94900595B67 /* MHFacebookImageViewer.m in Sources */,
 				A8A11D5E1F1F5E72008CA39A /* RegeistViewController.m in Sources */,
 				A821F5261F3011B20040846E /* MyZView.m in Sources */,
 				A821F5821F39B5720040846E /* InterfaceSingleton.m in Sources */,
@@ -1299,6 +1386,7 @@
 				A821F4BE1F26D50B0040846E /* MoreTempViewController.m in Sources */,
 				A8C0D9F81F4BE29F000AD2D8 /* UITableView+JRTableViewPlaceHolder.m in Sources */,
 				A8246A151F146F0100CFD65A /* WonoCircleViewController.m in Sources */,
+				A8A501A51F58F94900595B67 /* UIImageView+MHFacebookImageViewer.m in Sources */,
 				A821F5541F3442E60040846E /* KBTabbar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

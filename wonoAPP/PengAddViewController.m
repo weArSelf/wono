@@ -245,7 +245,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    [_stuffTableView reloadData];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
 }
 

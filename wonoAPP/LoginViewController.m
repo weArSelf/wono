@@ -142,7 +142,7 @@
     [self.view addSubview:btnForget];
 
     UILabel* label = [[UILabel alloc] init];
-    label.text = @"注册表示通过《沃农科技协议》";
+    label.text = @"登录表示通过《沃农科技协议》";
     label.textAlignment = NSTextAlignmentCenter;
     label.textColor = [UIColor lightGrayColor];
     label.font = [UIFont systemFontOfSize:12.0];

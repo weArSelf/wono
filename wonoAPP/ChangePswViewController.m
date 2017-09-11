@@ -117,6 +117,17 @@
         make.height.equalTo(@(HDAutoHeight(26)));
         make.width.equalTo(@(HDAutoWidth(150)));
     }];
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(SaveClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_titleLabel.mas_centerY);
+        make.right.equalTo(_headView.mas_right);
+        make.height.equalTo(_headView.mas_height);
+        make.width.equalTo(@(HDAutoWidth(150)));
+    }];
 }
 
 -(void)SaveClick{

@@ -84,4 +84,20 @@ typedef void(^AllCallBack)(int state, id data, NSString *msg);
 
 -(void)getUserInfoWithCallBack:(AllCallBack)callback;
 
+-(void)getOldMainPlantWithModel:(MainPlantModel *)model WithCallBack:(AllCallBack)callback;
+
+-(void)GetRegWithCallBack:(AllCallBack)callback;
+
+-(void)SendFeedBackWithContent:(NSString *)content WithCallBack:(AllCallBack)callback;
+
+-(void)GetAllAskWithCallBackWithPage:(int)page AndCallBack:(AllCallBack)callback;
+
+-(void)WonoAskQuestionWithContent:(NSString *)content AndResources:(NSString *)resArrStr     WithTitle:(NSString *)title WithType:(NSString *)type WithCallBack:(AllCallBack)callback;
+
+-(void)getWonoAllAnswerWithPage:(int)page AndQid:(NSString *)Qid WithCallBack:(AllCallBack)callback;
+
+-(void)getAskDetailWithID:(NSString *)qid WithCallBack:(AllCallBack)callback;
+
+-(void)wonoAnswerWithQid:(NSString *)qid AndContent:(NSString *)ansDic WithRepID:(NSString *)repID WithCallBack:(AllCallBack)callback;
+
 @end

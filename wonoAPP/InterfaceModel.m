@@ -145,6 +145,8 @@
 
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     [param setObject:phone forKey:@"mobile"];
+    NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
+    [param setObject:str forKey:@"fid"];
     
     [[BaseInterfaceModel shareInstance] sendData:API_SearchPhone parameters:param type:ENRT_GET success:^(id task, id responseObject) {
         
@@ -808,6 +810,227 @@
         }
     }];
 
+    
+}
+
+-(void)getOldMainPlantWithModel:(MainPlantModel *)model WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:model.date forKey:@"date"];
+    
+    [param setObject:model.fid forKey:@"fid"];
+    NSString *page = [NSString stringWithFormat:@"%d",model.page];
+    [param setObject:page forKey:@"page"];
+    NSString *perPage = [NSString stringWithFormat:@"%d",model.per_page];
+    [param setObject:perPage forKey:@"per_page"];
+    
+    [param setObject:model.uid forKey:@"uid"];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_PlantOld parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+    
+}
+
+
+
+-(void)GetRegWithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+//    [param setObject:fid forKey:@"fid"];
+    
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_GetReg parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+    
+}
+
+-(void)SendFeedBackWithContent:(NSString *)content WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:content forKey:@"content"];
+    
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_SendFeed parameters:param type:ENRT_POST success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+
+
+}
+
+
+-(void)GetAllAskWithCallBackWithPage:(int)page AndCallBack:(AllCallBack)callback{
+    
+    NSString *str = [NSString stringWithFormat:@"%d",page];
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:str forKey:@"page"];
+    
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_GetAllAsk parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+    
+}
+
+-(void)WonoAskQuestionWithContent:(NSString *)content AndResources:(NSString *)resArrStr     WithTitle:(NSString *)title WithType:(NSString *)type WithCallBack:(AllCallBack)callback{
+
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    //    [param setObject:fid forKey:@"fid"];
+    [param setObject:content forKey:@"content"];
+    [param setObject:resArrStr forKey:@"resources"];
+    [param setObject:title forKey:@"title"];
+    [param setObject:type forKey:@"type"];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_Ask parameters:param type:ENRT_POST success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+}
+
+-(void)getWonoAllAnswerWithPage:(int)page AndQid:(NSString *)Qid WithCallBack:(AllCallBack)callback{
+    
+    NSString *str = [NSString stringWithFormat:@"%d",page];
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:str forKey:@"page"];
+    [param setObject:Qid forKey:@"qid"];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_GetAllAnswer parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+
+}
+
+-(void)getAskDetailWithID:(NSString *)qid WithCallBack:(AllCallBack)callback{
+    
+   
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+//    [param setObject:str forKey:@"page"];
+    [param setObject:qid forKey:@"qid"];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_GetDetail parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+
+    
+}
+
+-(void)wonoAnswerWithQid:(NSString *)qid AndContent:(NSString *)ansDic WithRepID:(NSString *)repID WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:qid forKey:@"qid"];
+    [param setObject:ansDic forKey:@"answer"];
+    [param setObject:repID forKey:@"reply_id"];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_Answer parameters:param type:ENRT_POST success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+
+    
     
 }
 

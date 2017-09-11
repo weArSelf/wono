@@ -118,7 +118,8 @@
     _contentLabel = [[UILabel alloc]init];
     _contentLabel.font = [UIFont systemFontOfSize:13];
     _contentLabel.textColor = UIColorFromHex(0x727171);
-    _contentLabel.text = @"沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容";
+    _contentLabel.text = @"";
+//    沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容沃农科技描述内容
     _contentLabel.numberOfLines = 0;
     
     [self.view addSubview:_contentLabel];

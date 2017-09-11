@@ -7,7 +7,7 @@
 //
 
 #import "TempTableViewCell.h"
-
+#import "BBFlashCtntLabel.h"
 
 @interface TempTableViewCell()
 
@@ -20,12 +20,13 @@
 @property (nonatomic,strong) UILabel *diwenLabel;
 @property (nonatomic,strong) UILabel *dishiLabel;
 @property (nonatomic,strong) UILabel *leibieLabel;
-@property (nonatomic,strong) UILabel *yuangongLabel;
+@property (nonatomic,strong) BBFlashCtntLabel *yuangongLabel;
 
 @property (nonatomic,strong) UIImageView *headImageView;
 
 @property (nonatomic,strong) UILabel *timeLabel;
 
+//@property (nonatomic,strong) BBFlashCtntLabel *conLabel;
 
 @end
 
@@ -121,8 +122,16 @@
     [hintString addAttribute:NSForegroundColorAttributeName value:UIColorFromHex(0x9fa0a0) range:range1];
     
     _leibieLabel.attributedText = hintString;
-    _yuangongLabel = [self reLabel:_yuangongLabel];
-    _yuangongLabel.text = @"员工：张毅";
+//    _yuangongLabel = [self reLabel:_yuangongLabel];
+    
+//    [_yuangongLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(_qishiLabel.mas_left);
+//        make.top.equalTo(_leibieLabel.mas_top);
+//        make.width.equalTo(@(HDAutoWidth(400)));
+//        make.height.equalTo(@(HDAutoHeight(40)));
+//    }];
+
+    
     
     [_qiwenLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_titleLabel.mas_left);
@@ -154,13 +163,18 @@
         make.width.equalTo(@(HDAutoWidth(200)));
         make.height.equalTo(@(HDAutoHeight(40)));
     }];
-    [_yuangongLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_qishiLabel.mas_left);
-        make.top.equalTo(_leibieLabel.mas_top);
-        make.width.equalTo(@(HDAutoWidth(400)));
-        make.height.equalTo(@(HDAutoHeight(40)));
-    }];
     
+    [_qishiLabel layoutIfNeeded];
+    [_leibieLabel layoutIfNeeded];
+    [self layoutIfNeeded];
+    
+    _yuangongLabel = [[BBFlashCtntLabel alloc]init];
+    _yuangongLabel.font = [UIFont systemFontOfSize:13];
+    _yuangongLabel.textColor = UIColorFromHex(0x9fa0a0);
+    _yuangongLabel.frame = CGRectMake(_qishiLabel.x, _leibieLabel.y, HDAutoWidth(400), HDAutoHeight(40));
+    [_ConView addSubview:_yuangongLabel];
+    _yuangongLabel.text = @"员工：张毅";
+
 }
 
 -(UILabel *)reLabel:(UILabel *)label{

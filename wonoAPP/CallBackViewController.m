@@ -98,6 +98,24 @@
 
 -(void)BackClick{
     NSLog(@"点击返回");
+    
+    if(![_contentTextView.text isEqualToString:@""]){
+        
+        UIAlertController *AlertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"返回将失去当前填写内容\n是否继续？" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
+        UIAlertAction *refuseAct = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [AlertC addAction:refuseAct];
+        [AlertC addAction:confirmAct];
+        [self presentViewController:AlertC animated:YES completion:nil];
+        
+        return;
+    }
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -116,10 +134,43 @@
         make.height.equalTo(@(HDAutoHeight(26)));
         make.width.equalTo(@(HDAutoWidth(150)));
     }];
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(SaveClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_titleLabel.mas_centerY);
+        make.right.equalTo(_headView.mas_right);
+        make.height.equalTo(_headView.mas_height);
+        make.width.equalTo(@(HDAutoWidth(150)));
+    }];
 }
 
 -(void)SaveClick{
     NSLog(@"点击确认修改");
+    
+    
+    if([_contentTextView.text isEqualToString:@""]){
+        
+        [MBProgressHUD showSuccess:@"反馈内容不能为空"];
+        return;
+        
+    }
+    
+    [[InterfaceSingleton shareInstance].interfaceModel SendFeedBackWithContent:_contentTextView.text WithCallBack:^(int state, id data, NSString *msg) {
+      
+        if(state == 2000){
+            [MBProgressHUD showSuccess:@"提交成功"];
+            [self.navigationController popViewControllerAnimated:YES];
+        }else{
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
+    
+    
+    
     
 }
 
@@ -135,7 +186,7 @@
     //    _ConView.layer.masksToBounds = YES;
     _contentTextView.layer.cornerRadius = 5;
     _contentTextView.layer.masksToBounds = NO;
-
+    _contentTextView.font = [UIFont systemFontOfSize:16];
     [self.view addSubview:_contentTextView];
     
     [_contentTextView mas_makeConstraints:^(MASConstraintMaker *make) {

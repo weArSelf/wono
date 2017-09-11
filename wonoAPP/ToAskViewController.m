@@ -24,7 +24,13 @@
 #define BMK_KEY @"kClOFMdxGkzAgIr6MEfGF8cgGWMjqx02"//百度地图的key
 
 
-@interface ToAskViewController ()<UITextFieldDelegate,UITextViewDelegate,CustomActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate>
+#import "UIImageView+MHFacebookImageViewer.h"
+
+
+#import "QNUploader.h"
+
+
+@interface ToAskViewController ()<UITextFieldDelegate,UITextViewDelegate,CustomActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,QNUploaderDelegate>
 
 @property (nonatomic,strong)UIView *headView;
 @property (nonatomic,strong)UILabel *titleLabel;
@@ -56,12 +62,14 @@
     CGRect frame2;
     CGRect frame3;
     CGRect frame4;
+    NSMutableArray *resImageArr;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     dataArr = [NSMutableArray array];
+    resImageArr = [NSMutableArray array];
     
     // Do any additional setup after loading the view.
     [self creatTitleAndBackBtn];
@@ -84,7 +92,27 @@
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     [self createLocateContent];
-    [self getLocate];
+//    [self getLocate];
+    [self getReLocate];
+    
+}
+
+-(void)getReLocate{
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getMyFarmWithCallBack:^(int state, id data, NSString *msg) {
+       
+        if(state == 2000){
+            NSLog(@"成功");
+            NSDictionary *dic = data;
+            NSString *add = dic[@"address"];
+            _locatLabel.text = add;
+            
+        }else{
+            _locatLabel.text = @"未指定农场";
+//            [MBProgressHUD showSuccess:@"未定义农场位置"];
+        }
+        
+    }];
     
 }
 
@@ -171,6 +199,23 @@
 
 -(void)BackClick{
     NSLog(@"点击返回");
+    if(![_mainTextView.text isEqualToString:@""]||dataArr.count!=0){
+        
+        UIAlertController *AlertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"返回将失去当前填写内容\n是否继续？" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
+        UIAlertAction *refuseAct = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [AlertC addAction:refuseAct];
+        [AlertC addAction:confirmAct];
+        [self presentViewController:AlertC animated:YES completion:nil];
+        
+        return;
+    }
+
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -190,11 +235,125 @@
         make.height.equalTo(@(HDAutoHeight(26)));
         make.width.equalTo(@(HDAutoWidth(150)));
     }];
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(SaveClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_titleLabel.mas_centerY);
+        make.right.equalTo(_headView.mas_right);
+        make.height.equalTo(_headView.mas_height);
+        make.width.equalTo(@(HDAutoWidth(150)));
+    }];
 }
 
 -(void)SaveClick{
     NSLog(@"点击发送");
+    if([_headTextField.text isEqualToString:@""]){
+        [MBProgressHUD showSuccess:@"请添加标题"];
+        return;
+    }
     
+    if(dataArr.count>0){
+        [MBProgressHUD showLongSuccess:@"图片文件上传中" toView:nil];
+//        [MBProgressHUD showlongNormalMessage:@"图片文件上传中"];
+        for (int i=0; i<dataArr.count; i++) {
+            UIImage *image = dataArr[i];
+            NSData *data = UIImagePNGRepresentation(image);
+            if(data!=nil){
+                QNUploader *uploader = [[QNUploader alloc] initWithUploadType:EQTT_Pic];
+                uploader.delegate = self;
+                
+                NSString *name = [NSString stringWithFormat:@"%@.png",[self createGUID]];
+                
+                [uploader addTaskWithFileData:data FileName:name];
+            }
+
+        }
+        
+       
+        
+        
+        return;
+    }
+    
+    [MBProgressHUD showLongSuccess:@"提交中..." toView:nil];
+    [[InterfaceSingleton shareInstance].interfaceModel WonoAskQuestionWithContent:_mainTextView.text AndResources:nil WithTitle:_headTextField.text WithType:@"1" WithCallBack:^(int state, id data, NSString *msg) {
+        [MBProgressHUD hideHUD];
+        if(state == 2000){
+            NSLog(@"成功");
+            [MBProgressHUD showSuccess:@"提交成功"];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"wonoCircleRe" object:nil];
+            [self.navigationController popViewControllerAnimated:YES];
+            
+        }else{
+            [MBProgressHUD showSuccess:msg];
+        }
+       
+    }];
+    
+}
+- (NSString *)createGUID{
+    CFUUIDRef uuid_ref = CFUUIDCreate(NULL);
+    CFStringRef uuid_string_ref= CFUUIDCreateString(NULL, uuid_ref);
+    CFRelease(uuid_ref);
+    NSString *uuid = [NSString stringWithString:(__bridge NSString*)uuid_string_ref];
+    CFRelease(uuid_string_ref);
+    return uuid;
+}
+
+-(void)UploadSuccessWithFileName:(NSString *)fileName{
+    
+    
+    NSString *imgUrl = [NSString stringWithFormat:@"http://ospirz9dn.bkt.clouddn.com/%@",fileName];
+    
+    NSLog(@"%@", imgUrl);
+    NSLog(@"aaa");
+    
+    [resImageArr addObject:imgUrl];
+    
+    if(resImageArr.count == dataArr.count){
+        NSString *resource = [self objArrayToJSON:resImageArr];
+        NSLog(@"上传");
+       
+        [[InterfaceSingleton shareInstance].interfaceModel WonoAskQuestionWithContent:_mainTextView.text AndResources:resource WithTitle:_headTextField.text WithType:@"1" WithCallBack:^(int state, id data, NSString *msg) {
+            [MBProgressHUD hideHUD];
+            if(state == 2000){
+                NSLog(@"成功");
+                [MBProgressHUD showSuccess:@"提交成功"];
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"wonoCircleRe" object:nil];
+                [self.navigationController popViewControllerAnimated:YES];
+                
+            }else{
+                [MBProgressHUD hideHUD];
+                [MBProgressHUD showSuccess:msg];
+            }
+            
+        }];
+        
+        
+    }
+    
+}
+
+- (NSString *)objArrayToJSON:(NSArray *)array {
+    
+    NSString *jsonStr = @"[\"";
+    
+    for (NSInteger i = 0; i < array.count; ++i) {
+        if (i != 0) {
+            jsonStr = [jsonStr stringByAppendingString:@"\",\""];
+        }
+        jsonStr = [jsonStr stringByAppendingString:array[i]];
+    }
+    jsonStr = [jsonStr stringByAppendingString:@"\"]"];
+    
+    return jsonStr;
+}
+
+-(void)UploadFailedWithFileName:(NSString *)fileName{
+    [MBProgressHUD showSuccess:@"上传失败,请重试"];
 }
 
 -(void)createFirstHead{
@@ -400,10 +559,12 @@
                 break;
         }
         imageView.image = newImage;
-        imageView.contentMode = UIViewContentModeScaleToFill;
+//        imageView.contentMode = UIViewContentModeScaleToFill;
         imageView.alpha = 0;
         imageView.tag = dataArr.count+300;
         imageView.userInteractionEnabled=true;
+        
+        [imageView setupImageViewer];
         
         [_selImageView addSubview:imageView];
         
@@ -411,7 +572,8 @@
         
         deleteBtn.tag = dataArr.count+200;
         [deleteBtn setBackgroundImage:[UIImage imageNamed:@"关闭"] forState:UIControlStateNormal];
-        deleteBtn.frame = CGRectMake(imageView.width-HDAutoWidth(25), -HDAutoWidth(25), HDAutoWidth(50), HDAutoWidth(50));
+//        deleteBtn.frame = CGRectMake(imageView.width-HDAutoWidth(25), -HDAutoWidth(25), HDAutoWidth(50), HDAutoWidth(50));
+        deleteBtn.frame = CGRectMake(imageView.width-HDAutoWidth(40), -HDAutoWidth(10), HDAutoWidth(50), HDAutoWidth(50));
         [deleteBtn addTarget:self action:@selector(deleteClick:) forControlEvents:UIControlEventTouchUpInside];
         
         deleteBtn.imageView.contentMode = UIViewContentModeScaleToFill;
@@ -698,7 +860,9 @@
 }
 
 
-
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
 
 
 

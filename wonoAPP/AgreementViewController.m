@@ -7,6 +7,7 @@
 //
 
 #import "AgreementViewController.h"
+#import <WebKit/WebKit.h>
 
 @interface AgreementViewController ()
 
@@ -15,8 +16,8 @@
 @property (nonatomic,strong)UIButton *backBtn;
 
 @property (nonatomic,strong)UILabel *agreeLabel;
-@property (nonatomic,strong)UITextView *contentScroll;
-
+//@property (nonatomic,strong)UITextView *contentScroll;
+@property (nonatomic, strong) WKWebView *webView;
 
 
 @end
@@ -28,8 +29,23 @@
     self.view.backgroundColor = [UIColor whiteColor];
     [self creatTitleAndBackBtn];
     [self createContent];
-    
+    [self requestData];
 }
+
+-(void)requestData{
+    [[InterfaceSingleton shareInstance].interfaceModel GetRegWithCallBack:^(int state, id data, NSString *msg) {
+        if(state == 2000){
+            NSLog(@"成功");
+            [self.webView loadHTMLString:data baseURL:nil];
+            
+            
+        }else{
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
+}
+
 
 -(void)creatTitleAndBackBtn{
     
@@ -99,38 +115,40 @@
     _agreeLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:_agreeLabel];
     
-    _contentScroll = [[UITextView alloc]init];
-    _contentScroll.textColor = [UIColor lightGrayColor];
-    _contentScroll.font = [UIFont systemFontOfSize:14];
-    _contentScroll.text = @"啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文";
-    [self.view addSubview:_contentScroll];
+//    _contentScroll = [[UITextView alloc]init];
+//    _contentScroll.textColor = [UIColor lightGrayColor];
+//    _contentScroll.font = [UIFont systemFontOfSize:14];
+//    _contentScroll.text = @"啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文啊啊啊啊啊我我我问问企鹅全文";
+////    [self.view addSubview:_contentScroll];
     
+    _webView = [[WKWebView alloc]init];
+    [self.view addSubview:_webView];
     [_agreeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_titleLabel.mas_bottom).offset(10);
         make.centerX.equalTo(self.view.mas_centerX);
         make.height.equalTo(@(40));
         make.width.equalTo(@(100));
     }];
-    [_contentScroll mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_agreeLabel.mas_bottom).offset(2);
+    [_webView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_titleLabel.mas_bottom).offset(10);
         make.centerX.equalTo(self.view.mas_centerX);
-        make.width.equalTo(@(self.view.bounds.size.width-60));
-        make.bottom.equalTo(self.view.mas_bottom).offset(-100);
+        make.width.equalTo(@(self.view.bounds.size.width-30));
+        make.bottom.equalTo(self.view.mas_bottom).offset(-10);
     }];
     
-    UILabel *bottomLabel = [[UILabel alloc]init];
-    bottomLabel.text = @"Copyright © 2014-2018 沃农科技有限公司";
-    bottomLabel.font = [UIFont systemFontOfSize:12];
-    bottomLabel.textAlignment = NSTextAlignmentCenter;
-    bottomLabel.textColor = [UIColor lightGrayColor];
-    [self.view addSubview:bottomLabel];
-    
-    [bottomLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.view.mas_centerX);
-        make.top.equalTo(_contentScroll.mas_bottom).offset(20);
-        make.width.equalTo(@(300));
-        make.height.equalTo(@(40));
-    }];
+//    UILabel *bottomLabel = [[UILabel alloc]init];
+//    bottomLabel.text = @"Copyright © 2014-2018 沃农科技有限公司";
+//    bottomLabel.font = [UIFont systemFontOfSize:12];
+//    bottomLabel.textAlignment = NSTextAlignmentCenter;
+//    bottomLabel.textColor = [UIColor lightGrayColor];
+//    [self.view addSubview:bottomLabel];
+//    
+//    [bottomLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerX.equalTo(self.view.mas_centerX);
+//        make.top.equalTo(_webView.mas_bottom).offset(20);
+//        make.width.equalTo(@(300));
+//        make.height.equalTo(@(40));
+//    }];
 }
 
 @end

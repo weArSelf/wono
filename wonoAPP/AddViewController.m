@@ -194,6 +194,18 @@
         make.height.equalTo(@(HDAutoHeight(26)));
         make.width.equalTo(@(HDAutoWidth(150)));
     }];
+    
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(SaveClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_titleLabel.mas_centerY);
+        make.right.equalTo(_headView.mas_right);
+        make.height.equalTo(_headView.mas_height);
+        make.width.equalTo(@(HDAutoWidth(150)));
+    }];
 }
 
 -(void)SaveClick{
@@ -310,6 +322,14 @@
         scroll.contentSize = CGSizeMake(SCREEN_WIDTH, HDAutoHeight(100)*k+HDAutoHeight(80));
     }
     bottomY = scroll.bottom;
+    
+    scroll.alpha = 0;
+    selecLabel.alpha = 0;
+    [UIView animateWithDuration:0.5 animations:^{
+        scroll.alpha = 1;
+        selecLabel.alpha = 1;
+    }];
+    
 }
 -(void)pengClick:(UIButton *)btn{
     
@@ -421,6 +441,10 @@
         
         
     }];
+    
+    NSDate *da = [NSDate date];
+    _datepicker.maxLimitDate = da;
+    
     if(_SelDate != nil){
         [_datepicker getNowDate:_SelDate animated:YES];
     }

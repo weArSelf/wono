@@ -70,7 +70,7 @@
     label.font = [UIFont systemFontOfSize:16];
     label.textColor = MainColor;
     label.textAlignment = NSTextAlignmentCenter;
-    label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(390), 300, HDAutoHeight(60));
+    label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, 64+255/2-HDAutoHeight(30), 300, HDAutoHeight(60));
     
     [_mainView addSubview:label];
     _MLabel = label;
@@ -84,7 +84,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
-    
+    [_mainScroll flashScrollIndicators];
 //    [self requestData];
     //    [self.navigationController setNavigationBarHidden:NO animated:YES];
    
@@ -234,8 +234,14 @@
             [_mainScroll addSubview:botView];
             
             _mainScroll.alpha = 0;
+//            [UIView animateWithDuration:0.5 animations:^{
+//                _mainScroll.alpha = 1;
+//            }];
+            
             [UIView animateWithDuration:0.5 animations:^{
                 _mainScroll.alpha = 1;
+            } completion:^(BOOL finished) {
+                [_mainScroll flashScrollIndicators];
             }];
             
             
@@ -282,7 +288,7 @@
     MyPieView *pie3 = [_mainScroll viewWithTag:401];
     MyPieView *pie4 = [_mainScroll viewWithTag:402];
     
-    if(pie1==nil||pie2==nil||pie3==nil||pie4==nil){
+    if(pie3==nil||pie4==nil){
         [MBProgressHUD showSuccess:@"加载数据中,请稍后"];
         return;
     }
@@ -314,16 +320,17 @@
 -(void)RequestYueNian{
     NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
     [[InterfaceSingleton shareInstance].interfaceModel GetNianWithFid:str AndType:@"1" WithCallBack:^(int state, id data, NSString *msg) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [UIView animateWithDuration:0.5 animations:^{
+                _secTitleLabel.alpha = 1;
+                _needBtn.alpha = 1;
+            }];
+            
+        });
+
         if(state == 2000){
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [UIView animateWithDuration:0.5 animations:^{
-                    _secTitleLabel.alpha = 1;
-                    _needBtn.alpha = 1;
-                }];
-
-            });
             
             
             NSLog(@"成功");
@@ -355,26 +362,56 @@
             
             dispatch_after(delayTime, dispatch_get_main_queue(), ^{
                 
-                MyPieView *pieV = (MyPieView *)[self.view viewWithTag:301];
+                if(arr1.count == 0){
+                    MyPieView *pieV = (MyPieView *)[self.view viewWithTag:301];
+                    
+                    if(pieV != nil){
+                        [pieV removeFromSuperview];
+                    }
+                    
+                    UIView *needV = [[UIView alloc]init];
+                    
+                    needV.tag = 301;
+                    needV.backgroundColor = [UIColor whiteColor];
+                    needV.frame = CGRectMake(0, 255+HDAutoHeight(80), SCREEN_WIDTH, HDAutoHeight(450));
+                    //                pieV.model = model;
+                    
+                    UILabel *label = [[UILabel alloc]init];
+                    label.text = @"无图表信息";
+                    label.textColor = MainColor;
+                    label.font = [UIFont systemFontOfSize:16];
+                    label.textAlignment = NSTextAlignmentCenter;
+                    label.frame = CGRectMake(SCREEN_WIDTH/2-HDAutoWidth(100), HDAutoHeight(205), HDAutoWidth(200), HDAutoHeight(40));
+                    [needV addSubview:label];
+                    
+                    [_mainScroll addSubview:needV];
                 
-                if(pieV != nil){
-                    [pieV removeFromSuperview];
+                    
+                }else{
+                
+                    MyPieView *pieV = (MyPieView *)[self.view viewWithTag:301];
+                    
+                    if(pieV != nil){
+                        [pieV removeFromSuperview];
+                    }
+                    
+                    pieV = [[MyPieView alloc]init];
+                    
+                    pieV.tag = 301;
+                    
+                    pieV.frame = CGRectMake(0, 255+HDAutoHeight(80), SCREEN_WIDTH, HDAutoHeight(450));
+                    pieV.model = model;
+                    [_mainScroll addSubview:pieV];
                 }
-                
-                pieV = [[MyPieView alloc]init];
-                
-                pieV.tag = 301;
-                
-                pieV.frame = CGRectMake(0, 255+HDAutoHeight(80), SCREEN_WIDTH, HDAutoHeight(450));
-                pieV.model = model;
-                [_mainScroll addSubview:pieV];
             });
            
+            
             
             PercentModel *model2 = [[PercentModel alloc]init];
             nameArr = [NSMutableArray array];
             amountArr = [NSMutableArray array];
             total = 0;
+            
             
             for (int i=0; i<arr2.count; i++) {
                 NSDictionary *dic = arr2[i];
@@ -403,25 +440,54 @@
             
             
             dispatch_after(delayTime, dispatch_get_main_queue(), ^{
-                
-                MyPieView *pieV2 = (MyPieView *)[self.view viewWithTag:302];
-                
-                if(pieV2 != nil){
-                    [pieV2 removeFromSuperview];
+                if(arr2.count == 0){
+                    
+                    MyPieView *pieV = (MyPieView *)[self.view viewWithTag:301];
+                    
+                    if(pieV != nil){
+                        [pieV removeFromSuperview];
+                    }
+                    
+                    UIView *needV = [[UIView alloc]init];
+                    
+                    needV.tag = 301;
+                    needV.backgroundColor = [UIColor whiteColor];
+                    needV.frame = CGRectMake(0, 255+HDAutoHeight(80), SCREEN_WIDTH, HDAutoHeight(450));
+                    //                pieV.model = model;
+                    
+                    UILabel *label = [[UILabel alloc]init];
+                    label.text = @"无图表信息";
+                    label.textColor = MainColor;
+                    label.font = [UIFont systemFontOfSize:16];
+                    label.textAlignment = NSTextAlignmentCenter;
+                    label.frame = CGRectMake(SCREEN_WIDTH/2-HDAutoWidth(100), HDAutoHeight(205), HDAutoWidth(200), HDAutoHeight(40));
+                    [needV addSubview:label];
+                    
+                    [_mainScroll addSubview:needV];
+                    
+                    
+                }else{
+
+                    MyPieView *pieV2 = (MyPieView *)[self.view viewWithTag:302];
+                    
+                    if(pieV2 != nil){
+                        [pieV2 removeFromSuperview];
+                    }
+                    
+                    pieV2 = [[MyPieView alloc]init];
+                    
+                    pieV2.tag = 302;
+                    
+                    pieV2.frame = CGRectMake(0, 255+HDAutoHeight(530), SCREEN_WIDTH, HDAutoHeight(450));
+                    pieV2.model = model2;
+                    [_mainScroll addSubview:pieV2];
+                    UIView *botView = [[UIView alloc]init];
+                    botView.backgroundColor = [UIColor grayColor];
+                    botView.alpha = 0.3;
+                    botView.frame = CGRectMake(0, 255+HDAutoHeight(530)+HDAutoHeight(450), SCREEN_WIDTH, 1);
+                    [_mainScroll addSubview:botView];
+                        
                 }
-                
-                pieV2 = [[MyPieView alloc]init];
-                
-                pieV2.tag = 302;
-                
-                pieV2.frame = CGRectMake(0, 255+HDAutoHeight(530), SCREEN_WIDTH, HDAutoHeight(450));
-                pieV2.model = model2;
-                [_mainScroll addSubview:pieV2];
-                UIView *botView = [[UIView alloc]init];
-                botView.backgroundColor = [UIColor grayColor];
-                botView.alpha = 0.3;
-                botView.frame = CGRectMake(0, 255+HDAutoHeight(530)+HDAutoHeight(450), SCREEN_WIDTH, 1);
-                [_mainScroll addSubview:botView];
 
             });
 
@@ -429,8 +495,36 @@
            
             
 //            _mainScroll.contentSize = CGSizeMake(SCREEN_WIDTH, 255+HDAutoHeight(530)+HDAutoHeight(450)+10);
-        }
-        if(state<2000){
+        }else{
+            
+            dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC);
+            
+            dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+                
+                MyPieView *pieV = (MyPieView *)[self.view viewWithTag:301];
+                
+                if(pieV != nil){
+                    [pieV removeFromSuperview];
+                }
+                
+                UIView *needV = [[UIView alloc]init];
+                
+                needV.tag = 301;
+                needV.backgroundColor = [UIColor whiteColor];
+                needV.frame = CGRectMake(0, 255+HDAutoHeight(80), SCREEN_WIDTH, HDAutoHeight(450));
+//                pieV.model = model;
+                
+                UILabel *label = [[UILabel alloc]init];
+                label.text = @"无图表信息";
+                label.textColor = MainColor;
+                label.font = [UIFont systemFontOfSize:16];
+                label.textAlignment = NSTextAlignmentCenter;
+                label.frame = CGRectMake(SCREEN_WIDTH/2-HDAutoWidth(100), HDAutoHeight(205), HDAutoWidth(200), HDAutoHeight(40));
+                [needV addSubview:label];
+                
+                [_mainScroll addSubview:needV];
+            });
+            
             [MBProgressHUD showSuccess:msg];
         }
     }];
