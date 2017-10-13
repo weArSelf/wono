@@ -6,10 +6,14 @@
 //  Copyright © 2017年 IF. All rights reserved.
 //
 
+//蔬菜大棚
+
 #import "SelectionViewController.h"
 #import "PlantCell.h"
 #import "StatisticsTableViewCell.h"
 #import "PlantBaseModel.h"
+#import "PengUpdateViewController.h"
+
 
 @interface SelectionViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -21,6 +25,10 @@
 
 @property (nonatomic,strong) UITableView *plantTableView;
 
+
+@property (nonatomic,strong)UIButton *nextBtn;
+
+@property (nonatomic,strong)UIButton *xiugaiBtn;
 
 @end
 
@@ -51,13 +59,55 @@
     
     [self createFirseView];
     [self createTabelview];
+//    [self createNextBtn];
     
 }
 
+-(void)createNextBtn{
+    _nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_nextBtn setTitle:@"修改" forState:UIControlStateNormal];
+//    [_nextBtn setTitle:@"取消编辑" forState:UIControlStateSelected];
+    [_nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    _nextBtn.titleLabel.font = [UIFont systemFontOfSize:14];
+    [_nextBtn addTarget:self action:@selector(SaveClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:_nextBtn];
+    //    _saveBtn.titleLabel.textAlignment = NSTextAlignmentRight;
+    [_nextBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_titleLabel.mas_centerY);
+        make.right.equalTo(_headView.mas_right).offset(-HDAutoWidth(20));
+        make.height.equalTo(@(HDAutoHeight(26)));
+        make.width.equalTo(@(HDAutoWidth(150)));
+    }];
+    
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(SaveClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_titleLabel.mas_centerY);
+        make.right.equalTo(_headView.mas_right);
+        make.height.equalTo(_headView.mas_height);
+        make.width.equalTo(@(HDAutoWidth(150)));
+    }];
+}
+
+-(void)SaveClick{
+    NSLog(@"点击编辑");
+    PengUpdateViewController *updateVC = [[PengUpdateViewController alloc]init];
+    updateVC.pengID = _pengID;
+    [self.navigationController pushViewController:updateVC animated:YES];
+}
+
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    [self requestData];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:YES];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
    
 }
 
@@ -72,7 +122,7 @@
     _headView.alpha = 0.8;
     [self.view addSubview:_headView];
     _titleLabel = [[UILabel alloc]init];
-    _titleLabel.text = @"蔬菜大棚";
+    _titleLabel.text = @"";
     _titleLabel.textColor = [UIColor whiteColor];
     _titleLabel.font = [UIFont systemFontOfSize:18];
     _titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -103,7 +153,7 @@
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(_headView.mas_centerX);
         make.centerY.equalTo(_backBtn.mas_centerY);
-        make.width.equalTo(@(100));
+        make.width.equalTo(@(300));
         make.height.equalTo(@(40));
     }];
     
@@ -130,8 +180,21 @@
 
 -(void)createFirseView{
     _firstView = [[UIView alloc]init];
-    _firstView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"图层-3"]];
+    
+    
+    
+//    _firstView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"图层-3"]];
     [self.view addSubview:_firstView];
+    
+    UIImageView *backImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"图层-3"]];
+    [_firstView addSubview:backImageView];
+    
+    [backImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_firstView.mas_left);
+        make.right.equalTo(_firstView.mas_right);
+        make.top.equalTo(_firstView.mas_top);
+        make.bottom.equalTo(_firstView.mas_bottom);
+    }];
     
     [_firstView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left);
@@ -141,7 +204,8 @@
     }];
     UILabel *label1 = [self mylabel];
     label1.tag = 200;
-    label1.text = @"种植品种: ";
+    label1.text = @"大棚名称: ";
+//    种植品种
     UILabel *label2 = [self mylabel];
     label2.tag = 201;
     label2.text = @"占地面积: ";
@@ -187,7 +251,26 @@
         
     }];
 
-    
+    int userType = [[[NSUserDefaults standardUserDefaults]objectForKey:@"userType"]intValue];
+    if(userType == 1){
+        _xiugaiBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_xiugaiBtn addTarget:self action:@selector(SaveClick) forControlEvents:UIControlEventTouchUpInside];
+        [_xiugaiBtn setTitle:@"修改大棚信息>" forState:UIControlStateNormal];
+        _xiugaiBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+        _xiugaiBtn.titleLabel.textAlignment = NSTextAlignmentRight;
+        [_xiugaiBtn setTitleColor:UIColorFromHex(0xffffff) forState:UIControlStateNormal];
+        
+        [_firstView addSubview:_xiugaiBtn];
+        
+        [_xiugaiBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+           
+            make.right.equalTo(_firstView.mas_right).offset(-HDAutoWidth(0));
+            make.bottom.equalTo(label4.mas_bottom);
+            make.top.equalTo(label4.mas_top);
+            make.width.equalTo(@(HDAutoWidth(250)));
+            
+        }];
+    }
 }
 
 -(UILabel *)mylabel{
@@ -215,6 +298,13 @@
 //    _plantTableView.panGestureRecognizer.delegate = self;
     
 //    _plantTableView.scrollEnabled = false;
+    
+//    if (@available(iOS 11.0, *)){
+//        _plantTableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+//        _plantTableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);//导航栏如果使用系统原生半透明的，top设置为64
+//        _plantTableView.scrollIndicatorInsets = _plantTableView.contentInset;
+//    }
+
     
     [self.view addSubview:_plantTableView];
     [_plantTableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -260,18 +350,18 @@
         [self requestCircleDataWithGid];
         [self requestList];
         
-        [_plantTableView.mj_header endRefreshing];
+//        [_plantTableView.mj_header endRefreshing];
     });
     
 }
 -(void)loadMore{
     NSLog(@"上拉加载");
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         Count++;
-        [self requestCircleDataWithGid];
+//        [self requestCircleDataWithGid];
         [self requestList];
-        [_plantTableView.mj_footer endRefreshing];
-    });
+//        [_plantTableView.mj_footer endRefreshing];
+//    });
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -389,10 +479,10 @@
     headView.frame = CGRectMake(0, 0, tableView.bounds.size.width, 40);
     
     //    headView.backgroundColor = [UIColor clearColor];
-    
+    PlantBaseModel *model123 = dataArr[section-1];
     UILabel *label = [[UILabel alloc]init];
     
-    label.text = @"本月";
+    label.text = model123.name;
     label.textColor = UIColorFromHex(0x727171);
     label.font = [UIFont systemFontOfSize:13];
     [headView addSubview:label];
@@ -415,7 +505,7 @@
 -(void)setPengID:(NSString *)pengID{
     _pengID = pengID;
     Count = 1;
-    [self requestData];
+//    [self requestData];
     [self requestCircleDataWithGid];
     [self requestList];
 }
@@ -428,6 +518,11 @@
             NSLog(@"成功");
             
             NSDictionary *dic = data;
+            
+            NSString *name = dic[@"name"];
+            _titleLabel.text = name;
+            
+            
             NSString *str1 = dic[@"variety_name"];
             NSString *str2 = dic[@"area"];
             int num2 = [str2 intValue];
@@ -435,7 +530,8 @@
             NSString *str4 = dic[@"build"];
             
             UILabel *label1 = [self.view viewWithTag:200];
-            label1.text = [NSString stringWithFormat:@"种植品种: %@",str1];
+            label1.text = [NSString stringWithFormat:@"大棚名称: %@",name];
+//            种植品种
             UILabel *label2 = [self.view viewWithTag:201];
             label2.text = [NSString stringWithFormat:@"占地面积: %d亩",num2];
             UILabel *label3 = [self.view viewWithTag:202];
@@ -455,7 +551,8 @@
 -(void)requestCircleDataWithGid{
     
     [[InterfaceSingleton shareInstance].interfaceModel getPengPayWithGid:_pengID AndCallBack:^(int state, id data, NSString *msg) {
-      
+        [_plantTableView.mj_footer endRefreshing];
+        [_plantTableView.mj_header endRefreshing];
         if(state == 2000){
             NSLog(@"成功");
             
@@ -523,6 +620,8 @@
             model.colorArr  = colorArr;
             
             [_plantTableView reloadData];
+            
+            
 //            percentArr = [NSArray arrayWithObjects:[NSNumber numberWithDouble:20.0],[NSNumber numberWithDouble:30.0],[NSNumber numberWithDouble:40.0],[NSNumber numberWithDouble:10.0], nil];
 //            dataArr = [NSArray arrayWithObjects:@"土豆",@"黄瓜",@"西红柿",@"白菜", nil];
             
@@ -543,12 +642,30 @@
     }
     
     [[InterfaceSingleton shareInstance].interfaceModel getPengListWithGid:_pengID AndPage:Count WithCallBack:^(int state, id data, NSString *msg) {
-        
+        [_plantTableView.mj_footer endRefreshing];
+        [_plantTableView.mj_header endRefreshing];
         if(state == 2000){
             NSLog(@"成功");
             dataMark = YES;
-            _plantTableView.mj_footer.hidden = YES;
+            
             NSArray *arr = data[@"data"];
+            
+            if(arr.count>0){
+                _plantTableView.mj_footer.hidden = NO;
+            }
+            
+           
+            
+            if(arr.count == 0){
+                if(Count!=1){
+                    Count--;
+                    [_plantTableView.mj_footer endRefreshingWithNoMoreData];
+                    return;
+                }
+            }else{
+                [_plantTableView.mj_footer endRefreshing];
+            }
+            
             for (int i = 0 ; i<arr.count; i++) {
                 
                 
@@ -575,6 +692,14 @@
                     model2.extraStr = dic2[@"variety_name"];
                     
                     model2.pengID = dic2[@"gid"];
+                    
+                    NSString *typeS = [NSString stringWithFormat:@"%@",dic2[@"plant_type_id"]];
+                    if([typeS isEqualToString:@"1"]){
+                        
+                        NSString *needStr = [NSString stringWithFormat:@"%@株/粒",dic2[@"amount"]];
+                        model2.numberStr = needStr;
+                    }
+                    
                     [baseModel.arr addObject:model2];
                 }
                 

@@ -37,6 +37,10 @@
 
 @property (nonatomic,strong)UIButton *workBtn;
 
+@property (nonatomic,strong)UIButton *nextBtn;
+@property (nonatomic,strong)UIButton *hubBtn;
+
+
 @end
 
 @implementation PlantControllViewController{
@@ -53,11 +57,15 @@
     int upCount;
     int donwCount;
     
+    BOOL alMark;
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 //    [self setBtn];
+    
+    alMark = false;
     type = @"0";
     
     selID = @"-10";
@@ -66,15 +74,71 @@
     [self creatTitleAndBackBtn];
 //    [self CreateTitleLabelWithText:@"种植管理"];
     [self createHeadView];
-    [self createTabelview];
-    _plantTableView.mj_footer.hidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
-    [self createWork];
-    // Do any additional setup after loading the view.
-    [self requestData];
     
+    int nongChangHave = [[[NSUserDefaults standardUserDefaults]objectForKey:@"fid"]intValue];
+    NSString *pengHave = [[NSUserDefaults standardUserDefaults]objectForKey:@"pengID"];
+    int userType = [[[NSUserDefaults standardUserDefaults]objectForKey:@"userType"]intValue];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(re) name:@"plantChange" object:nil];
+    
+    [self createNextBtn];
+    if(userType == 1){
+
+        [self createTabelview];
+        _plantTableView.mj_footer.hidden = YES;
+        // Do any additional setup after loading the view.
+        [self requestData];
+        [self createWork];
+    }else{
+       
+        if(nongChangHave == 0){
+            [self createWork];
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有进入农场\n请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            [alertC addAction:confirmAct];
+            [self presentViewController:alertC animated:YES completion:nil];
+            
+            leftBtn.alpha = 0.3;
+            rightBtn.alpha = 0.3;
+            _workBtn.alpha = 0.3;
+        
+            leftBtn.enabled = NO;
+            rightBtn.enabled = NO;
+            _workBtn.enabled = NO;
+            
+        }else if ([pengHave isEqualToString:@""]){
+            [self createWork];
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有负责的大棚\n请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            [alertC addAction:confirmAct];
+            [self presentViewController:alertC animated:YES completion:nil];
+            
+            leftBtn.alpha = 0.3;
+            leftBtn.enabled = NO;
+        }else{
+            
+            [self createTabelview];
+            _plantTableView.mj_footer.hidden = YES;
+            
+            [self requestData];
+            
+            [self createWork];
+            
+            leftBtn.alpha = 0.3;
+            leftBtn.enabled = NO;
+        }
+        
+       
+        
+    }
     
 }
+
 
 -(void)creatTitleAndBackBtn{
     
@@ -123,18 +187,123 @@
 }
 
 
+-(void)createNextBtn{
+    _nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_nextBtn setTitle:@"重置筛选" forState:UIControlStateNormal];
+    //    [_nextBtn setTitle:@"取消编辑" forState:UIControlStateSelected];
+    [_nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    _nextBtn.titleLabel.font = [UIFont systemFontOfSize:14];
+//    [_nextBtn addTarget:self action:@selector(SaveClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView2 addSubview:_nextBtn];
+    //    _saveBtn.titleLabel.textAlignment = NSTextAlignmentRight;
+    [_nextBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_titleLabel.mas_centerY);
+        make.right.equalTo(_headView2.mas_right).offset(-HDAutoWidth(20));
+        make.height.equalTo(@(HDAutoHeight(26)));
+        make.width.equalTo(@(HDAutoWidth(150)));
+    }];
+    
+    _hubBtn = [[UIButton alloc]init];
+    _hubBtn.backgroundColor = [UIColor clearColor];
+    [_hubBtn addTarget:self action:@selector(SaveClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView2 addSubview:_hubBtn];
+//    _headView.userInteractionEnabled = YES;
+    [_hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_titleLabel.mas_centerY);
+        make.right.equalTo(_headView2.mas_right);
+        make.height.equalTo(_headView2.mas_height);
+        make.width.equalTo(@(HDAutoWidth(150)));
+    }];
+}
+
+-(void)SaveClick{
+    _hubBtn.enabled = NO;
+    _plantTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
+    _plantTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMore)];
+    type = @"0";
+    [_plantTableView.mj_header beginRefreshing];
+    [leftBtn setTitle:@"按员工" forState:UIControlStateNormal];
+    [leftBtn setTitleColor:UIColorFromHex(0x4db366) forState:UIControlStateNormal];
+    [leftBtn setBackgroundColor:[UIColor whiteColor]];
+    [rightBtn setTitle:@"按时间" forState:UIControlStateNormal];
+    [rightBtn setTitleColor:UIColorFromHex(0x4db366) forState:UIControlStateNormal];
+    [rightBtn setBackgroundColor:[UIColor whiteColor]];
+    Count = 1;
+//    [self requestData];
+}
+
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    [_plantTableView reloadData];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:YES];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     
     _plantTableView.alpha = 0;
     [UIView animateWithDuration:0.5 animations:^{
         _plantTableView.alpha = 1;
     }];
     
+    
+    if(_plantTableView == nil){
+        
+        int nongChangHave = [[[NSUserDefaults standardUserDefaults]objectForKey:@"fid"]intValue];
+        NSString *pengHave = [[NSUserDefaults standardUserDefaults]objectForKey:@"pengID"];
+        int userType = [[[NSUserDefaults standardUserDefaults]objectForKey:@"userType"]intValue];
+        
+        
+        
+        if(userType == 1){
+            
+            [self createTabelview];
+            _plantTableView.mj_footer.hidden = YES;
+            // Do any additional setup after loading the view.
+            [self requestData];
+            [self createWork];
+        }else{
+            
+            if(nongChangHave == 0){
+                
+               
+                
+            }else if ([pengHave isEqualToString:@""]){
+                
+              
+            }else{
+                
+                [self createTabelview];
+                _plantTableView.mj_footer.hidden = YES;
+                
+                [self requestData];
+                [self createWork];
+                
+            }
+            
+           
+            
+        }
+
+        
+    }
+    
+    
+//    [_plantTableView.header beginRefreshing];
+    
+    
+    
 //    [self requestData];
 //    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
+
+-(void)re{
+    if(NO == rightBtn.selected){
+        [_plantTableView.header beginRefreshing];
+    }
+}
+
 -(void)setBtn{
     
     _selectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -201,7 +370,7 @@
 -(void)refresh{
     NSLog(@"下拉刷新");
     Count = 1;
-    [_plantTableView.mj_header beginRefreshing];
+//    [_plantTableView.mj_header beginRefreshing];
     if([type isEqualToString:@"0"]){
         [self requestData];
     }else if ([type isEqualToString:@"1"]){
@@ -308,6 +477,8 @@
     
     cell.model = model;
     
+    [cell reloadNeedV];
+    
     return cell;
 }
 
@@ -328,9 +499,11 @@
     
 //    headView.backgroundColor = [UIColor clearColor];
     
+    PlantBaseModel *model = dataArr[section];
+    
     UILabel *label = [[UILabel alloc]init];
     
-    label.text = @"本月";
+    label.text = model.name;
     label.textColor = UIColorFromHex(0x727171);
     label.font = [UIFont systemFontOfSize:13];
     [headView addSubview:label];
@@ -402,6 +575,7 @@
 //    rightBtn.layer.masksToBounds = YES;
 //    rightBtn.layer.borderColor = UIColorFromHex(0x4db366).CGColor;
 //    rightBtn.layer.borderWidth = 1;
+    rightBtn.selected = NO;
     [rightBtn addTarget:self action:@selector(rightClick) forControlEvents:UIControlEventTouchUpInside];
     [rightBtn setTitle:@"按时间" forState:UIControlStateNormal];
     [rightBtn setBackgroundColor:[UIColor whiteColor]];
@@ -473,7 +647,7 @@
         leftBtn.backgroundColor = [UIColor whiteColor];
         [rightBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         rightBtn.backgroundColor = UIColorFromHex(0x4db366);
-        
+        rightBtn.selected = YES;
     }];
     NSDate *date = [NSDate date];
     _datepicker.maxLimitDate = date;
@@ -531,6 +705,18 @@
     
 }
 
+-(void)toendRe{
+    if(![_plantTableView.mj_header isRefreshing]){
+        _hubBtn.enabled = YES;
+    }else{
+        dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.2/*延迟执行时间*/ * NSEC_PER_SEC);
+        
+        dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+            [self toendRe];
+        });
+    }
+}
+
 -(void)requestData{
     
     type = @"0";
@@ -553,11 +739,32 @@
     [[InterfaceSingleton shareInstance].interfaceModel getMainPlantWithModel:model WithCallBack:^(int state, id data, NSString *msg) {
         [_plantTableView.mj_header endRefreshing];
         [_plantTableView.mj_footer endRefreshing];
+        
+        
+        [self toendRe];
+        
+        int userType = [[[NSUserDefaults standardUserDefaults]objectForKey:@"userType"]intValue];
+        if(userType == 1){
+            [self tableBackgroundWithTitle:@"暂无数据,请添加相关大棚和员工"];
+        }else{
+            [self tableBackgroundWithTitle:@"暂无数据,请点击“开始干活”按钮添加记录"];
+        }
+        
         if(state == 2000){
             NSLog(@"成功");
             
 
             NSArray *arr = data[@"data"];
+            
+            if(arr.count == 0){
+                if(Count!=1){
+                    Count--;
+                    [_plantTableView.mj_footer endRefreshingWithNoMoreData];
+                    return;
+                }
+            }
+            
+            
             for (int i = 0 ; i<arr.count; i++) {
                 
                 
@@ -585,6 +792,13 @@
                     
                     model.pengID = dic2[@"gid"];
                     
+                    NSString *typeS = [NSString stringWithFormat:@"%@",dic2[@"plant_type_id"]];
+                    if([typeS isEqualToString:@"1"]){
+                        
+                        NSString *needStr = [NSString stringWithFormat:@"%@株/粒",dic2[@"amount"]];
+                        model.numberStr = needStr;
+                    }
+                    
                     [baseModel.arr addObject:model];
                 }
                 
@@ -595,44 +809,51 @@
             _plantTableView.mj_footer.hidden = NO;
             [_plantTableView reloadData];
             
+            if(alMark == false){
+            
             _plantTableView.alpha = 0;
             [UIView animateWithDuration:0.5 animations:^{
                 _plantTableView.alpha = 1;
             }];
-            
+                alMark = true;
+            }
         }else{
             
-            dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3/*延迟执行时间*/ * NSEC_PER_SEC);
-            
-            dispatch_after(delayTime, dispatch_get_main_queue(), ^{
-                [self.view layoutIfNeeded];
-                [_plantTableView layoutIfNeeded];
-                [_plantTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
-                    //                [_plantTableView setScrollEnabled:NO];
-                    UIView *view = [[UIView alloc]initWithFrame:_plantTableView.bounds];
-                    view.backgroundColor = [UIColor clearColor];
-                    
-                    UILabel *label = [[UILabel alloc]init];
-                    label.text = @"暂无数据";
-                    label.font = [UIFont systemFontOfSize:16];
-                    label.textColor = MainColor;
-                    label.textAlignment = NSTextAlignmentCenter;
-                    label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(390), 300, HDAutoHeight(60));
-                    [view addSubview:label];
-                    
-                    
-                    return view;
-                } normalBlock:^(UITableView * _Nonnull sender) {
-                    [_plantTableView setScrollEnabled:YES];
-                }];
-                [_plantTableView reloadData];
-            });
             
         }
         if(state<2000){
             [MBProgressHUD showSuccess:msg];
         }
     }];
+
+}
+
+-(void)tableBackgroundWithTitle:(NSString *)title{
+    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3/*延迟执行时间*/ * NSEC_PER_SEC);
+    
+    dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+        [self.view layoutIfNeeded];
+        [_plantTableView layoutIfNeeded];
+        [_plantTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
+            //                [_plantTableView setScrollEnabled:NO];
+            UIView *view = [[UIView alloc]initWithFrame:_plantTableView.bounds];
+            view.backgroundColor = [UIColor clearColor];
+            
+            UILabel *label = [[UILabel alloc]init];
+            label.text = title;
+            label.font = [UIFont systemFontOfSize:16];
+            label.textColor = MainColor;
+            label.textAlignment = NSTextAlignmentCenter;
+            label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(390), 300, HDAutoHeight(60));
+            [view addSubview:label];
+            
+            
+            return view;
+        } normalBlock:^(UITableView * _Nonnull sender) {
+            [_plantTableView setScrollEnabled:YES];
+        }];
+        [_plantTableView reloadData];
+    });
 
 }
 
@@ -647,7 +868,7 @@
     rightBtn.backgroundColor = [UIColor whiteColor];
     [leftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     leftBtn.backgroundColor = UIColorFromHex(0x4db366);
-    
+    rightBtn.selected = NO;
     NSArray *arr = [dic allValues];
     
     Count = 1;
@@ -732,6 +953,18 @@
             NSLog(@"成功");
 
             NSArray *arr = data[@"data"];
+            
+            if(arr.count == 0){
+                if(Count!=1){
+                    Count--;
+                    [_plantTableView.mj_footer endRefreshingWithNoMoreData];
+                    return;
+                }
+            }
+            
+            
+            
+            
             for (int i = 0 ; i<arr.count; i++) {
                 
                 
@@ -758,6 +991,15 @@
                     model.extraStr = dic2[@"variety_name"];
                     
                     model.pengID = dic2[@"gid"];
+                    
+                    
+                    NSString *typeS = [NSString stringWithFormat:@"%@",dic2[@"plant_type_id"]];
+                    if([typeS isEqualToString:@"1"]){
+                        
+                        NSString *needStr = [NSString stringWithFormat:@"%@株/粒",dic2[@"amount"]];
+                        model.numberStr = needStr;
+                    }
+                    
                     [baseModel.arr addObject:model];
                 }
                 
@@ -842,6 +1084,16 @@
             NSLog(@"成功");
 
             NSArray *arr = data[@"data"];
+            
+            if(arr.count == 0){
+                if(Count!=1){
+                    Count--;
+                    [_plantTableView.mj_footer endRefreshingWithNoMoreData];
+                    return;
+                }
+            }
+            
+            
             for (int i = 0 ; i<arr.count; i++) {
                 
                 
@@ -868,6 +1120,14 @@
                     model.extraStr = dic2[@"variety_name"];
                     
                     model.pengID = dic2[@"gid"];
+                    
+                    NSString *typeS = [NSString stringWithFormat:@"%@",dic2[@"plant_type_id"]];
+                    if([typeS isEqualToString:@"1"]){
+                        
+                        NSString *needStr = [NSString stringWithFormat:@"%@株/粒",dic2[@"amount"]];
+                        model.numberStr = needStr;
+                    }
+                    
                     [baseModel.arr addObject:model];
                 }
                 
@@ -882,7 +1142,7 @@
             
             MJRefreshGifHeader *header = [MJRefreshGifHeader headerWithRefreshingTarget:self refreshingAction:@selector(Rrefresh)];
             
-            [header setTitle:@"上拉可加载较新时间段内容" forState:MJRefreshStateIdle];
+            [header setTitle:@"下拉可加载较新时间段内容" forState:MJRefreshStateIdle];
             [header setTitle:@"松开查看较新时间段内容" forState:MJRefreshStatePulling];
             [header setTitle:@"正在刷新..." forState:MJRefreshStateRefreshing];
 
@@ -890,7 +1150,7 @@
             _plantTableView.mj_header = header;
             
             MJRefreshAutoGifFooter *footer = [MJRefreshAutoGifFooter footerWithRefreshingTarget:self refreshingAction:@selector(RrefreshMore)];
-                        [footer setTitle:@"下拉可查看以往时间段内容" forState:MJRefreshStateIdle];
+                        [footer setTitle:@"上拉可查看以往时间段内容" forState:MJRefreshStateIdle];
             [footer setTitle:@"松开查看以往时间段内容" forState:MJRefreshStatePulling];
             [footer setTitle:@"正在刷新..." forState:MJRefreshStateRefreshing];
 
@@ -900,31 +1160,31 @@
             
         }else{
             
-//            dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3/*延迟执行时间*/ * NSEC_PER_SEC);
-//            
-//            dispatch_after(delayTime, dispatch_get_main_queue(), ^{
-//                [self.view layoutIfNeeded];
-//                [_plantTableView layoutIfNeeded];
-//                [_plantTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
-//                    //                [_plantTableView setScrollEnabled:NO];
-//                    UIView *view = [[UIView alloc]initWithFrame:_plantTableView.bounds];
-//                    view.backgroundColor = [UIColor whiteColor];
-//                    
-//                    UILabel *label = [[UILabel alloc]init];
-//                    label.text = @"暂无数据";
-//                    label.font = [UIFont systemFontOfSize:16];
-//                    label.textColor = MainColor;
-//                    label.textAlignment = NSTextAlignmentCenter;
-//                    label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(390), 300, HDAutoHeight(60));
-//                    [view addSubview:label];
-//                    
-//                    
-//                    return view;
-//                } normalBlock:^(UITableView * _Nonnull sender) {
-//                    [_plantTableView setScrollEnabled:YES];
-//                }];
-//                [_plantTableView reloadData];
-//            });
+            dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3/*延迟执行时间*/ * NSEC_PER_SEC);
+            
+            dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+                [self.view layoutIfNeeded];
+                [_plantTableView layoutIfNeeded];
+                [_plantTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
+                    //                [_plantTableView setScrollEnabled:NO];
+                    UIView *view = [[UIView alloc]initWithFrame:_plantTableView.bounds];
+                    view.backgroundColor = [UIColor clearColor];
+                    
+                    UILabel *label = [[UILabel alloc]init];
+                    label.text = @"暂无数据";
+                    label.font = [UIFont systemFontOfSize:16];
+                    label.textColor = MainColor;
+                    label.textAlignment = NSTextAlignmentCenter;
+                    label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(390), 300, HDAutoHeight(60));
+                    [view addSubview:label];
+                    
+                    
+                    return view;
+                } normalBlock:^(UITableView * _Nonnull sender) {
+                    [_plantTableView setScrollEnabled:YES];
+                }];
+                [_plantTableView reloadData];
+            });
            
             upCount = 1;
             donwCount = 2;
@@ -943,7 +1203,7 @@
             [footer setTitle:@"松开查看以往时间段内容" forState:MJRefreshStatePulling];
             [footer setTitle:@"正在刷新..." forState:MJRefreshStateRefreshing];
             _plantTableView.mj_footer = footer;
-
+            [_plantTableView reloadData];
         }
         
         _plantTableView.mj_footer.hidden = NO;
@@ -975,10 +1235,8 @@
             NSArray *arr = data[@"data"];
             
             if(arr.count == 0){
+                [_plantTableView.mj_footer endRefreshingWithNoMoreData];
                 
-                if(upCount != 1){
-                    upCount --;
-                }
                 dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3/*延迟执行时间*/ * NSEC_PER_SEC);
                 dispatch_after(delayTime, dispatch_get_main_queue(), ^{
                     [self.view layoutIfNeeded];
@@ -1011,11 +1269,13 @@
                 
             }
             
-            
+            PlantBaseModel *orgba = [dataArr lastObject];
             for (int i = 0 ; i<arr.count; i++) {
                 
                 
                 NSDictionary *dic = arr[i];
+                
+                
                 
                 PlantBaseModel *baseModel = [[PlantBaseModel alloc]init];
                 
@@ -1038,11 +1298,26 @@
                     model.extraStr = dic2[@"variety_name"];
                     
                     model.pengID = dic2[@"gid"];
+                    
+                    NSString *typeS = [NSString stringWithFormat:@"%@",dic2[@"plant_type_id"]];
+                    if([typeS isEqualToString:@"1"]){
+                        
+                        NSString *needStr = [NSString stringWithFormat:@"%@株/粒",dic2[@"amount"]];
+                        model.numberStr = needStr;
+                    }
+                    
                     [baseModel.arr addObject:model];
                 }
                 
-                [dataArr addObject:baseModel];
+                if([orgba.name isEqualToString:baseModel.name]){
+                    
+                    [orgba.arr addObjectsFromArray:baseModel.arr];
+                    
+                }else{
+                    [dataArr addObject:baseModel];
+                }
                 
+           
             }
             
 //            [needArr addObjectsFromArray:dataArr];
@@ -1124,9 +1399,9 @@
             
             if(arr.count == 0){
                 
-                if(donwCount != 2){
-                    donwCount --;
-                }
+//                if(donwCount != 2){
+//                    donwCount --;
+//                }
                 dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3/*延迟执行时间*/ * NSEC_PER_SEC);
                 
                 dispatch_after(delayTime, dispatch_get_main_queue(), ^{
@@ -1187,6 +1462,14 @@
                     model.extraStr = dic2[@"variety_name"];
                     
                     model.pengID = dic2[@"gid"];
+                    
+                    NSString *typeS = [NSString stringWithFormat:@"%@",dic2[@"plant_type_id"]];
+                    if([typeS isEqualToString:@"1"]){
+                        
+                        NSString *needStr = [NSString stringWithFormat:@"%@株/粒",dic2[@"amount"]];
+                        model.numberStr = needStr;
+                    }
+                    
                     [baseModel.arr addObject:model];
                 }
                 

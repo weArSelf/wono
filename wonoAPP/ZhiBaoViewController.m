@@ -55,7 +55,7 @@
     [self getdata];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(Change:) name:@"catChange" object:nil];
-
+    _moneyTextView.keyboardType = UIKeyboardTypeNumberPad;
 }
 
 
@@ -75,8 +75,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 -(void)createSaveBtn{
@@ -91,6 +94,17 @@
         make.centerY.equalTo(_titleLabel.mas_centerY);
         make.right.equalTo(_headView.mas_right).offset(-HDAutoWidth(20));
         make.height.equalTo(@(HDAutoHeight(26)));
+        make.width.equalTo(@(HDAutoWidth(150)));
+    }];
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(SaveClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_titleLabel.mas_centerY);
+        make.right.equalTo(_headView.mas_right);
+        make.height.equalTo(_headView.mas_height);
         make.width.equalTo(@(HDAutoWidth(150)));
     }];
 }
@@ -121,8 +135,30 @@
         
         if(state == 2000){
             NSLog(@"成功");
-            [MBProgressHUD showSuccess:@"提交成功"];
-            [self.navigationController popToRootViewControllerAnimated:YES];
+//            [MBProgressHUD showSuccess:@"提交成功"];
+//            [[NSNotificationCenter defaultCenter]postNotificationName:@"plantChange" object:nil];
+//            [self.navigationController popToRootViewControllerAnimated:YES];
+            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"提交成功!" preferredStyle:UIAlertControllerStyleAlert];
+            [alertVC addAction:[UIAlertAction actionWithTitle:@"返回首页" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }]];
+            [alertVC addAction:[UIAlertAction actionWithTitle:@"继续添加" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                _catDetailLabel.text = @"点击选择种类";
+                _moneyTextView.text = @"";
+                
+                _addTextView.text = @"";
+                
+                _model.amount = _moneyTextView.text;
+                
+                _model.note = _addTextView.text;
+                _model.unitType  = @"-1";
+                
+                
+                SeModel.typeId = nil;
+                [self getdata];
+            }]];
+            [self presentViewController:alertVC animated:YES completion:nil];
         }
         if(state<2000){
             [MBProgressHUD showSuccess:msg];
@@ -268,7 +304,7 @@
     _moneyTextView.layer.borderWidth = 1;
     _moneyTextView.font = [UIFont systemFontOfSize:14];
     _moneyTextView.textAlignment = NSTextAlignmentCenter;
-    _moneyTextView.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+    _moneyTextView.keyboardType = UIKeyboardTypeNumberPad;
     
     [self.view addSubview:_moneyTextView];
     
@@ -326,6 +362,10 @@
 -(void)labelClick:(UITapGestureRecognizer *)recognizer{
     UILabel *label=(UILabel*)recognizer.view;
     NSLog(@"%ld被点击了",(long)label.tag);
+    if(nexArr.count == 0){
+        [MBProgressHUD showSuccess:@"数据加载中，请稍后"];
+        return;
+    }
     PlantTypeViewController *plant = [[PlantTypeViewController alloc]init];
     plant.NowdataArr = nexArr;
     [self.navigationController pushViewController:plant animated:YES];

@@ -41,8 +41,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 -(void)creatTitleAndBackBtn{
@@ -52,7 +55,7 @@
     _headView.alpha = 0.8;
     [self.view addSubview:_headView];
     _titleLabel = [[UILabel alloc]init];
-    _titleLabel.text = @"种植品种";
+    _titleLabel.text = @"植保品种";
     _titleLabel.textColor = [UIColor whiteColor];
     _titleLabel.font = [UIFont systemFontOfSize:18];
     _titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -128,6 +131,7 @@
     //    _plantTableView.frame = self.view.frame;
     _contentTableView.showsVerticalScrollIndicator = NO;
     //    _contentTableView.scrollEnabled = NO;
+    _contentTableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0,0,0,0.01)];
     [self.view addSubview:_contentTableView];
     
     [_contentTableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -203,7 +207,7 @@
     
     [[NSNotificationCenter defaultCenter]postNotificationName:@"catChange" object:model];
     
-    [[InterfaceSingleton shareInstance].interfaceModel getPengWithCatPid:pid WithType:nil AndCallBack:^(int state, id data, NSString *msg) {
+    [[InterfaceSingleton shareInstance].interfaceModel getPengWithCatPid:pid WithType:@"3" AndCallBack:^(int state, id data, NSString *msg) {
         
         if(state == 2000){
             NSLog(@"");

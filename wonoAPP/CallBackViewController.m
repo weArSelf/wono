@@ -36,8 +36,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 
@@ -101,6 +104,7 @@
     
     if(![_contentTextView.text isEqualToString:@""]){
         
+        [_contentTextView resignFirstResponder];
         UIAlertController *AlertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"返回将失去当前填写内容\n是否继续？" preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

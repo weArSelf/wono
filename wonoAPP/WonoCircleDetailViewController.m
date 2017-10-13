@@ -11,7 +11,7 @@
 #import "WonoAnswerTableViewCell.h"
 #import "CMInputView.h"
 #import "ToAnswerViewController.h"
-
+#import <AVFoundation/AVFoundation.h>
 
 #define HEIGHT [ [ UIScreen mainScreen ] bounds ].size.height
 
@@ -33,6 +33,9 @@
 @property (nonatomic,strong) UIView *botView;
 @property (nonatomic,strong) CMInputView *botTextView;
 
+@property (nonatomic, strong) AVAudioPlayer *player; //播放器
+@property (nonatomic, strong) AVAudioSession *session;
+
 @end
 
 @implementation WonoCircleDetailViewController{
@@ -41,15 +44,30 @@
     int mark;
     
     NSString *replyID;
+    
+    BOOL reMark;
+    
+    int rowCount;
+    
+    int Ccount;
+    
+    NSMutableArray *tempAswerArr;
+    
+    NSData *data;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    Ccount = 0;
+    rowCount = 0;
+    reMark = false;
     replyID = @"";
     mark = 0;
     page = 1;
     // Do any additional setup after loading the view.
     answerArr = [NSMutableArray array];
+    tempAswerArr = [NSMutableArray array];
     self.view.backgroundColor = [UIColor whiteColor];
     [self creatTitleAndBackBtn];
     [self createNextBtn];
@@ -83,6 +101,56 @@
     [self requsetDetail];
     
      [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(refresh) name:@"wonoCircleRe" object:nil];
+    
+    [self getPermission];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    [_mainTabelView reloadData];
+    
+//    if(reMark == false){
+////        reMark = true;
+//    }else{
+//        [self refresh];
+//    }
+    
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    
+    [super viewWillDisappear:animated];
+    if([self.player isPlaying]){
+        
+        [self.player stop];
+        
+        self.player = nil;
+    }else{
+        self.player = nil;
+    }
+    
+}
+
+-(void)getPermission{
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getUserCollectWithQid:self.qid WithCallBack:^(int state, id data, NSString *msg) {
+       
+        if(state == 2000){
+        
+            NSDictionary *dic = data;
+            int res = [dic[@"collect"] intValue];
+            _nextBtn.hidden = NO;
+            if(res == 0){
+                _nextBtn.selected = NO;
+            }else{
+                _nextBtn.selected = YES;
+            }
+            
+        }
+        
+    }];
+    
 }
 
 -(void)dealloc{
@@ -92,6 +160,20 @@
 -(void)setQid:(NSString *)qid{
     _qid = qid;
     
+}
+
+-(void)doMark{
+    [_mainTabelView.mj_header endRefreshing];
+    [_mainTabelView.mj_footer endRefreshing];
+    if([_mainTabelView.mj_header isRefreshing]){
+        dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.2/*延迟执行时间*/ * NSEC_PER_SEC);
+        
+        dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+            [self doMark];
+        });
+    }else{
+        Ccount = 0;
+    }
 }
 
 -(void)requsetDetail{
@@ -109,10 +191,18 @@
             NSDictionary *reDic = dic[@"author"];
             _askModel.imageArr = dic[@"pic_urls"];
             _askModel.askId = dic[@"id"];
-            _askModel.name = reDic[@"username"];
+            
             _askModel.time = dic[@"created_at"];
-            _askModel.headUrl = reDic[@"avatar"];
-            _askModel.sujjestCount = @"233";
+            @try {
+                _askModel.name = reDic[@"username"];
+                _askModel.headUrl = reDic[@"avatar"];
+            } @catch (NSException *exception) {
+                
+            } @finally {
+                
+            }
+            
+            _askModel.sujjestCount = dic[@"like_num"];
             _askModel.positionStr = dic[@"location"];
             
             if([_askModel.contentStr isEqualToString:@""]&&_askModel.imageArr.count == 0){
@@ -130,6 +220,8 @@
             
 //            [_mainTabelView reloadData];
             [self requestData];
+            
+            
             
         }else{
             [MBProgressHUD showSuccess:msg];
@@ -172,21 +264,33 @@
     
     page = 1;
     
-    for(int i=0;i<answerArr.count;i++){
-        NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:1];
-        //        NSString *cellIdentifier = [NSString stringWithFormat:@"identy%d",i];
-        WonoAnswerTableViewCell *cell = [_mainTabelView cellForRowAtIndexPath:path];
-        if(cell == nil){
-            break;
-        }
-        cell.changeMark = @"1";
+    if(Ccount == 0){
+        Ccount++;
+    }else{
+        return;
     }
     
-    answerArr = [NSMutableArray array];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"markChange" object:nil];
+//    for(int i=0;i<answerArr.count;i++){
+//        NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:1];
+//        //        NSString *cellIdentifier = [NSString stringWithFormat:@"identy%d",i];
+//        WonoAnswerTableViewCell *cell = [_mainTabelView cellForRowAtIndexPath:path];
+////        if(cell == nil){
+////            break;
+////        }
+//        cell.changeMark = @"1";
+//    }
     
     
     
-    [self requestData];
+    tempAswerArr = [NSMutableArray array];
+    
+//    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.2/*延迟执行时间*/ * NSEC_PER_SEC);
+//    
+//    dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+        [self requestData];
+//    });
+    
 
 }
 -(void)requestMore{
@@ -354,15 +458,20 @@
     [[InterfaceSingleton shareInstance].interfaceModel getWonoAllAnswerWithPage:page AndQid:_qid WithCallBack:^(int state, id data, NSString *msg) {
         [_mainTabelView.mj_header endRefreshing];
         [_mainTabelView.mj_footer endRefreshing];
+        
+        [self doMark];
         if(state == 2000){
             NSLog(@"chenggong");
             
             NSDictionary *dic = data;
             NSArray *arr = dic[@"data"];
             
+            rowCount = [dic[@"total"]intValue];
+            
             if(arr.count==0){
                 if(page !=1){
                     page--;
+                    [_mainTabelView.mj_footer endRefreshingWithNoMoreData];
                 }
             }
             
@@ -377,8 +486,11 @@
                 model.time = dataDic[@"created_at"];
                 model.contentStr = dataDic[@"content"];
                 model.positionStr = dataDic[@"location"];
-                model.audioUrl = dataDic[@"audio"];
-                model.audioLength = @"0";//!!!!!!!!!!!!!!!!!!!!
+                
+                NSDictionary *dic123 = dataDic[@"audio"];
+                
+                model.audioUrl = dic123[@"url"];
+                model.audioLength = dic123[@"time"];//!!!!!!!!!!!!!!!!!!!!
                 model.imageArr = dataDic[@"pic_urls"];
                 model.answerId = dataDic[@"id"];
                 model.replyName = dataDic[@"reply_name"];
@@ -405,18 +517,32 @@
                     model.type = 7;
                 }
                 
-                [answerArr addObject:model];
+                [tempAswerArr addObject:model];
             }
+            
+            answerArr = tempAswerArr;
+            
             [_mainTabelView reloadData];
             
-            if(answerArr.count<4){
+            
+            if(reMark == false){
+                reMark = true;
+                _mainTabelView.alpha = 0;
+                [UIView animateWithDuration:0.5 animations:^{
+                    _mainTabelView.alpha = 1;
+                }];
+            }
+            
+            if(tempAswerArr.count<4){
                 _mainTabelView.mj_footer.hidden = YES;
             }else{
                 _mainTabelView.mj_footer.hidden = NO;
             }
             
         }else{
-            [MBProgressHUD showNormalMessage:msg];
+            answerArr = tempAswerArr;
+            [_mainTabelView reloadData];
+//            [MBProgressHUD showNormalMessage:msg];
             if(page!=1){
                 page--;
             }
@@ -489,14 +615,19 @@
 -(void)BackClick{
     NSLog(@"点击返回");
     
+    if([_Cmark isEqualToString:@"1"]){
+        [self.navigationController popViewControllerAnimated:YES];
+    }else{
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
     
-    
-    [self.navigationController popViewControllerAnimated:YES];
+//
 }
 
 
 -(void)createNextBtn{
     _nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _nextBtn.hidden = YES;
     [_nextBtn setTitle:@"收藏" forState:UIControlStateNormal];
     [_nextBtn setTitle:@"取消收藏" forState:UIControlStateSelected];
     [_nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -521,11 +652,55 @@
         make.height.equalTo(_headView.mas_height);
         make.width.equalTo(@(HDAutoWidth(150)));
     }];
+    _nextBtn.selected = NO;
 }
+
+
 
 -(void)SaveClick{
     NSLog(@"点击发送");
     [_botTextView resignFirstResponder];
+//    _nextBtn.enabled = NO;
+    if(_nextBtn.selected){
+        UIAlertController *alertVc = [UIAlertController alertControllerWithTitle:@"提示" message:@"是否要取消该收藏？" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+            _nextBtn.selected = NO;
+            [[InterfaceSingleton shareInstance].interfaceModel collectWithAction:@"2" AndQid:_askModel.askId WithCallBack:^(int state, id data, NSString *msg) {
+                
+                if(state == 2000){
+                    
+                    //                    _nextBtn.enabled = YES;
+                    
+                }else{
+                    _nextBtn.selected = YES;
+                    [MBProgressHUD showSuccess:@"取消收藏失败"];
+                }
+                
+            }];
+        }];
+        UIAlertAction *cancelAct = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [alertVc addAction:cancelAct];
+        [alertVc addAction:confirmAct];
+        
+        [self presentViewController:alertVc animated:YES completion:nil];
+        
+    }else{
+        
+        
+        _nextBtn.selected = YES;
+        [[InterfaceSingleton shareInstance].interfaceModel collectWithAction:@"1" AndQid:_askModel.askId WithCallBack:^(int state, id data, NSString *msg) {
+            //            _nextBtn.enabled = YES;
+            if(state!=2000){
+                [MBProgressHUD showSuccess:@"收藏失败"];
+                _nextBtn.selected = NO;
+            }
+        }];
+
+    }
 }
 
 
@@ -581,8 +756,7 @@
             return 1;
         }
     }
-    
-    return answerArr.count;
+    return  answerArr.count;
     
 }
 
@@ -623,32 +797,55 @@
             
         }];
 //        [cell setCellBlock:<#void (^)(NSDictionary *)cellBlock#>]
-        
+        [cell reloadTitle];
         
         return cell;
     }else{
         
         
         NSString *cellIdentifier = [NSString stringWithFormat:@"identy%ld",(long)indexPath.row];
+        NSLog(@"%@",cellIdentifier);
         WonoAnswerModel *model = answerArr[indexPath.row];
-        
+        if(model.type == 0){
+            model.type = 1;
+        }
         WonoAnswerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         if(cell == nil){
             cell = [[WonoAnswerTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.model = model;
-            
+//            cell.model = model;
+            if(model!=nil){
+                cell.model = model;
+            }else{
+                NSLog(@"空了1");
+
+
+            }
+
             
         }
+//        [cell reloadTitle];
         
         if([cell.changeMark isEqualToString:@"1"]){
             NSLog(@"aaa");
-            
+
             cell = [[WonoAnswerTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.model = model;
+            if(model != nil){
+                cell.model = model;
+            }else{
+                NSLog(@"空了2");
+
+
+            }
             cell.changeMark = @"0";
         }
+
+        
+       
+        
+        
+        
     
         [cell setCellBlock:^(NSDictionary *dic){
             NSLog(@"点击了");
@@ -661,6 +858,62 @@
             
         }];
         
+        cell.audioBlo = ^(NSString *audioUrl) {
+            
+            
+        
+        //    NSString *str = _model.audioUrl;
+        //    NSURL *url = [NSURL URLWithString:str];
+        
+            
+            NSURL *url = [NSURL URLWithString:audioUrl];
+            if ([self.player isPlaying]){
+//                if(self.player.url == url){
+                [self.player stop];
+                return;
+//                }
+            }
+        
+                    AVAudioSession *session =[AVAudioSession sharedInstance];
+                    NSError *sessionError;
+                    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&sessionError];
+        
+                    if (session == nil) {
+        
+                        NSLog(@"Error creating session: %@",[sessionError description]);
+        
+                    }else{
+                        [session setActive:YES error:nil];
+        
+                    }
+                    self.session = session;
+        
+            
+        
+                    data = [NSData dataWithContentsOfURL:url];
+            
+        
+            
+            [self.player stop];
+            
+            
+        
+            self.player = [[AVAudioPlayer alloc] initWithData:data error:nil];;
+            
+//            self.player = [[AVAudioPlayer alloc]initWithContentsOfURL:url error:nil];
+        
+            NSLog(@"%li",self.player.data.length/1024);
+        
+        
+        
+            [self.session setCategory:AVAudioSessionCategoryPlayback error:nil];
+            [self.player play];
+
+            
+        };
+        
+        [cell reloadTitle];
+        
         return cell;
     }
     
@@ -672,25 +925,33 @@
     
     if(indexPath.section == 0){
         
+        CGFloat height123 = [self getSpaceLabelHeight:_askModel.titleStr withFont:[UIFont systemFontOfSize:15] withWidth:SCREEN_WIDTH - HDAutoWidth(80)]+HDAutoHeight(20);
         
         CGFloat height233 = [self getSpaceLabelHeight:_askModel.contentStr withFont:[UIFont systemFontOfSize:13] withWidth:SCREEN_WIDTH - HDAutoWidth(80)]+HDAutoHeight(20);
         CGFloat height = 0;
         
         switch (_askModel.type) {
             case 1:{
-                height = HDAutoHeight(270)+HDAutoHeight(90);
+                height = HDAutoHeight(220)+HDAutoHeight(90)+height123;
                 break;
             }
             case 2:{
-                height = HDAutoHeight(310)+HDAutoHeight(10)+height233;
+                height = HDAutoHeight(260)+HDAutoHeight(10)+height233+height123;
                 break;
             }
             case 3:{
-                height = HDAutoHeight(550)+HDAutoHeight(90)-HDAutoHeight(180);
+                height = HDAutoHeight(550)+HDAutoHeight(35)-HDAutoHeight(180)+height123;
                 break;
             }
             case 4:{
-                height = HDAutoHeight(630)+HDAutoHeight(20)-HDAutoHeight(180)+height233;
+                if(IS_IPHONE_5){
+                    
+                    height = HDAutoHeight(595)-HDAutoHeight(180)+height233+height123;
+                    
+                }else{
+                    height = HDAutoHeight(570)-HDAutoHeight(180)+height233+height123;
+                }
+                
                 break;
             }
            
@@ -704,7 +965,19 @@
     }else{
         
         WonoAnswerModel *model = answerArr[indexPath.row];
-        CGFloat height233 = [self getSpaceLabelHeight:model.contentStr withFont:[UIFont systemFontOfSize:13] withWidth:SCREEN_WIDTH - HDAutoWidth(80)]+HDAutoHeight(20);
+        
+        NSString *res;
+        
+        if(![model.replyName isEqualToString:@""]){
+            //        NSString *conS = _model.contentStr;
+            res = [NSString stringWithFormat:@"回复@%@:  %@",model.replyName,model.contentStr];
+            
+        }else{
+            res = model.contentStr;
+        }
+
+        
+        CGFloat height233 = [self getSpaceLabelHeight:res withFont:[UIFont systemFontOfSize:13] withWidth:SCREEN_WIDTH - HDAutoWidth(80)]+HDAutoHeight(20);
         CGFloat height = 0;
         
         switch (model.type) {
@@ -807,7 +1080,7 @@
     if(section == 1){
     UILabel *label = [[UILabel alloc]init];
         if(mark != 0){
-            label.text = [NSString stringWithFormat:@"%lu个回答",(unsigned long)answerArr.count];
+            label.text = [NSString stringWithFormat:@"%d个回答",rowCount];
         }
     label.font = [UIFont systemFontOfSize:13];
     label.textColor = [UIColor grayColor];

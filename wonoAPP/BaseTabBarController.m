@@ -18,13 +18,17 @@
 
 #import "KBTabbar.h"
 
+#import "PPBadgeView.h"
+
 @interface BaseTabBarController ()<UITabBarControllerDelegate>
 
 @property (nonatomic,strong)KBTabbar *tabbar;
 
 @end
 
-@implementation BaseTabBarController
+@implementation BaseTabBarController{
+    BaseNavViewController *nav4;
+}
 
 
 - (void)viewDidLoad {
@@ -69,7 +73,7 @@
     WonoCircleViewController *wono = [[WonoCircleViewController alloc]init];
     
     
-    BaseNavViewController *nav4 = [[BaseNavViewController alloc]initWithRootViewController:wono];
+    nav4 = [[BaseNavViewController alloc]initWithRootViewController:wono];
     nav4.tabBarItem.title = @"农知道";
     nav4.tabBarItem.image = [UIImage imageNamed:@"沃农圈"];
     nav4.tabBarItem.selectedImage = [UIImage imageNamed:@"沃农圈-selected"];
@@ -97,6 +101,26 @@
     [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
     
     [self setCustomtabbar];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(valChange:) name:@"badgeChange" object:nil];
+    
+    
+}
+
+-(void)valChange:(NSNotification *)noti{
+    
+    NSString *str = (NSString *)[noti object];
+
+    if([str isEqualToString:@"0"]){
+        [nav4.tabBarItem pp_hiddenBadge];
+    }else{
+        [nav4.tabBarItem pp_addBadgeWithText:str];
+        [nav4.tabBarItem pp_setBadgeLabelAttributes:^(PPBadgeLabel *badgeLabel) {
+            badgeLabel.font = [UIFont systemFontOfSize:12];
+        }];
+
+    }
+    
 }
 
 

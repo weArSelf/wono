@@ -42,6 +42,14 @@
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     [param setObject:phone forKey:@"mobile"];
     [param setObject:secret forKey:@"password"];
+    
+    
+    NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"DEVICETOKEN"];
+    NSString *clientId = [[NSUserDefaults standardUserDefaults] objectForKey:@"CLIENTID"];
+    
+    [param setObject:token forKey:@"device_token"];
+    [param setObject:clientId forKey:@"client_id"];
+    
     [[BaseInterfaceModel shareInstance] sendData:API_Login
                                       parameters:param
                                             type:ENRT_POST
@@ -119,8 +127,14 @@
     [param setObject:model.name forKey:@"name"];
     if(model.type == 1){
         [param setObject:model.farmName forKey:@"farmName"];
-        [param setObject:model.area forKey:@"area"];
+//        [param setObject:model.area forKey:@"area"];
         
+        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+        [dic setObject:model.address forKey:@"detail"];
+        [dic setObject:model.location forKey:@"gps"];
+        NSString *resStr = [self DataTOjsonString:dic];
+        
+        [param setObject:resStr forKey:@"area"];
     }
     
     
@@ -140,6 +154,22 @@
         }
     }];
 }
+
+-(NSString*)DataTOjsonString:(id)object
+{
+    NSString *jsonString = nil;
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:object
+                                                       options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
+                                                         error:&error];
+    if (! jsonData) {
+        NSLog(@"Got an error: %@", error);
+    } else {
+        jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+    return jsonString;
+}
+
 
 -(void)searchForUserPhone:(NSString *)phone WithCallBack:(AllCallBack)callback{
 
@@ -374,7 +404,7 @@
     [param setObject:name forKey:@"name"];
     [param setObject:type forKey:@"type"];
     [param setObject:arr forKey:@"uids"];
-    [param setObject:varId forKey:@"varieties_id"];
+//    [param setObject:varId forKey:@"varieties_id"];
     [[BaseInterfaceModel shareInstance] sendData:API_AddPeng parameters:param type:ENRT_POST success:^(id task, id responseObject) {
         
         NSString *code = responseObject[@"code"];
@@ -1031,6 +1061,313 @@
     
 
     
+    
+}
+
+-(void)MarkPointWithAction:(NSString *)act AndQid:(NSString *)qid WithCallBack:(AllCallBack)callback{
+    
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:qid forKey:@"qid"];
+    [param setObject:act forKey:@"action"];
+    
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_Point parameters:param type:ENRT_POST success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+}
+
+-(void)collectWithAction:(NSString *)act AndQid:(NSString *)qid WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:qid forKey:@"qid"];
+    [param setObject:act forKey:@"action"];
+    
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_Collect parameters:param type:ENRT_POST success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+
+}
+
+-(void)getUserLikeWithQid:(NSString *)qid WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:qid forKey:@"qid"];
+
+    [[BaseInterfaceModel shareInstance] sendData:API_GetPoint parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+    
+}
+
+-(void)getUserCollectWithQid:(NSString *)qid WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:qid forKey:@"qid"];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_GetCollect parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+
+    
+}
+
+-(void)getUserCollectDetailWithPage:(int)page WithCallBack:(AllCallBack)callback{
+
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    NSString *str = [NSString stringWithFormat:@"%d",page];
+    [param setObject:str forKey:@"page"];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_GetUserCollect parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+}
+
+-(void)ChangeUserDetailWithObject:(NSString *)obj AndKey:(NSString *)key WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
+    
+    [param setObject:str forKey:@"fid"];
+    [param setObject:obj forKey:key];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_ChangeFarmDetail parameters:param type:ENRT_POST success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+}
+
+-(void)getMyMessageWithPage:(int)page WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    NSString *str = [NSString stringWithFormat:@"%d",page];
+    [param setObject:str forKey:@"page"];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_GetMyMessage parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+
+    
+}
+
+-(void)getUnReadMsgCountWithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_GetUnReadMessage parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+}
+
+-(void)changeMsgStateWithMessageID:(NSString *)needID AndStatus:(NSString *)status WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:needID forKey:@"id"];
+    [param setObject:status forKey:@"status"];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_ChangeMyMessage parameters:param type:ENRT_POST success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+
+
+}
+
+-(void)changeuserPswWithOrgin:(NSString *)orgpsw AndNewPsw:(NSString *)newpsw WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:orgpsw forKey:@"old_password"];
+    [param setObject:newpsw forKey:@"new_password"];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_ChangePsw parameters:param type:ENRT_POST success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+    
+}
+
+-(void)updatePengWithArea:(NSString *)area AndGid:(NSString *)gid AndImei:(NSString *)imei AndType:(NSString *)type AndUids:(NSString *)uids WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    if(![area isEqualToString:@""]){
+        [param setObject:area forKey:@"area"];
+    }
+    if(![imei isEqualToString:@""]){
+        [param setObject:imei forKey:@"imei"];
+    }
+    if(![type isEqualToString:@""]){
+        [param setObject:type forKey:@"type"];
+    }
+    if(![uids isEqualToString:@""]){
+        [param setObject:uids forKey:@"uids"];
+    }
+    
+    [param setObject:gid forKey:@"gid"];
+    
+    
+    
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_UpdatePeng parameters:param type:ENRT_POST success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+    
+}
+
+-(void)userLogOutWithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+   
+    [[BaseInterfaceModel shareInstance] sendData:API_LogOut parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
     
 }
 

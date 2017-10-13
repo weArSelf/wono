@@ -70,7 +70,7 @@ IMPLEMENT_PROPERTY(UITextView)
     if (number && textField.text.length > [number integerValue] && textField.markedTextRange == nil) {
         
         int qwe = [number intValue];
-        NSString *str = [NSString stringWithFormat:@"不得超过%d个字",qwe];
+        NSString *str = [NSString stringWithFormat:@"长度不得超过%d",qwe];
         [MBProgressHUD showSuccess:str];
         
         textField.text = [textField.text substringWithRange: NSMakeRange(0, [number integerValue])];
@@ -86,7 +86,7 @@ IMPLEMENT_PROPERTY(UITextView)
     NSNumber *number = [textView valueForKey:PROPERTY_NAME];
     if (number && textView.text.length > [number integerValue] && textView.markedTextRange == nil) {
         int qwe = [number intValue];
-        NSString *str = [NSString stringWithFormat:@"不得超过%d个字",qwe];
+        NSString *str = [NSString stringWithFormat:@"长度不得超过%d",qwe];
         [MBProgressHUD showSuccess:str];
         
         textView.text = [textView.text substringWithRange: NSMakeRange(0, [number integerValue])];

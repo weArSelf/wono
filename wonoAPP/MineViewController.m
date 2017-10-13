@@ -39,19 +39,73 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 //    dataArr = [NSArray arrayWithObjects:@"我的收藏",@"修改密码",@"意见反馈",@"关于沃农",@"注销账号", nil];
-    dataArr = [NSArray arrayWithObjects:@"我的收藏",@"管理员工",@"管理大棚",@"我的农场",@"设置",nil];
+    
+    
+    
+    
+    
+    
+    
     // Do any additional setup after loading the view.
 //    [self CreateTitleLabelWithText:@"我的"];
     [self creatTitleAndBackBtn];
     [self createHead];
     [self createTable];
     
+    [[NSUserDefaults standardUserDefaults]setObject:@"1" forKey:@"AleKey"];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self requestData];
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    
+    
+    int userType = [[[NSUserDefaults standardUserDefaults]objectForKey:@"userType"]intValue];
+    int nongChangHave = [[[NSUserDefaults standardUserDefaults]objectForKey:@"fid"]intValue];
+    NSString *pengHave = [[NSUserDefaults standardUserDefaults]objectForKey:@"pengID"];
+    
+    
+    if(userType == 1){
+        dataArr = [NSArray arrayWithObjects:@"我的收藏",@"管理员工",@"管理大棚",@"我的农场",@"设置",nil];
+    }else{
+        if(nongChangHave == 0){
+            
+            dataArr = [NSArray arrayWithObjects:@"我的收藏",@"设置",nil];
+            
+//            [[NSUserDefaults standardUserDefaults]setObject:@"1" forKey:@"AleKey"];
+            NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"AleKey"];
+            if([str isEqualToString:@"1"]){
+                
+                [[NSUserDefaults standardUserDefaults]setObject:@"1" forKey:@"AleKey"];
+                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有进入农场,请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [alertC addAction:confirmAct];
+                [self presentViewController:alertC animated:YES completion:nil];
+            }
+        }else{
+            
+            dataArr = [NSArray arrayWithObjects:@"我的收藏",@"我的农场",@"设置",nil];
+            
+        }
+        
+        
+    }
+    
+
+    
+    
+    
+//    dataArr = [NSArray arrayWithObjects:@"我的收藏",@"管理员工",@"管理大棚",@"我的农场",@"设置",nil];
+
+    [_contentTableView reloadData];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
 }
 
 -(void)requestData{
@@ -144,6 +198,7 @@
     //    _plantTableView.frame = self.view.frame;
     _contentTableView.showsVerticalScrollIndicator = NO;
     _contentTableView.scrollEnabled = NO;
+    _contentTableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0,0,0,0.01)];
     [self.view addSubview:_contentTableView];
     
     [_contentTableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -208,17 +263,27 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    int userType = [[[NSUserDefaults standardUserDefaults]objectForKey:@"userType"]intValue];
+    if(userType == 1){
+    
+    
     switch (indexPath.row) {
         case 0:{
+            
+            
+            
             MyCollectionViewController *myVc = [[MyCollectionViewController alloc]init];
             myVc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:myVc animated:YES];
             break;
         }
         case 1:{
+            
+            
             EmployeeViewController *empVc = [[EmployeeViewController alloc]init];
             empVc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:empVc animated:YES];
+            
             break;
         }
         case 2:{
@@ -248,6 +313,69 @@
             
         default:
             break;
+    }
+        
+    }else{
+        
+        int nongChangHave = [[[NSUserDefaults standardUserDefaults]objectForKey:@"fid"]intValue];
+        if(nongChangHave == 0){
+            
+            switch (indexPath.row) {
+                case 0:{
+                    MyCollectionViewController *myVc = [[MyCollectionViewController alloc]init];
+                    myVc.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:myVc animated:YES];
+
+                    break;
+                }
+                case 1:{
+                    MineSettingViewController *setVc = [[MineSettingViewController alloc]init];
+                    setVc.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:setVc animated:YES];
+
+                    break;
+                }
+
+                    
+                default:
+                    break;
+            }
+            
+        }else{
+        
+            switch (indexPath.row) {
+                case 0:{
+                    MyCollectionViewController *myVc = [[MyCollectionViewController alloc]init];
+                    myVc.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:myVc animated:YES];
+                    
+                    break;
+                }
+                case 1:{
+                    
+                    MyFarmViewController *MyVc = [[MyFarmViewController alloc]init];
+                    MyVc.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:MyVc animated:YES];
+                    
+                    break;
+                }
+                case 2:{
+                    MineSettingViewController *setVc = [[MineSettingViewController alloc]init];
+                    setVc.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:setVc animated:YES];
+                    
+                    break;
+                }
+
+                    
+                    
+                default:
+                    break;
+            }
+
+            
+        }
+        
     }
     
     

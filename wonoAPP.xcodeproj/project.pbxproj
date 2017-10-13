@@ -68,6 +68,14 @@
 		A8246A251F149C5400CFD65A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8246A241F149C5400CFD65A /* LoginViewController.m */; };
 		A8246A281F14C25A00CFD65A /* CompleteInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8246A271F14C25A00CFD65A /* CompleteInfoViewController.m */; };
 		A8246A2B1F17448300CFD65A /* AgreementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8246A2A1F17448300CFD65A /* AgreementViewController.m */; };
+		A87405DF1F6A2130004A87C1 /* PPBadgeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A87405D71F6A2130004A87C1 /* PPBadgeLabel.m */; };
+		A87405E01F6A2130004A87C1 /* UIBarButtonItem+PPBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A87405DA1F6A2130004A87C1 /* UIBarButtonItem+PPBadgeView.m */; };
+		A87405E11F6A2130004A87C1 /* UITabBarItem+PPBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A87405DC1F6A2130004A87C1 /* UITabBarItem+PPBadgeView.m */; };
+		A87405E21F6A2130004A87C1 /* UIView+PPBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A87405DE1F6A2130004A87C1 /* UIView+PPBadgeView.m */; };
+		A88D8CFC1F74E2A500138A9C /* UIColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = A88D8CFB1F74E2A500138A9C /* UIColor+Hex.m */; };
+		A88D8D011F78F28100138A9C /* CaiShouTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A88D8D001F78F28100138A9C /* CaiShouTypeViewController.m */; };
+		A88D8D041F78F29900138A9C /* ZhongZhiTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A88D8D031F78F29800138A9C /* ZhongZhiTypeViewController.m */; };
+		A88D8D071F7B3B9100138A9C /* WonoWebMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A88D8D061F7B3B9100138A9C /* WonoWebMessageViewController.m */; };
 		A89990D71F4EB4A000D15005 /* MyZview2.m in Sources */ = {isa = PBXBuildFile; fileRef = A89990D61F4EB4A000D15005 /* MyZview2.m */; };
 		A89990DC1F4FC10D00D15005 /* MyPieView.m in Sources */ = {isa = PBXBuildFile; fileRef = A89990DB1F4FC10D00D15005 /* MyPieView.m */; };
 		A8A11D261F1852DB008CA39A /* ForgetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A11D251F1852DB008CA39A /* ForgetViewController.m */; };
@@ -112,6 +120,8 @@
 		A8A94F791F46983A00D9BBA2 /* PercentModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F781F46983A00D9BBA2 /* PercentModel.m */; };
 		A8A94F7C1F46D73000D9BBA2 /* AddModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F7B1F46D73000D9BBA2 /* AddModel.m */; };
 		A8A94F7F1F46E3C700D9BBA2 /* AddDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A94F7E1F46E3C700D9BBA2 /* AddDetailModel.m */; };
+		A8ABD1E31F6A4DC000CEF4DE /* PengUpdateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8ABD1E21F6A4DC000CEF4DE /* PengUpdateViewController.m */; };
+		A8ABD1E61F70FD8B00CEF4DE /* MyTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8ABD1E51F70FD8B00CEF4DE /* MyTextViewController.m */; };
 		A8ADF1641F0F841100781E06 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A8ADF1631F0F841100781E06 /* main.m */; };
 		A8ADF1671F0F841200781E06 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A8ADF1661F0F841200781E06 /* AppDelegate.m */; };
 		A8ADF16A1F0F841200781E06 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8ADF1691F0F841200781E06 /* ViewController.m */; };
@@ -121,7 +131,6 @@
 		A8ADF17D1F0F841200781E06 /* wonoAPPTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A8ADF17C1F0F841200781E06 /* wonoAPPTests.m */; };
 		A8ADF1881F0F841200781E06 /* wonoAPPUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = A8ADF1871F0F841200781E06 /* wonoAPPUITests.m */; };
 		A8ADF1971F0F84DB00781E06 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8ADF1961F0F84DB00781E06 /* File.swift */; };
-		A8ADF1B51F13181A00781E06 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8ADF19F1F0F85E500781E06 /* Charts.framework */; };
 		A8ADF1B61F13181A00781E06 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A8ADF19F1F0F85E500781E06 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A8ADF1BB1F13182700781E06 /* Pods_wonoAPP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8ADF1BA1F13182700781E06 /* Pods_wonoAPP.framework */; };
 		A8BC31421F3C329000BD6E76 /* PengTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8BC31411F3C329000BD6E76 /* PengTypeViewController.m */; };
@@ -134,6 +143,7 @@
 		A8C0D9F81F4BE29F000AD2D8 /* UITableView+JRTableViewPlaceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = A8C0D9F71F4BE29F000AD2D8 /* UITableView+JRTableViewPlaceHolder.m */; };
 		A8C0D9FB1F4C11ED000AD2D8 /* MapSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8C0D9FA1F4C11ED000AD2D8 /* MapSearchViewController.m */; };
 		A8C0DA0F1F4D69B4000AD2D8 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8C0DA0E1F4D69B4000AD2D8 /* UserNotifications.framework */; };
+		A8CECDA91F8B642000A9D024 /* UIDevice+DeviceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8CECDA81F8B642000A9D024 /* UIDevice+DeviceModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -320,6 +330,23 @@
 		A8246A271F14C25A00CFD65A /* CompleteInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompleteInfoViewController.m; sourceTree = "<group>"; };
 		A8246A291F17448300CFD65A /* AgreementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgreementViewController.h; sourceTree = "<group>"; };
 		A8246A2A1F17448300CFD65A /* AgreementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgreementViewController.m; sourceTree = "<group>"; };
+		A87405D61F6A2130004A87C1 /* PPBadgeLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PPBadgeLabel.h; sourceTree = "<group>"; };
+		A87405D71F6A2130004A87C1 /* PPBadgeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PPBadgeLabel.m; sourceTree = "<group>"; };
+		A87405D81F6A2130004A87C1 /* PPBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PPBadgeView.h; sourceTree = "<group>"; };
+		A87405D91F6A2130004A87C1 /* UIBarButtonItem+PPBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+PPBadgeView.h"; sourceTree = "<group>"; };
+		A87405DA1F6A2130004A87C1 /* UIBarButtonItem+PPBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+PPBadgeView.m"; sourceTree = "<group>"; };
+		A87405DB1F6A2130004A87C1 /* UITabBarItem+PPBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarItem+PPBadgeView.h"; sourceTree = "<group>"; };
+		A87405DC1F6A2130004A87C1 /* UITabBarItem+PPBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITabBarItem+PPBadgeView.m"; sourceTree = "<group>"; };
+		A87405DD1F6A2130004A87C1 /* UIView+PPBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+PPBadgeView.h"; sourceTree = "<group>"; };
+		A87405DE1F6A2130004A87C1 /* UIView+PPBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+PPBadgeView.m"; sourceTree = "<group>"; };
+		A88D8CFA1F74E2A500138A9C /* UIColor+Hex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Hex.h"; sourceTree = "<group>"; };
+		A88D8CFB1F74E2A500138A9C /* UIColor+Hex.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Hex.m"; sourceTree = "<group>"; };
+		A88D8CFF1F78F28100138A9C /* CaiShouTypeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaiShouTypeViewController.h; sourceTree = "<group>"; };
+		A88D8D001F78F28100138A9C /* CaiShouTypeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CaiShouTypeViewController.m; sourceTree = "<group>"; };
+		A88D8D021F78F29800138A9C /* ZhongZhiTypeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZhongZhiTypeViewController.h; sourceTree = "<group>"; };
+		A88D8D031F78F29800138A9C /* ZhongZhiTypeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZhongZhiTypeViewController.m; sourceTree = "<group>"; };
+		A88D8D051F7B3B9100138A9C /* WonoWebMessageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WonoWebMessageViewController.h; sourceTree = "<group>"; };
+		A88D8D061F7B3B9100138A9C /* WonoWebMessageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WonoWebMessageViewController.m; sourceTree = "<group>"; };
 		A89990D51F4EB4A000D15005 /* MyZview2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyZview2.h; sourceTree = "<group>"; };
 		A89990D61F4EB4A000D15005 /* MyZview2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyZview2.m; sourceTree = "<group>"; };
 		A89990DA1F4FC10D00D15005 /* MyPieView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPieView.h; sourceTree = "<group>"; };
@@ -407,6 +434,10 @@
 		A8A94F7B1F46D73000D9BBA2 /* AddModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddModel.m; sourceTree = "<group>"; };
 		A8A94F7D1F46E3C700D9BBA2 /* AddDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddDetailModel.h; sourceTree = "<group>"; };
 		A8A94F7E1F46E3C700D9BBA2 /* AddDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddDetailModel.m; sourceTree = "<group>"; };
+		A8ABD1E11F6A4DC000CEF4DE /* PengUpdateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PengUpdateViewController.h; sourceTree = "<group>"; };
+		A8ABD1E21F6A4DC000CEF4DE /* PengUpdateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PengUpdateViewController.m; sourceTree = "<group>"; };
+		A8ABD1E41F70FD8B00CEF4DE /* MyTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTextViewController.h; sourceTree = "<group>"; };
+		A8ABD1E51F70FD8B00CEF4DE /* MyTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTextViewController.m; sourceTree = "<group>"; };
 		A8ADF15F1F0F841100781E06 /* wonoAPP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wonoAPP.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8ADF1631F0F841100781E06 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A8ADF1651F0F841100781E06 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -449,6 +480,8 @@
 		A8C0D9FA1F4C11ED000AD2D8 /* MapSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapSearchViewController.m; sourceTree = "<group>"; };
 		A8C0DA0D1F4D67F1000AD2D8 /* wonoAPP.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = wonoAPP.entitlements; sourceTree = "<group>"; };
 		A8C0DA0E1F4D69B4000AD2D8 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		A8CECDA71F8B642000A9D024 /* UIDevice+DeviceModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIDevice+DeviceModel.h"; sourceTree = "<group>"; };
+		A8CECDA81F8B642000A9D024 /* UIDevice+DeviceModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+DeviceModel.m"; sourceTree = "<group>"; };
 		C19FD802BF9A56E1A918136F /* Pods-wonoAPP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wonoAPP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-wonoAPP/Pods-wonoAPP.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -459,7 +492,6 @@
 			files = (
 				A8C0DA0F1F4D69B4000AD2D8 /* UserNotifications.framework in Frameworks */,
 				A8ADF1BB1F13182700781E06 /* Pods_wonoAPP.framework in Frameworks */,
-				A8ADF1B51F13181A00781E06 /* Charts.framework in Frameworks */,
 				61EB95DFE3F818790E70A887 /* Pods_wonoAPP.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -596,6 +628,7 @@
 		A82469FA1F14625600CFD65A /* Support Tools */ = {
 			isa = PBXGroup;
 			children = (
+				A87405C81F68FDB4004A87C1 /* 右上角小圆点控件 */,
 				A8A501B61F5E9D6000595B67 /* 自适应高度textview */,
 				A8A501A01F58F93A00595B67 /* 详细查看图片 */,
 				A8A501901F54FDE900595B67 /* QiNiu */,
@@ -610,8 +643,8 @@
 				A821F5121F2B1EE40040846E /* LimitInput.m */,
 				A821F50F1F2B06BD0040846E /* FZHPickerView.h */,
 				A821F5101F2B06BD0040846E /* FZHPickerView.m */,
-				A821F50C1F2AFFC00040846E /* UITextView+Placeholder.m */,
 				A821F50D1F2AFFC00040846E /* UITextView+Placeholder.h */,
+				A821F50C1F2AFFC00040846E /* UITextView+Placeholder.m */,
 				A821F5021F29BE610040846E /* CDZPicker */,
 				A821F4B31F25E67A0040846E /* prograssLib */,
 				A8A11D4B1F1DF04A008CA39A /* WSDaePickerView */,
@@ -631,6 +664,10 @@
 				A821F55F1F34754A0040846E /* UIImageView+ForScrollView.m */,
 				A821F56D1F386A670040846E /* CustomLabel.h */,
 				A821F56E1F386A670040846E /* CustomLabel.m */,
+				A88D8CFA1F74E2A500138A9C /* UIColor+Hex.h */,
+				A88D8CFB1F74E2A500138A9C /* UIColor+Hex.m */,
+				A8CECDA71F8B642000A9D024 /* UIDevice+DeviceModel.h */,
+				A8CECDA81F8B642000A9D024 /* UIDevice+DeviceModel.m */,
 			);
 			name = "Support Tools";
 			sourceTree = "<group>";
@@ -660,6 +697,10 @@
 				A8C0D9EF1F4AAE03000AD2D8 /* PlantTypeViewController.m */,
 				A8C0D9F11F4AB958000AD2D8 /* ShifeiTypeViewController.h */,
 				A8C0D9F21F4AB958000AD2D8 /* ShifeiTypeViewController.m */,
+				A88D8CFF1F78F28100138A9C /* CaiShouTypeViewController.h */,
+				A88D8D001F78F28100138A9C /* CaiShouTypeViewController.m */,
+				A88D8D021F78F29800138A9C /* ZhongZhiTypeViewController.h */,
+				A88D8D031F78F29800138A9C /* ZhongZhiTypeViewController.m */,
 			);
 			name = "种植管理";
 			sourceTree = "<group>";
@@ -671,6 +712,8 @@
 				A821F4A61F21C4130040846E /* view */,
 				A8246A191F146F9200CFD65A /* StatisticsViewController.h */,
 				A8246A1A1F146F9200CFD65A /* StatisticsViewController.m */,
+				A8ABD1E41F70FD8B00CEF4DE /* MyTextViewController.h */,
+				A8ABD1E51F70FD8B00CEF4DE /* MyTextViewController.m */,
 			);
 			name = "数据统计";
 			sourceTree = "<group>";
@@ -709,6 +752,8 @@
 				A8A501A81F593B0400595B67 /* WonoCircleDetailViewController.m */,
 				A8A501BA1F5F9BED00595B67 /* MessageViewController.h */,
 				A8A501BB1F5F9BED00595B67 /* MessageViewController.m */,
+				A88D8D051F7B3B9100138A9C /* WonoWebMessageViewController.h */,
+				A88D8D061F7B3B9100138A9C /* WonoWebMessageViewController.m */,
 			);
 			name = "沃农圈";
 			sourceTree = "<group>";
@@ -748,6 +793,8 @@
 				A821F5851F3AA29B0040846E /* PengAddViewController.m */,
 				A8BC31401F3C329000BD6E76 /* PengTypeViewController.h */,
 				A8BC31411F3C329000BD6E76 /* PengTypeViewController.m */,
+				A8ABD1E11F6A4DC000CEF4DE /* PengUpdateViewController.h */,
+				A8ABD1E21F6A4DC000CEF4DE /* PengUpdateViewController.m */,
 			);
 			name = "我的";
 			sourceTree = "<group>";
@@ -798,6 +845,22 @@
 				A8A11D341F189F1B008CA39A /* BaseViewController.m */,
 			);
 			name = Base;
+			sourceTree = "<group>";
+		};
+		A87405C81F68FDB4004A87C1 /* 右上角小圆点控件 */ = {
+			isa = PBXGroup;
+			children = (
+				A87405D61F6A2130004A87C1 /* PPBadgeLabel.h */,
+				A87405D71F6A2130004A87C1 /* PPBadgeLabel.m */,
+				A87405D81F6A2130004A87C1 /* PPBadgeView.h */,
+				A87405D91F6A2130004A87C1 /* UIBarButtonItem+PPBadgeView.h */,
+				A87405DA1F6A2130004A87C1 /* UIBarButtonItem+PPBadgeView.m */,
+				A87405DB1F6A2130004A87C1 /* UITabBarItem+PPBadgeView.h */,
+				A87405DC1F6A2130004A87C1 /* UITabBarItem+PPBadgeView.m */,
+				A87405DD1F6A2130004A87C1 /* UIView+PPBadgeView.h */,
+				A87405DE1F6A2130004A87C1 /* UIView+PPBadgeView.m */,
+			);
+			name = "右上角小圆点控件";
 			sourceTree = "<group>";
 		};
 		A89990DD1F4FC31500D15005 /* model */ = {
@@ -908,10 +971,10 @@
 		A8A501A01F58F93A00595B67 /* 详细查看图片 */ = {
 			isa = PBXGroup;
 			children = (
-				A8A501A11F58F94900595B67 /* UIImageView+MHFacebookImageViewer.m */,
 				A8A501A21F58F94900595B67 /* UIImageView+MHFacebookImageViewer.h */,
-				A8A501A31F58F94900595B67 /* MHFacebookImageViewer.m */,
+				A8A501A11F58F94900595B67 /* UIImageView+MHFacebookImageViewer.m */,
 				A8A501A41F58F94900595B67 /* MHFacebookImageViewer.h */,
+				A8A501A31F58F94900595B67 /* MHFacebookImageViewer.m */,
 			);
 			name = "详细查看图片";
 			sourceTree = "<group>";
@@ -1273,6 +1336,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A821F53B1F31D13F0040846E /* MineSettingViewController.m in Sources */,
+				A88D8CFC1F74E2A500138A9C /* UIColor+Hex.m in Sources */,
+				A8ABD1E61F70FD8B00CEF4DE /* MyTextViewController.m in Sources */,
 				A821F5801F39B5720040846E /* BaseInterfaceModel.m in Sources */,
 				A821F53E1F32AEBF0040846E /* MineDataViewController.m in Sources */,
 				A8BC31421F3C329000BD6E76 /* PengTypeViewController.m in Sources */,
@@ -1294,17 +1359,21 @@
 				A821F5071F29BE790040846E /* CDZPicker.m in Sources */,
 				A821F5321F31B1270040846E /* ChangePswViewController.m in Sources */,
 				A8A11D421F1C6A29008CA39A /* WonoCircleTableViewCell.m in Sources */,
+				A87405DF1F6A2130004A87C1 /* PPBadgeLabel.m in Sources */,
 				A8A11D351F189F1B008CA39A /* BaseViewController.m in Sources */,
 				A8A5018F1F53F3BD00595B67 /* ToAskViewController.m in Sources */,
 				A8C0D9FB1F4C11ED000AD2D8 /* MapSearchViewController.m in Sources */,
 				A8A501AC1F59541F00595B67 /* WonoAnswerModel.m in Sources */,
 				A821F52C1F3177CC0040846E /* AboutViewController.m in Sources */,
 				A8ADF16A1F0F841200781E06 /* ViewController.m in Sources */,
+				A88D8D041F78F29900138A9C /* ZhongZhiTypeViewController.m in Sources */,
+				A88D8D011F78F28100138A9C /* CaiShouTypeViewController.m in Sources */,
 				A8BC31471F3C428900BD6E76 /* ZhengZeSupport.m in Sources */,
 				A8ADF1971F0F84DB00781E06 /* File.swift in Sources */,
 				A8246A1E1F146FA800CFD65A /* PlantControllViewController.m in Sources */,
 				A8C0D9F31F4AB958000AD2D8 /* ShifeiTypeViewController.m in Sources */,
 				A821F51A1F2EDA190040846E /* ShifeiViewController.m in Sources */,
+				A8ABD1E31F6A4DC000CEF4DE /* PengUpdateViewController.m in Sources */,
 				A8246A251F149C5400CFD65A /* LoginViewController.m in Sources */,
 				A821F5861F3AA29B0040846E /* PengAddViewController.m in Sources */,
 				A8A94F6D1F4537F800D9BBA2 /* ScreenDetailViewController.m in Sources */,
@@ -1321,11 +1390,13 @@
 				A8ADF1671F0F841200781E06 /* AppDelegate.m in Sources */,
 				A821F4B91F25E6900040846E /* CABasicAnimation+Category.m in Sources */,
 				A8A11D451F1C7FCB008CA39A /* WonoCircleModel.m in Sources */,
+				A8CECDA91F8B642000A9D024 /* UIDevice+DeviceModel.m in Sources */,
 				A821F50B1F2AD1030040846E /* WorkViewController.m in Sources */,
 				A8BC314C1F3D599300BD6E76 /* CompleteModel.m in Sources */,
 				A8A501BC1F5F9BED00595B67 /* MessageViewController.m in Sources */,
 				A8ADF1641F0F841100781E06 /* main.m in Sources */,
 				A8A94F621F41856E00D9BBA2 /* MainTempModel.m in Sources */,
+				A87405E11F6A2130004A87C1 /* UITabBarItem+PPBadgeView.m in Sources */,
 				A821F4F81F2842070040846E /* ZXView.m in Sources */,
 				A821F4F11F2729840040846E /* TempModel.m in Sources */,
 				A8A11D2F1F1863A6008CA39A /* BaseNavViewController.m in Sources */,
@@ -1333,6 +1404,7 @@
 				A82469FF1F14626B00CFD65A /* MBProgressHUD+XMG.m in Sources */,
 				A8246A181F146F4800CFD65A /* TempViewController.m in Sources */,
 				A8A94F791F46983A00D9BBA2 /* PercentModel.m in Sources */,
+				A88D8D071F7B3B9100138A9C /* WonoWebMessageViewController.m in Sources */,
 				A821F5811F39B5720040846E /* InterfaceModel.m in Sources */,
 				A8246A281F14C25A00CFD65A /* CompleteInfoViewController.m in Sources */,
 				A8246A0E1F1467DC00CFD65A /* NSObject+JKCoding.m in Sources */,
@@ -1351,6 +1423,7 @@
 				A821F5381F31C47E0040846E /* EmployeeViewController.m in Sources */,
 				A821F5011F28975C0040846E /* TempSetTableViewCell.m in Sources */,
 				A821F5721F394FBF0040846E /* AddStuffViewController.m in Sources */,
+				A87405E21F6A2130004A87C1 /* UIView+PPBadgeView.m in Sources */,
 				A821F4BB1F25E6900040846E /* LoadingView.m in Sources */,
 				A8246A221F14710C00CFD65A /* BaseTabBarController.m in Sources */,
 				A821F5601F34754A0040846E /* UIImageView+ForScrollView.m in Sources */,
@@ -1372,6 +1445,7 @@
 				A821F5821F39B5720040846E /* InterfaceSingleton.m in Sources */,
 				A8BC314F1F41326300BD6E76 /* SearchModel.m in Sources */,
 				A8246A1B1F146F9200CFD65A /* StatisticsViewController.m in Sources */,
+				A87405E01F6A2130004A87C1 /* UIBarButtonItem+PPBadgeView.m in Sources */,
 				A8A11D3D1F18C1DF008CA39A /* PlantModel.m in Sources */,
 				A821F4AB1F21C43B0040846E /* StatisticsTableViewCell.m in Sources */,
 				A821F5451F32D2430040846E /* StuffTableViewCell.m in Sources */,
@@ -1551,12 +1625,90 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = wonoAPP/wonoAPP.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Tianjin Edu-Smart Technology Co., Ltd. (UKT4L53925)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = UKT4L53925;
+				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/wonoApp/WonoPrefixHeader.pch";
 				INFOPLIST_FILE = wonoAPP/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"GeTuiSdk-1.6.3.0-noidfa\"",
+					"-l\"c++\"",
+					"-l\"crypto\"",
+					"-l\"sqlite3\"",
+					"-l\"sqlite3.0\"",
+					"-l\"ssl\"",
+					"-l\"stdc++.6.0.9\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AFNetworking\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"BabyBluetooth\"",
+					"-framework",
+					"\"BaiduMapAPI_Base\"",
+					"-framework",
+					"\"BaiduMapAPI_Cloud\"",
+					"-framework",
+					"\"BaiduMapAPI_Location\"",
+					"-framework",
+					"\"BaiduMapAPI_Map\"",
+					"-framework",
+					"\"BaiduMapAPI_Radar\"",
+					"-framework",
+					"\"BaiduMapAPI_Search\"",
+					"-framework",
+					"\"BaiduMapAPI_Utils\"",
+					"-framework",
+					"\"Bugly\"",
+					"-framework",
+					"\"CFNetwork\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreLocation\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"GLChart\"",
+					"-framework",
+					"\"HappyDNS\"",
+					"-framework",
+					"\"JHChart\"",
+					"-framework",
+					"\"MBProgressHUD\"",
+					"-framework",
+					"\"MJRefresh\"",
+					"-framework",
+					"\"Masonry\"",
+					"-framework",
+					"\"OpenGLES\"",
+					"-framework",
+					"\"Qiniu\"",
+					"-framework",
+					"\"QiniuUpload\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"SDWebImage\"",
+					"-framework",
+					"\"SafeKit\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"UserNotifications\"",
+					"-all_load",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wono.wonoAPP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "wonoAPP/wonoAPP-Bridging-Header.h";
@@ -1574,12 +1726,90 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = wonoAPP/wonoAPP.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Tianjin Edu-Smart Technology Co., Ltd. (UKT4L53925)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = UKT4L53925;
+				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/wonoApp/WonoPrefixHeader.pch";
 				INFOPLIST_FILE = wonoAPP/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"GeTuiSdk-1.6.3.0-noidfa\"",
+					"-l\"c++\"",
+					"-l\"crypto\"",
+					"-l\"sqlite3\"",
+					"-l\"sqlite3.0\"",
+					"-l\"ssl\"",
+					"-l\"stdc++.6.0.9\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AFNetworking\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"BabyBluetooth\"",
+					"-framework",
+					"\"BaiduMapAPI_Base\"",
+					"-framework",
+					"\"BaiduMapAPI_Cloud\"",
+					"-framework",
+					"\"BaiduMapAPI_Location\"",
+					"-framework",
+					"\"BaiduMapAPI_Map\"",
+					"-framework",
+					"\"BaiduMapAPI_Radar\"",
+					"-framework",
+					"\"BaiduMapAPI_Search\"",
+					"-framework",
+					"\"BaiduMapAPI_Utils\"",
+					"-framework",
+					"\"Bugly\"",
+					"-framework",
+					"\"CFNetwork\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreLocation\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"GLChart\"",
+					"-framework",
+					"\"HappyDNS\"",
+					"-framework",
+					"\"JHChart\"",
+					"-framework",
+					"\"MBProgressHUD\"",
+					"-framework",
+					"\"MJRefresh\"",
+					"-framework",
+					"\"Masonry\"",
+					"-framework",
+					"\"OpenGLES\"",
+					"-framework",
+					"\"Qiniu\"",
+					"-framework",
+					"\"QiniuUpload\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"SDWebImage\"",
+					"-framework",
+					"\"SafeKit\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"UserNotifications\"",
+					"-all_load",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wono.wonoAPP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "wonoAPP/wonoAPP-Bridging-Header.h";

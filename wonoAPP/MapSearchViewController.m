@@ -14,6 +14,7 @@
 #import <BaiduMapAPI_Search/BMKSearchComponent.h>
 
 #import "CompleteInfoViewController.h"
+#import "BBFlashCtntLabel.h"
 
 @interface MapSearchViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate,BMKPoiSearchDelegate,BMKGeoCodeSearchDelegate>
 
@@ -131,8 +132,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 -(void)creatTitleAndBackBtn{
@@ -369,10 +373,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     UITableViewCell *cell = [[UITableViewCell alloc]init];
-    UILabel *titleLabel = [[UILabel alloc]init];
+    BBFlashCtntLabel *titleLabel = [[BBFlashCtntLabel alloc]initWithFrame:CGRectMake(15, 5, SCREEN_WIDTH-30, 30)];
+    titleLabel.speed = -1;
     titleLabel.font = [UIFont systemFontOfSize:14];
     titleLabel.textColor = [UIColor grayColor];
-    UILabel *detailLabel = [[UILabel alloc]init];
+    BBFlashCtntLabel *detailLabel = [[BBFlashCtntLabel alloc]initWithFrame:CGRectMake(15, 35, SCREEN_WIDTH-39, 20)];
+    detailLabel.speed = -1;
     detailLabel.font = [UIFont systemFontOfSize:12];
     detailLabel.textColor = [UIColor lightGrayColor];
     BMKPoiInfo *model = dataArr[indexPath.row];
@@ -381,18 +387,7 @@
     [cell.contentView addSubview:titleLabel];
     [cell.contentView addSubview:detailLabel];
     
-    [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(cell.contentView.mas_left).offset(15);
-        make.top.equalTo(cell.contentView.mas_top).offset(5);
-        make.width.equalTo(@(APP_CONTENT_WIDTH*2/3));
-        make.height.equalTo(@(30));
-    }];
-    [detailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(cell.contentView.mas_left).offset(15);
-        make.top.equalTo(titleLabel.mas_bottom).offset(5);
-        make.width.equalTo(@(APP_CONTENT_WIDTH*2/3));
-        make.height.equalTo(@(20));
-    }];
+    
     
     if(selectItem == indexPath.row){
         UIImageView *imgV = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"对勾"]];

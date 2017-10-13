@@ -50,10 +50,14 @@
     int d1;
     int d2;
     
+    int firMark;
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    firMark = 0;
     
     a1 = -50;
     a2 = -50;
@@ -75,7 +79,7 @@
     
     numberDataArr = [NSMutableArray array];
     
-    for(int i = -10;i<=40;i++){
+    for(int i = -10;i<=60;i++){
         NSString *str = [NSString stringWithFormat:@"%d",i];
         [numberDataArr addObject:str];
     }
@@ -172,7 +176,15 @@
             
             [_selectTableView reloadData];
             
-            
+            if(firMark == 0){
+                
+                firMark ++;
+                _selectTableView.alpha = 0;
+                [UIView animateWithDuration:0.5 animations:^{
+                    _selectTableView.alpha = 1;
+                }];
+                
+            }
             
             
         }
@@ -186,8 +198,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 -(void)createSaveBtn{
@@ -209,6 +224,7 @@
 -(void)SaveClick{
     NSLog(@"点击保存");
     
+    
     NSArray *arr = [selDic allValues];
     
     if(arr.count==0){
@@ -218,16 +234,16 @@
     
     NSString *str = [self objArrayToJSON:arr];
     SelModel.needID = str;
-    
+    _saveBtn.enabled = NO;
     [[InterfaceSingleton shareInstance].interfaceModel updatePengAlertWithModel:SelModel WithCallBack:^(int state, id data, NSString *msg) {
-        
+        _saveBtn.enabled = YES;
         if(state == 2000){
             NSLog(@"成功");
             [MBProgressHUD showSuccess:@"设置成功"];
             
             [self requestData];
             
-            selDic = [NSDictionary dictionary];
+            selDic = [NSMutableDictionary dictionary];
             
         }
         if(state<2000){
@@ -547,6 +563,11 @@
     UILabel *label=(UILabel*)recognizer.view;
     
     NSLog(@"%ld被点击了",(long)label.tag);
+    
+    if(numberDataArr.count == 0||numberDataArr == nil){
+        return;
+    }
+    
     [CDZPicker showPickerInView:self.view withStrings:numberDataArr confirm:^(NSArray<NSString *> *stringArray) {
 //        self.label.text = stringArray.firstObject;
         

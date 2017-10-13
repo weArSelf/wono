@@ -13,6 +13,7 @@
 #import "PointModel.h"
 #import "MyZview2.h"
 #import "MyPieView.h"
+#import "UIColor+Hex.h"
 //#import "UITableView+JRTableViewPlaceHolder.h"
 
 @interface StatisticsViewController ()
@@ -52,6 +53,26 @@
     
 //    resDic = [NSMutableDictionary dictionary];
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    int nongChangHave = [[[NSUserDefaults standardUserDefaults]objectForKey:@"fid"]intValue];
+    NSString *pengHave = [[NSUserDefaults standardUserDefaults]objectForKey:@"pengID"];
+    int userType = [[[NSUserDefaults standardUserDefaults]objectForKey:@"userType"]intValue];
+    
+    if(userType == 2){
+        
+        if(nongChangHave == 0){
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有进入农场\n请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            [alertC addAction:confirmAct];
+            [self presentViewController:alertC animated:YES completion:nil];
+            return;
+        }
+        
+    }
+    
+    
     [self creatTitleAndBackBtn];
     [self createScroll];
     [self requestCircleData];
@@ -76,17 +97,71 @@
     _MLabel = label;
     
     [_mainScroll addSubview:_mainView];
+
+    
     
 
     
 }
 
+
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:YES];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     [_mainScroll flashScrollIndicators];
 //    [self requestData];
     //    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
+    
+    
+    int nongChangHave = [[[NSUserDefaults standardUserDefaults]objectForKey:@"fid"]intValue];
+    NSString *pengHave = [[NSUserDefaults standardUserDefaults]objectForKey:@"pengID"];
+    int userType = [[[NSUserDefaults standardUserDefaults]objectForKey:@"userType"]intValue];
+    
+    if(userType == 2){
+        
+        if(nongChangHave != 0){
+           
+            if(_mainScroll == nil){
+                
+                [self creatTitleAndBackBtn];
+                [self createScroll];
+                [self requestCircleData];
+                
+                [self createYueNian];
+                
+                [self RequestYueNian];
+                [self RequestYueNian2];
+                [self requestTotalData];
+                
+                _mainView = [[UIView alloc]initWithFrame:CGRectMake(0, 40, SCREEN_WIDTH, HDAutoHeight(150))];
+                _mainView.backgroundColor = [UIColor whiteColor];
+                
+                UILabel *label = [[UILabel alloc]init];
+                label.text = @"加载数据中...";
+                label.font = [UIFont systemFontOfSize:16];
+                label.textColor = MainColor;
+                label.textAlignment = NSTextAlignmentCenter;
+                label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, 64+255/2-HDAutoHeight(30), 300, HDAutoHeight(60));
+                
+                [_mainView addSubview:label];
+                _MLabel = label;
+                
+                [_mainScroll addSubview:_mainView];
+
+                
+            }
+            
+        }
+        
+    }
+
+    
    
 }
 
@@ -248,6 +323,10 @@
             
         }else{
             _MLabel.text = @"暂无数据";
+            
+            [UIView animateWithDuration:0.5 animations:^{
+                _MLabel.y = 64+255/2-HDAutoHeight(30)-HDAutoHeight(200);
+            }];
         }
         if(state<2000){
             [MBProgressHUD showSuccess:msg];
@@ -261,7 +340,7 @@
     _secTitleLabel.text = @"当月总收入与支出";
     _secTitleLabel.textColor = [UIColor grayColor];
     _secTitleLabel.font = [UIFont systemFontOfSize:14];
-    _secTitleLabel.frame = CGRectMake(HDAutoWidth(25), 255+HDAutoHeight(20), HDAutoWidth(250), HDAutoHeight(60));
+    _secTitleLabel.frame = CGRectMake(HDAutoWidth(25), 255+HDAutoHeight(20), HDAutoWidth(300), HDAutoHeight(60));
     
     _secTitleLabel.alpha = 0;
     
@@ -280,8 +359,16 @@
 
 }
 -(void)changeClick:(UIButton *)btn{
-    [MobClick startSession:nil];
-    [MobClick event:@"check"];
+    
+    btn.enabled = NO;
+    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.5/*延迟执行时间*/ * NSEC_PER_SEC);
+    
+    dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+        btn.enabled = YES;
+    });
+    
+//    [MobClick startSession:nil];
+//    [MobClick event:@"check"];
 //    [MobClick event:@"login" durations:10];
     MyPieView *pie1 = [_mainScroll viewWithTag:301];
     MyPieView *pie2 = [_mainScroll viewWithTag:302];
@@ -289,7 +376,7 @@
     MyPieView *pie4 = [_mainScroll viewWithTag:402];
     
     if(pie3==nil||pie4==nil){
-        [MBProgressHUD showSuccess:@"加载数据中,请稍后"];
+        [MBProgressHUD showSuccess:@"尝试获取数据中"];
         return;
     }
     
@@ -341,7 +428,7 @@
             PercentModel *model = [[PercentModel alloc]init];
             NSMutableArray *nameArr = [NSMutableArray array];
             NSMutableArray *amountArr = [NSMutableArray array];
-//            NSMutableArray *colorArr = [NSMutableArray array];
+            NSMutableArray *colorArr = [NSMutableArray array];
             
             float total = 0;
             
@@ -352,11 +439,14 @@
                 float value = [dic[@"total_amount"] floatValue];
                 total+=value;
                 [amountArr addObject:dic[@"total_amount"]];
+                UIColor *color = [UIColor colorWithHexString:dic[@"color"]];
+                [colorArr addObject:color];
             }
             model.title = @"";
             model.nameArr = nameArr;
             model.amountArr = amountArr;
             model.total = total;
+            model.colorArr = colorArr;
             
             dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC);
             
@@ -372,7 +462,7 @@
                     UIView *needV = [[UIView alloc]init];
                     
                     needV.tag = 301;
-                    needV.backgroundColor = [UIColor whiteColor];
+                    needV.backgroundColor = [UIColor clearColor];
                     needV.frame = CGRectMake(0, 255+HDAutoHeight(80), SCREEN_WIDTH, HDAutoHeight(450));
                     //                pieV.model = model;
                     
@@ -410,6 +500,7 @@
             PercentModel *model2 = [[PercentModel alloc]init];
             nameArr = [NSMutableArray array];
             amountArr = [NSMutableArray array];
+            colorArr = [NSMutableArray array];
             total = 0;
             
             
@@ -420,21 +511,23 @@
                 float value = [dic[@"total_amount"] floatValue];
                 total+=value;
                 [amountArr addObject:dic[@"total_amount"]];
+                UIColor *color = [UIColor colorWithHexString:dic[@"color"]];
+                [colorArr addObject:color];
             }
             
             model2.nameArr = nameArr;
             model2.amountArr = amountArr;
             model2.total = total;
-
-            NSMutableArray *mulColorArr = [NSMutableArray array];
-            UIColor *color1 = UIColorFromHex(0x4db366);
-            UIColor *color2 = UIColorFromHex(0x795548);
-            UIColor *color3 = UIColorFromHex(0x2196f3);
-            
-            [mulColorArr addObject:color1];
-            [mulColorArr addObject:color2];
-            [mulColorArr addObject:color3];
-            model2.colorArr = mulColorArr;
+            model2.colorArr = colorArr;
+//            NSMutableArray *mulColorArr = [NSMutableArray array];
+//            UIColor *color1 = UIColorFromHex(0x4db366);
+//            UIColor *color2 = UIColorFromHex(0x795548);
+//            UIColor *color3 = UIColorFromHex(0x2196f3);
+//
+//            [mulColorArr addObject:color1];
+//            [mulColorArr addObject:color2];
+//            [mulColorArr addObject:color3];
+//            model2.colorArr = mulColorArr;
             
             
             
@@ -451,7 +544,7 @@
                     UIView *needV = [[UIView alloc]init];
                     
                     needV.tag = 301;
-                    needV.backgroundColor = [UIColor whiteColor];
+                    needV.backgroundColor = [UIColor clearColor];
                     needV.frame = CGRectMake(0, 255+HDAutoHeight(80), SCREEN_WIDTH, HDAutoHeight(450));
                     //                pieV.model = model;
                     
@@ -510,7 +603,7 @@
                 UIView *needV = [[UIView alloc]init];
                 
                 needV.tag = 301;
-                needV.backgroundColor = [UIColor whiteColor];
+                needV.backgroundColor = [UIColor clearColor];
                 needV.frame = CGRectMake(0, 255+HDAutoHeight(80), SCREEN_WIDTH, HDAutoHeight(450));
 //                pieV.model = model;
                 
@@ -525,7 +618,7 @@
                 [_mainScroll addSubview:needV];
             });
             
-            [MBProgressHUD showSuccess:msg];
+//            [MBProgressHUD showSuccess:msg];
         }
     }];
     
@@ -545,7 +638,7 @@
             PercentModel *model = [[PercentModel alloc]init];
             NSMutableArray *nameArr = [NSMutableArray array];
             NSMutableArray *amountArr = [NSMutableArray array];
-            //            NSMutableArray *colorArr = [NSMutableArray array];
+            NSMutableArray *colorArr = [NSMutableArray array];
             
             float total = 0;
             
@@ -556,11 +649,17 @@
                 float value = [dic[@"total_amount"] floatValue];
                 total+=value;
                 [amountArr addObject:dic[@"total_amount"]];
+//                NSString *colStr = [NSString stringWithFormat:@"0x%@",dic[@"color"]];
+//                float flcol = [colStr floatValue];
+                UIColor *color = [UIColor colorWithHexString:dic[@"color"]];
+                [colorArr addObject:color];
+                
             }
             model.title = @"";
             model.nameArr = nameArr;
             model.amountArr = amountArr;
             model.total = total;
+            model.colorArr = colorArr;
              dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC);
             dispatch_after(delayTime, dispatch_get_main_queue(), ^{
 
@@ -582,6 +681,7 @@
             PercentModel *model2 = [[PercentModel alloc]init];
             nameArr = [NSMutableArray array];
             amountArr = [NSMutableArray array];
+            colorArr = [NSMutableArray array];
             total = 0;
             
             for (int i=0; i<arr2.count; i++) {
@@ -591,21 +691,24 @@
                 float value = [dic[@"total_amount"] floatValue];
                 total+=value;
                 [amountArr addObject:dic[@"total_amount"]];
+                UIColor *color = [UIColor colorWithHexString:dic[@"color"]];
+                [colorArr addObject:color];
             }
             
             model2.nameArr = nameArr;
             model2.amountArr = amountArr;
             model2.total = total;
+            model2.colorArr = colorArr;
             
-            NSMutableArray *mulColorArr = [NSMutableArray array];
-            UIColor *color1 = UIColorFromHex(0x4db366);
-            UIColor *color2 = UIColorFromHex(0x795548);
-            UIColor *color3 = UIColorFromHex(0x2196f3);
-            
-            [mulColorArr addObject:color1];
-            [mulColorArr addObject:color2];
-            [mulColorArr addObject:color3];
-            model2.colorArr = mulColorArr;
+//            NSMutableArray *mulColorArr = [NSMutableArray array];
+//            UIColor *color1 = UIColorFromHex(0x4db366);
+//            UIColor *color2 = UIColorFromHex(0x795548);
+//            UIColor *color3 = UIColorFromHex(0x2196f3);
+//
+//            [mulColorArr addObject:color1];
+//            [mulColorArr addObject:color2];
+//            [mulColorArr addObject:color3];
+//            model2.colorArr = mulColorArr;
             
             MyPieView *pieV2 = (MyPieView *)[self.view viewWithTag:402];
             
@@ -646,7 +749,7 @@
             PercentModel *dmodel = [[PercentModel alloc]init];
             NSMutableArray *dnameArr = [NSMutableArray array];
             NSMutableArray *damountArr = [NSMutableArray array];
-            //            NSMutableArray *colorArr = [NSMutableArray array];
+            NSMutableArray *colorArr = [NSMutableArray array];
             
             float total = 0;
             
@@ -654,15 +757,21 @@
             for (int i=0; i<dArr.count; i++) {
                 NSDictionary *dic = dArr[i];
                 NSString *name = dic[@"variety_name"];
-                [dnameArr addObject:name];
-                float value = [dic[@"greenhouse_num"] floatValue];
-                total+=value;
-                [damountArr addObject:dic[@"greenhouse_num"]];
+                if(![name isEqual:[NSNull null]]){
+               
+                    [dnameArr addObject:name];
+                    float value = [dic[@"greenhouse_num"] floatValue];
+                    total+=value;
+                    [damountArr addObject:dic[@"greenhouse_num"]];
+                }
+                UIColor *color = [UIColor colorWithHexString:dic[@"color"]];
+                [colorArr addObject:color];
             }
             dmodel.title = @"种植棚数:";
             dmodel.nameArr = dnameArr;
             dmodel.amountArr = damountArr;
             dmodel.total = total;
+            dmodel.colorArr = colorArr;
             MyPieView *dpieV = (MyPieView *)[self.view viewWithTag:501];
             
             if(dpieV != nil){
@@ -691,23 +800,27 @@
             PercentModel *model = [[PercentModel alloc]init];
             NSMutableArray *nameArr = [NSMutableArray array];
             NSMutableArray *amountArr = [NSMutableArray array];
-            //            NSMutableArray *colorArr = [NSMutableArray array];
+            colorArr = [NSMutableArray array];
             
             total = 0;
             
             for (int i=0; i<arr1.count; i++) {
                 NSDictionary *dic = arr1[i];
                 NSString *name = dic[@"variety_name"];
-                [nameArr addObject:name];
-                float value = [dic[@"total_amount"] floatValue];
-                total+=value;
-                [amountArr addObject:dic[@"total_amount"]];
+                if(![name isEqual:[NSNull null]]){
+                    [nameArr addObject:name];
+                    float value = [dic[@"total_amount"] floatValue];
+                    total+=value;
+                    [amountArr addObject:dic[@"total_amount"]];
+                }
+                UIColor *color = [UIColor colorWithHexString:dic[@"color"]];
+                [colorArr addObject:color];
             }
             model.title = @"总收入(按品类划分)";
             model.nameArr = nameArr;
             model.amountArr = amountArr;
             model.total = total;
-            
+            model.colorArr = colorArr;
             MyPieView *pieV = (MyPieView *)[self.view viewWithTag:502];
             
             if(pieV != nil){
@@ -724,6 +837,7 @@
             PercentModel *model2 = [[PercentModel alloc]init];
             nameArr = [NSMutableArray array];
             amountArr = [NSMutableArray array];
+            colorArr = [NSMutableArray array];
             total = 0;
             
             for (int i=0; i<arr2.count; i++) {
@@ -733,12 +847,15 @@
                 float value = [dic[@"total_amount"] floatValue];
                 total+=value;
                 [amountArr addObject:dic[@"total_amount"]];
+                UIColor *color = [UIColor colorWithHexString:dic[@"color"]];
+                [colorArr addObject:color];
             }
             
             model2.nameArr = nameArr;
             model2.amountArr = amountArr;
             model2.total = total;
             model2.title = @"总支出(按品类划分)";
+            model2.colorArr = colorArr;
 //            NSMutableArray *mulColorArr = [NSMutableArray array];
 //            UIColor *color1 = UIColorFromHex(0x4db366);
 //            UIColor *color2 = UIColorFromHex(0x795548);

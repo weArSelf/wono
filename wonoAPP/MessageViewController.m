@@ -10,6 +10,8 @@
 #import "MessageModel.h"
 #import "BBFlashCtntLabel.h"
 #import "WonoCircleDetailViewController.h"
+#import "PPBadgeView.h"
+#import "WonoWebMessageViewController.h"
 
 @interface MessageViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -24,38 +26,139 @@
 
 @implementation MessageViewController{
     NSMutableArray *dataArr;
+    int page;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    page = 1;
     // Do any additional setup after loading the view.
     dataArr = [NSMutableArray array];
     self.view.backgroundColor = [UIColor whiteColor];
     [self creatTitleAndBackBtn];
     [self createTabel];
+    [self makePlaceHolderWithTitle:@"加载数据中"];
+    dataArr = [NSMutableArray array];
     [self requestData];
     
+    _mainTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
+    _mainTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMore)];
+    
+}
+
+-(void)refresh{
+    page = 1;
+    dataArr = [NSMutableArray array];
+    [self requestData];
+}
+-(void)loadMore{
+    page++;
+    [self requestData];
 }
 
 -(void)requestData{
     
-    dataArr = [NSMutableArray array];
-    MessageModel *model = [[MessageModel alloc]init];
-    model.type = 1;
-    model.content = @"消息内容消息内容消息内容消息内容";
-    model.needID = @"233";
+
+//    MessageModel *model = [[MessageModel alloc]init];
+//    model.type = 1;
+//    model.content = @"消息内容消息内容消息内容消息内容";
+//    model.needID = @"233";
+//    
+//    [dataArr addObject:model];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model];
+//    [dataArr addObject:model];
+//    [_mainTableView reloadData];
     
-    [dataArr addObject:model];
-    [dataArr addObject:model];
-    [dataArr addObject:model];
-    [dataArr addObject:model];
-    [dataArr addObject:model];
-    [dataArr addObject:model];
-    [dataArr addObject:model];
-    [dataArr addObject:model];
-    [_mainTableView reloadData];
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getMyMessageWithPage:page WithCallBack:^(int state, id data, NSString *msg) {
+       
+        if(state == 2000){
+            
+            [_mainTableView.mj_header endRefreshing];
+            [_mainTableView.mj_footer endRefreshing];
+            NSLog(@"成功");
+            NSArray *arr = data[@"data"];
+            
+            if(arr.count == 0){
+                if(page!=1){
+                    page--;
+                    [_mainTableView.mj_footer endRefreshingWithNoMoreData];
+                    return;
+                }
+            }
+            
+            for (int i=0; i<arr.count; i++) {
+                NSDictionary *dic = arr[i];
+                MessageModel *model = [[MessageModel alloc]init];
+                model.type = [dic[@"type"]intValue];
+                model.content = dic[@"title"];
+                model.needID = dic[@"param1"];
+                model.statu = dic[@"status"];
+                model.msgID = dic[@"id"];
+                [dataArr addObject:model];
+            }
+            if(dataArr.count<15){
+                _mainTableView.mj_footer.hidden = YES;
+            }
+            
+            [_mainTableView reloadData];
+        }else{
+            dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0/*延迟执行时间*/ * NSEC_PER_SEC));
+            
+            dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+                [self makePlaceHolderWithTitle:@"暂无数据"];
+            });
+        }
+        
+    }];
+    
     
 }
+
+-(void)changeStateWithMsgID:(NSString *)needID{
+    
+    [[InterfaceSingleton shareInstance].interfaceModel changeMsgStateWithMessageID:needID AndStatus:@"1" WithCallBack:^(int state, id data, NSString *msg) {
+       
+        if(state == 2000){
+//            [self refresh];
+        }
+        
+    }];
+    
+}
+
+-(void)makePlaceHolderWithTitle:(NSString *)title{
+    
+    [self.view layoutIfNeeded];
+    [_mainTableView layoutIfNeeded];
+    [_mainTableView jr_configureWithPlaceHolderBlock:^UIView * _Nonnull(UITableView * _Nonnull sender) {
+        //        [_plantTableView setScrollEnabled:NO];
+        UIView *view = [[UIView alloc]initWithFrame:_mainTableView.bounds];
+        view.backgroundColor = [UIColor whiteColor];
+        
+        UILabel *label = [[UILabel alloc]init];
+        label.text = title;
+        label.font = [UIFont systemFontOfSize:16];
+        label.textColor = MainColor;
+        label.textAlignment = NSTextAlignmentCenter;
+        label.frame = CGRectMake(APP_CONTENT_WIDTH/2-150, HDAutoHeight(390), 300, HDAutoHeight(60));
+        [view addSubview:label];
+        
+        
+        return view;
+    } normalBlock:^(UITableView * _Nonnull sender) {
+        [_mainTableView setScrollEnabled:YES];
+    }];
+    [_mainTableView reloadData];
+    
+    
+}
+
 
 -(void)creatTitleAndBackBtn{
     
@@ -146,12 +249,12 @@
     NSString *identy = @"cellIdenty";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identy];
-    if(cell == nil){
-        
+//    if(cell == nil){
+    
         cell = [[UITableViewCell alloc]init];
         cell.backgroundColor = [UIColor whiteColor];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    }
+//    }
     UIView *conView = [[UIView alloc]init];
     conView.backgroundColor = [UIColor whiteColor];
     conView.layer.masksToBounds  = YES;
@@ -166,14 +269,57 @@
     }];
     
     
+    
     MessageModel *model = dataArr[indexPath.row];
     
-    BBFlashCtntLabel *label = [[BBFlashCtntLabel alloc]initWithFrame:CGRectMake(HDAutoWidth(41), 0, SCREEN_WIDTH - HDAutoWidth(82), HDAutoHeight(100))];
-    label.text = model.content;
-    label.speed = -1;
-    label.font = [UIFont systemFontOfSize:13];
-    label.textColor = [UIColor grayColor];
-    [conView addSubview:label];
+    float width = [self getLengthWithFont:14 AndText:model.content];
+    
+    if(width>=SCREEN_WIDTH-HDAutoWidth(90)){
+        width = SCREEN_WIDTH-HDAutoWidth(90);
+    }
+    
+    if(model.type == 10){
+        
+        UIImageView *officialImageView = [[UIImageView alloc]init];
+        officialImageView.image = [UIImage imageNamed:@"官方消息"];
+        officialImageView.contentMode = UIViewContentModeScaleAspectFill;
+        officialImageView.frame = CGRectMake(HDAutoWidth(41), HDAutoHeight(34), HDAutoWidth(94), HDAutoHeight(32));
+        [conView addSubview:officialImageView];
+        
+        
+        
+        BBFlashCtntLabel *label = [[BBFlashCtntLabel alloc]initWithFrame:CGRectMake(HDAutoWidth(150), HDAutoHeight(10), width, HDAutoHeight(80))];
+        label.text = model.content;
+        label.speed = -1;
+        label.font = [UIFont systemFontOfSize:13];
+        label.textColor = [UIColor grayColor];
+        [conView addSubview:label];
+
+        int val = [model.statu intValue];
+        
+        if(val == 0){
+            [label pp_addDotWithColor:nil];
+            [label pp_moveBadgeWithX:-HDAutoWidth(14) Y:HDAutoHeight(20)];
+            [label pp_setBadgeHeightPoints:HDAutoWidth(10)];
+        }
+    }else{
+        
+        BBFlashCtntLabel *label = [[BBFlashCtntLabel alloc]initWithFrame:CGRectMake(HDAutoWidth(41), HDAutoHeight(10), width, HDAutoHeight(80))];
+        label.text = model.content;
+        label.speed = -1;
+        label.font = [UIFont systemFontOfSize:13];
+        label.textColor = [UIColor grayColor];
+        [conView addSubview:label];
+        
+        int val = [model.statu intValue];
+        
+        if(val == 0){
+            [label pp_addDotWithColor:nil];
+            [label pp_moveBadgeWithX:-HDAutoWidth(14) Y:HDAutoHeight(20)];
+            [label pp_setBadgeHeightPoints:HDAutoWidth(10)];
+        }
+    }
+    
 //    [label mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.left.equalTo(conView.mas_left).offset(HDAutoWidth(40));
 //        make.top.equalTo(conView.mas_top);
@@ -183,6 +329,12 @@
     
     return cell;
     
+}
+
+-(float)getLengthWithFont:(int)font AndText:(NSString *)text{
+    NSDictionary *attrs = @{NSFontAttributeName : [UIFont boldSystemFontOfSize:font]};
+    CGSize size=[text sizeWithAttributes:attrs];
+    return size.width;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -196,7 +348,59 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"点击了");
+    
+    
+    
     WonoCircleDetailViewController *wonoDetailVc = [[WonoCircleDetailViewController alloc]init];
-    [self.navigationController pushViewController:wonoDetailVc animated:YES];
+    MessageModel *model = dataArr[indexPath.row];
+    
+    if(model.type == 10){
+        
+        WonoWebMessageViewController *webVC = [[WonoWebMessageViewController alloc]init];
+        webVC.needID = model.needID;
+        //一会测试一下 这样的时候viewdidload里边 needid到底有没有值 很期待~
+        [self.navigationController pushViewController:webVC animated:YES];
+        if([model.statu intValue]==0){
+            model.statu = @"1";
+            dataArr[indexPath.row] = model;
+            NSArray *arr = [NSArray arrayWithObjects:indexPath, nil];
+            [tableView reloadRowsAtIndexPaths:arr withRowAnimation:UITableViewRowAnimationRight];
+            [self changeStateWithMsgID:model.msgID];
+            
+        }
+        
+    }else if(model.type == 1){
+    
+        wonoDetailVc.qid = model.needID;
+        wonoDetailVc.Cmark = @"1";
+        [self.navigationController pushViewController:wonoDetailVc animated:YES];
+        
+        if([model.statu intValue]==0){
+            model.statu = @"1";
+            dataArr[indexPath.row] = model;
+            NSArray *arr = [NSArray arrayWithObjects:indexPath, nil];
+            [tableView reloadRowsAtIndexPaths:arr withRowAnimation:UITableViewRowAnimationRight];
+            [self changeStateWithMsgID:model.msgID];
+            
+        }
+    }else if(model.type == 2){
+        
+//        wonoDetailVc.qid = model.needID;
+//        wonoDetailVc.Cmark = @"1";
+//        [self.navigationController pushViewController:wonoDetailVc animated:YES];
+        
+        if([model.statu intValue]==0){
+            model.statu = @"1";
+            dataArr[indexPath.row] = model;
+            NSArray *arr = [NSArray arrayWithObjects:indexPath, nil];
+            [tableView reloadRowsAtIndexPaths:arr withRowAnimation:UITableViewRowAnimationRight];
+            
+            
+            [self changeStateWithMsgID:model.msgID];
+            
+        }
+    }
+    
+    
 }
 @end

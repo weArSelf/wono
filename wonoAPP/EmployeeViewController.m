@@ -31,10 +31,12 @@
     int count;
     BOOL changeMark;
     NSMutableArray *dataArr;
+    BOOL animateMark;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    animateMark = true;
     dataArr = [NSMutableArray array];
     
     count = 5;
@@ -58,6 +60,17 @@
         if(state == 2000){
             NSArray *arr = data;
             dataArr = [NSMutableArray array];
+            
+            if(arr.count == 0){
+                _nextBtn.enabled = false;
+                [_nextBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            }else{
+                
+                _nextBtn.enabled = true;
+                [_nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+                
+            }
+            
             for (int i=0; i<arr.count; i++) {
                 NSDictionary *dic = arr[i];
                 SearchModel *model = [[SearchModel alloc]init];
@@ -72,6 +85,17 @@
             
             [_stuffTableView reloadData];
             
+            if(animateMark == true){
+                animateMark = false;
+                _stuffTableView.alpha = 0;
+                [UIView animateWithDuration:0.5 animations:^{
+                    _stuffTableView.alpha = 1;
+                }];
+            }
+            
+        }else{
+            _nextBtn.enabled = false;
+            [_nextBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         }
         
         if(state<2000){
@@ -91,7 +115,11 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self requestStuff];
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 
@@ -234,7 +262,7 @@
     tap.delegate = self;
     [_stuffTableView addGestureRecognizer:tap];
     
-    
+    _stuffTableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0,0,0,0.01)];
     [self.view addSubview:_stuffTableView];
     
     [_stuffTableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -307,7 +335,7 @@
         SearchModel *nowModel = dataArr[indexPath.row];
         //            count--;
         
-        NSString *title = [NSString stringWithFormat:@"是否删除员工%@?",nowModel.name];
+        NSString *title = [NSString stringWithFormat:@"是否删除员工%@?\n将清除此员工相关一切数据",nowModel.name];
         
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:title preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -347,9 +375,11 @@
         
         
         
-        
-        
-        
+//        UIAlertController *alertC2 = [UIAlertController alertControllerWithTitle:@"提示" message:title preferredStyle:UIAlertControllerStyleAlert];
+//
+//        [alertC2 addAction:cancel];
+//        [alertC2 addAction:confirm];
+//        [self presentViewController:alertC2 animated:YES completion:nil];
         
         
         

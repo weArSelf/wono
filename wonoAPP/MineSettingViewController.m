@@ -42,8 +42,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 
@@ -124,6 +127,7 @@
     //    _plantTableView.frame = self.view.frame;
     _contentTableView.showsVerticalScrollIndicator = NO;
     _contentTableView.scrollEnabled = NO;
+    _contentTableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0,0,0,0.01)];
     [self.view addSubview:_contentTableView];
     
     [_contentTableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -210,13 +214,24 @@
             
             UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"是否确认注销" preferredStyle:UIAlertControllerStyleAlert];
              UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                 [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"loginMark"];
-                 [[NSUserDefaults standardUserDefaults]synchronize];
-                 LoginViewController *login = [[LoginViewController alloc]init];
-                 UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:login];
-                 nav.navigationBarHidden = YES;
                  
-                 appDelegate.window.rootViewController = nav;
+                 [[InterfaceSingleton shareInstance].interfaceModel userLogOutWithCallBack:^(int state, id data, NSString *msg) {
+                    
+                     if(state == 2000){
+                         [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"loginMark"];
+                         [[NSUserDefaults standardUserDefaults]synchronize];
+                         LoginViewController *login = [[LoginViewController alloc]init];
+                         UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:login];
+                         nav.navigationBar.hidden = YES;
+                         
+                         
+                         appDelegate.window.rootViewController = nav;
+                     }else{
+                         [MBProgressHUD showSuccess:@"注销失败"];
+                     }
+                     
+                 }];
+                 
 
              }];
             

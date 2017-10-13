@@ -113,18 +113,27 @@ static const int toolBarHeight = 44;
 - (void)setupViews{
     self.backgroundColor = BACKGROUND_BLACK_COLOR;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dissView)];
+    
     [self addGestureRecognizer:tap];
     [self addSubview:self.containerView];
+    self.containerView.tag = 233;
     
     [self.containerView addSubview:self.pickerView];
     [self.containerView addSubview:self.confirmButton];
     [self.containerView addSubview:self.cancelButton];
     [self.pickerView selectRow:0 inComponent:0 animated:NO];
+    UIButton *hubBtn;
+    hubBtn = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH -120, 0, 120, 60)];
+    [hubBtn setBackgroundColor:[UIColor clearColor]];
+    [hubBtn addTarget:self action:@selector(confirm:) forControlEvents:UIControlEventTouchUpInside];
+    [self.containerView addSubview:hubBtn];
     
     [UIView animateWithDuration:0.3 animations:^{
         self.containerView.frame = CGRectMake(0, SCREEN_HEIGHT-pickerViewHeight, SCREEN_WIDTH, pickerViewHeight);
     }];
 }
+
+
 
 
 #pragma mark - event response
@@ -305,6 +314,7 @@ static const int toolBarHeight = 44;
     }
     return _pickerView;
 }
+
 
 
 @end

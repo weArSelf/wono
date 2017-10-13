@@ -17,6 +17,8 @@
 @property (nonatomic,strong)UITextField *mainTextField;
 @property (nonatomic,strong)UIButton *confirmBtn;
 
+@property (nonatomic,strong)UIButton *nextBtn;
+
 @end
 
 @implementation NeedSelectionViewController{
@@ -33,8 +35,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 -(void)creatTitleAndBackBtn{
@@ -96,6 +101,39 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
+
+-(void)createNextBtn{
+    _nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_nextBtn setTitle:@"确认修改" forState:UIControlStateNormal];
+//    [_nextBtn setTitle:@"取消编辑" forState:UIControlStateSelected];
+    [_nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    _nextBtn.titleLabel.font = [UIFont systemFontOfSize:14];
+    [_nextBtn addTarget:self action:@selector(confirmClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:_nextBtn];
+    //    _saveBtn.titleLabel.textAlignment = NSTextAlignmentRight;
+    [_nextBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_titleLabel.mas_centerY);
+        make.right.equalTo(_headView.mas_right).offset(-HDAutoWidth(20));
+        make.height.equalTo(@(HDAutoHeight(26)));
+        make.width.equalTo(@(HDAutoWidth(150)));
+    }];
+    
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(confirmClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_titleLabel.mas_centerY);
+        make.right.equalTo(_headView.mas_right);
+        make.height.equalTo(_headView.mas_height);
+        make.width.equalTo(@(HDAutoWidth(150)));
+    }];
+    
+}
+
+
 -(void)createMain{
 
     _mainTextField = [[UITextField alloc]init];
@@ -152,9 +190,9 @@
 
 -(void)changeStyle:(FarmStyle)style{
     [self creatTitleAndBackBtn];
-    [self createConfirmBtn];
+//    [self createConfirmBtn];
     [self createMain];
-    
+    [self createNextBtn];
     MyStyle = style;
     
     if(style == yuangongStyle){

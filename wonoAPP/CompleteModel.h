@@ -17,4 +17,7 @@
 @property (nonatomic) int  sex;
 @property (nonatomic) int  type;
 
+@property (nonatomic,strong) NSString *address;
+@property (nonatomic,strong) NSString *location;
+
 @end

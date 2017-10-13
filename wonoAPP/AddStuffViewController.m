@@ -84,8 +84,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 -(void)creatTitleAndBackBtn{
@@ -238,6 +241,7 @@
     _stuffTableView.delegate = self;
     //    _plantTableView.showsVerticalScrollIndicator = NO;
     _stuffTableView.backgroundColor = [UIColor clearColor];
+    _stuffTableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0,0,0,0.01)];
     //    _plantTableView.frame = self.view.frame;
     //    _stuffTableView.showsVerticalScrollIndicator = NO;
     //    _stuffTableView.scrollEnabled = NO;

@@ -34,12 +34,19 @@
     [self createNextBtn];
     [self cgreateContent];
     
+//    [_orginPsw setValue:@11 forKey:@"limit"];
+//    [_nextPsw setValue:@11 forKey:@"limit"];
+//    [_confirmPsw setValue:@11 forKey:@"limit"];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 -(void)creatTitleAndBackBtn{
@@ -133,6 +140,35 @@
 -(void)SaveClick{
     NSLog(@"点击确认修改");
     
+    if([_orginPsw.text isEqualToString:@""]||[_nextPsw.text isEqualToString:@""]||[_confirmPsw.text isEqualToString:@""]){
+        [MBProgressHUD showSuccess:@"密码不得为空"];
+        return;
+    }
+    
+    if(_orginPsw.text.length<6||_nextPsw.text.length<6||_confirmPsw.text.length<6){
+        [MBProgressHUD showSuccess:@"密码长度不得低于6位"];
+        return;
+    }
+    
+    if(![_nextPsw.text isEqualToString:_confirmPsw.text]){
+        [MBProgressHUD showSuccess:@"两次输入密码不一致"];
+        return;
+    }
+    
+    
+    
+    
+    [[InterfaceSingleton shareInstance].interfaceModel changeuserPswWithOrgin:_orginPsw.text AndNewPsw:_nextPsw.text WithCallBack:^(int state, id data, NSString *msg) {
+        if(state == 2000){
+            [MBProgressHUD showSuccess:@"修改成功"];
+            [self.navigationController popViewControllerAnimated:YES];
+        }else{
+            [MBProgressHUD showSuccess:msg];
+        }
+    }];
+    
+    
+    
     
 }
 
@@ -145,8 +181,16 @@
     _orginPsw.font = [UIFont systemFontOfSize:14];
     _orginPsw.placeholder = @"原密码";
     _orginPsw.textColor = UIColorFromHex(0x9fa0a0);
+    _orginPsw.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+//    _orginPsw.delegate = self;
+    _orginPsw.secureTextEntry = YES;
+    [_orginPsw setValue:@10 forKey:@"limit"];
+
+//    _orginPsw.keyboardType =
     UIView *orginView = [[UIView alloc]init];
     orginView.backgroundColor = [UIColor lightGrayColor];
+    
+    
     
     [self.view addSubview:orginImageView];
     [self.view addSubview:_orginPsw];
@@ -180,6 +224,8 @@
     _nextPsw.font = [UIFont systemFontOfSize:14];
     _nextPsw.placeholder = @"新密码";
     _nextPsw.textColor = UIColorFromHex(0x9fa0a0);
+    _nextPsw.secureTextEntry = YES;
+    [_nextPsw setValue:@10 forKey:@"limit"];
     UIView *orginView2 = [[UIView alloc]init];
     orginView2.backgroundColor = [UIColor lightGrayColor];
     
@@ -214,6 +260,8 @@
     _confirmPsw.font = [UIFont systemFontOfSize:14];
     _confirmPsw.placeholder = @"确认密码";
     _confirmPsw.textColor = UIColorFromHex(0x9fa0a0);
+    _confirmPsw.secureTextEntry = YES;
+    [_confirmPsw setValue:@10 forKey:@"limit"];
     UIView *orginView3 = [[UIView alloc]init];
     orginView3.backgroundColor = [UIColor lightGrayColor];
     

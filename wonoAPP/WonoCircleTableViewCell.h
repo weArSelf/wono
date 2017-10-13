@@ -17,4 +17,10 @@
 
 @property (nonatomic,strong) NSString *changeMark;
 
+@property (nonatomic,strong) UILabel *titleLabel;
+
+-(void)changeImg;
+
+-(void)reloadTitle;
+
 @end

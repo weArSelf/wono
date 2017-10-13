@@ -111,9 +111,9 @@
     _hubBtn.backgroundColor = [UIColor clearColor];
     [self addSubview:_hubBtn];
     [_hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(@(HDAutoWidth(25)));
+        make.left.equalTo(@(HDAutoWidth(0)));
         make.centerY.equalTo(self.mas_centerY);
-        make.width.equalTo(@(HDAutoWidth(60)));
+        make.width.equalTo(@(HDAutoWidth(85)));
         make.height.equalTo(self.mas_height);
     }];
 }

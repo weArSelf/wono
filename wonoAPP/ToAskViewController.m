@@ -201,6 +201,8 @@
     NSLog(@"点击返回");
     if(![_mainTextView.text isEqualToString:@""]||dataArr.count!=0){
         
+        [_headTextField resignFirstResponder];
+        [_mainTextView resignFirstResponder];
         UIAlertController *AlertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"返回将失去当前填写内容\n是否继续？" preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -255,8 +257,10 @@
         return;
     }
     
+    _nextBtn.enabled = NO;
+    
     if(dataArr.count>0){
-        [MBProgressHUD showLongSuccess:@"图片文件上传中" toView:nil];
+        [MBProgressHUD showLongSuccess:@"图片文件上传中" toView:self.view];
 //        [MBProgressHUD showlongNormalMessage:@"图片文件上传中"];
         for (int i=0; i<dataArr.count; i++) {
             UIImage *image = dataArr[i];
@@ -278,9 +282,9 @@
         return;
     }
     
-    [MBProgressHUD showLongSuccess:@"提交中..." toView:nil];
+    [MBProgressHUD showLongSuccess:@"提交中..." toView:self.view];
     [[InterfaceSingleton shareInstance].interfaceModel WonoAskQuestionWithContent:_mainTextView.text AndResources:nil WithTitle:_headTextField.text WithType:@"1" WithCallBack:^(int state, id data, NSString *msg) {
-        [MBProgressHUD hideHUD];
+        [MBProgressHUD hideHUDForView:self.view];
         if(state == 2000){
             NSLog(@"成功");
             [MBProgressHUD showSuccess:@"提交成功"];
@@ -290,6 +294,7 @@
         }else{
             [MBProgressHUD showSuccess:msg];
         }
+        _nextBtn.enabled = YES;
        
     }];
     
@@ -318,7 +323,7 @@
         NSLog(@"上传");
        
         [[InterfaceSingleton shareInstance].interfaceModel WonoAskQuestionWithContent:_mainTextView.text AndResources:resource WithTitle:_headTextField.text WithType:@"1" WithCallBack:^(int state, id data, NSString *msg) {
-            [MBProgressHUD hideHUD];
+            [MBProgressHUD hideHUDForView:self.view];
             if(state == 2000){
                 NSLog(@"成功");
                 [MBProgressHUD showSuccess:@"提交成功"];
@@ -326,9 +331,10 @@
                 [self.navigationController popViewControllerAnimated:YES];
                 
             }else{
-                [MBProgressHUD hideHUD];
+                [MBProgressHUD hideHUDForView:self.view];
                 [MBProgressHUD showSuccess:msg];
             }
+            _addBtn.enabled = YES;
             
         }];
         
@@ -354,6 +360,7 @@
 
 -(void)UploadFailedWithFileName:(NSString *)fileName{
     [MBProgressHUD showSuccess:@"上传失败,请重试"];
+    _nextBtn.enabled = YES;
 }
 
 -(void)createFirstHead{

@@ -16,4 +16,6 @@
 
 -(void)changeTitle;
 
+@property (nonatomic,strong) NSString *sevMark;
+
 @end

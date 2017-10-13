@@ -19,4 +19,6 @@
 
 @property (nonatomic,strong) PlantModel *model;
 
+-(void)reloadNeedV;
+
 @end

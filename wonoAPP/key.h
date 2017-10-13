@@ -11,7 +11,7 @@
 
 #import "InterfaceSingleton.h"
 
-#define BASE_URL  @"http://192.168.7.23:8000/api/ios/v1.0/"
+#define BASE_URL  @"http://api.wonotech.com:8000/ios/v1.0/"
 
 #define Base_Header @"wono"
 
@@ -80,14 +80,28 @@
 #define API_GetAllAnswer                    @"known/answer/detail"
 #define API_GetDetail                       @"known/question/detail"
 #define API_Answer                          @"known/answer"
-
-
-
-#define API_Collect                         @"known/collect"
-#define API_GetCollect                      @"user/collect"
 #define API_Point                           @"known/like"
+#define API_Collect                         @"known/collect"
+
+#define API_GetCollect                      @"known/collect"
+#define API_GetPoint                        @"known/like"
+
+#define API_GetUserCollect                  @"user/collect"
+
+#define API_ChangeFarmDetail                @"farm"
 
 
+//消息模块
 
+#define API_GetMyMessage                    @"user/message"
+#define API_ChangeMyMessage                 @"user/message/status"
+#define API_GetUnReadMessage                @"user/message/unread/count"
+
+
+#define API_ChangePsw                       @"user/change/password"
+
+#define API_UpdatePeng                      @"greenhouse/edit"
+
+#define API_LogOut                          @"auth/logout"
 
 #endif /* key_h */

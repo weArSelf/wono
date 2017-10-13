@@ -11,6 +11,8 @@
 #import "WSDatePickerView.h"
 #import "NeedSelectionViewController.h"
 
+
+
 @interface MyFarmViewController ()<UITableViewDelegate,UITableViewDataSource,SelectDelegate>
 
 @property (nonatomic,strong)UIView *headView;
@@ -51,6 +53,7 @@
     [self requestData];
 }
 
+
 -(void)requestData{
     [_contentTabel.mj_header beginRefreshing];
     [[InterfaceSingleton shareInstance].interfaceModel getMyFarmWithCallBack:^(int state, id data, NSString *msg) {
@@ -78,8 +81,13 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+    [_contentTabel reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 -(void)creatTitleAndBackBtn{
@@ -185,14 +193,18 @@
     static NSString *cellIdentifier = @"cellIdentifier";
     
     MyFarmTableViewCell *myFarmCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if(myFarmCell == nil){
+//    if(myFarmCell == nil){
         myFarmCell = [[MyFarmTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         myFarmCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
+    
+    int userType = [[[NSUserDefaults standardUserDefaults]objectForKey:@"userType"]intValue];
+    if(userType == 1){
+    
         if(indexPath.row!=0){
             myFarmCell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
         }
     }
+//    }
     
     NSString *firStr = firstDataArr[indexPath.row];
     NSString *nextStr = nextDataArr[indexPath.row];
@@ -211,6 +223,12 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    int userType = [[[NSUserDefaults standardUserDefaults]objectForKey:@"userType"]intValue];
+    if(userType != 1){
+        return;
+    }
+    
     switch (indexPath.row) {
         case 1:{
             NeedSelectionViewController *neeSel = [[NeedSelectionViewController alloc]init];
@@ -252,7 +270,7 @@
     NSLog(@"点击按时间");
     
     _datepicker = [[WSDatePickerView alloc] initWithDateStyle:DateStyleShowYearMonthDay CompleteBlock:^(NSDate *startDate) {
-        NSString *date = [startDate stringWithFormat:@"yyyy年MM月dd日"];
+        NSString *date = [startDate stringWithFormat:@"yyyy-MM-dd"];
         NSLog(@"时间： %@",date);
         
         _SelDate = startDate;
@@ -262,6 +280,13 @@
         NSIndexPath *indexPath=[NSIndexPath indexPathForRow:4 inSection:0];
         
         [_contentTabel reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationRight];
+        
+        [[InterfaceSingleton shareInstance].interfaceModel ChangeUserDetailWithObject:date AndKey:@"build" WithCallBack:^(int state, id data, NSString *msg) {
+            if(state !=2000){
+                [MBProgressHUD showSuccess:@"修改失败"];
+            }
+        }];
+        
     }];
     if(_SelDate != nil){
         [_datepicker getNowDate:_SelDate animated:YES];
@@ -275,12 +300,18 @@
 -(void)clickConfirmWithType:(FarmStyle)type AndStr:(NSString *)str{
     int NeedIndex = type + 1;
     
+    
+    NSString *key;
+    
     if(type == yuangongStyle){
         str = [NSString stringWithFormat:@"%@个",str];
+        key = @"employee_num";
     }else if(type == dapengStyle){
         str = [NSString stringWithFormat:@"%@座",str];
+        key = @"greenhouse_num";
     }else if(type == zhandiStyle){
         str = [NSString stringWithFormat:@"%@亩",str];
+        key = @"area";
     }
     
     nextDataArr[NeedIndex] = str;
@@ -293,6 +324,12 @@
 //    }else if(type == yuangongStyle){
 //        nextDataArr[3] = str;
 //    }
+    
+    [[InterfaceSingleton shareInstance].interfaceModel ChangeUserDetailWithObject:str AndKey:key WithCallBack:^(int state, id data, NSString *msg) {
+        if(state != 2000){
+            [MBProgressHUD showSuccess:@"修改失败"];
+        }
+    }];
     
 }
 

@@ -246,7 +246,11 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [_stuffTableView reloadData];
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 
@@ -435,6 +439,7 @@
     _pengNameTextField.leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 8, 0)];
     //设置显示模式为永远显示(默认不显示)
     _pengNameTextField.leftViewMode = UITextFieldViewModeAlways;
+    [_pengNameTextField setValue:@8 forKey:@"limit"];
 //    _pengNameTextField.keyboardType = UIKeyboardTypeNumberPad;
     [self.view addSubview:_pengNameTextField];
     [_pengNameTextField mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -471,13 +476,13 @@
 //    _catSelBtn.titleLabel.font = [UIFont systemFontOfSize:13];
     _catSelBtn.layer.masksToBounds = YES;
     _catSelBtn.layer.cornerRadius = 5;
-    [self.view addSubview:_catSelBtn];
-    [_catSelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_mainTextField.mas_left);
-        make.top.equalTo(_pengNameTextField.mas_bottom).offset(HDAutoHeight(15));
-        make.height.equalTo(_mainTextField.mas_height);
-        make.width.equalTo(@(HDAutoWidth(380)));
-    }];
+//    [self.view addSubview:_catSelBtn];
+//    [_catSelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(_mainTextField.mas_left);
+//        make.top.equalTo(_pengNameTextField.mas_bottom).offset(HDAutoHeight(15));
+//        make.height.equalTo(_mainTextField.mas_height);
+//        make.width.equalTo(@(HDAutoWidth(380)));
+//    }];
 
 
 }
@@ -535,12 +540,13 @@
     _typeLabel.layer.cornerRadius = 5;
 
     
+    
     [self.view addSubview:_typeLabel];
     [_typeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_pengNameTextField.mas_left);
-        make.top.equalTo(_catSelBtn.mas_bottom).offset(HDAutoHeight(15));
-        make.width.equalTo(_catSelBtn.mas_width);
-        make.height.equalTo(_catSelBtn.mas_height);
+        make.top.equalTo(_pengNameTextField.mas_bottom).offset(HDAutoHeight(15));
+        make.height.equalTo(_mainTextField.mas_height);
+        make.width.equalTo(@(HDAutoWidth(380)));
     }];
 }
 
@@ -549,6 +555,10 @@
     
 //    NSArray *arr = [NSArray arrayWithObjects:@"水果大棚",@"啊啊啊啊",@"呜呜呜呜",@"嗯嗯嗯嗯", nil];
     NSArray *arr = typeArr;
+    
+    if(arr.count == 0||arr == nil){
+        return;
+    }
     
       [CDZPicker showPickerInView:self.view withStrings:arr confirm:^(NSArray<NSString *> *stringArray) {
           
@@ -614,7 +624,7 @@
     _stuffTableView.dataSource = self;
     _stuffTableView.delegate = self;
     _stuffTableView.backgroundColor = [UIColor clearColor];
-    
+    _stuffTableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0,0,0,0.01)];
     
     [self.view addSubview:_stuffTableView];
     
@@ -678,12 +688,12 @@
 
 -(void)createOtherLabel{
     
-    _catLabelContent = [[UILabel alloc]init];
-    _catLabelContent.textColor = UIColorFromHex(0x9fa0a0);
-    _catLabelContent.font = [UIFont systemFontOfSize:13];
-    _catLabelContent.textAlignment = NSTextAlignmentCenter;
-    _catLabelContent.text = @"未选择品种";
-    [self.view addSubview:_catLabelContent];
+//    _catLabelContent = [[UILabel alloc]init];
+//    _catLabelContent.textColor = UIColorFromHex(0x9fa0a0);
+//    _catLabelContent.font = [UIFont systemFontOfSize:13];
+//    _catLabelContent.textAlignment = NSTextAlignmentCenter;
+//    _catLabelContent.text = @"未选择品种";
+//    [self.view addSubview:_catLabelContent];
     
     _typeLabelContent = [[UILabel alloc]init];
     _typeLabelContent.textColor = UIColorFromHex(0x9fa0a0);
@@ -692,12 +702,12 @@
     _typeLabelContent.text = @"未选择类型";
     [self.view addSubview:_typeLabelContent];
     
-    [_catLabelContent mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(_catSelBtn.mas_centerY);
-        make.height.equalTo(_catSelBtn.mas_height);
-        make.width.equalTo(@(HDAutoWidth(300)));
-        make.left.equalTo(_catSelBtn.mas_right).offset(HDAutoWidth(30));
-    }];
+//    [_catLabelContent mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerY.equalTo(_catSelBtn.mas_centerY);
+//        make.height.equalTo(_catSelBtn.mas_height);
+//        make.width.equalTo(@(HDAutoWidth(300)));
+//        make.left.equalTo(_catSelBtn.mas_right).offset(HDAutoWidth(30));
+//    }];
     [_typeLabelContent mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(_typeLabel.mas_centerY);
         make.height.equalTo(_typeLabel.mas_height);
@@ -753,10 +763,10 @@
         return;
     }
     
-    if([nowPlantTypeId isEqualToString:@""]){
-        [MBProgressHUD showSuccess:@"请选择大棚种植品种"];
-        return;
-    }
+//    if([nowPlantTypeId isEqualToString:@""]){
+//        [MBProgressHUD showSuccess:@"请选择大棚种植品种"];
+//        return;
+//    }
     
     if([_mainTextField.text isEqualToString:@""]){
         [MBProgressHUD showSuccess:@"请输入设备识别号"];

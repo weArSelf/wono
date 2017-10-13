@@ -7,17 +7,19 @@
 //
 
 #import "WonoCircleTableViewCell.h"
+#import "BBFlashCtntLabel.h"
 
 @interface WonoCircleTableViewCell ()
 
 @property (nonatomic,strong) UIView *ConView;
-@property (nonatomic,strong) UILabel *titleLabel;
+
 @property (nonatomic,strong) UILabel *contentLabel;
 @property (nonatomic,strong) UIImageView *mainImageView;
 @property (nonatomic,strong) UIImageView *positionImageView;
-@property (nonatomic,strong) UILabel *positionLabel;
+@property (nonatomic,strong) BBFlashCtntLabel *positionLabel;
 @property (nonatomic,strong) UILabel *answerCountLabel;
 @property (nonatomic,strong) UIButton *answerBtn;
+
 
 
 
@@ -31,7 +33,7 @@
 }
 
 -(void)prepareForReuse{
-    
+    [super prepareForReuse];
 }
 
 //- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -48,8 +50,19 @@
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
         [self createContent];
         
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(beChange) name:@"markChange" object:nil];
+        
     }
     return self;
+}
+
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+
+
+-(void)beChange{
+    _changeMark = @"1";
 }
 
 -(void)layoutSubviews{
@@ -145,20 +158,6 @@
     _contentLabel.text = _model.contentStr;
     _contentLabel.numberOfLines = 0;
     [_ConView addSubview:_contentLabel];
-    
-    
-    
-    
-    
-    
-//    if(_mainImageView == nil){
-//        _mainImageView = [[UIImageView alloc]init];
-//    }
-//    UIImage *img = [UIImage imageNamed:@"沃农圈测试背景"];
-//    _mainImageView.image = img;
-//    _mainImageView.contentMode = UIViewContentModeScaleToFill;
-//    _mainImageView.backgroundColor = [UIColor orangeColor];
-//    [_ConView addSubview:_mainImageView];
 
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_ConView.mas_left).offset(HDAutoWidth(20));
@@ -173,12 +172,7 @@
         make.height.equalTo(@(HDAutoHeight(40)));
         make.top.equalTo(_titleLabel.mas_bottom).offset(HDAutoHeight(10));
     }];
-//    [_mainImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(_titleLabel.mas_left);
-//        make.top.equalTo(_titleLabel.mas_bottom).offset(3);
-//        make.right.equalTo(_ConView.mas_right).offset(-HDAutoWidth(20));
-//        make.height.equalTo(@(HDAutoHeight(326)));
-//    }];
+
     
     
     _positionImageView = [[UIImageView alloc]init];
@@ -193,6 +187,9 @@
         make.width.equalTo(@(HDAutoWidth(30)));
         make.height.equalTo(@(HDAutoWidth(30)));
     }];
+    
+
+    
 }
 -(void)createType2{
     
@@ -263,15 +260,18 @@
     }];
 }
 
+-(void)reloadTitle{
+    [_positionLabel reloadView];
+}
 
 -(void)creatSubViews{
     
     
-    _positionLabel = [[UILabel alloc]init];
+    _positionLabel = [[BBFlashCtntLabel alloc]initWithFrame:CGRectMake(0, 0, HDAutoWidth(400), HDAutoHeight(40))];
     _positionLabel.textColor = UIColorFromHex(0x727171);
     _positionLabel.text = _model.positionStr;
     _positionLabel.font = [UIFont systemFontOfSize:12];
-    
+    _positionLabel.speed = -1;
     [_ConView addSubview:_positionLabel];
     
     _answerCountLabel = [[UILabel alloc]init];
@@ -307,7 +307,7 @@
     }];
     [_answerCountLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_positionImageView.mas_left);
-        make.top.equalTo(_positionLabel.mas_bottom);
+        make.top.equalTo(_positionLabel.mas_bottom).offset(HDAutoHeight(10));
         make.height.equalTo(@(HDAutoHeight(60)));
         make.width.equalTo(@(HDAutoWidth(150)));
     }];
@@ -318,6 +318,27 @@
         make.height.equalTo(@(HDAutoHeight(60)));
         make.right.equalTo(_ConView.mas_right).offset(-HDAutoWidth(20));
     }];
+    
+    if([_positionLabel.text isEqualToString:@"官方"]){
+        
+        _positionImageView.alpha = 0;
+        _positionLabel.alpha = 0;
+        UIImageView *realImageView = [[UIImageView alloc]init];
+        realImageView.image = [UIImage imageNamed:@"官方消息"];
+        realImageView.contentMode = UIViewContentModeScaleAspectFill;
+        [_ConView addSubview:realImageView];
+        
+        [realImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            
+            make.width.equalTo(@(HDAutoWidth(131.6)));
+            make.height.equalTo(@(HDAutoHeight(42.8)));
+            make.left.equalTo(_positionImageView.mas_left);
+            make.top.equalTo(_positionImageView.mas_top);
+        }];
+        
+    }
+    
+    
 //    [_answerBtn layoutIfNeeded];
 ////    [self.ConView layoutIfNeeded];
 //    CAShapeLayer *borderLayer = [CAShapeLayer layer];
@@ -490,6 +511,12 @@
         make.width.equalTo(@(HDAutoWidth(30)));
         make.height.equalTo(@(HDAutoWidth(30)));
     }];
+}
+
+-(void)changeImg{
+    
+    [_answerBtn setImage:[UIImage imageNamed:@"取消收藏"] forState:UIControlStateNormal];
+    
 }
 
 @end

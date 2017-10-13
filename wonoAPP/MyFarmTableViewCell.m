@@ -7,11 +7,13 @@
 //
 
 #import "MyFarmTableViewCell.h"
-
+#import "BBFlashCtntLabel.h"
 
 @interface MyFarmTableViewCell()
 
 @property (nonatomic,strong) UILabel *leftLabel;
+
+@property (nonatomic,strong) BBFlashCtntLabel *rightLabel;
 
 @property (nonatomic,strong) UIView *whiteView;
 
@@ -48,7 +50,7 @@
         _leftLabel.textColor = UIColorFromHex(0x9fa0a0);
         [self addSubview:_leftLabel];
     }
-    NSString *resStr = [NSString stringWithFormat:@"%@:  %@",leftStr,rightStr];
+    NSString *resStr = [NSString stringWithFormat:@"%@:",leftStr];
     _leftLabel.text = resStr;
     if(_whiteView == nil){
         _whiteView = [[UIView alloc]init];
@@ -56,12 +58,23 @@
         [self addSubview:_whiteView];
     }
     
-    [_leftLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.mas_left).offset(HDAutoWidth(32));
-        make.width.equalTo(self.mas_width).offset(-HDAutoWidth(150));
-        make.top.equalTo(self.mas_top);
-        make.bottom.equalTo(self.mas_bottom).offset(-1);
-    }];
+    NSString *res = [NSString stringWithFormat:@"%@",rightStr];
+    _leftLabel.frame = CGRectMake(HDAutoWidth(32), 0, HDAutoWidth(140), HDAutoHeight(80));
+    _rightLabel = [[BBFlashCtntLabel alloc]init];
+    _rightLabel.frame = CGRectMake(HDAutoWidth(180), 0, SCREEN_WIDTH-HDAutoWidth(280), HDAutoHeight(80));
+    _rightLabel.font = [UIFont systemFontOfSize:13];
+    _rightLabel.textColor = UIColorFromHex(0x9fa0a0);
+    _rightLabel.text = res;
+    _rightLabel.speed = -1;
+    [self addSubview:_rightLabel];
+    
+    
+//    [_leftLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(self.mas_left).offset(HDAutoWidth(32));
+//        make.width.equalTo(self.mas_width).offset(-HDAutoWidth(100));
+//        make.top.equalTo(self.mas_top);
+//        make.bottom.equalTo(self.mas_bottom).offset(-1);
+//    }];
     
     [_whiteView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.mas_left);

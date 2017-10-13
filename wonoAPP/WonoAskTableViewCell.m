@@ -8,6 +8,7 @@
 
 #import "WonoAskTableViewCell.h"
 #import "UIImageView+MHFacebookImageViewer.h"
+#import "BBFlashCtntLabel.h"
 
 #define HEIGHT [ [ UIScreen mainScreen ] bounds ].size.height
 
@@ -19,7 +20,7 @@
 @property (nonatomic,strong) UILabel *contentLabel;
 @property (nonatomic,strong) UIImageView *mainImageView;
 @property (nonatomic,strong) UIImageView *positionImageView;
-@property (nonatomic,strong) UILabel *positionLabel;
+@property (nonatomic,strong) BBFlashCtntLabel *positionLabel;
 @property (nonatomic,strong) UILabel *answerCountLabel;
 @property (nonatomic,strong) UIButton *answerBtn;
 
@@ -135,14 +136,16 @@
     _titleLabel.text = _model.titleStr;
     _titleLabel.textColor = UIColorFromHex(0x000000);
     _titleLabel.font = [UIFont systemFontOfSize:15];
-    
+    _titleLabel.numberOfLines = 0;
     [_ConView addSubview:_titleLabel];
-
+    
+    CGFloat height = [self getSpaceLabelHeight:_model.titleStr withFont:[UIFont systemFontOfSize:15] withWidth:(SCREEN_WIDTH-HDAutoWidth(40))];
+    
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_ConView.mas_left).offset(HDAutoWidth(20));
         make.top.equalTo(_ConView.mas_top).offset(HDAutoHeight(10));
         make.right.equalTo(_ConView.mas_right).offset(-HDAutoWidth(20));
-        make.height.equalTo(@(HDAutoHeight(50)));
+        make.height.equalTo(@(height));
     }];
     
     
@@ -188,7 +191,12 @@
 
     _sujjestBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_sujjestBtn setImage:[UIImage imageNamed:@"未点击点赞"] forState:UIControlStateNormal];
-    [_sujjestBtn setTitle:@"1" forState:UIControlStateNormal];
+    
+    
+    int needInt = [_model.sujjestCount intValue];
+    NSString *res = [NSString stringWithFormat:@"%d",needInt];
+    
+    [_sujjestBtn setTitle:res forState:UIControlStateNormal];
     _sujjestBtn.layer.masksToBounds = YES;
     _sujjestBtn.layer.borderWidth = 0.5;
     _sujjestBtn.layer.borderColor = MainColor.CGColor;
@@ -206,13 +214,74 @@
         make.height.equalTo(@(HDAutoHeight(50)));
         make.width.equalTo(@(HDAutoWidth(150)));
     }];
-
     
+    _sujjestBtn.selected = NO;
     
+    [self getPermission];
 }
 
 -(void)sujjestClick{
     NSLog(@"点击点赞");
+    
+    _sujjestBtn.enabled = NO;
+    
+    if(_sujjestBtn.selected == NO){
+        _sujjestBtn.selected = YES;
+        
+        [[InterfaceSingleton shareInstance].interfaceModel MarkPointWithAction:@"1" AndQid:_model.askId WithCallBack:^(int state, id data, NSString *msg) {
+           
+            _sujjestBtn.enabled = YES;
+            
+        }];
+        
+        
+        NSString *str = _sujjestBtn.titleLabel.text;
+        int needint = [str intValue];
+        needint++;
+        NSString *res = [NSString stringWithFormat:@"%d",needint];
+        
+        [_sujjestBtn setImage:[UIImage imageNamed:@"点击点赞"] forState:UIControlStateNormal];
+        [_sujjestBtn setTitle:res forState:UIControlStateNormal];
+    }else{
+        
+        [[InterfaceSingleton shareInstance].interfaceModel MarkPointWithAction:@"2" AndQid:_model.askId WithCallBack:^(int state, id data, NSString *msg) {
+            
+            _sujjestBtn.enabled = YES;
+            
+        }];
+
+        
+        _sujjestBtn.selected = NO;
+        
+        NSString *str = _sujjestBtn.titleLabel.text;
+        int needint = [str intValue];
+        needint--;
+        NSString *res = [NSString stringWithFormat:@"%d",needint];
+
+        [_sujjestBtn setImage:[UIImage imageNamed:@"未点击点赞"] forState:UIControlStateNormal];
+        [_sujjestBtn setTitle:res forState:UIControlStateNormal];
+    }
+    
+    
+}
+
+-(void)getPermission{
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getUserLikeWithQid:_model.askId WithCallBack:^(int state, id data, NSString *msg) {
+       
+        if(state == 2000){
+            NSDictionary *dic = data;
+            int res = [dic[@"like"] intValue];
+            if(res == 0){
+                _sujjestBtn.selected = NO;
+                [_sujjestBtn setImage:[UIImage imageNamed:@"未点击点赞"] forState:UIControlStateNormal];
+            }else{
+                _sujjestBtn.selected = YES;
+                [_sujjestBtn setImage:[UIImage imageNamed:@"点击点赞"] forState:UIControlStateNormal];
+            }
+        }
+        
+    }];
 }
 
 -(void)createType1{
@@ -242,6 +311,7 @@
     //    [_ConView addSubview:_mainImageView];
     
 
+    
     
     [_contentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_titleLabel.mas_left);
@@ -344,15 +414,17 @@
     }];
 }
 
-
+-(void)reloadTitle{
+    [_positionLabel reloadView];
+}
 -(void)creatSubViews{
     
     
-    _positionLabel = [[UILabel alloc]init];
+    _positionLabel = [[BBFlashCtntLabel alloc]initWithFrame:CGRectMake(0, 0, HDAutoWidth(400), HDAutoHeight(40))];
     _positionLabel.textColor = UIColorFromHex(0x727171);
     _positionLabel.text = _model.positionStr;
     _positionLabel.font = [UIFont systemFontOfSize:12];
-    
+    _positionLabel.speed = -1;
     [_ConView addSubview:_positionLabel];
     
     _answerCountLabel = [[UILabel alloc]init];
@@ -387,7 +459,7 @@
     }];
     [_answerCountLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_positionImageView.mas_left);
-        make.top.equalTo(_positionLabel.mas_bottom);
+        make.top.equalTo(_positionLabel.mas_bottom).offset(HDAutoHeight(10));
         make.height.equalTo(@(HDAutoHeight(60)));
         make.width.equalTo(@(HDAutoWidth(400)));
     }];
@@ -398,6 +470,25 @@
         make.height.equalTo(@(HDAutoHeight(60)));
         make.right.equalTo(_ConView.mas_right).offset(-HDAutoWidth(20));
     }];
+    
+    if([_positionLabel.text isEqualToString:@"官方"]){
+        
+        _positionImageView.alpha = 0;
+        _positionLabel.alpha = 0;
+        UIImageView *realImageView = [[UIImageView alloc]init];
+        realImageView.image = [UIImage imageNamed:@"官方消息"];
+        realImageView.contentMode = UIViewContentModeScaleAspectFill;
+        [_ConView addSubview:realImageView];
+        
+        [realImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            
+            make.width.equalTo(@(HDAutoWidth(131.6)));
+            make.height.equalTo(@(HDAutoHeight(42.8)));
+            make.left.equalTo(_positionImageView.mas_left);
+            make.top.equalTo(_positionImageView.mas_top);
+        }];
+        
+    }
 }
 
 

@@ -13,8 +13,8 @@
 
 @property (nonatomic,strong) UIView *ConView;
 
-@property (nonatomic,strong) UILabel *titleLabel;
-@property (nonatomic,strong) UILabel *nextTitleLabel;
+@property (nonatomic,strong) BBFlashCtntLabel *titleLabel;
+@property (nonatomic,strong) BBFlashCtntLabel *nextTitleLabel;
 @property (nonatomic,strong) UILabel *qiwenLabel;
 @property (nonatomic,strong) UILabel *qishiLabel;
 @property (nonatomic,strong) UILabel *diwenLabel;
@@ -72,12 +72,12 @@
 }
 
 -(void)createTitle{
-    _titleLabel = [[UILabel alloc]init];
+    _titleLabel = [[BBFlashCtntLabel alloc]init];
     _titleLabel.text = @"黄瓜大棚";
     _titleLabel.textColor = UIColorFromHex(0x000000);
     _titleLabel.font = [UIFont systemFontOfSize:14];
     [_ConView addSubview:_titleLabel];
-    _nextTitleLabel = [[UILabel alloc]init];
+    _nextTitleLabel = [[BBFlashCtntLabel alloc]init];
     _nextTitleLabel.text = @"(TPCG092)";
     _nextTitleLabel.textColor = UIColorFromHex(0x9fa0a0);
     _nextTitleLabel.font = [UIFont systemFontOfSize:14];
@@ -87,16 +87,28 @@
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_ConView.mas_left).offset(HDAutoWidth(15));
         make.top.equalTo(_ConView.mas_top).offset(HDAutoHeight(15));
-        make.width.equalTo(@(HDAutoWidth(250)));
+        make.width.equalTo(@(HDAutoWidth(200)));
         make.height.equalTo(@(HDAutoHeight(50)));
     }];
+    
     [_nextTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(_titleLabel.mas_centerY);
-        make.left.equalTo(_titleLabel.mas_right).offset(HDAutoWidth(5));
-        make.width.equalTo(@(HDAutoWidth(450)));
+        make.left.equalTo(_titleLabel.mas_right).offset(HDAutoWidth(20));
+        make.right.equalTo(_ConView.mas_right).offset(-HDAutoWidth(170));
         make.bottom.equalTo(_titleLabel.mas_bottom);
     }];
+    [_titleLabel layoutIfNeeded];
+    [_nextTitleLabel layoutIfNeeded];
+    _titleLabel.speed = -1;
+    _nextTitleLabel.speed = -1;
+}
 
+-(void)reloadSpeed{
+    
+    [_titleLabel reloadView];
+    [_nextTitleLabel reloadView];
+    [_yuangongLabel reloadView];
+    
 }
 
 -(float)getLengthWithFont:(int)font AndText:(NSString *)text{
@@ -174,6 +186,7 @@
     _yuangongLabel.frame = CGRectMake(_qishiLabel.x, _leibieLabel.y, HDAutoWidth(400), HDAutoHeight(40));
     [_ConView addSubview:_yuangongLabel];
     _yuangongLabel.text = @"员工：张毅";
+    _yuangongLabel.speed = -1;
 
 }
 
@@ -288,19 +301,19 @@
     _yuangongLabel.text = st2;
 
     _timeLabel.text = _model.time;
-    
+//    model.state = 3;
     if(model.state == 2){
     
         UIImage *image = [UIImage imageNamed:@"1-预警"];
         
         _headImageView.image = image;
-    }
-    
-    if(model.state == 3){
+    }else if(model.state == 3){
         
         UIImage *image = [UIImage imageNamed:@"1-异常"];
         
         _headImageView.image = image;
+    }else{
+        _headImageView.image = nil;
     }
     
 }

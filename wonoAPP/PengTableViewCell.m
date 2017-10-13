@@ -7,6 +7,7 @@
 //
 
 #import "PengTableViewCell.h"
+#import "BBFlashCtntLabel.h"
 
 
 @interface PengTableViewCell()
@@ -16,9 +17,9 @@
 @property(nonatomic,strong) UIButton *deleteBtn;
 
 
-@property(nonatomic,strong) UILabel *nameLabel;
+@property(nonatomic,strong) BBFlashCtntLabel *nameLabel;
 
-@property(nonatomic,strong) UILabel *contentLabel;
+@property(nonatomic,strong) BBFlashCtntLabel *contentLabel;
 
 @property(nonatomic,strong) UILabel *stateLabel;
 
@@ -109,9 +110,9 @@
     _hubBtn.backgroundColor = [UIColor clearColor];
     [self addSubview:_hubBtn];
     [_hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(@(HDAutoWidth(25)));
+        make.left.equalTo(@(HDAutoWidth(0)));
         make.centerY.equalTo(self.mas_centerY);
-        make.width.equalTo(@(HDAutoWidth(60)));
+        make.width.equalTo(@(HDAutoWidth(85)));
         make.height.equalTo(self.mas_height);
     }];
 }
@@ -136,10 +137,8 @@
 
 -(void)createContent{
     
-    _nameLabel = [[UILabel alloc]init];
-    _nameLabel.text = @"大棚1";
-    _nameLabel.textColor = UIColorFromHex(0x000000);
-    _nameLabel.font = [UIFont systemFontOfSize:13];
+    _nameLabel = [[BBFlashCtntLabel alloc]init];
+    
     [_ConView addSubview:_nameLabel];
     [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_ConView.mas_left).offset(HDAutoWidth(35));
@@ -147,19 +146,17 @@
         make.width.equalTo(@(HDAutoWidth(200)));
         make.height.equalTo(@(HDAutoHeight(60)));
     }];
+    [self layoutIfNeeded];
+    _nameLabel.text = @"大棚1";
+    _nameLabel.textColor = UIColorFromHex(0x000000);
+    _nameLabel.font = [UIFont systemFontOfSize:13];
+    _nameLabel.speed = -1;
     
-    _contentLabel = [[UILabel alloc]init];
-    _contentLabel.text = @"TPG92347842";
-    _contentLabel.textColor = UIColorFromHex(0x9fa0a0);
-    _contentLabel.font = [UIFont systemFontOfSize:13];
-    _contentLabel.textAlignment = NSTextAlignmentCenter;
+    _contentLabel = [[BBFlashCtntLabel alloc]init];
+    
     [_ConView addSubview:_contentLabel];
-    [_contentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(_ConView.mas_centerX);
-        make.centerY.equalTo(_ConView.mas_centerY);
-        make.width.equalTo(@(HDAutoWidth(400)));
-        make.height.equalTo(@(HDAutoHeight(60)));
-    }];
+    
+    
     
     _stateLabel = [[UILabel alloc]init];
     _stateLabel.text = @"正常";
@@ -174,6 +171,18 @@
         make.width.equalTo(@(HDAutoWidth(100)));
     }];
     
+    [_contentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_ConView.mas_centerY);
+        make.right.equalTo(_stateLabel.mas_left).offset(-HDAutoWidth(20));
+        make.left.equalTo(_nameLabel.mas_right).offset(HDAutoWidth(30));
+        make.height.equalTo(@(HDAutoHeight(60)));
+    }];
+    [self layoutIfNeeded];
+    _contentLabel.text = @"TPG92347842";
+    _contentLabel.textColor = UIColorFromHex(0x9fa0a0);
+    _contentLabel.font = [UIFont systemFontOfSize:13];
+//    _contentLabel.textAlignment = NSTextAlignmentLeft;
+    _contentLabel.speed = -1;
     
     
 }

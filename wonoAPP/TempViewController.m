@@ -75,10 +75,16 @@
     int loadMark;
     TempModel *model;
     NSMutableArray *dataArr;
+    BOOL animateMark;
+    BOOL animateMark2;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    animateMark = true;
+    animateMark2 = true;
+    
     [self creatTitleAndBackBtn];
     
     dataArr = [NSMutableArray array];
@@ -97,11 +103,11 @@
     
      _contentTabel.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(requestData)];
     
-//    [self createIndicator];
-//    [self getLocate];
+    [self createIndicator];
+    [self getLocate];
     
     [self loadCatch];
-    [self requestData];
+//    [self requestData];
     
 //    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0/*延迟执行时间*/ * NSEC_PER_SEC));
 //    
@@ -109,8 +115,87 @@
 //        NSString *clientID = [GeTuiSdk clientId];
 //        NSLog(@"%@",clientID);
 //    });
+    [self requsetNeed];
+    [self requestCount];
     
+}
+
+
+-(void)requestCount{
     
+    [[InterfaceSingleton shareInstance].interfaceModel getUnReadMsgCountWithCallBack:^(int state, id data, NSString *msg) {
+        if(state == 2000){
+            NSDictionary *dic = data;
+            
+            NSString *str = [NSString stringWithFormat:@"%@",dic[@"count"]];
+            
+            
+            if([str intValue]>99){
+                str = @"99+";
+            }
+            
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"badgeChange" object:str];
+            
+            NSLog(@"成功");
+        }
+    }];
+    
+}
+
+
+-(void)requsetNeed{
+    
+    [MBProgressHUD showMessage:@"加载中"];
+//    [MBProgressHUD showLongSuccess:@"加载用户数据..." toView:[[UIApplication sharedApplication].delegate window]];
+    [[InterfaceSingleton shareInstance].interfaceModel getUserInfoWithCallBack:^(int state, id data, NSString *msg) {
+        [MBProgressHUD hideHUDForView:[[UIApplication sharedApplication].delegate window]];
+//        [MBProgressHUD hideHUDForView:[[UIApplication sharedApplication].delegate window]];
+        if(state == 2000){
+            [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"fid"];
+            [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"pengID"];
+            NSLog(@"成功");
+            
+            NSDictionary *dic = data;
+            
+            NSString *fid = dic[@"fid"];
+            NSString *pengID = dic[@"greenHouse"];
+            NSString *type = dic[@"type"];
+            
+            [[NSUserDefaults standardUserDefaults] setObject:fid forKey:@"fid"];
+            [[NSUserDefaults standardUserDefaults] setObject:pengID forKey:@"pengID"];
+            [[NSUserDefaults standardUserDefaults] setObject:type forKey:@"userType"];
+            [self requestData];
+        }else{
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+        if(state == 999){
+            
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"登录已过期" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"重新登录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"loginMark"];
+                [[NSUserDefaults standardUserDefaults]synchronize];
+                LoginViewController *login = [[LoginViewController alloc]init];
+                UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:login];
+                nav.navigationBar.hidden = YES;
+                
+                appDelegate.window.rootViewController = nav;
+                
+            }];
+            [alertC addAction:confirmAct];
+            [self presentViewController:alertC animated:YES completion:nil];
+            
+            return;
+        }
+        
+        
+    }];
+    
+}
+
+-(void)removeCatch{
+    [[JXTCacher cacher] clearObject:@"firstCat" userId:@"login"];
 }
 
 -(void)loadCatch{
@@ -139,6 +224,7 @@
         
 //        [MBProgressHUD showSuccess:msg];
         if(state == 2001){
+            [self removeCatch];
             
             dataArr = [NSMutableArray array];
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -165,12 +251,16 @@
                 
                 
                 [_contentTabel reloadData];
+                
+                
+                    
             });
            
             return;
         }
         
-        if(state == 999||state == 3001){
+        if(state == 999){
+            
             UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"登录已过期" message:@"" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"重新登录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 
@@ -178,7 +268,7 @@
                 [[NSUserDefaults standardUserDefaults]synchronize];
                 LoginViewController *login = [[LoginViewController alloc]init];
                 UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:login];
-                nav.navigationBarHidden = YES;
+                nav.navigationBar.hidden = YES;
                 
                 appDelegate.window.rootViewController = nav;
                 
@@ -194,7 +284,7 @@
             NSLog(@"成功");
             
            
-            
+            [self removeCatch];
             dataArr = [NSMutableArray array];
             
             NSArray *arr = data;
@@ -256,11 +346,25 @@
             
             [_contentTabel reloadData];
             
-        }
-        if(state<2000){
+            if(animateMark == true){
+                animateMark = false;
+                _contentTabel.alpha = 0;
+                [UIView animateWithDuration:0.5 animations:^{
+                    _contentTabel.alpha = 1;
+                }];
+            }
+            
+        }else{
             [MBProgressHUD showSuccess:msg];
         }
+//        if(state<2000){
+//            [MBProgressHUD showSuccess:msg];
+//        }
     }];
+    
+   
+    
+    
 }
 
 
@@ -303,9 +407,13 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
+    [_contentTabel reloadData];
     NSLog(@"我显示了");
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    self.navigationController.navigationBar.hidden = YES;
+//    self.navigationController.navigationBar.alpha = 0;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
 }
 
 -(void)createHead{
@@ -557,6 +665,8 @@
     MainTempModel *model2 = dataArr[indexPath.row];
     cell.model = model2;
     
+    [cell reloadSpeed];
+    
     return cell;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -770,6 +880,10 @@
                                                                imageView.frame = CGRectMake(0, 0, _headView.width, _headView.height);
                                                                [_headView addSubview:imageView];
                                                                [_headView sendSubviewToBack:imageView];
+                                                               imageView.alpha = 0;
+                                                               [UIView animateWithDuration:0.5 animations:^{
+                                                                   imageView.alpha = 1;
+                                                               }];
                                                                [MBProgressHUD hideHUDForView:_headView];
                                                                [self createHubBtn];
                                                            }
@@ -963,5 +1077,73 @@
 }
 
 
-
+//-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
+//
+//    return YES;
+//
+//}
+//
+//
+//
+//-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+//
+//    if (editingStyle == UITableViewCellEditingStyleDelete) {
+//
+////        [self.dataSource removeObjectAtIndex:indexPath.row];
+////
+////        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+//
+//    }
+//
+//}
+//-(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    return UITableViewCellEditingStyleDelete;// 删除cell
+//}
+//
+//- (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath{
+//
+//    //设置删除按钮
+//
+//    UITableViewRowAction *deleteRowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"删除"handler:^(UITableViewRowAction *action,NSIndexPath *indexPath) {
+//
+////        [self.dataSource removeObjectAtIndex:indexPath.row];
+////
+////        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+//
+//    }];
+//
+//    //设置收藏按钮
+//
+//    UITableViewRowAction *collectRowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"收藏"handler:^(UITableViewRowAction *action,NSIndexPath *indexPath) {
+//
+//        collectRowAction.backgroundColor = [UIColor greenColor];
+//
+//        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"收藏" message:@"收藏成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+//
+//        [alertView show];
+//
+//    }];
+//
+//    //设置置顶按钮
+//
+//    UITableViewRowAction *topRowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"置顶" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+//
+////        [self.dataSource exchangeObjectAtIndex:indexPath.row withObjectAtIndex:0];
+////
+////        NSIndexPath *firstIndexPath = [NSIndexPath indexPathForRow:0 inSection:indexPath.section];
+////
+////        [tableView moveRowAtIndexPath:indexPath toIndexPath:firstIndexPath];
+//
+//    }];
+//
+//    collectRowAction.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+//
+//    topRowAction.backgroundColor = [UIColor blueColor];
+//
+//    collectRowAction.backgroundColor = [UIColor grayColor];
+//
+//    return  @[deleteRowAction,collectRowAction,topRowAction];
+//
+//}
 @end

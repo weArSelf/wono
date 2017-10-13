@@ -9,6 +9,7 @@
 #import "WonoAnswerTableViewCell.h"
 #import "UIImageView+MHFacebookImageViewer.h"
 #import <AVFoundation/AVFoundation.h>
+#import "BBFlashCtntLabel.h"
 
 #define HEIGHT [ [ UIScreen mainScreen ] bounds ].size.height
 
@@ -20,7 +21,7 @@
 @property (nonatomic,strong) UILabel *contentLabel;
 @property (nonatomic,strong) UIImageView *mainImageView;
 @property (nonatomic,strong) UIImageView *positionImageView;
-@property (nonatomic,strong) UILabel *positionLabel;
+@property (nonatomic,strong) BBFlashCtntLabel *positionLabel;
 @property (nonatomic,strong) UILabel *answerCountLabel;
 @property (nonatomic,strong) UIButton *answerBtn;
 
@@ -60,11 +61,20 @@
         //        self.backgroundColor = [UIColor greenColor];
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
         [self createContent];
-        
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(beChange) name:@"markChange" object:nil];
         
     }
     return self;
 }
+
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+
+-(void)beChange{
+    _changeMark = @"1";
+}
+
 
 -(void)createContent{
     
@@ -107,16 +117,26 @@
     
     return second;
 }
+-(void)reloadTitle{
+//    _positionLabel.text = @"aaaaaaaaaaaaawwwwwwwwwwweeeeeeeeeeeeeddddddddd";
+    [_positionLabel layoutIfNeeded];
+//    _positionLabel.speed = -1;
+    [_positionLabel reloadView];
+}
 -(void)setModel:(WonoAnswerModel *)model{
     
     _model = model;
     
-    if(![_model.audioUrl isEqualToString:@""]){
-        NSURL *url = [NSURL URLWithString:_model.audioUrl];
-        NSInteger leng = [self durationWithVideo:url];
-        _model.audioLength = [NSString stringWithFormat:@"%ld",(long)leng];
+//    if(![_model.audioUrl isEqualToString:@""]){
+//        NSURL *url = [NSURL URLWithString:_model.audioUrl];
+//        NSInteger leng = [self durationWithVideo:url];
+//        _model.audioLength = [NSString stringWithFormat:@"%ld",(long)leng];
+//    }
+    if(model == nil){
+        
+        return;
+        
     }
-    
     
     [self createHead];
     
@@ -243,13 +263,16 @@
     }
     _contentLabel.textColor = [UIColor grayColor];
     _contentLabel.font = [UIFont systemFontOfSize:13];
+    
+    NSString *res;
     if(![_model.replyName isEqualToString:@""]){
         //        NSString *conS = _model.contentStr;
-        NSString *res = [NSString stringWithFormat:@"回复@%@:  %@",_model.replyName,_model.contentStr];
-        _contentLabel.text = res;
+        res = [NSString stringWithFormat:@"回复@%@:  %@",_model.replyName,_model.contentStr];
+        
     }else{
-        _contentLabel.text = _model.contentStr;
+        res = _model.contentStr;
     }
+    _contentLabel.text = res;
     _contentLabel.numberOfLines = 0;
     [_ConView addSubview:_contentLabel];
     
@@ -274,7 +297,7 @@
     //        make.height.equalTo(@(HDAutoHeight(50)));
     //    }];
     
-    CGFloat height = [self getSpaceLabelHeight:_model.contentStr withFont:[UIFont systemFontOfSize:13] withWidth:SCREEN_WIDTH - HDAutoWidth(80)];
+    CGFloat height = [self getSpaceLabelHeight:res withFont:[UIFont systemFontOfSize:13] withWidth:SCREEN_WIDTH - HDAutoWidth(80)];
     
     
     
@@ -429,50 +452,13 @@
 -(void)audioClick{
     NSLog(@"点击音频");
     
-    if ([self.player isPlaying])return;
-    
-//    NSString *str = _model.audioUrl;
-//    NSURL *url = [NSURL URLWithString:str];
-    
-    if(_model.audioUrl){
+    if(_audioBlo){
         
-        if(self.session==nil){
-        
-            AVAudioSession *session =[AVAudioSession sharedInstance];
-            NSError *sessionError;
-            [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&sessionError];
-
-            if (session == nil) {
-
-                NSLog(@"Error creating session: %@",[sessionError description]);
-
-            }else{
-                [session setActive:YES error:nil];
-
-            }
-            self.session = session;
-            
-            NSURL *url = [NSURL URLWithString:_model.audioUrl];
-            
-            data = [NSData dataWithContentsOfURL:url];
-        }
-
-        
-
+        _audioBlo(_model.audioUrl);
         
     }
-
-    
-    self.player = [[AVAudioPlayer alloc] initWithData:data error:nil];;
     
     
-    
-    NSLog(@"%li",self.player.data.length/1024);
-    
-    
-    
-    [self.session setCategory:AVAudioSessionCategoryPlayback error:nil];
-    [self.player play];
 
     
     
@@ -483,11 +469,11 @@
 -(void)creatSubViews{
     
     
-    _positionLabel = [[UILabel alloc]init];
+    _positionLabel = [[BBFlashCtntLabel alloc]initWithFrame:CGRectMake(0, 0, HDAutoWidth(400), HDAutoHeight(40))];
     _positionLabel.textColor = UIColorFromHex(0x727171);
     _positionLabel.text = _model.positionStr;
     _positionLabel.font = [UIFont systemFontOfSize:12];
-    
+    _positionLabel.speed = -1;
     [_ConView addSubview:_positionLabel];
     
     _answerCountLabel = [[UILabel alloc]init];
@@ -517,13 +503,23 @@
         
     }];
     
+    if([_positionLabel.text isEqualToString:@"官方"]){
+        [_answerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(_positionLabel.mas_centerY).offset(HDAutoHeight(8));
+            make.width.equalTo(@(HDAutoWidth(150)));
+            make.height.equalTo(@(HDAutoHeight(50)));
+            make.right.equalTo(_ConView.mas_right).offset(-HDAutoWidth(20));
+        }];
+    }else{
+        [_answerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(_positionLabel.mas_centerY);
+            make.width.equalTo(@(HDAutoWidth(150)));
+            make.height.equalTo(@(HDAutoHeight(50)));
+            make.right.equalTo(_ConView.mas_right).offset(-HDAutoWidth(20));
+        }];
+    }
     
-    [_answerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(_positionLabel.mas_centerY);
-        make.width.equalTo(@(HDAutoWidth(150)));
-        make.height.equalTo(@(HDAutoHeight(50)));
-        make.right.equalTo(_ConView.mas_right).offset(-HDAutoWidth(20));
-    }];
+    
 //    [self layoutIfNeeded];
 //    [self.ConView layoutIfNeeded];
 //    CAShapeLayer *borderLayer = [CAShapeLayer layer];
@@ -543,6 +539,25 @@
 //    borderLayer.strokeColor = MainColor.CGColor;
 //    borderLayer.cornerRadius = 5;
 //    [_answerBtn.layer addSublayer:borderLayer];
+    
+    if([_positionLabel.text isEqualToString:@"官方"]){
+        
+        _positionImageView.alpha = 0;
+        _positionLabel.alpha = 0;
+        UIImageView *realImageView = [[UIImageView alloc]init];
+        realImageView.image = [UIImage imageNamed:@"官方消息"];
+        realImageView.contentMode = UIViewContentModeScaleAspectFill;
+        [_ConView addSubview:realImageView];
+        
+        [realImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            
+            make.width.equalTo(@(HDAutoWidth(131.6)));
+            make.height.equalTo(@(HDAutoHeight(42.8)));
+            make.left.equalTo(_positionImageView.mas_left);
+            make.top.equalTo(_positionImageView.mas_top);
+        }];
+        
+    }
 }
 
 

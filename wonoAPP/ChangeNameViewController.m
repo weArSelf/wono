@@ -7,7 +7,7 @@
 //
 
 #import "ChangeNameViewController.h"
-
+#import "LimitInput.h"
 
 @interface ChangeNameViewController ()<UITextFieldDelegate>
 
@@ -40,8 +40,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 -(void)creatTitleAndBackBtn{
@@ -170,11 +173,13 @@
     
     _nameTextField.placeholder = @"请输入昵称";
     
-    _nameTextField.layer.cornerRadius = 5;
+    _nameTextField.borderStyle = UITextBorderStyleRoundedRect;
     
-    _nameTextField.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    
-    _nameTextField.layer.borderWidth = 1;
+//    _nameTextField.layer.cornerRadius = 5;
+//    
+//    _nameTextField.layer.borderColor = [UIColor lightGrayColor].CGColor;
+//    
+//    _nameTextField.layer.borderWidth = 1;
     
     _nameTextField.font = [UIFont systemFontOfSize:13];
     
@@ -184,9 +189,13 @@
     
     _nameTextField.delegate = self;
     
-    UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, HDAutoWidth(15), HDAutoHeight(70))];
-    _nameTextField.leftView = paddingView;
-    _nameTextField.leftViewMode = UITextFieldViewModeAlways;
+    [_nameTextField setValue:@"8" forKey:@"limit"];
+    
+//    UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, HDAutoWidth(15), HDAutoHeight(70))];
+//    _nameTextField.leftView = paddingView;
+//    _nameTextField.leftViewMode = UITextFieldViewModeAlways;
+    
+    
 //    _nameTextField.rightView = paddingView;
     [self.view addSubview:_nameTextField];
     

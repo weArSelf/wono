@@ -81,7 +81,11 @@
     {
         NSNumber *resNum = percentArr[i];
         double real = [resNum doubleValue];
-        [values addObject:[[PieChartDataEntry alloc] initWithValue:real label:dataArr[i]]];
+        if([dataArr[i] isEqual:[NSNull null]]){
+            [values addObject:[[PieChartDataEntry alloc] initWithValue:real label:@"未知"]];
+         }else{
+            [values addObject:[[PieChartDataEntry alloc] initWithValue:real label:dataArr[i]]];
+         }
     }
     
     PieChartDataSet *dataSet = [[PieChartDataSet alloc] initWithValues:values label:@""];

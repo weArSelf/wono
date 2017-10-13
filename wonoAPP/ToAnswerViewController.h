@@ -13,4 +13,6 @@
 @property (nonatomic,strong) NSString *askID;
 @property (nonatomic,strong) NSString *replyID;
 
+@property (nonatomic,strong) NSString *turnMark;
+
 @end

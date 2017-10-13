@@ -15,5 +15,5 @@
 @property (nonatomic,copy) void(^cellBlock)(NSDictionary *dic);
 
 @property (nonatomic,strong) WonoAskModel *model;
-
+-(void)reloadTitle;
 @end

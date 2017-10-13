@@ -133,7 +133,7 @@
                                                                      75,
                                                                      30)];
     [btnForget addTarget:self action:@selector(btnForgetClick) forControlEvents:UIControlEventTouchUpInside];
-    [btnForget setTitle:@"忘记密码" forState:UIControlStateNormal];
+    [btnForget setTitle:@"忘记密码?" forState:UIControlStateNormal];
     [btnForget setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     btnForget.titleLabel.font =  [UIFont boldSystemFontOfSize:14.0];
     //    btnForget.titleLabel.font = [UIFont systemFontOfSize:15];
@@ -147,10 +147,10 @@
     label.textColor = [UIColor lightGrayColor];
     label.font = [UIFont systemFontOfSize:12.0];
     label.frame = CGRectMake(0, APP_CONTENT_HEIGHT-80, APP_CONTENT_WIDTH, 30);
-    [self.view addSubview:label];
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(AgreementClick)];
-    [label addGestureRecognizer:tap];
-    label.userInteractionEnabled = YES;
+//    [self.view addSubview:label];
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(AgreementClick)];
+//    [label addGestureRecognizer:tap];
+//    label.userInteractionEnabled = YES;
     
     
 }
@@ -203,8 +203,17 @@
                     NSString *token = dic[@"token"];
                     NSString *fid = dic[@"fid"];
                     
+                    NSString *type = dic[@"type"];
+                    if(type){
+                        int tyint = [type intValue];
+                        NSString *reType = [NSString stringWithFormat:@"%d",tyint];
+                        [[NSUserDefaults standardUserDefaults] setObject:reType forKey:@"type"];
+                    }
+                    
                     [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"token"];
                     [[NSUserDefaults standardUserDefaults] setObject:fid forKey:@"fid"];
+                    
+                    
                     
                     int status = [dic[@"status"]intValue];
                     if(status == 0 ){
@@ -213,7 +222,7 @@
                     }else if(status == 1){
                         _btnLogin.enabled = false;
                         //正常状态
-                        [MBProgressHUD showSuccess:@"登陆成功"];
+                        [MBProgressHUD showSuccess:@"登录成功"];
                         
                         [[NSUserDefaults standardUserDefaults]setObject:@"login" forKey:@"loginMark"];
                         [[NSUserDefaults standardUserDefaults]synchronize];
@@ -259,7 +268,7 @@
             
         }else{
 //            NSLog(@"密码长度小于6位");
-            [MBProgressHUD showSuccess:@"密码长度小于6位"];
+            [MBProgressHUD showSuccess:@"密码长度不能小于6位"];
         }
         
         
@@ -321,6 +330,7 @@
         _pswTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _pswTextField.delegate = self;
         _pswTextField.secureTextEntry = YES;
+        [_pswTextField setValue:@10 forKey:@"limit"];
         [_pswTextField addTarget:self
                            action:@selector(textFieldEditChanged:)
                  forControlEvents:UIControlEventEditingChanged];

@@ -13,4 +13,6 @@
 
 @property (nonatomic,strong) NSString *qid;
 
+@property (nonatomic,strong) NSString *Cmark;
+
 @end

@@ -41,8 +41,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 -(void)creatTitleAndBackBtn{
@@ -130,6 +133,7 @@
     //    _plantTableView.frame = self.view.frame;
     _contentTableView.showsVerticalScrollIndicator = NO;
     //    _contentTableView.scrollEnabled = NO;
+    _contentTableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0,0,0,0.01)];
     [self.view addSubview:_contentTableView];
     
     [_contentTableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -207,7 +211,7 @@
     
     
     
-    [[InterfaceSingleton shareInstance].interfaceModel getPengWithCatPid:pid WithType:nil AndCallBack:^(int state, id data, NSString *msg) {
+    [[InterfaceSingleton shareInstance].interfaceModel getPengWithCatPid:pid WithType:@"2" AndCallBack:^(int state, id data, NSString *msg) {
         
         if(state == 2000){
             NSLog(@"");

@@ -222,6 +222,7 @@
     _textfPassWord.secureTextEntry = YES;
     _textfPassWord.placeholder = @"密码";
     _textfPassWord.font = [UIFont systemFontOfSize:14];
+    [_textfPassWord setValue:@10 forKey:@"limit"];
     [_textfPassWord addTarget:self
                        action:@selector(textFieldEditChanged:)
              forControlEvents:UIControlEventEditingChanged];
@@ -254,6 +255,7 @@
     _textVerificationPassWord.secureTextEntry = YES;
     _textVerificationPassWord.font = [UIFont systemFontOfSize:14];
     _textVerificationPassWord.placeholder = @"确认密码";
+    [_textVerificationPassWord setValue:@10 forKey:@"limit"];
     [_textVerificationPassWord addTarget:self
                                   action:@selector(textFieldEditChanged:)
                         forControlEvents:UIControlEventEditingChanged];
@@ -376,8 +378,13 @@
         return;
     }
     
+    if([_verificationCodeTextF.text isEqualToString: @""]){
+        [MBProgressHUD showSuccess:@"验证码不能为空"];
+        return;
+    }
+    
     if(_textfPassWord.text.length<6){
-        [MBProgressHUD showSuccess:@"密码长度小于6位"];
+        [MBProgressHUD showSuccess:@"密码长度不能小于6位"];
         return;
     }
     
@@ -386,10 +393,7 @@
         return;
     }
     
-    if([_verificationCodeTextF.text isEqualToString: @""]){
-        [MBProgressHUD showSuccess:@"验证码不能为空"];
-        return;
-    }
+    
     
     
     

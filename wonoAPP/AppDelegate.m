@@ -17,6 +17,9 @@
 
 #import "BaseNavViewController.h"
 
+#import "WonoCircleDetailViewController.h"
+#import "WonoCircleViewController.h"
+
 
 #define BMK_KEY @"kClOFMdxGkzAgIr6MEfGF8cgGWMjqx02"//百度地图的key
 #define Statis_KEY @"18d240c73a"//百度统计key
@@ -28,7 +31,9 @@
 #import <GeTuiSdk.h>
 #import <UserNotifications/UserNotifications.h>
 
-#import <UMMobClick/MobClick.h>
+//#import <UMMobClick/MobClick.h>
+#import "WonoWebMessageViewController.h"
+#import "UIDevice+DeviceModel.h"
 
 //#import <BaiduMobStat/BaiduMobStat.h>
 
@@ -46,6 +51,8 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    
     loginMark = false;
     self.LocatePermission = NO;
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
@@ -61,6 +68,10 @@
 //    if(mark == nil){
 //        mark = [[NSUserDefaults standardUserDefaults]objectForKey:@"loginMark"];
 //    }
+    if (@available(iOS 11.0, *)){
+        [[UIScrollView appearance] setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever];
+    }
+    
     if([mark isEqualToString:@"login"]){
     
         self.base = [[BaseTabBarController alloc]init];
@@ -71,7 +82,7 @@
     
         LoginViewController *login = [[LoginViewController alloc]init];
         UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:login];
-        nav.navigationBarHidden = YES;
+        nav.navigationBar.hidden = YES;
         self.window.rootViewController = nav;
     //    self.window.rootViewController = base;
             
@@ -88,26 +99,62 @@
 //    {
 //        NSLog(@"百度地图启动成功");
 //    }
-    [self setUpBaiMap];
+    
+#if !TARGET_OS_SIMULATOR
+    // 通过个推平台分配的appId、 appKey 、appSecret 启动SDK，注：该方法需要在主线程中调用
+    [GeTuiSdk startSdkWithAppId:kGtAppId appKey:kGtAppKey appSecret:kGtAppSecret delegate:self];
+    // 注册APNS
+    [self registerRemoteNotification];
+    
+    [GeTuiSdk clearAllNotificationForNotificationBar];
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+#endif
+
     
     
-//    // 通过个推平台分配的appId、 appKey 、appSecret 启动SDK，注：该方法需要在主线程中调用
-//    [GeTuiSdk startSdkWithAppId:kGtAppId appKey:kGtAppKey appSecret:kGtAppSecret delegate:self];
-//    // 注册APNS
-//    [self registerRemoteNotification];
-//    
-//    [GeTuiSdk clearAllNotificationForNotificationBar];
-//    [[UIApplication sharedApplication] cancelAllLocalNotifications];
-//    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
     
 //    [[BaiduMobStat defaultStat] startWithAppId:Statis_KEY];
     
-    UMConfigInstance.appKey = @"599fdc4c4544cb433a0009e8";
-    UMConfigInstance.channelId = @"App Store";
+//        UMConfigInstance.appKey = @"599fdc4c4544cb433a0009e8";
+//        UMConfigInstance.channelId = @"App Store";
+    
 //    UMConfigInstance.eSType = E_UM_GAME; //仅适用于游戏场景，应用统计不用设置
     
-    [MobClick startWithConfigure:UMConfigInstance];//配置以上参数后调用此方法初始化SDK！
+//        [MobClick startWithConfigure:UMConfigInstance];//配置以上参数后调用此方法初始化SDK！
+    
+    
+    [self setUpBaiMap];
+    
+//    NSString *dev =  UIDevice.currentDevice.localizedModel;
+//    NSLog(@"%@",dev);
+    
+//    UIDevice
+//    NSString *phoneModel = [[UIDevice currentDevice] deviceModel];
+    
+    
+    UIDevice *device = [UIDevice currentDevice];
+    float sysVersion = [device.systemVersion floatValue];
+    
+    if (sysVersion >= 10.0f) {
+        // 动态添加快捷启动
+        UIApplicationShortcutIcon *icon = [UIApplicationShortcutIcon iconWithType:UIApplicationShortcutIconTypeCloud];
+        UIApplicationShortcutItem *item = [[UIApplicationShortcutItem alloc] initWithType:@"fenxiang" localizedTitle:@"温湿度" localizedSubtitle:nil icon:icon userInfo:nil];
+        UIApplicationShortcutIcon *icon2 = [UIApplicationShortcutIcon iconWithType:UIApplicationShortcutIconTypeCompose];
+        UIApplicationShortcutItem *item2 = [[UIApplicationShortcutItem alloc] initWithType:@"zhongzhi" localizedTitle:@"种植管理" localizedSubtitle:nil icon:icon2 userInfo:nil];
+        UIApplicationShortcutIcon *icon3 = [UIApplicationShortcutIcon iconWithType:UIApplicationShortcutIconTypeBookmark];
+        UIApplicationShortcutItem *item3 = [[UIApplicationShortcutItem alloc] initWithType:@"tongji" localizedTitle:@"数据统计" localizedSubtitle:nil icon:icon3 userInfo:nil];
+        UIApplicationShortcutIcon *icon4 = [UIApplicationShortcutIcon iconWithType:UIApplicationShortcutIconTypeMessage];
+        UIApplicationShortcutItem *item4 = [[UIApplicationShortcutItem alloc] initWithType:@"zhidao" localizedTitle:@"农知道" localizedSubtitle:nil icon:icon4 userInfo:nil];
+        UIApplicationShortcutIcon *icon5 = [UIApplicationShortcutIcon iconWithType:UIApplicationShortcutIconTypeHome];
+        UIApplicationShortcutItem *item5 = [[UIApplicationShortcutItem alloc] initWithType:@"wode" localizedTitle:@"我的" localizedSubtitle:nil icon:icon5 userInfo:nil];
+        [[UIApplication sharedApplication] setShortcutItems:@[item,item2,item3,item4,item5]];
+    }
+    
+    
+    
+//    [self requsetNeed];
     
     return YES;
 }
@@ -156,8 +203,8 @@
         CLLocationManager  *locationManager = [[CLLocationManager alloc] init];
         //获取授权认证
         [locationManager requestAlwaysAuthorization];
-        [locationManager requestWhenInUseAuthorization];
-        [locationManager startUpdatingLocation];
+//        [locationManager requestWhenInUseAuthorization];
+//        [locationManager startUpdatingLocation];
     }
     _mapManager = [[BMKMapManager alloc]init];
     // 如果要关注网络及授权验证事件，请设定     generalDelegate参数
@@ -197,11 +244,23 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    
 }
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+    UIViewController *currentVC = [self currentViewController];
+    if([currentVC isKindOfClass:[WonoCircleViewController class]]){
+        WonoCircleViewController *noVC = (WonoCircleViewController *)currentVC;
+        [noVC requestCount];
+    }else{
+        [self requestCount];
+    }
+    [GeTuiSdk clearAllNotificationForNotificationBar];
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    
 }
 
 
@@ -238,14 +297,161 @@
 }
 /** 处理APNs展示点击，统计有效用户点击数 */
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    
+    UIApplicationState state = [UIApplication sharedApplication].applicationState;
+    
+    if(state == UIApplicationStateBackground){
+        return;
+    }
+    
+    NSString *payloadMsg = [userInfo objectForKey:@"payload"];
+    NSData* xmlData = [payloadMsg dataUsingEncoding:NSUTF8StringEncoding];
+    id obj = [NSJSONSerialization JSONObjectWithData:xmlData options:0 error:NULL];
+    
+    NSDictionary *dic = obj;
+    NSString *type;
+    @try {
+          type = [NSString stringWithFormat:@"%@",dic[@"type"]];
+        
+    } @catch (NSException *exception) {
+        return;
+        
+    } @finally {
+        
+    }
+   
+    
+//    2222222
+//    [MBProgressHUD showLongSuccess:type toView:nil];
+    
+    if([type isEqualToString:@"1000"]){
+        
+        dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5/*延迟执行时间*/ * NSEC_PER_SEC));
+        
+        dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+            [self alertWithTitle:dic[@"content"]];
+            [self requsetNeed];
+            
+        });
+        
+    }
+    if([type isEqualToString:@"1001"]){
+        
+        dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5/*延迟执行时间*/ * NSEC_PER_SEC));
+        
+        dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+            
+            UIViewController *nowVC = [self currentViewController];
+            
+            if([nowVC isKindOfClass:[UIAlertController class]]){
+                [nowVC dismissViewControllerAnimated:YES completion:nil];
+                
+                dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0/*延迟执行时间*/ * NSEC_PER_SEC));
+                
+                dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+                    
+                    UIViewController *nowVC = [self currentViewController];
+                    
+                    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:dic[@"content"] preferredStyle:UIAlertControllerStyleAlert];
+                    
+                    UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"去看看" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        NSLog(@"aaa");
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            
+                            WonoCircleDetailViewController *detailVc = [[WonoCircleDetailViewController alloc]init];
+                            detailVc.qid = dic[@"qid"];
+                            detailVc.hidesBottomBarWhenPushed = YES;
+                            [nowVC.navigationController pushViewController:detailVc animated:YES];
+                        });
+                        
+                    }];
+                    UIAlertAction *cancelAct = [UIAlertAction actionWithTitle:@"算了" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                        NSLog(@"bbb");
+                    }];
+                    [alertVC addAction:cancelAct];
+                    [alertVC addAction:confirmAct];
+                    
+                    [nowVC presentViewController:alertVC animated:YES completion:nil];
+                    
+                });
+                
+            }else{
+                
+                nowVC = [self currentViewController];
+                
+                UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:dic[@"content"] preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"去看看" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    NSLog(@"aaa");
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        
+                        WonoCircleDetailViewController *detailVc = [[WonoCircleDetailViewController alloc]init];
+                        detailVc.qid = dic[@"qid"];
+                        detailVc.hidesBottomBarWhenPushed = YES;
+                        [nowVC.navigationController pushViewController:detailVc animated:YES];
+                    });
+                    
+                }];
+                UIAlertAction *cancelAct = [UIAlertAction actionWithTitle:@"算了" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    NSLog(@"bbb");
+                }];
+                [alertVC addAction:cancelAct];
+                [alertVC addAction:confirmAct];
+                
+                [nowVC presentViewController:alertVC animated:YES completion:nil];
+            }
+
+        });
+        
+    }
+    
     // 将收到的APNs信息传给个推统计
     [GeTuiSdk handleRemoteNotification:userInfo];
     completionHandler(UIBackgroundFetchResultNewData);
 }
+
+
+-(void)requsetNeed{
+    
+//    [MBProgressHUD showMessage:@"加载中"];
+    //    [MBProgressHUD showLongSuccess:@"加载用户数据..." toView:self.view];
+    [[InterfaceSingleton shareInstance].interfaceModel getUserInfoWithCallBack:^(int state, id data, NSString *msg) {
+        [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"fid"];
+        [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"pengID"];
+        
+        
+//        [MBProgressHUD hideHUD];
+        if(state == 2000){
+            
+            NSLog(@"成功");
+            
+            NSDictionary *dic = data;
+            
+            NSString *fid = dic[@"fid"];
+            NSString *pengID = dic[@"greenHouse"];
+            NSString *type = dic[@"type"];
+            
+            [[NSUserDefaults standardUserDefaults] setObject:fid forKey:@"fid"];
+            [[NSUserDefaults standardUserDefaults] setObject:pengID forKey:@"pengID"];
+            [[NSUserDefaults standardUserDefaults] setObject:type forKey:@"userType"];
+            
+        }
+        
+        
+    }];
+    
+}
+
+
+
+
 /** SDK启动成功返回cid */
 - (void)GeTuiSdkDidRegisterClient:(NSString *)clientId {
     //个推SDK已注册，返回clientId
     NSLog(@"\n>>>[GeTuiSdk RegisterClient]:%@\n\n", clientId);
+    [[NSUserDefaults standardUserDefaults] setObject:clientId forKey:@"CLIENTID"];
+    
+    
 }
 
 /** SDK遇到错误回调 */
@@ -266,6 +472,177 @@
     NSString *msg = [NSString stringWithFormat:@"taskId=%@,messageId:%@,payloadMsg:%@%@",taskId,msgId, payloadMsg,offLine ? @"<离线消息>" : @"透传消息"];
     NSLog(@"\n>>>[GexinSdk ReceivePayload]:%@\n\n", msg);
     
+    
+    if(offLine == NO){
+        
+        id obj = [NSJSONSerialization JSONObjectWithData:payloadData options:0 error:NULL];
+        
+        NSDictionary *dic =obj;
+        
+        NSString *type;
+        @try {
+            type = [NSString stringWithFormat:@"%@",dic[@"type"]];
+            
+        } @catch (NSException *exception) {
+            return;
+        } @finally {
+            
+        }
+        NSString *pid = [NSString stringWithFormat:@"%@",dic[@"pid"]];
+        
+        NSLog(@"%@",pid);
+        
+        if([type isEqualToString:@"1000"]){
+                [self alertWithTitle:dic[@"content"]];
+                [self requsetNeed];
+          
+        }
+        
+        if([type isEqualToString:@"1001"]){
+            
+            UIViewController *currentVC = [self currentViewController];
+            if([currentVC isKindOfClass:[WonoCircleViewController class]]){
+                WonoCircleViewController *noVC = (WonoCircleViewController *)currentVC;
+                [noVC requestCount];
+            }else{
+                [self requestCount];
+            }
+            
+            
+            
+        }
+        
+    }
+    
+        
+    id obj = [NSJSONSerialization JSONObjectWithData:payloadData options:0 error:NULL];
+    
+    
+    NSDictionary *dic =obj;
+    
+    NSString *type;
+    @try {
+        type = [NSString stringWithFormat:@"%@",dic[@"type"]];
+        
+    } @catch (NSException *exception) {
+        return;
+    } @finally {
+        
+    }
+    NSString *pid = [NSString stringWithFormat:@"%@",dic[@"pid"]];
+    
+    NSLog(@"%@",pid);
+    
+    if([type isEqualToString:@"1002"]){
+        UIViewController *nowVC = [self currentViewController];
+        
+        if([nowVC isKindOfClass:[UIAlertController class]]){
+            [nowVC dismissViewControllerAnimated:YES completion:nil];
+            
+            dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0/*延迟执行时间*/ * NSEC_PER_SEC));
+            
+            dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+                
+                UIViewController *nowVC = [self currentViewController];
+                
+                UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:dic[@"content"] preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+               
+//                [alertVC addAction:cancelAct];
+                [alertVC addAction:confirmAct];
+                
+                [nowVC presentViewController:alertVC animated:YES completion:nil];
+                
+            });
+            
+        }else{
+            
+            nowVC = [self currentViewController];
+            
+            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:dic[@"content"] preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                
+            }];
+            
+//            [alertVC addAction:cancelAct];
+            [alertVC addAction:confirmAct];
+            
+            [nowVC presentViewController:alertVC animated:YES completion:nil];
+        }
+        
+    }
+    
+    
+    if([type isEqualToString:@"1003"]){
+        UIViewController *nowVC = [self currentViewController];
+        
+        if([nowVC isKindOfClass:[UIAlertController class]]){
+            [nowVC dismissViewControllerAnimated:YES completion:nil];
+            
+            dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0/*延迟执行时间*/ * NSEC_PER_SEC));
+            
+            dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+                
+                UIViewController *nowVC = [self currentViewController];
+                
+                UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:dic[@"content"] preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"去看看" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    NSLog(@"aaa");
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        
+                        WonoWebMessageViewController *detailVc = [[WonoWebMessageViewController alloc]init];
+                        detailVc.needID = dic[@"needID"];
+                        detailVc.hidesBottomBarWhenPushed = YES;
+                        [nowVC.navigationController pushViewController:detailVc animated:YES];
+                    });
+                    
+                }];
+                UIAlertAction *cancelAct = [UIAlertAction actionWithTitle:@"算了" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    NSLog(@"bbb");
+                    
+                }];
+                [alertVC addAction:cancelAct];
+                [alertVC addAction:confirmAct];
+                
+                [nowVC presentViewController:alertVC animated:YES completion:nil];
+                
+            });
+            
+        }else{
+            
+            nowVC = [self currentViewController];
+            
+            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:dic[@"content"] preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"去看看" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                NSLog(@"aaa");
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    WonoWebMessageViewController *detailVc = [[WonoWebMessageViewController alloc]init];
+                    detailVc.needID = dic[@"needID"];
+                    detailVc.hidesBottomBarWhenPushed = YES;
+                    [nowVC.navigationController pushViewController:detailVc animated:YES];
+                });
+                
+            }];
+            UIAlertAction *cancelAct = [UIAlertAction actionWithTitle:@"算了" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                NSLog(@"bbb");
+            }];
+            [alertVC addAction:cancelAct];
+            [alertVC addAction:confirmAct];
+            
+            [nowVC presentViewController:alertVC animated:YES completion:nil];
+        }
+        
+    }
+    
+    
     /**
      *汇报个推自定义事件
      *actionId：用户自定义的actionid，int类型，取值90001-90999。
@@ -274,6 +651,11 @@
      *返回值：BOOL，YES表示该命令已经提交，NO表示该命令未提交成功。注：该结果不代表服务器收到该条命令
      **/
     [GeTuiSdk sendFeedbackMessage:90001 andTaskId:taskId andMsgId:msgId];
+    
+    
+    
+    
+    
 }
 
 
@@ -289,17 +671,319 @@
     completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert);
 }
 
-//  iOS 10: 点击通知进入App时触发，在该方法内统计有效用户点击数
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
-    
-    NSLog(@"didReceiveNotification：%@", response.notification.request.content.userInfo);
-    
-    // [ GTSdk ]：将收到的APNs信息传给个推统计
-    [GeTuiSdk handleRemoteNotification:response.notification.request.content.userInfo];
-    
-    completionHandler();
-}
+////  iOS 10: 点击通知进入App时触发，在该方法内统计有效用户点击数
+//- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
+//
+//
+//
+//    NSDictionary *userInfo = response.notification.request.content.userInfo;
+//
+//    NSString *payloadMsg = [userInfo objectForKey:@"payload"];
+//    NSData* xmlData = [payloadMsg dataUsingEncoding:NSUTF8StringEncoding];
+//    id obj = [NSJSONSerialization JSONObjectWithData:xmlData options:0 error:NULL];
+//
+//    NSDictionary *dic = obj;
+//
+//    NSString *type = [NSString stringWithFormat:@"%@",dic[@"type"]];
+//
+////    [MBProgressHUD showLongSuccess:type toView:nil];
+//
+//
+//    if([type isEqualToString:@"1000"]){
+//
+//        dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5/*延迟执行时间*/ * NSEC_PER_SEC));
+//
+//        dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+//            [self alertWithTitle:dic[@"content"]];
+//            [self requsetNeed];
+//
+//        });
+//
+//    }
+//
+//
+//    if([type isEqualToString:@"1001"]){
+//
+//        dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5/*延迟执行时间*/ * NSEC_PER_SEC));
+//
+//        dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+//
+//            UIViewController *nowVC = [self currentViewController];
+//
+//            if([nowVC isKindOfClass:[UIAlertController class]]){
+//                [nowVC dismissViewControllerAnimated:YES completion:nil];
+//
+//                dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0/*延迟执行时间*/ * NSEC_PER_SEC));
+//
+//                dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+//
+//                    UIViewController *nowVC = [self currentViewController];
+//
+//                    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:dic[@"content"] preferredStyle:UIAlertControllerStyleAlert];
+//
+//                    UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"去看看" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//                        NSLog(@"aaa");
+//                        dispatch_async(dispatch_get_main_queue(), ^{
+//
+//                            WonoCircleDetailViewController *detailVc = [[WonoCircleDetailViewController alloc]init];
+//                            detailVc.qid = dic[@"qid"];
+//                            detailVc.hidesBottomBarWhenPushed = YES;
+//                            [nowVC.navigationController pushViewController:detailVc animated:YES];
+//                        });
+//
+//                    }];
+//                    UIAlertAction *cancelAct = [UIAlertAction actionWithTitle:@"算了" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//                        NSLog(@"bbb");
+//                    }];
+//                    [alertVC addAction:cancelAct];
+//                    [alertVC addAction:confirmAct];
+//
+//                    [nowVC presentViewController:alertVC animated:YES completion:nil];
+//
+//                });
+//
+//            }else{
+//
+//                nowVC = [self currentViewController];
+//
+//                UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:dic[@"content"] preferredStyle:UIAlertControllerStyleAlert];
+//
+//                UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"去看看" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//                    NSLog(@"aaa");
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//
+//                        WonoCircleDetailViewController *detailVc = [[WonoCircleDetailViewController alloc]init];
+//                        detailVc.qid = dic[@"qid"];
+//                        detailVc.hidesBottomBarWhenPushed = YES;
+//                        [nowVC.navigationController pushViewController:detailVc animated:YES];
+//                    });
+//
+//                }];
+//                UIAlertAction *cancelAct = [UIAlertAction actionWithTitle:@"算了" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//                    NSLog(@"bbb");
+//                }];
+//                [alertVC addAction:cancelAct];
+//                [alertVC addAction:confirmAct];
+//
+//                [nowVC presentViewController:alertVC animated:YES completion:nil];
+//            }
+//
+//
+//        });
+//
+//    }
+//
+//
+//
+//    // [ GTSdk ]：将收到的APNs信息传给个推统计
+//    [GeTuiSdk handleRemoteNotification:response.notification.request.content.userInfo];
+//
+//    completionHandler();
+//}
 
 #endif
+
+-(UIViewController *)currentViewController
+{
+    
+    UIViewController * currVC = nil;
+    UIViewController * Rootvc = self.window.rootViewController ;
+    do {
+        if ([Rootvc isKindOfClass:[UINavigationController class]]) {
+            UINavigationController * nav = (UINavigationController *)Rootvc;
+            UIViewController * v = [nav.viewControllers lastObject];
+            currVC = v;
+            Rootvc = v.presentedViewController;
+            continue;
+        }else if([Rootvc isKindOfClass:[UITabBarController class]]){
+            UITabBarController * tabVC = (UITabBarController *)Rootvc;
+            currVC = tabVC;
+            Rootvc = [tabVC.viewControllers objectAtIndex:tabVC.selectedIndex];
+            continue;
+        }else if ([Rootvc isKindOfClass:[UIAlertController class]]){
+            UIAlertController * tabVC = (UIAlertController *)Rootvc;
+            currVC = tabVC;
+            Rootvc = nil;
+            continue;
+        }
+    } while (Rootvc!=nil);
+    
+    
+    return currVC;
+}
+
+// //获取当前屏幕显示的viewcontroller
+//- (UIViewController *)getCurrentVC
+//{
+//    UIViewController *result = nil;
+//
+//    UIWindow * window = [[UIApplication sharedApplication] keyWindow];
+//    if (window.windowLevel != UIWindowLevelNormal)
+//        {
+//            NSArray *windows = [[UIApplication sharedApplication] windows];
+//            for(UIWindow * tmpWin in windows)
+//                {
+//                    if (tmpWin.windowLevel == UIWindowLevelNormal)
+//                        {
+//                            window = tmpWin;
+//                            break;
+//                            }
+//                    }
+//            }
+//
+//    UIView *frontView = [[window subviews] objectAtIndex:0];
+//    id nextResponder = [frontView nextResponder];
+//
+//    if ([nextResponder isKindOfClass:[UIViewController class]])
+//        result = nextResponder;
+//    else
+//        result = window.rootViewController;
+//
+//    return result;
+//}
+
+-(void)alertWithTitle:(NSString *)title{
+    
+    UIViewController *nowVC = [self currentViewController];
+    
+    if([nowVC isKindOfClass:[UIAlertController class]]){
+        [nowVC dismissViewControllerAnimated:YES completion:nil];
+        
+        dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0/*延迟执行时间*/ * NSEC_PER_SEC));
+        
+        dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+            
+            UIViewController *nowVC = [self currentViewController];
+            
+            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:title preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                
+            }];
+            
+            
+            [alertVC addAction:confirmAct];
+            
+            [nowVC presentViewController:alertVC animated:YES completion:nil];
+            
+        });
+        
+    }else{
+        
+        nowVC = [self currentViewController];
+        
+        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:title preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+            
+        }];
+        
+//        [alertVC addAction:cancelAct];
+        [alertVC addAction:confirmAct];
+        
+        [nowVC presentViewController:alertVC animated:YES completion:nil];
+    }
+
+    
+}
+
+- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void(^)(BOOL succeeded))completionHandler{
+    //判断先前我们设置的唯一标识
+    
+//    if([shortcutItem.type isEqualToString:@"fenxiang"]){
+////        NSArray *arr = @[@"hello 3D Touch"];
+////        UIActivityViewController *vc = [[UIActivityViewController alloc]initWithActivityItems:arr applicationActivities:nil];
+////        //设置当前的VC 为rootVC
+////        [self.window.rootViewController presentViewController:vc animated:YES completion:^{
+////        }];
+//        BaseTabBarController *baseTabVc = (BaseTabBarController *)appDelegate.window.rootViewController;
+//        baseTabVc.selectedIndex = 4;
+//
+//    }
+    
+    NSString *mark = [[NSUserDefaults standardUserDefaults]objectForKey:@"loginMark"];
+    
+    if([mark isEqualToString:@"login"]){
+        
+        [[InterfaceSingleton shareInstance].interfaceModel getUserInfoWithCallBack:^(int state, id data, NSString *msg) {
+            [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"fid"];
+            [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"pengID"];
+            
+            
+            //        [MBProgressHUD hideHUD];
+            if(state == 2000){
+                
+                NSLog(@"成功");
+                
+                NSDictionary *dic = data;
+                
+                NSString *fid = dic[@"fid"];
+                NSString *pengID = dic[@"greenHouse"];
+                NSString *type = dic[@"type"];
+                
+                [[NSUserDefaults standardUserDefaults] setObject:fid forKey:@"fid"];
+                [[NSUserDefaults standardUserDefaults] setObject:pengID forKey:@"pengID"];
+                [[NSUserDefaults standardUserDefaults] setObject:type forKey:@"userType"];
+                
+                if([shortcutItem.type isEqualToString:@"fenxiang"]){
+                    //        NSArray *arr = @[@"hello 3D Touch"];
+                    //        UIActivityViewController *vc = [[UIActivityViewController alloc]initWithActivityItems:arr applicationActivities:nil];
+                    //        //设置当前的VC 为rootVC
+                    //        [self.window.rootViewController presentViewController:vc animated:YES completion:^{
+                    //        }];
+                    BaseTabBarController *baseTabVc = (BaseTabBarController *)appDelegate.window.rootViewController;
+                    baseTabVc.selectedIndex = 4;
+                    
+                }else if([shortcutItem.type isEqualToString:@"zhongzhi"]){
+                    
+                    BaseTabBarController *baseTabVc = (BaseTabBarController *)appDelegate.window.rootViewController;
+                    baseTabVc.selectedIndex = 0;
+                    
+                }else if ([shortcutItem.type isEqualToString:@"tongji"]){
+                    BaseTabBarController *baseTabVc = (BaseTabBarController *)appDelegate.window.rootViewController;
+                    baseTabVc.selectedIndex = 1;
+                }else if ([shortcutItem.type isEqualToString:@"zhidao"]){
+                    BaseTabBarController *baseTabVc = (BaseTabBarController *)appDelegate.window.rootViewController;
+                    baseTabVc.selectedIndex = 2;
+                }else if ([shortcutItem.type isEqualToString:@"wode"]){
+                    BaseTabBarController *baseTabVc = (BaseTabBarController *)appDelegate.window.rootViewController;
+                    baseTabVc.selectedIndex = 3;
+                }
+                
+            }
+            
+            
+        }];
+        
+        
+        
+    }
+    
+    
+}
+
+
+
+-(void)requestCount{
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getUnReadMsgCountWithCallBack:^(int state, id data, NSString *msg) {
+        if(state == 2000){
+            
+            
+            
+            NSDictionary *dic = data;
+            
+            NSString *str = [NSString stringWithFormat:@"%@",dic[@"count"]];
+            
+
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"badgeChange" object:str];
+        }
+    }];
+    
+}
+
+
 
 @end

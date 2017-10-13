@@ -14,5 +14,8 @@
 @property (nonatomic,strong) NSString *content;
 @property (nonatomic,strong) NSString *needID;
 
+@property (nonatomic,strong) NSString *statu;
+
+@property (nonatomic,strong) NSString *msgID;
 
 @end

@@ -47,8 +47,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 -(void)createRight{
@@ -68,6 +71,9 @@
 
 -(void)rightClick{
     NSLog(@"点击问号");
+    if(_appearLabel.alpha != 0){
+        return;
+    }
     if(_appearLabel == nil){
         _appearLabel = [[CustomLabel alloc]init];
         _appearLabel.numberOfLines = 0;
@@ -527,9 +533,15 @@
                 
                 
             }
+            if([type isEqualToString:@"2"]){
+                [self createZXview3];
+                [self createZXview4];
+            }else{
+                [self createZXview];
+                [self createZXview2];
+            }
             
-            [self createZXview];
-            [self createZXview2];
+            
             
             
             
@@ -548,6 +560,45 @@
 }
 
 
+-(void)createZXview3{
+    
+    MyZView *view = [self.view viewWithTag:201];
+    if(view){
+        [view removeFromSuperview];
+    }
+    
+    MyZView *Zview = [[MyZView alloc]initWithFrame:CGRectMake(0, 64,APP_CONTENT_WIDTH,HDAutoHeight(550))];
+    
+    Zview.tag = 201;
+    Zview.sevMark = @"1";
+
+    Zview.dataArr = FdataArr;
+    
+    [self.view addSubview:Zview];
+    
+}
+
+-(void)createZXview4{
+    
+    MyZView *view = [self.view viewWithTag:202];
+    if(view){
+        [view removeFromSuperview];
+    }
+    
+
+    
+    MyZView *Zview = [[MyZView alloc]initWithFrame:CGRectMake(0, 64 +HDAutoHeight(550), APP_CONTENT_WIDTH, HDAutoHeight(550))];
+    
+    
+    Zview.tag = 202;
+    
+    Zview.sevMark = @"1";
+    [Zview changeTitle];
+    Zview.dataArr = NdataArr;
+    
+    [self.view addSubview:Zview];
+    
+}
 
 
 @end

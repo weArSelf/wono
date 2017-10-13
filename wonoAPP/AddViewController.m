@@ -63,8 +63,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 -(void)creatTitleAndBackBtn{
@@ -206,6 +209,15 @@
         make.height.equalTo(_headView.mas_height);
         make.width.equalTo(@(HDAutoWidth(150)));
     }];
+    int userType = [[[NSUserDefaults standardUserDefaults]objectForKey:@"userType"]intValue];
+    if(userType == 2){
+        NSString *pengHave = [[NSUserDefaults standardUserDefaults]objectForKey:@"pengID"];
+        if([pengHave isEqualToString:@""]){
+            [_nextBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            _nextBtn.enabled = NO;
+            hubBtn.enabled = NO;
+        }
+    }
 }
 
 -(void)SaveClick{
@@ -281,7 +293,13 @@
 
 -(void)createContent{
     UILabel *selecLabel = [self mylabel];
-    selecLabel.text = @"选择大棚:";
+    
+    int userType = [[[NSUserDefaults standardUserDefaults]objectForKey:@"userType"]intValue];
+    if(userType == 2){
+        selecLabel.text = @"负责大棚:";
+    }else{
+        selecLabel.text = @"选择大棚:";
+    }
     [self.view addSubview:selecLabel];
     [selecLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left).offset(HDAutoWidth(30));
@@ -464,6 +482,8 @@
             NSLog(@"成功");
             AddModel *model = [[AddModel alloc]init];
             NSArray *arr = data;
+            
+            
             for (int i=0; i<arr.count; i++) {
                 NSDictionary *dic = arr[i];
                 
@@ -476,6 +496,16 @@
             }
             
             pengData = model;
+            if(arr.count == 0){
+                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有负责的大棚\n请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [alertC addAction:confirmAct];
+                [self presentViewController:alertC animated:YES completion:nil];
+                
+            }
+            
             [self createContent];
             [self createType];
             

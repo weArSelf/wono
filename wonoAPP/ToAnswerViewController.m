@@ -14,6 +14,8 @@
 #import "QNUploader.h"
 #import "UIImageView+MHFacebookImageViewer.h"
 
+#import "WonoCircleDetailViewController.h"
+
 # define COUNTDOWN 60
 
 @interface ToAnswerViewController ()<UITextFieldDelegate,UITextViewDelegate,CustomActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,QNUploaderDelegate>
@@ -77,6 +79,8 @@
     int audiouploadMark;
     
     int state2;
+    
+    NSInteger tempCountDown;
 }
 
 - (void)viewDidLoad {
@@ -85,7 +89,7 @@
     state2 = 0;
     uploadImageCount = 0;
     audiouploadMark = 0;
-    
+    tempCountDown = 0;
     imageUrlArr = [NSMutableArray array];
     audioUrl = @"";
     
@@ -115,11 +119,12 @@
                                                object:nil];
     [self createLocateContent];
 //    [self getLocate];
-    [self prepareRecoard];
+    
     
     _iconImageView.alpha = 0;
     _locatLabel.alpha = 0;
-    [self deleteFile];
+//    [self deleteFile];
+    [self prepareRecoard];
     [self createBotView];
     [self createImageContent];
 }
@@ -167,6 +172,7 @@
     
     _recorder = [[AVAudioRecorder alloc] initWithURL:ur settings:recordSetting error:nil];
     
+    [self deleteFile];
 
 }
 
@@ -288,6 +294,8 @@
     
     if(_iconImageView.alpha == 1||![_mainTextView.text isEqualToString:@""]||dataArr.count!=0){
     
+        [_headTextField resignFirstResponder];
+        [_mainTextView resignFirstResponder];
         UIAlertController *AlertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"返回将失去当前填写内容\n是否继续？" preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -827,7 +835,7 @@
                 } completion:nil];
             }];
             UIAlertAction *refuse = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                
+                countDown = tempCountDown;
             }];
             [alertCont addAction:refuse];
             [alertCont addAction:confirm];
@@ -857,7 +865,7 @@
 //        } completion:^(BOOL finished) {
 //            [self.hubImgView removeFromSuperview];
 //        }];
-        
+        countDown = tempCountDown;
         dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.7/*延迟执行时间*/ * NSEC_PER_SEC));
         
         dispatch_after(delayTime, dispatch_get_main_queue(), ^{
@@ -915,6 +923,7 @@
 }
 
 -(void)addTimer{
+    tempCountDown = countDown;
     countDown = 0;
     timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerFired) userInfo:nil repeats:YES];
     [timer fireDate];
@@ -1061,20 +1070,22 @@
 -(void)SaveClick{
     NSLog(@"点击发送");
     
-    imageUrlArr = [NSMutableArray array];
-    audioUrl = @"";
-    state2 = 0;
-    [MBProgressHUD showLongSuccess:@"发送中" toView:nil];
+    BOOL blHave=[[NSFileManager defaultManager] fileExistsAtPath:resultPath];
+    
     
     //    UIImage *image = [UIImage imageNamed:@"年度收入与支出"];
-    if(dataArr.count == 0&&[audioUrl isEqualToString:@""]&&[_mainTextView.text isEqualToString:@""]){
+    if(dataArr.count == 0&&blHave == false&&[_mainTextView.text isEqualToString:@""]){
         [MBProgressHUD showSuccess:@"请填写内容"];
         return;
     }
     
+    _nextBtn.enabled = NO;
+    imageUrlArr = [NSMutableArray array];
+    audioUrl = @"";
+    state2 = 0;
+    [MBProgressHUD showLongSuccess:@"发送中" toView:self.view];
     
-    
-    if(dataArr.count == 0&&[resultPath isEqualToString:@""]){
+    if(dataArr.count == 0&&blHave == false){
         state2 = 1;
         NSMutableDictionary *dic = [NSMutableDictionary dictionary];
         [dic setObject:_mainTextView.text forKey:@"content"];
@@ -1082,11 +1093,22 @@
         NSString *json = [self DataTOjsonString:dic];
         
         [[InterfaceSingleton shareInstance].interfaceModel wonoAnswerWithQid:_askID AndContent:json WithRepID:nil WithCallBack:^(int state, id data, NSString *msg) {
-            [MBProgressHUD hideHUD];
+            [MBProgressHUD hideHUDForView:self.view];
+            _nextBtn.enabled = YES;
             if(state == 2000){
                 NSLog(@"成功");
                 [MBProgressHUD showSuccess:@"提交成功"];
-                [self.navigationController popViewControllerAnimated:YES];
+                
+                if([_turnMark isEqualToString:@"1"]){
+                    [[NSNotificationCenter defaultCenter]postNotificationName:@"wonoCircleRe" object:_askID];
+                    WonoCircleDetailViewController *detailVC = [[WonoCircleDetailViewController alloc]init];
+                    detailVC.qid = _askID;
+                    [self.navigationController pushViewController:detailVC animated:YES];
+                }else{
+                    [[NSNotificationCenter defaultCenter]postNotificationName:@"wonoCircleRe" object:_askID];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+                
             }else{
                 [MBProgressHUD showSuccess:msg];
             }
@@ -1097,7 +1119,7 @@
         return;
     }
     
-    if(dataArr.count == 0&&![resultPath isEqualToString:@""]){
+    if(dataArr.count == 0&&blHave == true){
         state2 = 2;
         //只有语音 可能存在描述的情况
         NSData *data = [NSData dataWithContentsOfFile:resultPath];
@@ -1114,7 +1136,7 @@
         return;
     }
     
-    if(dataArr.count != 0&&[resultPath isEqualToString:@""]){
+    if(dataArr.count != 0&&blHave == false){
         state2 = 3;
         //只有图片 可能存在描述的情况
         for(int i=0;i<dataArr.count;i++){
@@ -1134,7 +1156,7 @@
         
     }
     
-    if(dataArr.count != 0&&![resultPath isEqualToString:@""]){
+    if(dataArr.count != 0&&blHave == true){
         //图片 语音都有 可能存在描述的情况
         state2 = 4;
         
@@ -1187,17 +1209,34 @@
         
         NSMutableDictionary *dic = [NSMutableDictionary dictionary];
         [dic setObject:_mainTextView.text forKey:@"content"];
-        [dic setObject:audioUrl forKey:@"audio"];
+        
+        NSMutableDictionary *audioDic = [NSMutableDictionary dictionary];
+        [audioDic setObject:audioUrl forKey:@"url"];
+        NSString *str = [NSString stringWithFormat:@"%ld",(long)countDown];
+        [audioDic setObject:str forKey:@"time"];
+        
+        [dic setObject:audioDic forKey:@"audio"];
+        
         
         NSString *json = [self DataTOjsonString:dic];
         
         
         [[InterfaceSingleton shareInstance].interfaceModel wonoAnswerWithQid:_askID AndContent:json WithRepID:nil WithCallBack:^(int state, id data, NSString *msg) {
-            [MBProgressHUD hideHUD];
+            _nextBtn.enabled = YES;
+            [MBProgressHUD hideHUDForView:self.view];
             if(state == 2000){
                 NSLog(@"成功");
                 [MBProgressHUD showSuccess:@"提交成功"];
-                [self.navigationController popViewControllerAnimated:YES];
+                if([_turnMark isEqualToString:@"1"]){
+                    [[NSNotificationCenter defaultCenter]postNotificationName:@"wonoCircleRe" object:_askID];
+                    WonoCircleDetailViewController *detailVC = [[WonoCircleDetailViewController alloc]init];
+                    detailVC.qid = _askID;
+                    [self.navigationController pushViewController:detailVC animated:YES];
+                }else{
+                    [[NSNotificationCenter defaultCenter]postNotificationName:@"wonoCircleRe" object:_askID];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+
             }else{
                 [MBProgressHUD showSuccess:msg];
             }
@@ -1222,11 +1261,21 @@
             
             
             [[InterfaceSingleton shareInstance].interfaceModel wonoAnswerWithQid:_askID AndContent:json WithRepID:nil WithCallBack:^(int state, id data, NSString *msg) {
-                [MBProgressHUD hideHUD];
+                _nextBtn.enabled = YES;
+                [MBProgressHUD hideHUDForView:self.view];
                 if(state == 2000){
                     NSLog(@"成功");
                     [MBProgressHUD showSuccess:@"提交成功"];
-                    [self.navigationController popViewControllerAnimated:YES];
+                    if([_turnMark isEqualToString:@"1"]){
+                        [[NSNotificationCenter defaultCenter]postNotificationName:@"wonoCircleRe" object:_askID];
+                        WonoCircleDetailViewController *detailVC = [[WonoCircleDetailViewController alloc]init];
+                        detailVC.qid = _askID;
+                        [self.navigationController pushViewController:detailVC animated:YES];
+                    }else{
+                        [[NSNotificationCenter defaultCenter]postNotificationName:@"wonoCircleRe" object:_askID];
+                        [self.navigationController popViewControllerAnimated:YES];
+                    }
+
                 }else{
                     [MBProgressHUD showSuccess:msg];
                 }
@@ -1245,17 +1294,32 @@
             NSMutableDictionary *dic = [NSMutableDictionary dictionary];
             [dic setObject:_mainTextView.text forKey:@"content"];
             [dic setObject:imageUrlArr forKey:@"images"];
-            [dic setObject:audioUrl forKey:@"audio"];
+            NSMutableDictionary *audioDic = [NSMutableDictionary dictionary];
+            [audioDic setObject:audioUrl forKey:@"url"];
+            NSString *str = [NSString stringWithFormat:@"%ld",(long)countDown];
+            [audioDic setObject:str forKey:@"time"];
+            
+            [dic setObject:audioDic forKey:@"audio"];
             
             NSString *json = [self DataTOjsonString:dic];
             
             
             [[InterfaceSingleton shareInstance].interfaceModel wonoAnswerWithQid:_askID AndContent:json WithRepID:nil WithCallBack:^(int state, id data, NSString *msg) {
-                [MBProgressHUD hideHUD];
+                _nextBtn.enabled = YES;
+                [MBProgressHUD hideHUDForView:self.view];
                 if(state == 2000){
                     NSLog(@"成功");
                     [MBProgressHUD showSuccess:@"提交成功"];
-                    [self.navigationController popViewControllerAnimated:YES];
+                    if([_turnMark isEqualToString:@"1"]){
+                        [[NSNotificationCenter defaultCenter]postNotificationName:@"wonoCircleRe" object:_askID];
+                        WonoCircleDetailViewController *detailVC = [[WonoCircleDetailViewController alloc]init];
+                        detailVC.qid = _askID;
+                        [self.navigationController pushViewController:detailVC animated:YES];
+                    }else{
+                        [[NSNotificationCenter defaultCenter]postNotificationName:@"wonoCircleRe" object:_askID];
+                        [self.navigationController popViewControllerAnimated:YES];
+                    }
+
                 }else{
                     [MBProgressHUD showSuccess:msg];
                 }
@@ -1279,7 +1343,7 @@
 
 -(void)UploadFailedWithFileName:(NSString *)fileName{
     [MBProgressHUD showSuccess:@"上传失败，请重试"];
-    
+    _nextBtn.enabled = YES;
     NSLog(@"bbb");
 }
 

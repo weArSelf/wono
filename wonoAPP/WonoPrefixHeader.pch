@@ -10,9 +10,9 @@
 #define WonoPrefixHeader_pch
 
 //个推
-#define kGtAppId           @"yT0mbrHFOu7AuApcISQPk4"
-#define kGtAppKey          @"CNZAE9O3fi5NjHmrXiHWQ4"
-#define kGtAppSecret       @"AH26zwUqnN6SXwICqgiHF7"
+#define kGtAppId           @"sHSQOvJSeeA9MxmmZumcE"
+#define kGtAppKey          @"PsY9tWXxqD6WclZv9xY5K8"
+#define kGtAppSecret       @"D9yiKTRZWJ7CXrr26pwgA7"
 
 //log打印所在类及行数
 #define NSLog(FORMAT,...)   NSLog(@"%@ (Line:%d): %@",[[[NSString stringWithFormat:@"%s",__FILE__] componentsSeparatedByString:@"/"] lastObject], __LINE__,[NSString stringWithFormat:FORMAT, ##__VA_ARGS__])

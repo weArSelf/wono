@@ -16,6 +16,8 @@
 #import "LimitInput.h"
 #import "WSDatePickerView.h"
 
+#import "ZhongZhiTypeViewController.h"
+
 @interface ZhongZhiViewController ()<UITextViewDelegate>
 
 
@@ -47,6 +49,9 @@
 
 @implementation ZhongZhiViewController{
     
+    NSMutableArray *nexArr;
+    PengTypeModel *SeModel;
+    
 }
 
 - (void)viewDidLoad {
@@ -57,13 +62,31 @@
     [self createSaveBtn];
     
 //    [self createTime];
+    _moneyTextView.keyboardType = UIKeyboardTypeNumberPad;
+    _perTextView.keyboardType = UIKeyboardTypeNumberPad;
+    [self getdata];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(Change:) name:@"catChange" object:nil];
+}
+
+-(void)Change:(NSNotification *)noti{
+    if(noti.object){
+        SeModel = (PengTypeModel *)noti.object;
+        _catDetailLabel.text = SeModel.typeName;
+    }else{
+        SeModel = nil;
+        _catDetailLabel.text = @"";
+    }
+    
 }
 
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 -(void)createSaveBtn{
@@ -78,6 +101,17 @@
         make.centerY.equalTo(_titleLabel.mas_centerY);
         make.right.equalTo(_headView.mas_right).offset(-HDAutoWidth(20));
         make.height.equalTo(@(HDAutoHeight(26)));
+        make.width.equalTo(@(HDAutoWidth(150)));
+    }];
+    UIButton *hubBtn = [[UIButton alloc]init];
+    hubBtn.backgroundColor = [UIColor clearColor];
+    [hubBtn addTarget:self action:@selector(SaveClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_titleLabel.mas_centerY);
+        make.right.equalTo(_headView.mas_right);
+        make.height.equalTo(_headView.mas_height);
         make.width.equalTo(@(HDAutoWidth(150)));
     }];
 }
@@ -98,13 +132,43 @@
     _model.amount = _moneyTextView.text;
     _model.note = _addTextView.text;
     
+    if(SeModel.typeId == nil){
+        [MBProgressHUD showSuccess:@"请选择种类"];
+        return;
+    }
+    _model.varId = SeModel.typeId;
     
     [[InterfaceSingleton shareInstance].interfaceModel PostPlantWithModel:_model WithCallBack:^(int state, id data, NSString *msg) {
        
         if(state == 2000){
             NSLog(@"成功");
-            [MBProgressHUD showSuccess:@"提交成功"];
-            [self.navigationController popToRootViewControllerAnimated:YES];
+//            [MBProgressHUD showSuccess:@"提交成功"];
+//            [[NSNotificationCenter defaultCenter]postNotificationName:@"plantChange" object:nil];
+//            [self.navigationController popToRootViewControllerAnimated:YES];
+            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"提交成功!" preferredStyle:UIAlertControllerStyleAlert];
+            [alertVC addAction:[UIAlertAction actionWithTitle:@"返回首页" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }]];
+            [alertVC addAction:[UIAlertAction actionWithTitle:@"继续添加" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                _catDetailLabel.text = @"点击选择种类";
+                _moneyTextView.text = @"";
+                
+                _addTextView.text = @"";
+                _perTextView.text = @"";
+                
+                _model.amount = _moneyTextView.text;
+                _model.price = _perTextView.text;
+                
+                _model.note = _addTextView.text;
+                _model.unitType  = @"-1";
+                
+                
+                SeModel.typeId = nil;
+                [self getdata];
+            }]];
+            [self presentViewController:alertVC animated:YES completion:nil];
+            
         }
         if(state<2000){
             [MBProgressHUD showSuccess:msg];
@@ -184,9 +248,18 @@
     _catLabel.textColor = UIColorFromHex(0x000000);
     [self.view addSubview:_catLabel];
     _catDetailLabel = [[UILabel alloc]init];
-    _catDetailLabel.text = @"蔬菜>西红柿>小西红柿";
-    _catDetailLabel.font = [UIFont systemFontOfSize:13];
+    _catDetailLabel.text = @"点击选择种类";
     _catDetailLabel.textColor = UIColorFromHex(0x9fa0a0);
+    _catDetailLabel.font = [UIFont systemFontOfSize:14];
+    _catDetailLabel.textAlignment = NSTextAlignmentCenter;
+    _catDetailLabel.layer.masksToBounds = YES;
+    _catDetailLabel.layer.cornerRadius = 5;
+    _catDetailLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    _catDetailLabel.layer.borderWidth = 1;
+    _catDetailLabel.userInteractionEnabled = YES;
+    UITapGestureRecognizer *labelTapGestureRecognizer2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelClick2:)];
+    [_catDetailLabel addGestureRecognizer:labelTapGestureRecognizer2];
+
     [self.view addSubview:_catDetailLabel];
     
     [_catLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -198,8 +271,8 @@
     [_catDetailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_catLabel.mas_right).offset(HDAutoWidth(10));
         make.centerY.equalTo(_catLabel.mas_centerY);
-        make.height.equalTo(_catLabel.mas_height);
-        make.width.equalTo(@(HDAutoWidth(500)));
+        make.height.equalTo(@(HDAutoHeight(68)));
+        make.width.equalTo(@(HDAutoWidth(320)));
     }];
     
     _moneyLabel = [[UILabel alloc]init];
@@ -240,7 +313,7 @@
     _moneyTextView.layer.borderWidth = 1;
     _moneyTextView.font = [UIFont systemFontOfSize:14];
     _moneyTextView.textAlignment = NSTextAlignmentCenter;
-    _moneyTextView.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+    _moneyTextView.keyboardType = UIKeyboardTypeNumberPad;
     
     [self.view addSubview:_moneyTextView];
     
@@ -258,7 +331,7 @@
     _perTextView.layer.borderWidth = 1;
     _perTextView.font = [UIFont systemFontOfSize:14];
     _perTextView.textAlignment = NSTextAlignmentCenter;
-    _perTextView.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+    _perTextView.keyboardType = UIKeyboardTypeNumberPad;
     
     [self.view addSubview:_perTextView];
     
@@ -498,10 +571,62 @@
 -(void)setModel:(PlantAddModel *)model{
     _model = model;
     [self createCon];
-    _catDetailLabel.text = _model.varName;
+//    _catDetailLabel.text = _model.varName;
     
     
 }
+
+-(void)getdata{
+    //    [[InterfaceSingleton shareInstance].interfaceModel getPengWithCatPid:@"0" AndCallBack:^(int state, id data, NSString *msg) {
+    //
+    //        NSLog(@"aaa");
+    //    }];
+    nexArr = [[NSMutableArray alloc]init];
+    
+    [[InterfaceSingleton shareInstance].interfaceModel getPengWithCatPid:@"0" WithType:@"1" AndCallBack:^(int state, id data, NSString *msg) {
+        
+        if(state == 2000){
+            NSLog(@"成功");
+            
+            NSArray *arr = data;
+            
+            for (int i=0; i<arr.count; i++) {
+                NSDictionary *dic = arr[i];
+                PengTypeModel *models = [[PengTypeModel alloc]init];
+                models.typeName = dic[@"name"];
+                models.typeId = dic[@"id"];
+                
+                [nexArr addObject:models];
+            }
+            
+            
+            
+        }
+        if(state<2000){
+            [MBProgressHUD showSuccess:msg];
+        }
+        
+    }];
+    
+}
+
+-(void)labelClick2:(UITapGestureRecognizer *)recognizer{
+    UILabel *label=(UILabel*)recognizer.view;
+    NSLog(@"%ld被点击了",(long)label.tag);
+    
+    if(nexArr.count == 0){
+        [MBProgressHUD showSuccess:@"数据加载中，请稍后"];
+        return;
+    }
+    
+    ZhongZhiTypeViewController *plant = [[ZhongZhiTypeViewController alloc]init];
+    plant.NowdataArr = nexArr;
+    [self.navigationController pushViewController:plant animated:YES];
+    
+    
+    
+}
+
 
 
 @end

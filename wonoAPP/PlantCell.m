@@ -7,6 +7,7 @@
 //
 
 #import "PlantCell.h"
+#import "BBFlashCtntLabel.h"
 
 @interface PlantCell ()
 
@@ -16,7 +17,7 @@
 @property(nonatomic,strong) UILabel *dateLabel;
 @property(nonatomic,strong) UILabel *timeLabel;
 //@property(nonatomic,strong) UIImageView *headImageView;
-@property(nonatomic,strong) UILabel *nameLabel;
+@property(nonatomic,strong) BBFlashCtntLabel *nameLabel;
 @property(nonatomic,strong) UILabel *typeLabel;
 @property(nonatomic,strong) UILabel *numberLabel;
 
@@ -121,7 +122,7 @@
 //    
 //    [self.ConView addSubview:_headImageView];
     
-    _nameLabel = [[UILabel alloc]init];
+    _nameLabel = [[BBFlashCtntLabel alloc]init];
     _nameLabel.text = @"黄瓜大棚-张毅";
     _nameLabel.textColor = [UIColor grayColor];
     _nameLabel.font = [UIFont systemFontOfSize:14];
@@ -163,6 +164,9 @@
         make.width.equalTo(@(150));
         make.height.equalTo(@(40));
     }];
+    [_nameLabel layoutIfNeeded];
+    _nameLabel.speed = -1;
+    
     [_typeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_nameLabel.mas_left);
         make.centerY.equalTo(_timeLabel.mas_centerY);
@@ -193,7 +197,9 @@
     
 }
 
-
+-(void)reloadNeedV{
+    [_nameLabel reloadView];
+}
 
 -(void)setLeftColor:(UIColor *)color{
     
@@ -238,7 +244,7 @@
     int b = [model.numberStr intValue];
     
    
-    NSString *qwe = [NSString stringWithFormat:@"%d",b];
+    NSString *qwe = [NSString stringWithFormat:@"%@",model.numberStr];
     
     _numberLabel.text = qwe;
     

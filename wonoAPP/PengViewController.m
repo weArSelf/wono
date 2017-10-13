@@ -12,6 +12,10 @@
 
 #import "PengAddViewController.h"
 
+#import "PengUpdateViewController.h"
+
+
+
 @interface PengViewController ()<UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
 
 @property (nonatomic,strong)UIView *headView;
@@ -32,11 +36,12 @@
     int count;
     BOOL changeMark;
     NSMutableArray *dataArr;
+    BOOL animateMark;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    animateMark = true;
     dataArr = [NSMutableArray array];
     
     count = 5;
@@ -52,8 +57,13 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [_stuffTableView reloadData];
     [self requestData];
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.navigationBar.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
     [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteUnClick" object:nil];
 }
 
@@ -67,6 +77,17 @@
         if (state == 2000) {
             NSLog(@"请求数据成功");
             NSArray *arr = data;
+            
+            if(arr.count == 0){
+                _nextBtn.enabled = false;
+                [_nextBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            }else{
+                
+                _nextBtn.enabled = true;
+                [_nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+                
+            }
+            
             dataArr = [NSMutableArray array];
             for (int i=0; i<arr.count; i++) {
                 NSDictionary *dic = arr[i];
@@ -79,8 +100,17 @@
             }
             
             [_stuffTableView reloadData];
+            if(animateMark == true){
+                animateMark = false;
+                _stuffTableView.alpha = 0;
+                [UIView animateWithDuration:0.5 animations:^{
+                    _stuffTableView.alpha = 1;
+                }];
+            }
             
-            
+        }else{
+            _nextBtn.enabled = false;
+            [_nextBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         }
         if(state<2000){
             [MBProgressHUD showSuccess:msg];
@@ -223,7 +253,12 @@
     //    _plantTableView.frame = self.view.frame;
     //    _stuffTableView.showsVerticalScrollIndicator = NO;
     //    _stuffTableView.scrollEnabled = NO;
-    
+//    if (@available(iOS 11.0, *)) {
+//        _stuffTableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+////        _stuffTableView.contentInset = UIEdgeInsetsMake(64, 0, 49, 0);
+////        _stuffTableView.scrollIndicatorInsets = _stuffTableView.contentInset;
+//    }
+    _stuffTableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0,0,0,0.01)];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapClick)];
     tap.delegate = self;
     [_stuffTableView addGestureRecognizer:tap];
@@ -260,6 +295,18 @@
     
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    PengModel *model = dataArr[indexPath.row];
+    _nextBtn.selected = NO;
+    changeMark = false;
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteUnClick" object:nil];
+    [self changeBtnBack];
+    PengUpdateViewController *pengUpdateVc = [[PengUpdateViewController alloc]init];
+    pengUpdateVc.pengID = model.pengId;
+    [self.navigationController pushViewController:pengUpdateVc animated:YES];
+    
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *cellIdentifier = @"cellIdentifier";
     PengTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -279,7 +326,7 @@
             PengModel *nowModel = dataArr[indexPath.row];
             //            count--;
             
-            NSString *title = [NSString stringWithFormat:@"是否删除大棚%@?",nowModel.pengName];
+            NSString *title = [NSString stringWithFormat:@"是否删除大棚%@?\n将清除此大棚相关一切数据",nowModel.pengName];
             
             UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:title preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

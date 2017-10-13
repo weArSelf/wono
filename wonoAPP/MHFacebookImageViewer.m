@@ -82,12 +82,23 @@ static const CGFloat kMinImageScale = 1.0f;
 @synthesize panGesture = _panGesture;
 
 - (void) loadAllRequiredViews{
+    
+    
+    
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    CGRect frame = [UIScreen mainScreen].bounds;
-    __scrollView = [[UIScrollView alloc]initWithFrame:frame];
+//    CGRect frame = [UIScreen mainScreen].bounds;
+    __scrollView = [[UIScrollView alloc]init];
+    __scrollView.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     __scrollView.delegate = self;
     __scrollView.backgroundColor = [UIColor clearColor];
     [self addSubview:__scrollView];
+    
+    if (@available(iOS 11.0, *)) {
+        __scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+//        _tableView.contentInset = UIEdgeInsetsMake(64, 0, 49, 0);
+//        _tableView.scrollIndicatorInsets = _tableView.contentInset;
+    }
+    
     [_doneButton addTarget:self
                     action:@selector(close:)
           forControlEvents:UIControlEventTouchUpInside];
@@ -452,6 +463,11 @@ static const CGFloat kMinImageScale = 1.0f;
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    
+    return 0.01;
+    
+}
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Just to retain the old version
@@ -505,6 +521,10 @@ static const CGFloat kMinImageScale = 1.0f;
 
 - (void)loadView
 {
+    if ([[UIDevice currentDevice] systemVersion].floatValue>=7.0)
+    {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
     _statusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
     [UIApplication sharedApplication].statusBarHidden = YES;
     CGRect windowBounds = [[UIScreen mainScreen] bounds];
@@ -521,6 +541,7 @@ static const CGFloat kMinImageScale = 1.0f;
 
     // Add a Tableview
     _tableView = [[UITableView alloc]initWithFrame:windowBounds style:UITableViewStylePlain];
+    
     [self.view addSubview:_tableView];
     //rotate it -90 degrees
     _tableView.transform = CGAffineTransformMakeRotation(-M_PI_2);
@@ -533,7 +554,12 @@ static const CGFloat kMinImageScale = 1.0f;
     _tableView.delaysContentTouches = YES;
     [_tableView setShowsVerticalScrollIndicator:NO];
     [_tableView setContentOffset:CGPointMake(0, _initialIndex * windowBounds.size.width)];
-
+    _tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0,0,0,0.01)];
+    if (@available(iOS 11.0, *)) {
+        _tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+//        _tableView.contentInset = UIEdgeInsetsMake(64, 0, 49, 0);
+//        _tableView.scrollIndicatorInsets = _tableView.contentInset;
+    }
     _blackMask = [[UIView alloc] initWithFrame:windowBounds];
     _blackMask.backgroundColor = [UIColor blackColor];
     _blackMask.alpha = 0.0f;

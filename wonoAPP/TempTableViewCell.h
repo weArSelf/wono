@@ -13,4 +13,6 @@
 
 @property (nonatomic,strong) MainTempModel *model;
 
+-(void)reloadSpeed;
+
 @end

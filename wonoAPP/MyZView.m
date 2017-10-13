@@ -105,6 +105,9 @@
     pointLabel.center = orginP;
     
     pointLabel.width = HDAutoWidth(60);
+    if(IS_IPHONE_5){
+        pointLabel.width = HDAutoWidth(80);
+    }
     pointLabel.height = HDAutoHeight(40);
     
     pointLabel.y -= HDAutoHeight(55);
@@ -133,7 +136,9 @@
             realX = BorX + i*(self.width - BorX*2)/(9);
 //        }
         }
-        
+        if([_sevMark isEqualToString:@"1"]){
+            realX = BorX + (self.width - BorX*2)*i/(_dataArr.count-1);
+        }
         
         
         CGPoint nowP = CGPointMake(realX,HDAutoHeight(60)+(self.height-HDAutoHeight(140))*(50-nowM.Height)/60);
@@ -158,6 +163,10 @@
         pointLabel.center = nowP;
         
         pointLabel.width = HDAutoWidth(60);
+        if(IS_IPHONE_5){
+            pointLabel.width = HDAutoWidth(80);
+        }
+        
         pointLabel.height = HDAutoHeight(40);
         
         pointLabel.y -= HDAutoHeight(55);
@@ -254,10 +263,14 @@
         PointModel *nowM = _dataArr[i];
         
         float realX = BorX + (self.width - BorX*2)*i/(_dataArr.count-1);
+       
         if(_dataArr.count != 7&&_dataArr.count!=8){
 //        if(_dataArr.count>10){
             realX = BorX + i*(self.width - BorX*2)/(9);
 //        }
+        }
+        if([_sevMark isEqualToString:@"1"]){
+            realX = BorX + (self.width - BorX*2)*i/(_dataArr.count-1);
         }
         
         CGPoint nowP = CGPointMake(realX, HDAutoHeight(60)+(self.height-HDAutoHeight(140))*(50-nowM.Height2)/60);
@@ -358,24 +371,33 @@
     
     secLabel.tag = 351;
     
+    float wid = [self getLengthWithFont:14 AndText:@"气温"];
+    
     firView.frame = CGRectMake(HDAutoWidth(510), HDAutoHeight(45), HDAutoWidth(20), HDAutoWidth(20));
-    firLabel.frame = CGRectMake(HDAutoWidth(540), HDAutoHeight(45), HDAutoWidth(60), HDAutoHeight(30));
+    firLabel.frame = CGRectMake(HDAutoWidth(540), HDAutoHeight(45), wid, HDAutoHeight(30));
     firView.centerY = firLabel.centerY;
     
-    secView.frame = CGRectMake(HDAutoWidth(610), HDAutoHeight(45), HDAutoWidth(20), HDAutoWidth(20));
-    secLabel.frame = CGRectMake(HDAutoWidth(640), HDAutoHeight(45), HDAutoWidth(60), HDAutoHeight(30));
+    secView.frame = CGRectMake(HDAutoWidth(550)+wid, HDAutoHeight(45), HDAutoWidth(20), HDAutoWidth(20));
+    secLabel.frame = CGRectMake(HDAutoWidth(580)+wid, HDAutoHeight(45), wid, HDAutoHeight(30));
     secView.centerY = secLabel.centerY;
+    
+    
     
     [self addSubview:firView];
     [self addSubview:secView];
     [self addSubview:firLabel];
     [self addSubview:secLabel];
-    
+    [firLabel sizeThatFits:CGSizeZero];
+    [secLabel sizeThatFits:CGSizeZero];
     
     
     
 }
-
+-(float)getLengthWithFont:(int)font AndText:(NSString *)text{
+    NSDictionary *attrs = @{NSFontAttributeName : [UIFont boldSystemFontOfSize:font]};
+    CGSize size=[text sizeWithAttributes:attrs];
+    return size.width;
+}
 -(void)changeTitle{
 
     UILabel *label = (UILabel *)[self viewWithTag:350];

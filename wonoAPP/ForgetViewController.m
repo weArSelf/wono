@@ -195,6 +195,7 @@
     _textfPassWord.keyboardType = UIKeyboardTypeASCIICapable;
     _textfPassWord.secureTextEntry = YES;
     _textfPassWord.placeholder = @"输入新密码";
+    [_textfPassWord setValue:@10 forKey:@"limit"];
     _textfPassWord.font = [UIFont systemFontOfSize:14];
     [_textfPassWord addTarget:self
                        action:@selector(textFieldEditChanged:)
@@ -228,6 +229,7 @@
     _textVerificationPassWord.secureTextEntry = YES;
     _textVerificationPassWord.font = [UIFont systemFontOfSize:14];
     _textVerificationPassWord.placeholder = @"确认新密码";
+    [_textVerificationPassWord setValue:@10 forKey:@"limit"];
     [_textVerificationPassWord addTarget:self
                                   action:@selector(textFieldEditChanged:)
                         forControlEvents:UIControlEventEditingChanged];
@@ -349,9 +351,12 @@
         [MBProgressHUD showSuccess:@"手机号不符合规则"];
         return;
     }
-    
+    if([_verificationCodeTextF.text isEqualToString: @""]){
+        [MBProgressHUD showSuccess:@"验证码不能为空"];
+        return;
+    }
     if(_textfPassWord.text.length<6){
-        [MBProgressHUD showSuccess:@"密码长度小于6位"];
+        [MBProgressHUD showSuccess:@"密码长度不能小于6位"];
         return;
     }
     
@@ -360,10 +365,7 @@
         return;
     }
     
-    if([_verificationCodeTextF.text isEqualToString: @""]){
-        [MBProgressHUD showSuccess:@"验证码不能为空"];
-        return;
-    }
+   
     
     [[InterfaceSingleton shareInstance].interfaceModel forgetPwdWithMobile:_textfPhoneNum.text AndMessage:_verificationCodeTextF.text AndPwd:_textfPassWord.text WithCallBack:^(int state, id data, NSString *msg) {
         if(state == 2000){

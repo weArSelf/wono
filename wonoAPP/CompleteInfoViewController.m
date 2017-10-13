@@ -19,7 +19,9 @@
 #import "WSDatePickerView.h"
 #import "MapViewController.h"
 
+#import "BBFlashCtntLabel.h"
 
+#define IS_IPHONE_5 (IS_IPHONE && SCREEN_MAX_LENGTH == 568.0)
 
 @interface CompleteInfoViewController ()<UITextFieldDelegate,MyLocationDelegate>
 
@@ -55,7 +57,7 @@
 
 @property (nonatomic,strong)UIView *addressView;
 @property (nonatomic,strong)UIButton *adrBtn;
-@property (nonatomic,strong)UILabel *adrLabel;
+@property (nonatomic,strong)BBFlashCtntLabel *adrLabel;
 
 
 @end
@@ -66,6 +68,9 @@
     
     NSString *orgName;
     NSString *orgfarm;
+    
+    NSString *needlongitude;
+    NSString *needlatitude;
 }
 
 - (void)viewDidLoad {
@@ -101,9 +106,13 @@
 
     NSString *lat = dic[@"lat"];
     NSString *lont = dic[@"lont"];
-    _adrLabel.text = dic[@"name"];
+    _adrLabel.text = dic[@"adress"];
+    
+    needlongitude = lont;
+    needlatitude = lat;
     
     NSLog(@"%@  %@  %@", dic[@"name"],lat,lont);
+    
 }
 
 -(void)dealloc{
@@ -333,19 +342,40 @@
     [_confirmBtn setBackgroundColor:[UIColor lightGrayColor]];
     [_confirmBtn addTarget:self action:@selector(confirmBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_confirmBtn];
+    
+    if(IS_IPHONE_5){
+    
     [_confirmBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_addressLabel.mas_bottom).offset(40);
+        make.top.equalTo(_addressLabel.mas_bottom).offset(HDAutoHeight(30));
         make.centerX.equalTo(self.view.mas_centerX);
         make.width.equalTo(@(APP_CONTENT_WIDTH*3/5));
-        make.height.equalTo(@(38));
+        make.height.equalTo(@(HDAutoHeight(90)));
     }];
 //    _confirmBtn.layer.masksToBounds = YES;
-    _confirmBtn.layer.cornerRadius = 18;
+    _confirmBtn.layer.cornerRadius = HDAutoHeight(40);
     _confirmBtn.backgroundColor = UIColorFromHex(0x3aa566);
     _confirmBtn.layer.shadowColor = UIColorFromHex(0x3fb36f).CGColor;
     _confirmBtn.layer.shadowOpacity = 0.3f;
     _confirmBtn.layer.shadowRadius =18;
     _confirmBtn.layer.shadowOffset = CGSizeMake(5,5);
+        
+    }else{
+        
+        [_confirmBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(_addressLabel.mas_bottom).offset(40);
+            make.centerX.equalTo(self.view.mas_centerX);
+            make.width.equalTo(@(APP_CONTENT_WIDTH*3/5));
+            make.height.equalTo(@(HDAutoHeight(90)));
+        }];
+        //    _confirmBtn.layer.masksToBounds = YES;
+        _confirmBtn.layer.cornerRadius = 18;
+        _confirmBtn.backgroundColor = UIColorFromHex(0x3aa566);
+        _confirmBtn.layer.shadowColor = UIColorFromHex(0x3fb36f).CGColor;
+        _confirmBtn.layer.shadowOpacity = 0.3f;
+        _confirmBtn.layer.shadowRadius =18;
+        _confirmBtn.layer.shadowOffset = CGSizeMake(5,5);
+    
+    }
     
 }
 
@@ -354,6 +384,11 @@
     
     model.name = _nameTextField.text;
     model.farmName = _farmTextField.text;
+    model.address = _adrLabel.text;
+    
+    NSString *locate = [NSString stringWithFormat:@"%@,%@",needlongitude,needlatitude];
+    
+    model.location = locate;
     
     if([model.name isEqualToString:@""]){
         [MBProgressHUD showSuccess:@"请填写姓名"];
@@ -372,9 +407,15 @@
             [MBProgressHUD showSuccess:@"请填写农场名"];
             return;
         }
-        
-        
         //判断农场地址相关内容！！！！！
+        if([_adrLabel.text isEqualToString:@""]){
+            [MBProgressHUD showSuccess:@"请填写农场地址"];
+            return;
+        }
+        
+        
+        
+        
         
 
     }
@@ -394,6 +435,13 @@
             NSString *fid = dic[@"fid"];
             
             [[NSUserDefaults standardUserDefaults] setObject:fid forKey:@"fid"];
+            
+            NSString *type = dic[@"type"];
+            if(type){
+                int tyint = [type intValue];
+                NSString *reType = [NSString stringWithFormat:@"%d",tyint];
+                [[NSUserDefaults standardUserDefaults] setObject:reType forKey:@"type"];
+            }
             
         }else{
             [MBProgressHUD showSuccess:msg];
@@ -442,6 +490,7 @@
     
     _farmTextField = [[UITextField alloc]init];
     _farmTextField.placeholder=@"请输入您的农场名称";
+    [_farmTextField setValue:@10 forKey:@"limit"];
     //    _nameTextField.backgroundColor = [UIColor lightGrayColor];
     _farmTextField.layer.masksToBounds = YES;
     _farmTextField.layer.borderColor = [UIColor lightGrayColor].CGColor;
@@ -603,12 +652,13 @@
     _adrBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [_addressView addSubview:_adrBtn];
     
-    _adrLabel = [[UILabel alloc]init];
+    _adrLabel = [[BBFlashCtntLabel alloc]init];
     _adrLabel.font = [UIFont systemFontOfSize:14];
-    _adrLabel.text = @"点击选择位置";
+    _adrLabel.text = @"";
+//    点击选择位置
     _adrLabel.textColor = [UIColor lightGrayColor];
     [_addressView addSubview:_adrLabel];
-    
+    _adrLabel.speed = -1;
     [_adrBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_addressView.mas_left).offset(5);
         make.centerY.equalTo(_addressView.mas_centerY);
@@ -618,7 +668,7 @@
     [_adrLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_adrBtn.mas_right).offset(5);
         make.centerY.equalTo(_addressView.mas_centerY);
-        make.width.equalTo(@(200));
+        make.right.equalTo(_addressView.mas_right).offset(-HDAutoWidth(40));
         make.height.equalTo(@(30));
     }];
     
@@ -811,9 +861,12 @@
 
 -(void)confirmWithName:(NSString *)name AndLongitude:(NSString *)longitude AndLatitude:(NSString *)latitude AndCity:(NSString *)city AndAddress:(NSString *)address{
     
-    NSLog(@"%@  %@  %@", name,longitude,latitude);
+    needlongitude = longitude;
+    needlatitude = latitude;
     
-    _adrLabel.text = name;
+    NSLog(@"%@  %@  %@", address,longitude,latitude);
+    
+    _adrLabel.text = address;
     
     
     

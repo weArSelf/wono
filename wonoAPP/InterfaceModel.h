@@ -100,4 +100,28 @@ typedef void(^AllCallBack)(int state, id data, NSString *msg);
 
 -(void)wonoAnswerWithQid:(NSString *)qid AndContent:(NSString *)ansDic WithRepID:(NSString *)repID WithCallBack:(AllCallBack)callback;
 
+-(void)MarkPointWithAction:(NSString *)act AndQid:(NSString *)qid WithCallBack:(AllCallBack)callback;
+
+-(void)collectWithAction:(NSString *)act AndQid:(NSString *)qid WithCallBack:(AllCallBack)callback;
+
+-(void)getUserLikeWithQid:(NSString *)qid WithCallBack:(AllCallBack)callback;
+
+-(void)getUserCollectWithQid:(NSString *)qid WithCallBack:(AllCallBack)callback;
+
+-(void)getUserCollectDetailWithPage:(int)page WithCallBack:(AllCallBack)callback;
+
+-(void)ChangeUserDetailWithObject:(NSString *)obj AndKey:(NSString *)key WithCallBack:(AllCallBack)callback;
+
+-(void)getMyMessageWithPage:(int)page WithCallBack:(AllCallBack)callback;
+
+-(void)getUnReadMsgCountWithCallBack:(AllCallBack)callback;
+
+-(void)changeMsgStateWithMessageID:(NSString *)needID AndStatus:(NSString *)status WithCallBack:(AllCallBack)callback;
+
+-(void)changeuserPswWithOrgin:(NSString *)orgpsw AndNewPsw:(NSString *)newpsw WithCallBack:(AllCallBack)callback;
+
+-(void)updatePengWithArea:(NSString *)area AndGid:(NSString *)gid AndImei:(NSString *)imei AndType:(NSString *)type AndUids:(NSString *)uids WithCallBack:(AllCallBack)callback;
+
+-(void)userLogOutWithCallBack:(AllCallBack)callback;
+
 @end

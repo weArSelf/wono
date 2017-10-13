@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "WonoAnswerModel.h"
 
+typedef void (^audioPlayBlock)(NSString *audioUrl);
+
 @interface WonoAnswerTableViewCell : UITableViewCell
 
 @property (nonatomic,copy) void(^cellBlock)(NSDictionary *dic);
@@ -16,5 +18,9 @@
 @property (nonatomic,strong) WonoAnswerModel *model;
 
 @property (nonatomic,strong) NSString *changeMark;
+
+@property (nonatomic,copy) audioPlayBlock audioBlo;
+
+-(void)reloadTitle;
 
 @end

@@ -415,12 +415,12 @@
     
     secLabel.tag = 351;
     
-    firView.frame = CGRectMake(HDAutoWidth(510), HDAutoHeight(25), HDAutoWidth(20), HDAutoWidth(20));
-    firLabel.frame = CGRectMake(HDAutoWidth(540), HDAutoHeight(25), HDAutoWidth(60), HDAutoHeight(30));
+    firView.frame = CGRectMake(HDAutoWidth(490), HDAutoHeight(25), HDAutoWidth(20), HDAutoWidth(20));
+    firLabel.frame = CGRectMake(HDAutoWidth(520), HDAutoHeight(25), HDAutoWidth(80), HDAutoHeight(30));
     firView.centerY = firLabel.centerY;
     
     secView.frame = CGRectMake(HDAutoWidth(610), HDAutoHeight(25), HDAutoWidth(20), HDAutoWidth(20));
-    secLabel.frame = CGRectMake(HDAutoWidth(640), HDAutoHeight(25), HDAutoWidth(60), HDAutoHeight(30));
+    secLabel.frame = CGRectMake(HDAutoWidth(640), HDAutoHeight(25), HDAutoWidth(80), HDAutoHeight(30));
     secView.centerY = secLabel.centerY;
     
     [self addSubview:firView];
