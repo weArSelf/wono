@@ -100,9 +100,12 @@
     [self makePlaceHolderWithTitle:@"加载数据中..."];
     [self requsetDetail];
     
-     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(refresh) name:@"wonoCircleRe" object:nil];
+     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(Wonorefresh) name:@"wonoCircleRe" object:nil];
     
     [self getPermission];
+}
+-(void)Wonorefresh{
+    [_mainTabelView.mj_header beginRefreshing];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -288,7 +291,8 @@
 //    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.2/*延迟执行时间*/ * NSEC_PER_SEC);
 //    
 //    dispatch_after(delayTime, dispatch_get_main_queue(), ^{
-        [self requestData];
+//        [self requestData];
+    [self requsetDetail];
 //    });
     
 
@@ -799,6 +803,9 @@
 //        [cell setCellBlock:<#void (^)(NSDictionary *)cellBlock#>]
         [cell reloadTitle];
         
+        NSString *strC = [NSString stringWithFormat:@"%@",_askModel.sujjestCount];
+        
+        [cell.sujjestBtn setTitle:strC forState:UIControlStateNormal];
         return cell;
     }else{
         
@@ -949,7 +956,7 @@
                     height = HDAutoHeight(595)-HDAutoHeight(180)+height233+height123;
                     
                 }else{
-                    height = HDAutoHeight(570)-HDAutoHeight(180)+height233+height123;
+                    height = HDAutoHeight(595)-HDAutoHeight(180)+height233+height123;
                 }
                 
                 break;

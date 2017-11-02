@@ -34,10 +34,12 @@
 
 @implementation MineViewController{
     NSArray *dataArr;
+    int wonoMark;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    wonoMark = 1;
 //    dataArr = [NSArray arrayWithObjects:@"我的收藏",@"修改密码",@"意见反馈",@"关于沃农",@"注销账号", nil];
     
     
@@ -52,8 +54,14 @@
     [self createHead];
     [self createTable];
     
-    [[NSUserDefaults standardUserDefaults]setObject:@"1" forKey:@"AleKey"];
+//    [[NSUserDefaults standardUserDefaults]setObject:@"1" forKey:@"AleKey"];
     
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(WonoStateChange) name:@"WonoStateChange" object:nil];
+    
+}
+
+-(void)WonoStateChange{
+    wonoMark = 1;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -74,17 +82,22 @@
             dataArr = [NSArray arrayWithObjects:@"我的收藏",@"设置",nil];
             
 //            [[NSUserDefaults standardUserDefaults]setObject:@"1" forKey:@"AleKey"];
-            NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"AleKey"];
-            if([str isEqualToString:@"1"]){
-                
-                [[NSUserDefaults standardUserDefaults]setObject:@"1" forKey:@"AleKey"];
+//            NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"AleKey"];
+//            if([str isEqualToString:@"1"]){
+            
+//                [[NSUserDefaults standardUserDefaults]setObject:@"1" forKey:@"AleKey"];
+            if(wonoMark != 1){
+                return;
+            }
+            wonoMark++;
+            
                 UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有进入农场,请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                     
                 }];
                 [alertC addAction:confirmAct];
                 [self presentViewController:alertC animated:YES completion:nil];
-            }
+//            }
         }else{
             
             dataArr = [NSArray arrayWithObjects:@"我的收藏",@"我的农场",@"设置",nil];
@@ -126,7 +139,12 @@
             NSURL *ur = [NSURL URLWithString:imageUrl];
             
             [self.headImgBtn sd_setImageWithURL:ur forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"默认头像"]];
-            
+//            [self.headImgBtn sd_setImageWithURL:ur forState:UIControlStateNormal completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+//
+//            }];
+            self.headImgBtn.imageView.contentMode = UIViewContentModeScaleAspectFill;
+//            UIImageView *aaimageview;
+//            [aaimageview sd_setimage]
 //            [_headImgBtn setImage:[UIImage imageNamed:@"默认头像"] forState:UIControlStateNormal];
             
             
@@ -171,6 +189,8 @@
         make.width.equalTo(@(HDAutoHeight(140)));
         make.height.equalTo(@(HDAutoHeight(140)));
     }];
+    
+    float nameLength = [self getLengthWithFont:15 AndText:@"啊啊啊啊啊啊啊啊"];
     _nameLabel = [[UILabel alloc]init];
     _nameLabel.text = @"";
     _nameLabel.font = [UIFont systemFontOfSize:14];
@@ -180,11 +200,18 @@
     [_headView addSubview:_nameLabel];
     [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(_headView.mas_centerX);
-        make.width.equalTo(@(100));
+        make.width.equalTo(@(nameLength));
         make.height.equalTo(@(HDAutoHeight(40)));
         make.bottom.equalTo(_headView.mas_bottom).offset(-HDAutoHeight(5));
     }];
 }
+
+-(float)getLengthWithFont:(int)font AndText:(NSString *)text{
+    NSDictionary *attrs = @{NSFontAttributeName : [UIFont boldSystemFontOfSize:font]};
+    CGSize size=[text sizeWithAttributes:attrs];
+    return size.width;
+}
+
 
 -(void)createTable{
     

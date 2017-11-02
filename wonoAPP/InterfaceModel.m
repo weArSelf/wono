@@ -125,6 +125,13 @@
     [param setObject:sex forKey:@"sex"];
     [param setObject:model.birth forKey:@"birth"];
     [param setObject:model.name forKey:@"name"];
+    
+    NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"DEVICETOKEN"];
+    NSString *clientId = [[NSUserDefaults standardUserDefaults] objectForKey:@"CLIENTID"];
+    
+    [param setObject:token forKey:@"device_token"];
+    [param setObject:clientId forKey:@"client_id"];
+    
     if(model.type == 1){
         [param setObject:model.farmName forKey:@"farmName"];
 //        [param setObject:model.area forKey:@"area"];
@@ -1354,6 +1361,32 @@
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
    
     [[BaseInterfaceModel shareInstance] sendData:API_LogOut parameters:param type:ENRT_GET success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+}
+
+-(void)jobChangeWithJob:(NSString *)jobArr AndUnJob:(NSString *)unJob WithGid:(NSString *)gid WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:gid forKey:@"gid"];
+    [param setObject:jobArr forKey:@"work"];
+    [param setObject:unJob forKey:@"unwork"];
+    
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_StuffChange parameters:param type:ENRT_POST success:^(id task, id responseObject) {
         
         NSString *code = responseObject[@"code"];
         NSString *msg = responseObject[@"msg"];

@@ -14,4 +14,6 @@
 -(void)createContentWithLeftStr:(NSString *)leftStr AndRightStr:(NSString *)rightStr;
 
 
+-(void)toreload;
+
 @end

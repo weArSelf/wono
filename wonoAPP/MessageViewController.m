@@ -100,6 +100,7 @@
                 model.needID = dic[@"param1"];
                 model.statu = dic[@"status"];
                 model.msgID = dic[@"id"];
+                model.socialMsg = dic[@"content"];
                 [dataArr addObject:model];
             }
             if(dataArr.count<15){
@@ -288,7 +289,7 @@
         
         
         
-        BBFlashCtntLabel *label = [[BBFlashCtntLabel alloc]initWithFrame:CGRectMake(HDAutoWidth(150), HDAutoHeight(10), width, HDAutoHeight(80))];
+        BBFlashCtntLabel *label = [[BBFlashCtntLabel alloc]initWithFrame:CGRectMake(HDAutoWidth(150), HDAutoHeight(10), SCREEN_WIDTH - HDAutoWidth(175), HDAutoHeight(80))];
         label.text = model.content;
         label.speed = -1;
         label.font = [UIFont systemFontOfSize:13];
@@ -357,7 +358,8 @@
     if(model.type == 10){
         
         WonoWebMessageViewController *webVC = [[WonoWebMessageViewController alloc]init];
-        webVC.needID = model.needID;
+//        webVC.needID = model.needID;
+        webVC.needStr = model.socialMsg;
         //一会测试一下 这样的时候viewdidload里边 needid到底有没有值 很期待~
         [self.navigationController pushViewController:webVC animated:YES];
         if([model.statu intValue]==0){

@@ -55,7 +55,7 @@
     [self getdata];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(Change:) name:@"catChange" object:nil];
-    _moneyTextView.keyboardType = UIKeyboardTypeNumberPad;
+    _moneyTextView.keyboardType = UIKeyboardTypeDecimalPad;
 }
 
 
@@ -136,7 +136,7 @@
         if(state == 2000){
             NSLog(@"成功");
 //            [MBProgressHUD showSuccess:@"提交成功"];
-//            [[NSNotificationCenter defaultCenter]postNotificationName:@"plantChange" object:nil];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"plantChange" object:nil];
 //            [self.navigationController popToRootViewControllerAnimated:YES];
             UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"提交成功!" preferredStyle:UIAlertControllerStyleAlert];
             [alertVC addAction:[UIAlertAction actionWithTitle:@"返回首页" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
@@ -304,7 +304,7 @@
     _moneyTextView.layer.borderWidth = 1;
     _moneyTextView.font = [UIFont systemFontOfSize:14];
     _moneyTextView.textAlignment = NSTextAlignmentCenter;
-    _moneyTextView.keyboardType = UIKeyboardTypeNumberPad;
+    _moneyTextView.keyboardType = UIKeyboardTypeDecimalPad;
     
     [self.view addSubview:_moneyTextView];
     
@@ -433,7 +433,7 @@
                 PengTypeModel *models = [[PengTypeModel alloc]init];
                 models.typeName = dic[@"name"];
                 models.typeId = dic[@"id"];
-                
+                models.child = dic[@"child"];
                 [nexArr addObject:models];
             }
             

@@ -116,6 +116,7 @@
         make.width.equalTo(@(HDAutoWidth(85)));
         make.height.equalTo(self.mas_height);
     }];
+    _hubBtn.enabled = NO;
 }
 
 -(void)deleteClick{
@@ -125,12 +126,14 @@
 }
 
 -(void)createAnimate{
+    _hubBtn.enabled = YES;
     [UIView animateWithDuration:0.5 animations:^{
         _ConView.x+= HDAutoWidth(60);
     }];
 }
 
 -(void)unCreateAnimate{
+    _hubBtn.enabled = NO;
     [UIView animateWithDuration:0.5 animations:^{
         _ConView.x =10;
     }];
@@ -138,8 +141,8 @@
 
 -(void)createContent{
     _headImageView = [[UIImageView alloc]init];
-    _headImageView.contentMode = UIViewContentModeScaleAspectFit;
-    _headImageView.image = [UIImage imageNamed:@"选中-农场主"];
+    _headImageView.contentMode = UIViewContentModeScaleAspectFill;
+    _headImageView.image = [UIImage imageNamed:@"选中-员工"];
     
     [_ConView addSubview:_headImageView];
     
@@ -150,22 +153,31 @@
         make.height.equalTo(@(HDAutoWidth(70)));
     }];
     
+    _headImageView.layer.cornerRadius = HDAutoWidth(35);
+    _headImageView.layer.masksToBounds = YES;
+    
     _nameLabel = [[UILabel alloc]init];
     _nameLabel.text = @"啊啊";
     _nameLabel.textColor = UIColorFromHex(0x000000);
     _nameLabel.font = [UIFont systemFontOfSize:13];
+    
+    float nameLength = [self getLengthWithFont:14 AndText:@"啊啊啊啊啊啊啊"];
+    
     [_ConView addSubview:_nameLabel];
     [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_headImageView.mas_right).offset(HDAutoWidth(20));
         make.centerY.equalTo(_ConView.mas_centerY);
-        make.width.equalTo(@(HDAutoWidth(100)));
+        make.width.equalTo(@(nameLength));
         make.height.equalTo(@(HDAutoHeight(60)));
     }];
     
     [_nameLabel layoutIfNeeded];
     [_ConView layoutIfNeeded];
     [self layoutIfNeeded];
-    _conLabel = [[BBFlashCtntLabel alloc]initWithFrame:CGRectMake(_nameLabel.x+_nameLabel.width+HDAutoWidth(40), _nameLabel.y, HDAutoWidth(400), HDAutoHeight(60))];
+    _conLabel = [[BBFlashCtntLabel alloc]initWithFrame:CGRectMake(_nameLabel.x+_nameLabel.width+HDAutoWidth(40), _nameLabel.y, HDAutoWidth(300), HDAutoHeight(60))];
+    if(IS_IPHONE_5){
+        _conLabel = [[BBFlashCtntLabel alloc]initWithFrame:CGRectMake(_nameLabel.x+_nameLabel.width+HDAutoWidth(40), _nameLabel.y, HDAutoWidth(280), HDAutoHeight(60))];
+    }
     _conLabel.text = @"大棚1·大棚2·大棚3";
     _conLabel.speed = -1;
     _conLabel.textColor = UIColorFromHex(0x9fa0a0);
@@ -188,7 +200,7 @@
     
     NSURL *imageUrl = [NSURL URLWithString:_searchModel.imageUrl];
     
-    [_headImageView sd_setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"选中-农场主"]];
+    [_headImageView sd_setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"选中-员工"]];
     _nameLabel.text = _searchModel.name;
     
     _conLabel.text = _searchModel.phoneNum;
@@ -222,6 +234,12 @@
     _ConView.layer.cornerRadius = 5;
     
     self.selectMark = false;
+}
+
+-(float)getLengthWithFont:(int)font AndText:(NSString *)text{
+    NSDictionary *attrs = @{NSFontAttributeName : [UIFont boldSystemFontOfSize:font]};
+    CGSize size=[text sizeWithAttributes:attrs];
+    return size.width;
 }
 
 @end

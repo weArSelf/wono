@@ -8,6 +8,7 @@
 
 #import "LimitInput.h"
 #import <objc/runtime.h>
+#import "MBProgressHUD+XMG.h"
 
 
 #define RUNTIME_ADD_PROPERTY(propertyName)      \
@@ -68,7 +69,7 @@ IMPLEMENT_PROPERTY(UITextView)
     
     NSNumber *number = [textField valueForKey:PROPERTY_NAME];
     if (number && textField.text.length > [number integerValue] && textField.markedTextRange == nil) {
-        
+        [textField resignFirstResponder];
         int qwe = [number intValue];
         NSString *str = [NSString stringWithFormat:@"长度不得超过%d",qwe];
         [MBProgressHUD showSuccess:str];
@@ -86,6 +87,7 @@ IMPLEMENT_PROPERTY(UITextView)
     NSNumber *number = [textView valueForKey:PROPERTY_NAME];
     if (number && textView.text.length > [number integerValue] && textView.markedTextRange == nil) {
         int qwe = [number intValue];
+        [textView resignFirstResponder];
         NSString *str = [NSString stringWithFormat:@"长度不得超过%d",qwe];
         [MBProgressHUD showSuccess:str];
         

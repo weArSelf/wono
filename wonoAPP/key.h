@@ -104,4 +104,6 @@
 
 #define API_LogOut                          @"auth/logout"
 
+#define API_StuffChange                     @"greenhouse/job"
+
 #endif /* key_h */

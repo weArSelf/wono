@@ -8,6 +8,7 @@
 
 #import "QNOperation.h"
 
+
 @interface HDQiNiuOperation : NSObject
 
 + (QNOperation *)defaultOperation;

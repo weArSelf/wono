@@ -308,6 +308,8 @@
             
             [headImgView sd_setImageWithURL:rurl placeholderImage:[UIImage imageNamed:@"默认头像"]];
             
+            headImgView.contentMode = UIViewContentModeScaleAspectFill;
+            
 //            headImgView.backgroundColor = [UIColor greenColor];
 //            headImgView.contentMode = UIViewContentModeScaleToFill;
 //            headImgView.image = [UIImage imageNamed:@"我的-selected"];

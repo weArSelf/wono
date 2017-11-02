@@ -59,12 +59,16 @@
     
     BOOL alMark;
     
+    int wonoAlertMark;
+    
+    int orgRefMark;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    orgRefMark = 1;
 //    [self setBtn];
-    
+    wonoAlertMark = 1;
     alMark = false;
     type = @"0";
     
@@ -81,6 +85,7 @@
     int userType = [[[NSUserDefaults standardUserDefaults]objectForKey:@"userType"]intValue];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(re) name:@"plantChange" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(WonoStateChange) name:@"WonoStateChange" object:nil];
     
     [self createNextBtn];
     if(userType == 1){
@@ -93,33 +98,33 @@
     }else{
        
         if(nongChangHave == 0){
-            [self createWork];
-            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有进入农场\n请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                
-            }];
-            [alertC addAction:confirmAct];
-            [self presentViewController:alertC animated:YES completion:nil];
-            
-            leftBtn.alpha = 0.3;
-            rightBtn.alpha = 0.3;
-            _workBtn.alpha = 0.3;
-        
-            leftBtn.enabled = NO;
-            rightBtn.enabled = NO;
-            _workBtn.enabled = NO;
+//            [self createWork];
+//            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有进入农场\n请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
+//            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//
+//            }];
+//            [alertC addAction:confirmAct];
+//            [self presentViewController:alertC animated:YES completion:nil];
+//
+//            leftBtn.alpha = 0.3;
+//            rightBtn.alpha = 0.3;
+//            _workBtn.alpha = 0.3;
+//
+//            leftBtn.enabled = NO;
+//            rightBtn.enabled = NO;
+//            _workBtn.enabled = NO;
             
         }else if ([pengHave isEqualToString:@""]){
-            [self createWork];
-            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有负责的大棚\n请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                
-            }];
-            [alertC addAction:confirmAct];
-            [self presentViewController:alertC animated:YES completion:nil];
-            
-            leftBtn.alpha = 0.3;
-            leftBtn.enabled = NO;
+//            [self createWork];
+//            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有负责的大棚\n请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
+//            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//
+//            }];
+//            [alertC addAction:confirmAct];
+//            [self presentViewController:alertC animated:YES completion:nil];
+//
+//            leftBtn.alpha = 0.3;
+//            leftBtn.enabled = NO;
         }else{
             
             [self createTabelview];
@@ -137,6 +142,74 @@
         
     }
     
+}
+
+-(void)WonoStateChange{
+//    [_plantTableView removeFromSuperview];
+//    _plantTableView = nil;
+    wonoAlertMark = 1;
+    
+    int nongChangHave = [[[NSUserDefaults standardUserDefaults]objectForKey:@"fid"]intValue];
+    NSString *pengHave = [[NSUserDefaults standardUserDefaults]objectForKey:@"pengID"];
+    int userType = [[[NSUserDefaults standardUserDefaults]objectForKey:@"userType"]intValue];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(re) name:@"plantChange" object:nil];
+//    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(WonoStateChange) name:@"WonoStateChange" object:nil];
+    
+//    [self createNextBtn];
+    if(userType == 1){
+        
+        [self createTabelview];
+        _plantTableView.mj_footer.hidden = YES;
+        // Do any additional setup after loading the view.
+        [self requestData];
+        [self createWork];
+    }else{
+        
+        if(nongChangHave == 0){
+            //            [self createWork];
+            //            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有进入农场\n请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
+            //            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            //
+            //            }];
+            //            [alertC addAction:confirmAct];
+            //            [self presentViewController:alertC animated:YES completion:nil];
+            //
+            //            leftBtn.alpha = 0.3;
+            //            rightBtn.alpha = 0.3;
+            //            _workBtn.alpha = 0.3;
+            //
+            //            leftBtn.enabled = NO;
+            //            rightBtn.enabled = NO;
+            //            _workBtn.enabled = NO;
+            
+        }else if ([pengHave isEqualToString:@""]){
+            //            [self createWork];
+            //            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有负责的大棚\n请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
+            //            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            //
+            //            }];
+            //            [alertC addAction:confirmAct];
+            //            [self presentViewController:alertC animated:YES completion:nil];
+            //
+            //            leftBtn.alpha = 0.3;
+            //            leftBtn.enabled = NO;
+        }else{
+            
+            [self createTabelview];
+            _plantTableView.mj_footer.hidden = YES;
+            
+            [self requestData];
+            
+            [self createWork];
+            
+            leftBtn.alpha = 0.3;
+            leftBtn.enabled = NO;
+        }
+        
+        
+        
+    }
 }
 
 
@@ -236,6 +309,12 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [_plantTableView reloadData];
+    
+    if(orgRefMark == 10){
+        orgRefMark = 1;
+        [self SaveClick];
+    }
+    
 //    self.navigationController.navigationBar.alpha = 0;
     self.navigationController.navigationBar.hidden = YES;
 //    [self.navigationController setNavigationBarHidden:YES animated:YES];
@@ -267,9 +346,43 @@
             
             if(nongChangHave == 0){
                 
-               
+                [self createWork];
+                leftBtn.alpha = 0.3;
+                rightBtn.alpha = 0.3;
+                _workBtn.alpha = 0.3;
+                
+                leftBtn.enabled = NO;
+                rightBtn.enabled = NO;
+                _workBtn.enabled = NO;
+                if(wonoAlertMark != 1){
+                    return;
+                }
+                wonoAlertMark++;
+                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有进入农场\n请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [alertC addAction:confirmAct];
+                [self presentViewController:alertC animated:YES completion:nil];
+                
+                
                 
             }else if ([pengHave isEqualToString:@""]){
+                [self createWork];
+                leftBtn.alpha = 0.3;
+                leftBtn.enabled = NO;
+                if(wonoAlertMark != 1){
+                    
+                    return;
+                }
+                wonoAlertMark++;
+                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有负责的大棚\n请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [alertC addAction:confirmAct];
+                [self presentViewController:alertC animated:YES completion:nil];
+                
                 
               
             }else{
@@ -299,9 +412,11 @@
 }
 
 -(void)re{
-    if(NO == rightBtn.selected){
-        [_plantTableView.header beginRefreshing];
-    }
+//    if(NO == rightBtn.selected){
+//        [_plantTableView.mj_header beginRefreshing];
+//    }
+    orgRefMark =10;
+//    [self SaveClick];
 }
 
 -(void)setBtn{
@@ -696,6 +811,12 @@
 
 -(void)workClick{
     NSLog(@"点击去工作");
+    
+    
+    int nongChangHave = [[[NSUserDefaults standardUserDefaults]objectForKey:@"fid"]intValue];
+    if(nongChangHave == 0){
+        return;
+    }
     
     AddViewController *add = [[AddViewController alloc]init];
     add.hidesBottomBarWhenPushed = YES;

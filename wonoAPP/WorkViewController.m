@@ -53,8 +53,8 @@
     [self createSaveBtn];
 //    [self createCon];
 //    [self requestData];
-    _moneyTextView.keyboardType = UIKeyboardTypeNumberPad;
-    _perTextView.keyboardType = UIKeyboardTypeNumberPad;
+    _moneyTextView.keyboardType = UIKeyboardTypeDecimalPad;
+    _perTextView.keyboardType = UIKeyboardTypeDecimalPad;
     [self getdata];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(Change:) name:@"catChange" object:nil];
@@ -337,7 +337,7 @@
     _moneyTextView.layer.borderWidth = 1;
     _moneyTextView.font = [UIFont systemFontOfSize:14];
     _moneyTextView.textAlignment = NSTextAlignmentCenter;
-    _moneyTextView.keyboardType = UIKeyboardTypeNumberPad;
+    _moneyTextView.keyboardType = UIKeyboardTypeDecimalPad;
     
     [self.view addSubview:_moneyTextView];
     
@@ -355,7 +355,7 @@
     _perTextView.layer.borderWidth = 1;
     _perTextView.font = [UIFont systemFontOfSize:14];
     _perTextView.textAlignment = NSTextAlignmentCenter;
-    _perTextView.keyboardType = UIKeyboardTypeNumberPad;
+    _perTextView.keyboardType = UIKeyboardTypeDecimalPad;
     
     [self.view addSubview:_perTextView];
     
@@ -535,7 +535,7 @@
                 PengTypeModel *models = [[PengTypeModel alloc]init];
                 models.typeName = dic[@"name"];
                 models.typeId = dic[@"id"];
-                
+                models.child = dic[@"child"];
                 [nexArr addObject:models];
             }
             

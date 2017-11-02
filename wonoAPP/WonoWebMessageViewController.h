@@ -10,6 +10,8 @@
 
 @interface WonoWebMessageViewController : UIViewController
 
-@property (nonatomic,strong) NSString *needID;
+//@property (nonatomic,strong) NSString *needID;
+
+@property (nonatomic,strong) NSString *needStr;
 
 @end

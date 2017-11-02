@@ -376,7 +376,7 @@
     [self.view addSubview:_mainTextField];
     [_mainTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left).offset(HDAutoWidth(30));
-        make.width.equalTo(@(HDAutoWidth(430)));
+        make.right.equalTo(self.view.mas_right).offset(-HDAutoWidth(30));
         make.top.equalTo(_headView.mas_bottom).offset(HDAutoHeight(30));
         make.height.equalTo(@(HDAutoHeight(68)));
     }];
@@ -396,11 +396,11 @@
         make.height.equalTo(_mainTextField.mas_height);
         make.width.equalTo(@(HDAutoWidth(225)));
     }];
-    
+    _searchBtn.alpha = 0;
     _searchLabel = [[UILabel alloc]init];
     _searchLabel.font = [UIFont systemFontOfSize:13];
     _searchLabel.textColor = UIColorFromHex(0x727171);
-    _searchLabel.text = @"当前设备未被绑定，可连接";
+    _searchLabel.text = @"请确认设备号与实际匹配，否则无法收到数据。";
 //    当前设备未被绑定，可连接
     _searchLabel.backgroundColor = [UIColor clearColor];
     
@@ -450,7 +450,7 @@
     _pengNameTextField.layer.borderColor = [UIColor lightGrayColor].CGColor;
     _pengNameTextField.layer.borderWidth = 0.6;
     _pengNameTextField.layer.cornerRadius = 5;
-    _pengNameTextField.keyboardType = UIKeyboardTypeNumberPad;
+    _pengNameTextField.keyboardType = UIKeyboardTypeDecimalPad;
     _pengNameTextField.leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 8, 0)];
     //设置显示模式为永远显示(默认不显示)
     _pengNameTextField.leftViewMode = UITextFieldViewModeAlways;
@@ -458,7 +458,7 @@
     [self.view addSubview:_pengNameTextField];
     [_pengNameTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left).offset(HDAutoWidth(30));
-        make.right.equalTo(_searchBtn.mas_right);
+        make.right.equalTo(self.view.mas_right).offset(-HDAutoWidth(30));
         make.top.equalTo(_searchLabel.mas_bottom).offset(HDAutoHeight(20));
         make.height.equalTo(@(HDAutoHeight(68)));
     }];
@@ -782,9 +782,35 @@
         return;
     }
     
+    if(res == nil){
+        
+        [MBProgressHUD showSuccess:@"请预留员工"];
+        return;
+        
+    }
+//    arr;//现在的id们
+//    stuffArr;//过去的id们
+    NSDictionary *res233 = [self checkArrayWithArr1:stuffArr AndeArr2:arr];
+    NSArray *jiegu = res233[@"jiegu"];
+    NSArray *xinzeng = res233[@"xinzeng"];
+    
+    NSString *jiegustr = [self objArrayToJSON:jiegu];
+    NSString *xinzengstr = [self objArrayToJSON:xinzeng];
+    
+    
+//    return;
     [[InterfaceSingleton shareInstance].interfaceModel updatePengWithArea:_pengNameTextField.text AndGid:_pengID AndImei:_mainTextField.text AndType:nowType AndUids:res WithCallBack:^(int state, id data, NSString *msg) {
         if(state == 2000){
             NSLog(@"成功");
+            
+            [[InterfaceSingleton shareInstance].interfaceModel jobChangeWithJob:xinzengstr AndUnJob:jiegustr WithGid:_pengID WithCallBack:^(int state, id data, NSString *msg) {
+               
+                if(state == 2000){
+                    NSLog(@"成功");
+                }
+                
+            }];
+            
             [MBProgressHUD showSuccess:@"修改成功"];
             [self.navigationController popViewControllerAnimated:YES];
         }else{
@@ -792,6 +818,49 @@
         }
     }];
     
+}
+
+-(NSDictionary *)checkArrayWithArr1:(NSArray *)arr1 AndeArr2:(NSArray *)arr2{
+    //arr1原数组 arr2结果数组
+    NSMutableArray *org1 = [NSMutableArray array];//解雇的
+    NSMutableArray *org2 = [NSMutableArray array];//新增的
+    
+    for (int i=0; i<arr1.count; i++) {
+        int mark = 1;
+        for (int j=0; j<arr2.count; j++) {
+            NSString *str1 = [NSString stringWithFormat:@"%@",arr1[i]];
+            NSString *str2 = [NSString stringWithFormat:@"%@",arr2[j]];
+            if(![str1 isEqualToString:str2]){
+                mark++;
+            }
+            
+        }
+        
+        if(mark!=arr2.count){
+            NSString *str = [NSString stringWithFormat:@"%@",arr1[i]];
+            [org1 addObject:str];
+        }
+    }
+    for (int i=0; i<arr2.count; i++) {
+        int mark = 1;
+        for (int j=0; j<arr1.count; j++) {
+            
+            NSString *str1 = [NSString stringWithFormat:@"%@",arr2[i]];
+            NSString *str2 = [NSString stringWithFormat:@"%@",arr1[j]];
+            if(![str1 isEqualToString:str2]){
+                mark++;
+            }
+            
+        }
+        if(mark!=arr1.count){
+            NSString *str = [NSString stringWithFormat:@"%@",arr2[i]];
+            [org2 addObject:str];
+        }
+    }
+    NSMutableDictionary *redDic = [NSMutableDictionary dictionary];
+    [redDic setObject:org1 forKey:@"jiegu"];
+    [redDic setObject:org2 forKey:@"xinzeng"];
+    return redDic;
 }
 
 -(NSString*)DataTOjsonString:(id)object
@@ -873,6 +942,7 @@
 //            int varID = [dic[@"varieties_id"]intValue];
             
 //            _catLabelContent.text = dic[@"variety_name"];
+            
             _typeLabelContent.text = dic[@"type_name"];
             
             NSString *str = dic[@"employee_name"];

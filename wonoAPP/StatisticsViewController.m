@@ -42,17 +42,23 @@
     NSMutableArray *lineData;
     NSMutableArray *inDataArr;
     NSMutableArray *outDataArr;
+    int wonoMark;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    wonoMark = 1;
     inDataArr = [NSMutableArray array];
     outDataArr = [NSMutableArray array];
     lineData = [NSMutableArray array];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(WonoStateChange) name:@"WonoStateChange" object:nil];
+    
     // Do any additional setup after loading the view.
     
 //    resDic = [NSMutableDictionary dictionary];
     self.view.backgroundColor = [UIColor whiteColor];
+    [self creatTitleAndBackBtn];
     
     int nongChangHave = [[[NSUserDefaults standardUserDefaults]objectForKey:@"fid"]intValue];
     NSString *pengHave = [[NSUserDefaults standardUserDefaults]objectForKey:@"pengID"];
@@ -61,19 +67,20 @@
     if(userType == 2){
         
         if(nongChangHave == 0){
-            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有进入农场\n请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                
-            }];
-            [alertC addAction:confirmAct];
-            [self presentViewController:alertC animated:YES completion:nil];
+            
+//            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有进入农场\n请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
+//            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//
+//            }];
+//            [alertC addAction:confirmAct];
+//            [self presentViewController:alertC animated:YES completion:nil];
             return;
         }
         
     }
     
     
-    [self creatTitleAndBackBtn];
+    
     [self createScroll];
     [self requestCircleData];
     
@@ -105,6 +112,11 @@
 }
 
 
+-(void)WonoStateChange{
+    wonoMark = 1;
+    [_mainScroll removeFromSuperview];
+    _mainScroll = nil;
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -124,12 +136,30 @@
     int userType = [[[NSUserDefaults standardUserDefaults]objectForKey:@"userType"]intValue];
     
     if(userType == 2){
-        
+        if(nongChangHave == 0){
+            if(wonoMark != 1){
+                return;
+            }
+            wonoMark ++;
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有进入农场\n请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            [alertC addAction:confirmAct];
+            [self presentViewController:alertC animated:YES completion:nil];
+            
+            if(_mainScroll != nil){
+                [_mainScroll removeFromSuperview];
+                _mainScroll = nil;
+            }
+            
+            return;
+        }
         if(nongChangHave != 0){
            
             if(_mainScroll == nil){
                 
-                [self creatTitleAndBackBtn];
+//                [self creatTitleAndBackBtn];
                 [self createScroll];
                 [self requestCircleData];
                 
@@ -347,8 +377,8 @@
     [_mainScroll addSubview:_secTitleLabel];
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn addTarget:self action:@selector(changeClick:) forControlEvents:UIControlEventTouchUpInside];
-    [btn setBackgroundImage:[UIImage imageNamed:@"月度收入与支出"] forState:UIControlStateNormal];
-    [btn setBackgroundImage:[UIImage imageNamed:@"年度收入与支出"] forState:UIControlStateSelected];
+    [btn setBackgroundImage:[UIImage imageNamed:@"年度收入与支出"] forState:UIControlStateNormal];
+    [btn setBackgroundImage:[UIImage imageNamed:@"月度收入与支出"] forState:UIControlStateSelected];
     btn.frame = CGRectMake(SCREEN_WIDTH-HDAutoWidth(265), 255+HDAutoHeight(20), HDAutoWidth(250), HDAutoHeight(64));
     btn.imageView.contentMode = UIViewContentModeScaleAspectFit;
     btn.selected = NO;

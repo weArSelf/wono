@@ -16,6 +16,8 @@
 #import "TempCViewController.h"
 #import "LoginViewController.h"
 
+#import "BBFlashCtntLabel.h"
+
 //#import "LoadingView.h"
 
 //百度地图
@@ -65,7 +67,7 @@
 
 @property (nonatomic,strong) UIButton *hubBtn;
 
-@property (nonatomic,strong) UILabel *zaihaiLabel;
+@property (nonatomic,strong) BBFlashCtntLabel *zaihaiLabel;
 
 
 @end
@@ -118,6 +120,8 @@
     [self requsetNeed];
     [self requestCount];
     
+    
+
 }
 
 
@@ -165,6 +169,8 @@
             [[NSUserDefaults standardUserDefaults] setObject:pengID forKey:@"pengID"];
             [[NSUserDefaults standardUserDefaults] setObject:type forKey:@"userType"];
             [self requestData];
+            
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"WonoStateChange" object:nil];
         }else{
             [MBProgressHUD showSuccess:msg];
         }
@@ -410,6 +416,7 @@
     [_contentTabel reloadData];
     NSLog(@"我显示了");
     self.navigationController.navigationBar.hidden = YES;
+    [_zaihaiLabel reloadView];
 //    self.navigationController.navigationBar.alpha = 0;
 //    [self.navigationController setNavigationBarHidden:YES animated:animated];
 //    self.navigationController.interactivePopGestureRecognizer.delegate = self;
@@ -545,11 +552,12 @@
         make.bottom.equalTo(_qualityLabel.mas_bottom);
     }];
     
-    _zaihaiLabel = [[UILabel alloc]init];
+    
+    _zaihaiLabel = [[BBFlashCtntLabel alloc]init];
     _zaihaiLabel.text = @"...";
     _zaihaiLabel.font = [UIFont systemFontOfSize:13];
     _zaihaiLabel.textColor = [UIColor whiteColor];
-    _zaihaiLabel.numberOfLines = 0;
+//    _zaihaiLabel.numberOfLines = 0;
     [_headView addSubview:_zaihaiLabel];
     
     [_zaihaiLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -1022,6 +1030,10 @@
                                                            }else{
                                                                _zaihaiLabel.text = content;
                                                            }
+                                                            
+                                                            [_zaihaiLabel layoutIfNeeded];
+                                                            _zaihaiLabel.speed = -1;
+                                                            
                                                         });
                                                        
                                                        //打印应答中的body
@@ -1146,4 +1158,9 @@
 //    return  @[deleteRowAction,collectRowAction,topRowAction];
 //
 //}
+
+
+
+
+
 @end

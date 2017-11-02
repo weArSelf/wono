@@ -199,7 +199,7 @@
 
 -(void)BackClick{
     NSLog(@"点击返回");
-    if(![_mainTextView.text isEqualToString:@""]||dataArr.count!=0){
+    if(![_mainTextView.text isEqualToString:@""]||dataArr.count!=0||![_headTextField.text isEqualToString:@""] ){
         
         [_headTextField resignFirstResponder];
         [_mainTextView resignFirstResponder];

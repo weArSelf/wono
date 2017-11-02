@@ -147,7 +147,8 @@
     _mainTextField.leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 8, 0)];
     //设置显示模式为永远显示(默认不显示)
     _mainTextField.leftViewMode = UITextFieldViewModeAlways;
-    _mainTextField.keyboardType = UIKeyboardTypeNumberPad;
+    _mainTextField.keyboardType = UIKeyboardTypeDecimalPad;
+    [_mainTextField setValue:@15 forKey:@"limit"];
     [self.view addSubview:_mainTextField];
     [_mainTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left).offset(-1);

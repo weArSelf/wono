@@ -363,7 +363,7 @@
     [self.view addSubview:_mainTextField];
     [_mainTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left).offset(HDAutoWidth(30));
-        make.width.equalTo(@(HDAutoWidth(430)));
+        make.right.equalTo(self.view.mas_right).offset(-HDAutoWidth(30));
         make.top.equalTo(_headView.mas_bottom).offset(HDAutoHeight(30));
         make.height.equalTo(@(HDAutoHeight(68)));
     }];
@@ -383,11 +383,12 @@
         make.height.equalTo(_mainTextField.mas_height);
         make.width.equalTo(@(HDAutoWidth(225)));
     }];
+    _searchBtn.alpha = 0;
     
     _searchLabel = [[UILabel alloc]init];
     _searchLabel.font = [UIFont systemFontOfSize:13];
     _searchLabel.textColor = UIColorFromHex(0x727171);
-    _searchLabel.text = @"当前设备未被绑定，可连接";
+    _searchLabel.text = @"请确认设备号与实际匹配，否则无法收到数据。";
     _searchLabel.backgroundColor = [UIColor clearColor];
     
     [self.view addSubview:_searchLabel];
@@ -444,7 +445,7 @@
     [self.view addSubview:_pengNameTextField];
     [_pengNameTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left).offset(HDAutoWidth(30));
-        make.right.equalTo(_searchBtn.mas_right);
+        make.right.equalTo(self.view.mas_right).offset(-HDAutoWidth(30));
         make.top.equalTo(_searchLabel.mas_bottom).offset(HDAutoHeight(10));
         make.height.equalTo(@(HDAutoHeight(68)));
     }];

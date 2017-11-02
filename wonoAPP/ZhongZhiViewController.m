@@ -63,7 +63,7 @@
     
 //    [self createTime];
     _moneyTextView.keyboardType = UIKeyboardTypeNumberPad;
-    _perTextView.keyboardType = UIKeyboardTypeNumberPad;
+    _perTextView.keyboardType = UIKeyboardTypeDecimalPad;
     [self getdata];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(Change:) name:@"catChange" object:nil];
 }
@@ -143,7 +143,7 @@
         if(state == 2000){
             NSLog(@"成功");
 //            [MBProgressHUD showSuccess:@"提交成功"];
-//            [[NSNotificationCenter defaultCenter]postNotificationName:@"plantChange" object:nil];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"plantChange" object:nil];
 //            [self.navigationController popToRootViewControllerAnimated:YES];
             UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"提交成功!" preferredStyle:UIAlertControllerStyleAlert];
             [alertVC addAction:[UIAlertAction actionWithTitle:@"返回首页" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
@@ -315,6 +315,8 @@
     _moneyTextView.textAlignment = NSTextAlignmentCenter;
     _moneyTextView.keyboardType = UIKeyboardTypeNumberPad;
     
+    
+    
     [self.view addSubview:_moneyTextView];
     
     [_moneyTextView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -331,7 +333,7 @@
     _perTextView.layer.borderWidth = 1;
     _perTextView.font = [UIFont systemFontOfSize:14];
     _perTextView.textAlignment = NSTextAlignmentCenter;
-    _perTextView.keyboardType = UIKeyboardTypeNumberPad;
+    _perTextView.keyboardType = UIKeyboardTypeDecimalPad;
     
     [self.view addSubview:_perTextView];
     
@@ -595,6 +597,7 @@
                 PengTypeModel *models = [[PengTypeModel alloc]init];
                 models.typeName = dic[@"name"];
                 models.typeId = dic[@"id"];
+                models.child = dic[@"child"];
                 
                 [nexArr addObject:models];
             }

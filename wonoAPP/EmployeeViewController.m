@@ -216,6 +216,9 @@
 
 -(void)SaveClick{
     NSLog(@"点击编辑");
+    if(_nextBtn.enabled == NO){
+        return;
+    }
    
     if(_nextBtn.selected == NO){
         changeMark = true;
@@ -335,7 +338,7 @@
         SearchModel *nowModel = dataArr[indexPath.row];
         //            count--;
         
-        NSString *title = [NSString stringWithFormat:@"是否删除员工%@?\n将清除此员工相关一切数据",nowModel.name];
+        NSString *title = [NSString stringWithFormat:@"是否删除员工%@?\n一旦删除，相关数据则对该员工将会不可见",nowModel.name];
         
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:title preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

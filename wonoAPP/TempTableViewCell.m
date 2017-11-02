@@ -91,12 +91,12 @@
         make.height.equalTo(@(HDAutoHeight(50)));
     }];
     
-    [_nextTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(_titleLabel.mas_centerY);
-        make.left.equalTo(_titleLabel.mas_right).offset(HDAutoWidth(20));
-        make.right.equalTo(_ConView.mas_right).offset(-HDAutoWidth(170));
-        make.bottom.equalTo(_titleLabel.mas_bottom);
-    }];
+//    [_nextTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerY.equalTo(_titleLabel.mas_centerY);
+//        make.left.equalTo(_titleLabel.mas_right).offset(HDAutoWidth(20));
+//        make.right.equalTo(_ConView.mas_right).offset(-HDAutoWidth(170));
+//        make.bottom.equalTo(_titleLabel.mas_bottom);
+//    }];
     [_titleLabel layoutIfNeeded];
     [_nextTitleLabel layoutIfNeeded];
     _titleLabel.speed = -1;
@@ -143,37 +143,47 @@
 //        make.height.equalTo(@(HDAutoHeight(40)));
 //    }];
 
-    
+    float leibieLength = [self getLengthWithFont:14 AndText:@"类别: 啊啊啊啊啊"];
     
     [_qiwenLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_titleLabel.mas_left);
         make.top.equalTo(_titleLabel.mas_bottom).offset(HDAutoHeight(15));
-        make.width.equalTo(@(HDAutoWidth(200)));
+        make.width.equalTo(@(leibieLength));
         make.height.equalTo(@(HDAutoHeight(40)));
     }];
     [_qishiLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_qiwenLabel.mas_right);
         make.top.equalTo(_titleLabel.mas_bottom).offset(HDAutoHeight(15));
-        make.width.equalTo(@(HDAutoWidth(200)));
+        make.width.equalTo(@(leibieLength));
         make.height.equalTo(@(HDAutoHeight(40)));
     }];
     [_diwenLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_titleLabel.mas_left);
         make.top.equalTo(_qiwenLabel.mas_bottom).offset(HDAutoHeight(5));
-        make.width.equalTo(@(HDAutoWidth(200)));
+        make.width.equalTo(@(leibieLength));
         make.height.equalTo(@(HDAutoHeight(40)));
     }];
     [_dishiLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_qishiLabel.mas_left);
         make.top.equalTo(_diwenLabel.mas_top);
-        make.width.equalTo(@(HDAutoWidth(200)));
+        make.width.equalTo(@(leibieLength));
         make.height.equalTo(@(HDAutoHeight(40)));
     }];
+    
+    
     [_leibieLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_titleLabel.mas_left);
         make.top.equalTo(_diwenLabel.mas_bottom).offset(HDAutoHeight(5));
-        make.width.equalTo(@(HDAutoWidth(200)));
+        make.width.equalTo(@(leibieLength));
         make.height.equalTo(@(HDAutoHeight(40)));
+    }];
+    
+    
+    [_nextTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_titleLabel.mas_centerY);
+        make.left.equalTo(_dishiLabel.mas_left);
+        make.right.equalTo(_ConView.mas_right).offset(-HDAutoWidth(170));
+        make.bottom.equalTo(_titleLabel.mas_bottom);
     }];
     
     [_qishiLabel layoutIfNeeded];
@@ -189,6 +199,7 @@
     _yuangongLabel.speed = -1;
 
 }
+
 
 -(UILabel *)reLabel:(UILabel *)label{
     label = [[UILabel alloc]init];

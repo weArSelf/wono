@@ -13,6 +13,7 @@
 #import "StatisticsTableViewCell.h"
 #import "PlantBaseModel.h"
 #import "PengUpdateViewController.h"
+#import "BBFlashCtntLabel.h"
 
 
 @interface SelectionViewController ()<UITableViewDelegate,UITableViewDataSource>
@@ -202,7 +203,11 @@
         make.top.equalTo(_headView.mas_bottom);
         make.height.equalTo(@(HDAutoHeight(300)));
     }];
-    UILabel *label1 = [self mylabel];
+//    UILabel *label1 = [self mylabel];
+    
+    BBFlashCtntLabel *label1 = [[BBFlashCtntLabel alloc]init];
+    label1.font = [UIFont systemFontOfSize:13];
+    label1.textColor = UIColorFromHex(0xffffff);
     label1.tag = 200;
     label1.text = @"大棚名称: ";
 //    种植品种
@@ -227,6 +232,9 @@
         make.width.equalTo(@(HDAutoWidth(600)));
         
     }];
+    [self.view layoutIfNeeded];
+    label1.speed = -1;
+    
     [label2 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_firstView.mas_left).offset(HDAutoWidth(35));
         make.top.equalTo(label1.mas_bottom).offset(HDAutoHeight(20));
@@ -529,9 +537,10 @@
             NSString *str3 = dic[@"type_name"];
             NSString *str4 = dic[@"build"];
             
-            UILabel *label1 = [self.view viewWithTag:200];
-            label1.text = [NSString stringWithFormat:@"大棚名称: %@",name];
+            BBFlashCtntLabel *label1 = [self.view viewWithTag:200];
+            label1.text = [NSString stringWithFormat:@"种植品种: %@",str1];
 //            种植品种
+            label1.speed = -1;
             UILabel *label2 = [self.view viewWithTag:201];
             label2.text = [NSString stringWithFormat:@"占地面积: %d亩",num2];
             UILabel *label3 = [self.view viewWithTag:202];

@@ -115,6 +115,7 @@
         make.width.equalTo(@(HDAutoWidth(85)));
         make.height.equalTo(self.mas_height);
     }];
+    _hubBtn.enabled = NO;
 }
 
 -(void)deleteClick{
@@ -124,12 +125,14 @@
 }
 
 -(void)createAnimate{
+    _hubBtn.enabled = YES;
     [UIView animateWithDuration:0.5 animations:^{
         _ConView.x+= HDAutoWidth(60);
     }];
 }
 
 -(void)unCreateAnimate{
+    _hubBtn.enabled = NO;
     [UIView animateWithDuration:0.5 animations:^{
         _ConView.x =10;
     }];

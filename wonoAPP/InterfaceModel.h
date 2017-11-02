@@ -124,4 +124,6 @@ typedef void(^AllCallBack)(int state, id data, NSString *msg);
 
 -(void)userLogOutWithCallBack:(AllCallBack)callback;
 
+-(void)jobChangeWithJob:(NSString *)jobArr AndUnJob:(NSString *)unJob WithGid:(NSString *)gid WithCallBack:(AllCallBack)callback;
+
 @end

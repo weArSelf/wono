@@ -70,6 +70,7 @@
     _dataArr = dataArr;
     [self drawView];
     [self drawView2];
+    
 }
 
 
@@ -90,7 +91,7 @@
     
     float nowHeight = firM.Height - _minVal;
     
-    CGPoint orginP = CGPointMake(BorX, HDAutoHeight(100)+(self.height-HDAutoHeight(180))*(cen-nowHeight)/cen);
+    CGPoint orginP = CGPointMake(BorX, HDAutoHeight(100)+(self.height-HDAutoHeight(210))*(cen-nowHeight)/cen);
     
     UIView *pointView = [[UIView alloc]init];
     pointView.center = orginP;
@@ -147,7 +148,7 @@
         
 //        CGPoint orginP = CGPointMake(BorX, HDAutoHeight(60)+(self.height-HDAutoHeight(140))*(cen-nowHeight)/cen);
         
-        CGPoint nowP = CGPointMake(realX,HDAutoHeight(100)+(self.height-HDAutoHeight(180))*(cen-nowHeight2)/cen);
+        CGPoint nowP = CGPointMake(realX,HDAutoHeight(100)+(self.height-HDAutoHeight(210))*(cen-nowHeight2)/cen);
         
         
         UIView *pointView = [[UIView alloc]init];
@@ -180,14 +181,14 @@
         pointLabel.y -= HDAutoHeight(55);
         pointLabel.x -=length2/2;
         
-        if(_dataArr.count>3){
-        
-            if(i==_dataArr.count-1){
-                pointLabel.x = SCREEN_WIDTH - pointLabel.width-HDAutoWidth(10);
-    //            pointLabel.textAlignment = NSTextAlignmentRight;
-            }
-            
-        }
+//        if(_dataArr.count>3){
+//
+//            if(i==_dataArr.count-1){
+//                pointLabel.x = SCREEN_WIDTH - pointLabel.width-HDAutoWidth(10);
+//    //            pointLabel.textAlignment = NSTextAlignmentRight;
+//            }
+//
+//        }
         
         [self.BackgroundView addSubview:pointLabel];
         
@@ -228,7 +229,7 @@
     
     float nowHeight = firM.Height2 - _minVal;
     
-    CGPoint orginP = CGPointMake(BorX, HDAutoHeight(100)+(self.height-HDAutoHeight(180))*(cen-nowHeight)/cen);
+    CGPoint orginP = CGPointMake(BorX, HDAutoHeight(100)+(self.height-HDAutoHeight(210))*(cen-nowHeight)/cen);
     
 //    CGPoint orginP = CGPointMake(BorX, HDAutoHeight(60)+(self.height-HDAutoHeight(140))*(50-firM.Height2)/60);
     
@@ -300,7 +301,7 @@
         
         float nowHeight = nowM.Height2 - _minVal;
         
-        CGPoint nowP = CGPointMake(realX, HDAutoHeight(100)+(self.height-HDAutoHeight(180))*(cen-nowHeight)/cen);
+        CGPoint nowP = CGPointMake(realX, HDAutoHeight(100)+(self.height-HDAutoHeight(210))*(cen-nowHeight)/cen);
         
 //        CGPoint nowP = CGPointMake(realX, HDAutoHeight(60)+(self.height-HDAutoHeight(140))*(50-nowM.Height2)/60);
         
@@ -335,14 +336,14 @@
         pointLabel.y += HDAutoHeight(5);
         pointLabel.x -=length2/2;
         
-        if(_dataArr.count>3){
-            
-            if(i==_dataArr.count-1){
-                pointLabel.x = SCREEN_WIDTH - pointLabel.width-HDAutoWidth(10);
-                //            pointLabel.textAlignment = NSTextAlignmentRight;
-            }
-            
-        }
+//        if(_dataArr.count>3){
+//
+//            if(i==_dataArr.count-1){
+//                pointLabel.x = SCREEN_WIDTH - pointLabel.width-HDAutoWidth(10);
+//                //            pointLabel.textAlignment = NSTextAlignmentRight;
+//            }
+//
+//        }
         
         [self.BackgroundView addSubview:pointLabel];
         

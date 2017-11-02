@@ -9,7 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "AddDetailModel.h"
 
+
+
+
 @interface ZhongZhiViewController : UIViewController
+
+
 
 @property (nonatomic,strong) PlantAddModel *model;
 

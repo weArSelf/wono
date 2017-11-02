@@ -212,7 +212,9 @@
 
 -(void)SaveClick{
     NSLog(@"点击编辑");
-    
+    if(_nextBtn.enabled == NO){
+        return;
+    }
     if(_nextBtn.selected == NO){
         changeMark = true;
         _nextBtn.selected = YES;

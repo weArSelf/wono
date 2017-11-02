@@ -18,4 +18,6 @@
 
 @property (nonatomic,strong) NSString *msgID;
 
+@property (nonatomic,strong) NSString *socialMsg;
+
 @end

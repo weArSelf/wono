@@ -29,8 +29,17 @@
     self.view.backgroundColor = [UIColor whiteColor];
     [self creatTitleAndBackBtn];
     [self createContent];
-    [self requestData];
+//    [self requestData];
+    [self.webView loadHTMLString:_needStr baseURL:nil];
 }
+
+
+//-(void)setNeedStr:(NSString *)needStr{
+//
+//    _needStr = needStr;
+//    [self.webView loadHTMLString:_needStr baseURL:nil];
+//
+//}
 
 -(void)requestData{
     [[InterfaceSingleton shareInstance].interfaceModel GetRegWithCallBack:^(int state, id data, NSString *msg) {

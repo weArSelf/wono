@@ -85,4 +85,10 @@
     
 }
 
+-(void)toreload{
+    
+    [_rightLabel reloadView];
+    
+}
+
 @end

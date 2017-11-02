@@ -812,8 +812,8 @@
     NSString *str = textField.text;
     
     if (textField == _nameTextField) {
-        if(str.length>6){
-            [MBProgressHUD showSuccess:@"姓名不得超过6个字符"];
+        if(str.length>8){
+            [MBProgressHUD showSuccess:@"姓名不得超过8个字符"];
             NSString *res = [str substringWithRange:NSMakeRange(0, 6)];
             _nameTextField.text = res;
         }

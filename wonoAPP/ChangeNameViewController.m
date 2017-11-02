@@ -137,6 +137,9 @@
 
 -(void)SaveClick{
     NSLog(@"点击确认修改");
+    if(_nextBtn.enabled == NO){
+        return;
+    }
     if([_nameTextField.text isEqualToString:@""]){
         [MBProgressHUD showSuccess:@"昵称不能为空"];
         return;

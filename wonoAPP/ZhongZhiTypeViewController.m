@@ -106,7 +106,7 @@
     [self.navigationController popViewControllerAnimated:YES];
     
     
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"catChange" object:nil];
+//    [[NSNotificationCenter defaultCenter]postNotificationName:@"catChange" object:nil];
     //    for (UIViewController *controller in self.navigationController.viewControllers) {
     //        if ([controller isKindOfClass:[PengAddViewController class]]) {
     //            PengAddViewController *A =(PengAddViewController *)controller;
@@ -176,16 +176,22 @@
     }];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    UIImageView *imgView = [[UIImageView alloc]init];
-    imgView.contentMode = UIViewContentModeScaleAspectFit;
-    imgView.image = [UIImage imageNamed:@"我的-进入"];
-    [cell.contentView addSubview:imgView];
-    [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(cell.contentView.mas_centerY);
-        make.right.equalTo(cell.contentView.mas_right).offset(-HDAutoWidth(32));
-        make.width.equalTo(@(HDAutoWidth(60)));
-        make.height.equalTo(@(HDAutoWidth(60)));
-    }];
+    PengTypeModel *model = _NowdataArr[indexPath.row];
+    int child = [model.child intValue];
+    
+    if(child != 0){
+        
+        UIImageView *imgView = [[UIImageView alloc]init];
+        imgView.contentMode = UIViewContentModeScaleAspectFit;
+        imgView.image = [UIImage imageNamed:@"我的-进入"];
+        [cell.contentView addSubview:imgView];
+        [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(cell.contentView.mas_centerY);
+            make.right.equalTo(cell.contentView.mas_right).offset(-HDAutoWidth(32));
+            make.width.equalTo(@(HDAutoWidth(60)));
+            make.height.equalTo(@(HDAutoWidth(60)));
+        }];
+    }
     return cell;
 }
 
@@ -204,12 +210,12 @@
     //    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeTitle:) name:@"catChange" object:nil];
     
     
+//    PengTypeModel *model = _NowdataArr[indexPath.row];
+    int child = [model.child intValue];
     
-    
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"catChange" object:model];
-    
-    
-    
+    if(child == 0){
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"catChange" object:model];
+    }
     [[InterfaceSingleton shareInstance].interfaceModel getPengWithCatPid:pid WithType:@"1" AndCallBack:^(int state, id data, NSString *msg) {
         
         if(state == 2000){
@@ -223,6 +229,7 @@
                 NSDictionary *dic = arr[i];
                 model.typeName = dic[@"name"];
                 model.typeId = dic[@"id"];
+                model.child = dic[@"child"];
                 [RdataArr addObject:model];
             }
             

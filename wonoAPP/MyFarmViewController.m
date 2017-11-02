@@ -81,6 +81,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [_contentTabel reloadData];
     NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
     [_contentTabel reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
 //    self.navigationController.navigationBar.alpha = 0;
@@ -209,6 +210,9 @@
     NSString *firStr = firstDataArr[indexPath.row];
     NSString *nextStr = nextDataArr[indexPath.row];
     [myFarmCell createContentWithLeftStr:firStr AndRightStr:nextStr];
+    
+    
+    [myFarmCell toreload];
     
     return myFarmCell;
     

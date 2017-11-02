@@ -188,8 +188,9 @@
     _typeContentLabel.textAlignment = NSTextAlignmentRight;
     [self.ConView addSubview:_typeContentLabel];
 
+    
     [_typeContentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(_nameLabel.mas_centerY);
+        make.centerY.equalTo(_typeLabel.mas_centerY);
         make.height.equalTo(_nameLabel.mas_height);
         make.width.equalTo(@(HDAutoWidth(400)));
         make.right.equalTo(_ConView.mas_right).offset(-HDAutoWidth(20));

@@ -13,5 +13,7 @@
 @property (nonatomic,strong) NSString *typeName;
 @property (nonatomic,strong) NSString *typeId;
 
+@property (nonatomic,strong) NSString *child;
+
 
 @end

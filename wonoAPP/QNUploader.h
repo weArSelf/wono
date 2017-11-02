@@ -16,6 +16,7 @@ typedef NS_ENUM(NSInteger,ENUM_QiNiuTokenType)  //QiNiuToken类型
     EQTT_Video,
 };
 
+
 @protocol QNUploaderDelegate <NSObject>
 @optional
 -(void)UploadSuccessWithFileName:(NSString *)fileName;

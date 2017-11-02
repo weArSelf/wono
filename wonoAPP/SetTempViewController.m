@@ -52,11 +52,15 @@
     
     int firMark;
     
+    int changedMark;
+    
+    NSMutableArray *numberDataArr2;
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    changedMark = 0;
     firMark = 0;
     
     a1 = -50;
@@ -78,11 +82,18 @@
     dataArr = [NSMutableArray array];
     
     numberDataArr = [NSMutableArray array];
+    numberDataArr2 = [NSMutableArray array];
     
     for(int i = -10;i<=60;i++){
         NSString *str = [NSString stringWithFormat:@"%d",i];
         [numberDataArr addObject:str];
     }
+    
+    for(int i = 0;i<=100;i++){
+        NSString *str = [NSString stringWithFormat:@"%d",i];
+        [numberDataArr2 addObject:str];
+    }
+    
     
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
@@ -219,6 +230,16 @@
         make.height.equalTo(@(HDAutoHeight(26)));
         make.width.equalTo(@(HDAutoWidth(150)));
     }];
+    UIButton *hubBtn = [[UIButton alloc]init];
+    [hubBtn setBackgroundColor:[UIColor clearColor]];
+    [hubBtn addTarget:self action:@selector(SaveClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:hubBtn];
+    [hubBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_titleLabel.mas_centerY);
+        make.right.equalTo(_headView.mas_right).offset(0);
+        make.height.equalTo(@(HDAutoHeight(86)));
+        make.width.equalTo(@(HDAutoWidth(220)));
+    }];
 }
 
 -(void)SaveClick{
@@ -231,10 +252,15 @@
         [MBProgressHUD showSuccess:@"请选择要设置的大棚"];
         return;
     }
+    if(changedMark == 0){
+        [MBProgressHUD showSuccess:@"请填写需要设置的内容"];
+        return;
+    }
     
     NSString *str = [self objArrayToJSON:arr];
     SelModel.needID = str;
     _saveBtn.enabled = NO;
+    
     [[InterfaceSingleton shareInstance].interfaceModel updatePengAlertWithModel:SelModel WithCallBack:^(int state, id data, NSString *msg) {
         _saveBtn.enabled = YES;
         if(state == 2000){
@@ -372,6 +398,7 @@
 
 -(void)createDetail{
     
+    
     NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@"最低值=          °C"];
     NSRange range1=[[title string]rangeOfString:@"         "];
     [title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range1];
@@ -379,6 +406,15 @@
     NSRange range2=[[title2 string]rangeOfString:@"         "];
 //    NSRange titleRange = {0,[title length]};
     [title2 addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range2];
+    
+    NSMutableAttributedString *title3 = [[NSMutableAttributedString alloc] initWithString:@"最低值=          %"];
+//    NSRange range1=[[title string]rangeOfString:@"         "];
+    [title3 addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range1];
+    NSMutableAttributedString *title4 = [[NSMutableAttributedString alloc] initWithString:@"最高值=          %"];
+//    NSRange range2=[[title2 string]rangeOfString:@"         "];
+    //    NSRange titleRange = {0,[title length]};
+    [title4 addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range2];
+    
     
     UILabel *tempLabel = [self myLabel];
     tempLabel.text = @"气温:";
@@ -472,14 +508,14 @@
     tempLabel3.text = @"气湿:";
     
     UILabel *tempMinLabel3 = [self myLabel2];
-    tempMinLabel3.attributedText = title;
+    tempMinLabel3.attributedText = title3;
     tempMinLabel3.tag = 301;
     UITapGestureRecognizer *labelTapGestureRecognizer5 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelClick:)];
     [tempMinLabel3 addGestureRecognizer:labelTapGestureRecognizer5];
     tempMinLabel3.userInteractionEnabled = YES; // 可以理解为设置label可被点击
     
     UILabel *tempMaxLabel3 = [self myLabel2];
-    tempMaxLabel3.attributedText =title2;
+    tempMaxLabel3.attributedText =title4;
 //    tempMaxLabel3.textAlignment = NSTextAlignmentRight;
     tempMaxLabel3.tag = 302;
     UITapGestureRecognizer *labelTapGestureRecognizer6 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelClick:)];
@@ -516,14 +552,14 @@
     tempLabel4.text = @"地湿:";
     
     UILabel *tempMinLabel4 = [self myLabel2];
-    tempMinLabel4.attributedText = title;
+    tempMinLabel4.attributedText = title3;
     tempMinLabel4.tag = 401;
     UITapGestureRecognizer *labelTapGestureRecognizer7 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelClick:)];
     [tempMinLabel4 addGestureRecognizer:labelTapGestureRecognizer7];
     tempMinLabel4.userInteractionEnabled = YES; // 可以理解为设置label可被点击
     
     UILabel *tempMaxLabel4 = [self myLabel2];
-    tempMaxLabel4.attributedText = title2;
+    tempMaxLabel4.attributedText = title4;
 //    tempMaxLabel4.textAlignment = NSTextAlignmentRight;
     tempMaxLabel4.tag = 402;
     UITapGestureRecognizer *labelTapGestureRecognizer8 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelClick:)];
@@ -568,11 +604,19 @@
         return;
     }
     
-    [CDZPicker showPickerInView:self.view withStrings:numberDataArr confirm:^(NSArray<NSString *> *stringArray) {
+    NSArray *needArr = [NSArray array];
+    if(label.tag>=300){
+        needArr = numberDataArr2;
+    }else{
+        needArr = numberDataArr;
+    }
+    
+    
+    [CDZPicker showPickerInView:self.view withStrings:needArr confirm:^(NSArray<NSString *> *stringArray) {
 //        self.label.text = stringArray.firstObject;
         
 //        int res = [stringArray.firstObject intValue];
-        
+        changedMark = 1;
         switch (label.tag) {
             case 101:{
                 a1 = [stringArray.firstObject intValue];
@@ -807,7 +851,7 @@
                         NSString *str2 = label2.text;
                         str2 = [str2 substringToIndex:8];
                         
-                        NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                        NSString *result = [NSString stringWithFormat:@"%@%@  %%",str2,str];
                         
                         NSRange range = NSMakeRange(str2.length-2, str.length+4);
                         
@@ -827,7 +871,7 @@
                 NSString *str2 = label.text;
                 str2 = [str2 substringToIndex:8];
                 
-                NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                NSString *result = [NSString stringWithFormat:@"%@%@  %%",str2,str];
                 
                 NSRange range = NSMakeRange(str2.length-2, str.length+4);
                 
@@ -859,7 +903,7 @@
                         NSString *str2 = label2.text;
                         str2 = [str2 substringToIndex:8];
                         
-                        NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                        NSString *result = [NSString stringWithFormat:@"%@%@  %%",str2,str];
                         
                         NSRange range = NSMakeRange(str2.length-2, str.length+4);
                         
@@ -880,7 +924,7 @@
                 NSString *str2 = label.text;
                 str2 = [str2 substringToIndex:8];
                 
-                NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                NSString *result = [NSString stringWithFormat:@"%@%@  %%",str2,str];
                 
                 NSRange range = NSMakeRange(str2.length-2, str.length+4);
                 
@@ -914,7 +958,7 @@
                         NSString *str2 = label2.text;
                         str2 = [str2 substringToIndex:8];
                         
-                        NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                        NSString *result = [NSString stringWithFormat:@"%@%@  %%",str2,str];
                         
                         NSRange range = NSMakeRange(str2.length-2, str.length+4);
                         
@@ -934,7 +978,7 @@
                 NSString *str2 = label.text;
                 str2 = [str2 substringToIndex:8];
                 
-                NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                NSString *result = [NSString stringWithFormat:@"%@%@  %%",str2,str];
                 
                 NSRange range = NSMakeRange(str2.length-2, str.length+4);
                 
@@ -965,7 +1009,7 @@
                         NSString *str2 = label2.text;
                         str2 = [str2 substringToIndex:8];
                         
-                        NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                        NSString *result = [NSString stringWithFormat:@"%@%@  %%",str2,str];
                         
                         NSRange range = NSMakeRange(str2.length-2, str.length+4);
                         
@@ -986,7 +1030,7 @@
                 NSString *str2 = label.text;
                 str2 = [str2 substringToIndex:8];
                 
-                NSString *result = [NSString stringWithFormat:@"%@%@  °C",str2,str];
+                NSString *result = [NSString stringWithFormat:@"%@%@  %%",str2,str];
                 
                 NSRange range = NSMakeRange(str2.length-2, str.length+4);
                 

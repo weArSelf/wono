@@ -13,6 +13,7 @@
 @interface WonoAskTableViewCell : UITableViewCell
 
 @property (nonatomic,copy) void(^cellBlock)(NSDictionary *dic);
+@property (nonatomic,strong) UIButton *sujjestBtn;
 
 @property (nonatomic,strong) WonoAskModel *model;
 -(void)reloadTitle;
