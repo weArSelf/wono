@@ -19,6 +19,8 @@
 #import "MyCollectionViewController.h"
 #import <SDWebImage/UIButton+WebCache.h>
 
+#import "SignInViewController.h"
+
 @interface MineViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic,strong)UIView *headView2;
@@ -29,6 +31,8 @@
 @property (nonatomic,strong) UIButton *headImgBtn;
 @property (nonatomic,strong) UILabel *nameLabel;
 @property (nonatomic,strong) UITableView *contentTableView;
+
+@property (nonatomic,strong) UIButton *signInBtn;
 
 @end
 
@@ -58,6 +62,7 @@
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(WonoStateChange) name:@"WonoStateChange" object:nil];
     
+    [self createSignInBtn];
 }
 
 -(void)WonoStateChange{
@@ -467,4 +472,34 @@
     
    
 }
+
+-(void)createSignInBtn{
+//    UIControlState
+    _signInBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_signInBtn setTitle:@"签到" forState:UIControlStateNormal];
+    [_signInBtn setTitleColor:MainColor forState:UIControlStateNormal];
+    _signInBtn.titleLabel.font = [UIFont systemFontOfSize:14];
+    
+    _signInBtn.layer.masksToBounds = YES;
+    _signInBtn.layer.borderWidth = 1;
+    _signInBtn.layer.borderColor = MainColor.CGColor;
+    _signInBtn.layer.cornerRadius = 5;
+    [_signInBtn addTarget:self action:@selector(signInClick) forControlEvents:UIControlEventTouchUpInside];
+    [_headView addSubview:_signInBtn];
+    
+    [_signInBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(_headView.mas_right).offset(-HDAutoWidth(20));
+        make.bottom.equalTo(_headView.mas_bottom).offset(-HDAutoHeight(8));
+        make.width.equalTo(@(HDAutoWidth(120)));
+        make.height.equalTo(@(HDAutoHeight(50)));
+    }];
+    
+}
+
+-(void)signInClick{
+    NSLog(@"点击签到");
+    SignInViewController *sign = [[SignInViewController alloc]init];
+    [self.navigationController pushViewController:sign animated:YES];
+}
+
 @end

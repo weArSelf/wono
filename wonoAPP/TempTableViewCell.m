@@ -286,9 +286,9 @@
     }
     
     NSString *text1 = [NSString stringWithFormat:@"气温：%@°C",_model.temp1];
-    NSString *text2 = [NSString stringWithFormat:@"气湿：%@°C",_model.temp2];
+    NSString *text2 = [NSString stringWithFormat:@"气湿：%@%%",_model.temp2];
     NSString *text3 = [NSString stringWithFormat:@"地温：%@°C",_model.temp3];
-    NSString *text4 = [NSString stringWithFormat:@"地湿：%@°C",_model.temp4];
+    NSString *text4 = [NSString stringWithFormat:@"地湿：%@%%",_model.temp4];
     
     _qiwenLabel.text = text1;
     

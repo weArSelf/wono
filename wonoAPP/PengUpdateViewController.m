@@ -660,28 +660,30 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *cellIdentifier = @"cellIdentifier";
+    NSString *cellIdentifier = [NSString stringWithFormat:@"cellIdentifier%ld",indexPath.row];
     StuffTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
         cell = [[StuffTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
+        SearchModel *model = dataArr[indexPath.row];
+        cell.searchModel = model;
+        for (int i=0; i<stuffArr.count; i++) {
+            NSString *str = stuffArr[i];
+            int needint = [str intValue];
+            
+            if([model.stufID intValue] == needint){
+                [stuffDic setObject:model.stufID forKey:model.stufID];
+                [cell changeColor];
+            }
+        }
         //        [cell setLeftColor:[UIColor blueColor]];
     }
     cell.tag = 300 +indexPath.row;
     
-    SearchModel *model = dataArr[indexPath.row];
-    cell.searchModel = model;
     
     
-    for (int i=0; i<stuffArr.count; i++) {
-        NSString *str = stuffArr[i];
-        int needint = [str intValue];
-        if([model.stufID intValue] == needint){
-            [stuffDic setObject:model.stufID forKey:model.stufID];
-            [cell changeColor];
-        }
-    }
+    
+    
     
     //    [cell creatConView];
     

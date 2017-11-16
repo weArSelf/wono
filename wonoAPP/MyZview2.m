@@ -78,7 +78,7 @@
 
 
 -(void)drawView{
-    
+    _maxVal = _maxVal*1.3;
     float cen = _maxVal -_minVal;
     
     UIBezierPath *path = [[UIBezierPath alloc]init];
@@ -216,7 +216,7 @@
 
 
 -(void)drawView2{
-    
+//    _maxVal = _maxVal*1.3;
     float cen = _maxVal -_minVal;
     
     UIBezierPath *path = [[UIBezierPath alloc]init];

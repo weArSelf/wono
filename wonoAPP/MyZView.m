@@ -76,6 +76,39 @@
 
 -(void)drawView{
     
+    if(_maxVal!=100){
+        
+        _maxVal = -200;
+        _minVal = 200;
+        
+        for (int i=0; i<_dataArr.count; i++) {
+            PointModel *mod = _dataArr[i];
+            if(mod.Height>=mod.Height2){
+                if(mod.Height>_maxVal){
+                    _maxVal = mod.Height;
+                }
+                if(mod.Height2<_minVal){
+                    _minVal = mod.Height2;
+                }
+            }else{
+                
+                if(mod.Height2>_maxVal){
+                    _maxVal = mod.Height2;
+                }
+                if(mod.Height<_minVal){
+                    _minVal = mod.Height;
+                }
+                
+            }
+        }
+        
+        _maxVal = _maxVal*1.3;
+        
+    }
+    
+    
+    
+    float cen = _maxVal -_minVal;
     
     UIBezierPath *path = [[UIBezierPath alloc]init];
     path.lineWidth = 0.7;
@@ -85,7 +118,9 @@
     
     PointModel *firM = _dataArr[0];
     
-    CGPoint orginP = CGPointMake(BorX, HDAutoHeight(60)+(self.height-HDAutoHeight(140))*(50-firM.Height)/60);
+    float nowHeight = firM.Height - _minVal;
+    
+    CGPoint orginP = CGPointMake(BorX, HDAutoHeight(100)+(self.height-HDAutoHeight(210))*(cen-nowHeight)/cen);
     
     UIView *pointView = [[UIView alloc]init];
     pointView.center = orginP;
@@ -99,19 +134,25 @@
     
     UILabel *pointLabel = [[UILabel alloc]init];
     pointLabel.textAlignment = NSTextAlignmentCenter;
-    pointLabel.textColor = [UIColor whiteColor];
-    pointLabel.text = firM.firstBottomStr;
+    pointLabel.textColor = [UIColor grayColor];
+    
+    int val = [firM.firstBottomStr intValue];
+    NSString *restr = [NSString stringWithFormat:@"%d",val];
+    if(_maxVal == 100){
+        restr = [NSString stringWithFormat:@"%d%%",val];
+    }
+    
+    float length = [self getLengthWithFont:12 AndText:restr];
+    
+    pointLabel.text = restr;
     pointLabel.font = [UIFont systemFontOfSize:11];
     pointLabel.center = orginP;
     
-    pointLabel.width = HDAutoWidth(60);
-    if(IS_IPHONE_5){
-        pointLabel.width = HDAutoWidth(80);
-    }
+    pointLabel.width = length;
     pointLabel.height = HDAutoHeight(40);
     
     pointLabel.y -= HDAutoHeight(55);
-    pointLabel.x -=HDAutoWidth(30);
+    pointLabel.x -=length/2;
     
     [self.BackgroundView addSubview:pointLabel];
     
@@ -131,17 +172,15 @@
         
         float realX = BorX + (self.width - BorX*2)*i/(_dataArr.count-1);
         
-        if(_dataArr.count != 7&&_dataArr.count!=8){
-//        if(_dataArr.count>10){
-            realX = BorX + i*(self.width - BorX*2)/(9);
-//        }
-        }
-        if([_sevMark isEqualToString:@"1"]){
-            realX = BorX + (self.width - BorX*2)*i/(_dataArr.count-1);
-        }
+        //        if(_dataArr.count>10){
+        realX = BorX + i*(self.width - BorX*2)/(9);
+        //        }
         
+        float nowHeight2 = nowM.Height - _minVal;
         
-        CGPoint nowP = CGPointMake(realX,HDAutoHeight(60)+(self.height-HDAutoHeight(140))*(50-nowM.Height)/60);
+        //        CGPoint orginP = CGPointMake(BorX, HDAutoHeight(60)+(self.height-HDAutoHeight(140))*(cen-nowHeight)/cen);
+        
+        CGPoint nowP = CGPointMake(realX,HDAutoHeight(100)+(self.height-HDAutoHeight(210))*(cen-nowHeight2)/cen);
         
         
         UIView *pointView = [[UIView alloc]init];
@@ -157,20 +196,33 @@
         
         UILabel *pointLabel = [[UILabel alloc]init];
         pointLabel.textAlignment = NSTextAlignmentCenter;
-        pointLabel.textColor = [UIColor whiteColor];
-        pointLabel.text = nowM.firstBottomStr;
+        pointLabel.textColor = [UIColor grayColor];
+        
+        int val = [nowM.firstBottomStr intValue];
+        NSString *restr2 = [NSString stringWithFormat:@"%d",val];
+        if(_maxVal == 100){
+            restr2 = [NSString stringWithFormat:@"%d%%",val];
+        }
+        float length2 = [self getLengthWithFont:12 AndText:restr2];
+        
+        pointLabel.text = restr2;
         pointLabel.font = [UIFont systemFontOfSize:11];
         pointLabel.center = nowP;
         
-        pointLabel.width = HDAutoWidth(60);
-        if(IS_IPHONE_5){
-            pointLabel.width = HDAutoWidth(80);
-        }
-        
+        pointLabel.width = length2;
         pointLabel.height = HDAutoHeight(40);
         
         pointLabel.y -= HDAutoHeight(55);
-        pointLabel.x -=HDAutoWidth(30);
+        pointLabel.x -=length2/2;
+        
+        //        if(_dataArr.count>3){
+        //
+        //            if(i==_dataArr.count-1){
+        //                pointLabel.x = SCREEN_WIDTH - pointLabel.width-HDAutoWidth(10);
+        //    //            pointLabel.textAlignment = NSTextAlignmentRight;
+        //            }
+        //
+        //        }
         
         [self.BackgroundView addSubview:pointLabel];
         
@@ -180,11 +232,11 @@
     }
     
     
-//    [path addLineToPoint:CGPointMake(100, 100)];
-//    [path addLineToPoint:CGPointMake(200, 400)];
+    //    [path addLineToPoint:CGPointMake(100, 100)];
+    //    [path addLineToPoint:CGPointMake(200, 400)];
     
     [path stroke];
-
+    
     self.lineLayer = [CAShapeLayer layer];
     self.lineLayer.path = path.CGPath;
     self.lineLayer.strokeColor = LineColor.CGColor;
@@ -199,6 +251,35 @@
 
 -(void)drawView2{
     
+//    _maxVal = -200;
+//    _minVal = 200;
+    
+//    for (int i=0; i<_dataArr.count; i++) {
+//        PointModel *mod = _dataArr[i];
+//        if(mod.Height>=mod.Height2){
+//            if(mod.Height>_maxVal){
+//                _maxVal = mod.Height;
+//            }
+//            if(mod.Height2<_minVal){
+//                _minVal = mod.Height2;
+//            }
+//        }else{
+//
+//            if(mod.Height2>_maxVal){
+//                _maxVal = mod.Height2;
+//            }
+//            if(mod.Height<_minVal){
+//                _minVal = mod.Height;
+//            }
+//
+//        }
+//    }
+//
+//    _maxVal = _maxVal*1.3;
+    
+    
+    
+    float cen = _maxVal -_minVal;
     
     UIBezierPath *path = [[UIBezierPath alloc]init];
     path.lineWidth = 0.7;
@@ -208,7 +289,11 @@
     
     PointModel *firM = _dataArr[0];
     
-    CGPoint orginP = CGPointMake(BorX, HDAutoHeight(60)+(self.height-HDAutoHeight(140))*(50-firM.Height2)/60);
+    float nowHeight = firM.Height2 - _minVal;
+    
+    CGPoint orginP = CGPointMake(BorX, HDAutoHeight(100)+(self.height-HDAutoHeight(210))*(cen-nowHeight)/cen);
+    
+    //    CGPoint orginP = CGPointMake(BorX, HDAutoHeight(60)+(self.height-HDAutoHeight(140))*(50-firM.Height2)/60);
     
     UIView *pointView = [[UIView alloc]init];
     pointView.center = orginP;
@@ -223,35 +308,45 @@
     
     UILabel *pointLabel = [[UILabel alloc]init];
     pointLabel.textAlignment = NSTextAlignmentCenter;
-    pointLabel.textColor = [UIColor whiteColor];
-    pointLabel.text = firM.nextBottomStr;
+    pointLabel.textColor = [UIColor grayColor];
+    
+    
+    int val = [firM.nextBottomStr intValue];
+    NSString *restr = [NSString stringWithFormat:@"%d",val];
+    if(_maxVal == 100){
+        restr = [NSString stringWithFormat:@"%d%%",val];
+    }
+    float length = [self getLengthWithFont:12 AndText:restr];
+    
+    pointLabel.text = restr;
+    //    pointLabel.text = firM.nextBottomStr;
     pointLabel.font = [UIFont systemFontOfSize:11];
     pointLabel.center = orginP;
     
-    pointLabel.width = HDAutoWidth(60);
+    pointLabel.width = length;
     pointLabel.height = HDAutoHeight(40);
     
     pointLabel.y += HDAutoHeight(5);
-    pointLabel.x -=HDAutoWidth(30);
+    pointLabel.x -=length/2;
     
     [self.BackgroundView addSubview:pointLabel];
     
     
     UILabel *bottomLabel = [[UILabel alloc]init];
     bottomLabel.font = [UIFont systemFontOfSize:12];
-    bottomLabel.textColor = [UIColor whiteColor];
+    bottomLabel.textColor = [UIColor grayColor];
     bottomLabel.text =firM.lineName;
-//    bottomLabel.textAlignment = NSTextAlignmentCenter;
+    //    bottomLabel.textAlignment = NSTextAlignmentCenter;
     bottomLabel.numberOfLines = 0;
     
-//    [self setLabelSpace:bottomLabel withValue: firM.lineName withFont:[UIFont systemFontOfSize:13]];
+    //    [self setLabelSpace:bottomLabel withValue: firM.lineName withFont:[UIFont systemFontOfSize:13]];
     
     CGFloat height = [self getSpaceLabelHeight:firM.lineName withFont:[UIFont systemFontOfSize:13] withWidth:HDAutoWidth(60)];
     
     
     
     
-    bottomLabel.frame = CGRectMake(BorX-HDAutoWidth(30), self.height -HDAutoHeight(80) , HDAutoWidth(60), HDAutoHeight(80));
+    bottomLabel.frame = CGRectMake(BorX-HDAutoWidth(30), self.height -HDAutoHeight(80) , HDAutoWidth(70), HDAutoHeight(80));
     
     
     [self.BackgroundView addSubview:bottomLabel];
@@ -263,17 +358,16 @@
         PointModel *nowM = _dataArr[i];
         
         float realX = BorX + (self.width - BorX*2)*i/(_dataArr.count-1);
-       
-        if(_dataArr.count != 7&&_dataArr.count!=8){
-//        if(_dataArr.count>10){
-            realX = BorX + i*(self.width - BorX*2)/(9);
-//        }
-        }
-        if([_sevMark isEqualToString:@"1"]){
-            realX = BorX + (self.width - BorX*2)*i/(_dataArr.count-1);
-        }
         
-        CGPoint nowP = CGPointMake(realX, HDAutoHeight(60)+(self.height-HDAutoHeight(140))*(50-nowM.Height2)/60);
+        //        if(_dataArr.count>10){
+        realX = BorX + i*(self.width - BorX*2)/(9);
+        //        }
+        
+        float nowHeight = nowM.Height2 - _minVal;
+        
+        CGPoint nowP = CGPointMake(realX, HDAutoHeight(100)+(self.height-HDAutoHeight(210))*(cen-nowHeight)/cen);
+        
+        //        CGPoint nowP = CGPointMake(realX, HDAutoHeight(60)+(self.height-HDAutoHeight(140))*(50-nowM.Height2)/60);
         
         
         UIView *pointView = [[UIView alloc]init];
@@ -289,34 +383,51 @@
         
         UILabel *pointLabel = [[UILabel alloc]init];
         pointLabel.textAlignment = NSTextAlignmentCenter;
-        pointLabel.textColor =[UIColor whiteColor];
-        pointLabel.text = nowM.nextBottomStr;
+        pointLabel.textColor =[UIColor grayColor];
+        
+        int val = [nowM.nextBottomStr intValue];
+        NSString *restr2 = [NSString stringWithFormat:@"%d",val];
+        if(_maxVal == 100){
+            restr2 = [NSString stringWithFormat:@"%d%%",val];
+        }
+        float length2 = [self getLengthWithFont:12 AndText:restr2];
+        
+        pointLabel.text = restr2;
         pointLabel.font = [UIFont systemFontOfSize:11];
         pointLabel.center = nowP;
         
-        pointLabel.width = HDAutoWidth(60);
+        pointLabel.width = length2;
         pointLabel.height = HDAutoHeight(40);
         
         pointLabel.y += HDAutoHeight(5);
-        pointLabel.x -=HDAutoWidth(30);
+        pointLabel.x -=length2/2;
+        
+        //        if(_dataArr.count>3){
+        //
+        //            if(i==_dataArr.count-1){
+        //                pointLabel.x = SCREEN_WIDTH - pointLabel.width-HDAutoWidth(10);
+        //                //            pointLabel.textAlignment = NSTextAlignmentRight;
+        //            }
+        //
+        //        }
         
         [self.BackgroundView addSubview:pointLabel];
         
         
         UILabel *bottomLabel = [[UILabel alloc]init];
         bottomLabel.font = [UIFont systemFontOfSize:12];
-        bottomLabel.textColor = [UIColor whiteColor];
+        bottomLabel.textColor = [UIColor grayColor];
         bottomLabel.text =nowM.lineName;
-//        bottomLabel.textAlignment = NSTextAlignmentCenter;
+        //        bottomLabel.textAlignment = NSTextAlignmentCenter;
         bottomLabel.lineBreakMode = NSLineBreakByWordWrapping;
         
         bottomLabel.numberOfLines = 0;
-//        [self setLabelSpace:bottomLabel withValue: nowM.lineName withFont:[UIFont systemFontOfSize:13]];
+        //        [self setLabelSpace:bottomLabel withValue: nowM.lineName withFont:[UIFont systemFontOfSize:13]];
         
         CGFloat height = [self getSpaceLabelHeight:nowM.lineName withFont:[UIFont systemFontOfSize:13] withWidth:HDAutoWidth(60)];
         
         
-        bottomLabel.frame = CGRectMake(realX-HDAutoWidth(30), self.height  - HDAutoHeight(80) , HDAutoWidth(60),HDAutoHeight(80));
+        bottomLabel.frame = CGRectMake(realX-HDAutoWidth(30), self.height  - HDAutoHeight(80) , HDAutoWidth(70),HDAutoHeight(80));
         
         
         [self.BackgroundView addSubview:bottomLabel];
@@ -344,7 +455,6 @@
     
     
 }
-
 
 -(void)createTitle{
     
@@ -404,6 +514,7 @@
     label.text = @"气湿";
     UILabel *label2 = (UILabel *)[self viewWithTag:351];
     label2.text = @"地湿";
+    
 }
 
 

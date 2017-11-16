@@ -406,7 +406,7 @@
     MyPieView *pie4 = [_mainScroll viewWithTag:402];
     
     if(pie3==nil||pie4==nil){
-        [MBProgressHUD showSuccess:@"尝试获取数据中"];
+//        [MBProgressHUD showSuccess:@"尝试获取数据中"];
         return;
     }
     
@@ -793,6 +793,12 @@
                     float value = [dic[@"greenhouse_num"] floatValue];
                     total+=value;
                     [damountArr addObject:dic[@"greenhouse_num"]];
+                }else{
+                    name = @"未知";
+                    [dnameArr addObject:name];
+                    float value = [dic[@"greenhouse_num"] floatValue];
+                    total+=value;
+                    [damountArr addObject:dic[@"greenhouse_num"]];
                 }
                 UIColor *color = [UIColor colorWithHexString:dic[@"color"]];
                 [colorArr addObject:color];
@@ -839,6 +845,11 @@
                 NSString *name = dic[@"variety_name"];
                 if(![name isEqual:[NSNull null]]){
                     [nameArr addObject:name];
+                    float value = [dic[@"total_amount"] floatValue];
+                    total+=value;
+                    [amountArr addObject:dic[@"total_amount"]];
+                }else{
+                    name = @"未知";
                     float value = [dic[@"total_amount"] floatValue];
                     total+=value;
                     [amountArr addObject:dic[@"total_amount"]];

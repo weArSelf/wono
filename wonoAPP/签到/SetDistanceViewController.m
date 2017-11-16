@@ -1,12 +1,13 @@
 //
-//  MapViewController.m
+//  SetDistanceViewController.m
 //  wonoAPP
 //
-//  Created by IF on 2017/7/19.
+//  Created by IF on 2017/11/15.
 //  Copyright © 2017年 IF. All rights reserved.
 //
 
-#import "MapViewController.h"
+#import "SetDistanceViewController.h"
+
 //百度地图
 #import <BaiduMapAPI_Base/BMKBaseComponent.h>//引入base相关所有的头文件
 #import <BaiduMapAPI_Map/BMKMapComponent.h>//引入地图功能所有的头文件
@@ -23,7 +24,7 @@
 #import "BBFlashCtntLabel.h"
 
 
-@interface MapViewController ()<CLLocationManagerDelegate,BMKGeneralDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,BMKMapViewDelegate,BMKPoiSearchDelegate,BMKSuggestionSearchDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface SetDistanceViewController ()<CLLocationManagerDelegate,BMKGeneralDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,BMKMapViewDelegate,BMKPoiSearchDelegate,BMKSuggestionSearchDelegate,UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic,strong)UIView *headView;
 @property (nonatomic,strong)UILabel *titleLabel;
@@ -51,7 +52,7 @@
 
 @end
 
-@implementation MapViewController{
+@implementation SetDistanceViewController{
     NSString *lat;
     NSString *lont;
     
@@ -61,7 +62,7 @@
     CLLocationCoordinate2D region;
     
     NSString *resName;
-//    CLLocationCoordinate2D resSel;
+    //    CLLocationCoordinate2D resSel;
     NSString *citiCode;
     
     NSString *resCity;
@@ -84,7 +85,7 @@
     [self creatTitleAndBackBtn];
     
     _mapView = [[BMKMapView alloc]init];
-//    self.view = _mapView;
+    //    self.view = _mapView;
     
     [self.view addSubview:_mapView];
     
@@ -101,10 +102,10 @@
     _locService.delegate = self;//设置代理位self
     [_locService startUserLocationService];//启动定位服务
     
-//    [self createBottom];
+    //    [self createBottom];
     
     [self creatyRestView];
-
+    
 }
 
 -(void)creatyRestView{
@@ -131,7 +132,7 @@
         make.centerY.equalTo(_regionBtn.mas_centerY);
         make.height.equalTo(@(40));
     }];
-
+    
     
 }
 -(void)searchClick{
@@ -145,11 +146,11 @@
     con.city = citiCode;
     [self.navigationController pushViewController:con animated:YES];
     
-//    [MBProgressHUD showSuccess:@"敬请期待"];
+    //    [MBProgressHUD showSuccess:@"敬请期待"];
 }
 -(void)reginClick{
     
-//    _annotation.coordinate = region;
+    //    _annotation.coordinate = region;
     _mapView.centerCoordinate = region;
     _annotation.coordinate = region;
     
@@ -157,31 +158,31 @@
     NSString *longitude = [NSString stringWithFormat:@"%f",region.longitude];
     [self reverseGeoCodeWithLatitude:latitude withLongitude:longitude];
     
-
+    
     
 }
 
 -(void)SearchWithCLLocationCoordinate2D:(CLLocationCoordinate2D)locate{
-//    _searcher =[[BMKSuggestionSearch alloc]init];
-//    _searcher.delegate = self;
-//    //发起检索
-//    BMKSuggestionSearchOption *option = [[BMKSuggestionSearchOption alloc]init];
-////    option.pageIndex = 1;
-////    option.pageCapacity = 10;
-////    
-////    option.location = locate;
-//    option.cityname = @"北京";
-//    option.keyword = @"中关村";
-//    BOOL flag = [_searcher suggestionSearch:option];
-//    
-//    if(flag)
-//    {
-//        NSLog(@"周边检索发送成功");
-//    }
-//    else
-//    {
-//        NSLog(@"周边检索发送失败");
-//    }
+    //    _searcher =[[BMKSuggestionSearch alloc]init];
+    //    _searcher.delegate = self;
+    //    //发起检索
+    //    BMKSuggestionSearchOption *option = [[BMKSuggestionSearchOption alloc]init];
+    ////    option.pageIndex = 1;
+    ////    option.pageCapacity = 10;
+    ////
+    ////    option.location = locate;
+    //    option.cityname = @"北京";
+    //    option.keyword = @"中关村";
+    //    BOOL flag = [_searcher suggestionSearch:option];
+    //
+    //    if(flag)
+    //    {
+    //        NSLog(@"周边检索发送成功");
+    //    }
+    //    else
+    //    {
+    //        NSLog(@"周边检索发送失败");
+    //    }
     
     BMKGeoCodeSearch *searcher =[[BMKGeoCodeSearch alloc]init];
     searcher.delegate = self;
@@ -264,7 +265,7 @@
     [_rightBtn addTarget:self action:@selector(locationClick) forControlEvents:UIControlEventTouchUpInside];
     _rightBtn.titleLabel.font = [UIFont systemFontOfSize:14];
     _rightBtn.titleLabel.textAlignment = NSTextAlignmentRight;
-//    _rightBtn.contentMode = UIViewContentModeScaleAspectFit;
+    //    _rightBtn.contentMode = UIViewContentModeScaleAspectFit;
     //    _backBtn.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
     [_headView addSubview:_rightBtn];
     
@@ -287,7 +288,7 @@
         make.width.equalTo(@(50));
         make.height.equalTo(@(26));
     }];
-
+    
     
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(_headView.mas_centerX);
@@ -345,7 +346,7 @@
     //从manager获取左边
     CLLocationCoordinate2D coordinate = userLocation.location.coordinate;//位置坐标
     //存储经纬度
-//    [self.userLocationInfoModel SaveLocationCoordinate2D:coordinate];
+    //    [self.userLocationInfoModel SaveLocationCoordinate2D:coordinate];
     
     if ((userLocation.location.coordinate.latitude != 0 || userLocation.location.coordinate.longitude != 0))
     {
@@ -393,15 +394,15 @@
 {
     
     //发起反向地理编码检索
-//    lat = latitude;
-//    lont = longitude;
+    //    lat = latitude;
+    //    lont = longitude;
     
     CLLocationCoordinate2D coor;
     coor.latitude = [latitude doubleValue];
     coor.longitude = [longitude doubleValue];
     
-       if(_annotation == nil){
-           
+    if(_annotation == nil){
+        
         region = coor;
         _mapView.centerCoordinate = coor;
         _mapView.zoomLevel = 20;
@@ -409,8 +410,8 @@
         _annotation.coordinate = coor;
         [_mapView addAnnotation:_annotation];
     }
-//    [self SearchWithCLLocationCoordinate2D:coor];
-
+    //    [self SearchWithCLLocationCoordinate2D:coor];
+    
     BMKReverseGeoCodeOption *reverseGeocodeSearchOption = [[BMKReverseGeoCodeOption alloc] init];
     reverseGeocodeSearchOption.reverseGeoPoint = coor;
     BOOL flag = [self.geocodesearch reverseGeoCode:reverseGeocodeSearchOption];;
@@ -460,12 +461,13 @@
         citiCode = result.cityCode;
         NSString *address1 = result.address; // result.addressDetail ///层次化地址信息
         NSLog(@"我的位置在 %@",address1);
+        
 //        _annotation.title = address1;
         _locationLabel.text = address1;
-//        BMKPoiInfo
+        //        BMKPoiInfo
         
         //保存位置信息到模型
-//        [self.userLocationInfoModel saveLocationInfoWithBMKReverseGeoCodeResult:result];
+        //        [self.userLocationInfoModel saveLocationInfoWithBMKReverseGeoCodeResult:result];
         
         //进行缓存处理，上传到服务器等操作
         
@@ -478,7 +480,7 @@
             _table = [[UITableView alloc]init];
             //    [_plantTableView registerClass:[PlantCell class] forHeaderFooterViewReuseIdentifier:@"plantCell"];
             _table.separatorStyle = UITableViewCellSeparatorStyleNone;
-//            _table.allowsSelection = NO;
+            //            _table.allowsSelection = NO;
             _table.dataSource = self;
             _table.delegate = self;
             //    _plantTableView.showsVerticalScrollIndicator = NO;
@@ -493,7 +495,7 @@
                 make.right.equalTo(self.view.mas_right);
                 make.top.equalTo(self.mapView.mas_bottom).offset(5);
             }];
-
+            
             
         }else{
             [_table reloadData];
@@ -549,11 +551,11 @@
             make.width.equalTo(@(30));
             make.height.equalTo(@(30));
         }];
-
+        
     }
     
     return cell;
-
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -568,14 +570,15 @@
     selectItem = (int)indexPath.row;
     [tableView reloadData];
     BMKPoiInfo *model = dataArr[indexPath.row];
-     _mapView.centerCoordinate = model.pt;
+    _mapView.centerCoordinate = model.pt;
     _annotation.coordinate = model.pt;
     
-//    resSel = model.pt;
+    
+    //    resSel = model.pt;
     
     CLLocationCoordinate2D re = model.pt;
     
-//    lont = re.longitude;
+    //    lont = re.longitude;
     lat = [NSString stringWithFormat:@"%f",re.latitude];
     lont = [NSString stringWithFormat:@"%f",re.longitude];
     resName = model.name;
@@ -583,9 +586,27 @@
     resCity = model.city;
     
     resAddress = model.address;
+    
+    BMKCircle* circle = [BMKCircle circleWithCenterCoordinate:re radius:5000];
+    NSArray *arr = _mapView.overlays;
+    [_mapView removeOverlays:arr];
+    [_mapView addOverlay:circle];
+    
+    
 }
 
-
+// Override
+- (BMKOverlayView *)mapView:(BMKMapView *)mapView viewForOverlay:(id <BMKOverlay>)overlay{
+    if ([overlay isKindOfClass:[BMKCircle class]]){
+        BMKCircleView* circleView = [[BMKCircleView alloc] initWithOverlay:overlay];
+        circleView.fillColor = [[UIColor cyanColor] colorWithAlphaComponent:0.5];
+        circleView.strokeColor = [[UIColor blueColor] colorWithAlphaComponent:0.5];
+        circleView.lineWidth = 10.0;
+        
+        return circleView;
+    }
+    return nil;
+}
 
 
 
@@ -611,13 +632,16 @@
     NSLog(@"onClickedMapBlank-latitude==%f,longitude==%f",coordinate.latitude,coordinate.longitude);
     NSString* showmeg = [NSString stringWithFormat:@"您点击了地图空白处(blank click).\r\n当前经度:%f,当前纬度:%f,\r\nZoomLevel=%d;RotateAngle=%d;OverlookAngle=%d", coordinate.longitude,coordinate.latitude,
                          (int)_mapView.zoomLevel,_mapView.rotation,_mapView.overlooking];
+    
+    NSLog(@"%@",showmeg);
+    
     _annotation.coordinate = coordinate;
     
     NSString *latitude = [NSString stringWithFormat:@"%f",coordinate.latitude];
     NSString *longitude = [NSString stringWithFormat:@"%f",coordinate.longitude];
     [self reverseGeoCodeWithLatitude:latitude withLongitude:longitude];
-
-//    [_mapView addAnnotation:_annotation];
+    
+    //    [_mapView addAnnotation:_annotation];
     
 }
 //
@@ -649,10 +673,10 @@
     _locationBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     
     
-//    _btnLogin = [[UIButton alloc] initWithFrame:CGRectMake(APP_CONTENT_WIDTH/5,
-//                                                           CGRectGetMaxY(_imaVerificationVLinePassWord.frame)+50,
-//                                                           APP_CONTENT_WIDTH*3/5,
-//                                                           38)];
+    //    _btnLogin = [[UIButton alloc] initWithFrame:CGRectMake(APP_CONTENT_WIDTH/5,
+    //                                                           CGRectGetMaxY(_imaVerificationVLinePassWord.frame)+50,
+    //                                                           APP_CONTENT_WIDTH*3/5,
+    //                                                           38)];
     [_locationBtn addTarget:self action:@selector(locationClick) forControlEvents:UIControlEventTouchUpInside];
     _locationBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
     //    _btnLogin.backgroundColor = [UIColor lightGrayColor];
@@ -695,9 +719,9 @@
     
     
     
-    if ([self.delegate respondsToSelector:@selector(confirmWithName:AndLongitude:AndLatitude:AndCity: AndAddress:)]) {
-        [self.delegate confirmWithName:resName AndLongitude:lont AndLatitude:lat AndCity:resCity AndAddress:resAddress];
-    }
+//    if ([self.delegate respondsToSelector:@selector(confirmWithName:AndLongitude:AndLatitude:AndCity: AndAddress:)]) {
+//        [self.delegate confirmWithName:resName AndLongitude:lont AndLatitude:lat AndCity:resCity AndAddress:resAddress];
+//    }
     [self.navigationController popViewControllerAnimated:YES];
 }
 

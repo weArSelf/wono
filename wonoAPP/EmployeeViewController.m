@@ -255,6 +255,7 @@
     _stuffTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _stuffTableView.dataSource = self;
     _stuffTableView.delegate = self;
+    _stuffTableView.scrollsToTop = NO;
     //    _plantTableView.showsVerticalScrollIndicator = NO;
     _stuffTableView.backgroundColor = [UIColor clearColor];
     //    _plantTableView.frame = self.view.frame;

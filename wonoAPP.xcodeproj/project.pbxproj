@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		61EB95DFE3F818790E70A887 /* Pods_wonoAPP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E1A5ADF071EE1E73AE6E7C8 /* Pods_wonoAPP.framework */; };
+		A804B62E1FBBE3E1002EEB54 /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A804B62D1FBBE3E1002EEB54 /* SignInViewController.m */; };
+		A804B6311FBC2243002EEB54 /* SetDistanceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A804B6301FBC2243002EEB54 /* SetDistanceViewController.m */; };
 		A821F4AB1F21C43B0040846E /* StatisticsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F4AA1F21C43B0040846E /* StatisticsTableViewCell.m */; };
 		A821F4AE1F21F4560040846E /* UIImage+Scale.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F4AD1F21F4560040846E /* UIImage+Scale.m */; };
 		A821F4B21F2598C50040846E /* TempTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F4B11F2598C50040846E /* TempTableViewCell.m */; };
@@ -208,6 +210,10 @@
 /* Begin PBXFileReference section */
 		60F3C9014303CE2E44092EA7 /* Pods-wonoAPP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wonoAPP.release.xcconfig"; path = "Pods/Target Support Files/Pods-wonoAPP/Pods-wonoAPP.release.xcconfig"; sourceTree = "<group>"; };
 		7E1A5ADF071EE1E73AE6E7C8 /* Pods_wonoAPP.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wonoAPP.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A804B62C1FBBE3E1002EEB54 /* SignInViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignInViewController.h; sourceTree = "<group>"; };
+		A804B62D1FBBE3E1002EEB54 /* SignInViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SignInViewController.m; sourceTree = "<group>"; };
+		A804B62F1FBC2243002EEB54 /* SetDistanceViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SetDistanceViewController.h; sourceTree = "<group>"; };
+		A804B6301FBC2243002EEB54 /* SetDistanceViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SetDistanceViewController.m; sourceTree = "<group>"; };
 		A821F4A91F21C43B0040846E /* StatisticsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatisticsTableViewCell.h; sourceTree = "<group>"; };
 		A821F4AA1F21C43B0040846E /* StatisticsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatisticsTableViewCell.m; sourceTree = "<group>"; };
 		A821F4AC1F21F4560040846E /* UIImage+Scale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Scale.h"; sourceTree = "<group>"; };
@@ -530,6 +536,17 @@
 				7E1A5ADF071EE1E73AE6E7C8 /* Pods_wonoAPP.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A804B62B1FBBE3B4002EEB54 /* 签到 */ = {
+			isa = PBXGroup;
+			children = (
+				A804B62C1FBBE3E1002EEB54 /* SignInViewController.h */,
+				A804B62D1FBBE3E1002EEB54 /* SignInViewController.m */,
+				A804B62F1FBC2243002EEB54 /* SetDistanceViewController.h */,
+				A804B6301FBC2243002EEB54 /* SetDistanceViewController.m */,
+			);
+			path = "签到";
 			sourceTree = "<group>";
 		};
 		A821F4A61F21C4130040846E /* view */ = {
@@ -1013,6 +1030,7 @@
 		A8ADF1611F0F841100781E06 /* wonoAPP */ = {
 			isa = PBXGroup;
 			children = (
+				A804B62B1FBBE3B4002EEB54 /* 签到 */,
 				A8C0DA0D1F4D67F1000AD2D8 /* wonoAPP.entitlements */,
 				A8BC31481F3C42A900BD6E76 /* 正则表达式 */,
 				A821F5771F39A3C50040846E /* web封装 */,
@@ -1369,6 +1387,7 @@
 				A88D8D041F78F29900138A9C /* ZhongZhiTypeViewController.m in Sources */,
 				A88D8D011F78F28100138A9C /* CaiShouTypeViewController.m in Sources */,
 				A8BC31471F3C428900BD6E76 /* ZhengZeSupport.m in Sources */,
+				A804B6311FBC2243002EEB54 /* SetDistanceViewController.m in Sources */,
 				A8ADF1971F0F84DB00781E06 /* File.swift in Sources */,
 				A8246A1E1F146FA800CFD65A /* PlantControllViewController.m in Sources */,
 				A8C0D9F31F4AB958000AD2D8 /* ShifeiTypeViewController.m in Sources */,
@@ -1391,6 +1410,7 @@
 				A821F4B91F25E6900040846E /* CABasicAnimation+Category.m in Sources */,
 				A8A11D451F1C7FCB008CA39A /* WonoCircleModel.m in Sources */,
 				A8CECDA91F8B642000A9D024 /* UIDevice+DeviceModel.m in Sources */,
+				A804B62E1FBBE3E1002EEB54 /* SignInViewController.m in Sources */,
 				A821F50B1F2AD1030040846E /* WorkViewController.m in Sources */,
 				A8BC314C1F3D599300BD6E76 /* CompleteModel.m in Sources */,
 				A8A501BC1F5F9BED00595B67 /* MessageViewController.m in Sources */,

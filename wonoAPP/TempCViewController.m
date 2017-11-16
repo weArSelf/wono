@@ -253,6 +253,7 @@
 
 -(void)createZXview{
     
+    
     MyZView *view = [self.view viewWithTag:201];
     if(view){
         [view removeFromSuperview];
@@ -370,12 +371,14 @@
 //    [dataArr addObject:model];
 //    
     
-    MyZView *Zview = [[MyZView alloc]initWithFrame:CGRectMake(0, 64 +HDAutoHeight(550), APP_CONTENT_WIDTH, HDAutoHeight(550)) AndData:NdataArr];
-    
+    MyZView *Zview = [[MyZView alloc]initWithFrame:CGRectMake(0, 64 +HDAutoHeight(550), APP_CONTENT_WIDTH, HDAutoHeight(550))];
+    Zview.maxVal = 100;
+    Zview.minVal = 0;
     
     Zview.tag = 202;
     
     [Zview changeTitle];
+    Zview.dataArr = NdataArr;
     
     [self.view addSubview:Zview];
     
@@ -441,11 +444,11 @@
                 PointModel *model2 = [[PointModel alloc]init];
                 model2.Height = tem3;
                 
-                model2.firstBottomStr = [NSString stringWithFormat:@"%d°C",tem3];
+                model2.firstBottomStr = [NSString stringWithFormat:@"%d%%",tem3];
                 
                 model2.Height2 = tem4;
                 
-                model2.nextBottomStr = [NSString stringWithFormat:@"%d°C",tem4];
+                model2.nextBottomStr = [NSString stringWithFormat:@"%d%%",tem4];
                 
                 model2.lineName = dic[@"created_at"];
                 
@@ -462,6 +465,15 @@
             
             
             
+        }else{
+            MyZView *view = [self.view viewWithTag:201];
+            if(view){
+                [view removeFromSuperview];
+            }
+            MyZView *view2 = [self.view viewWithTag:202];
+            if(view2){
+                [view2 removeFromSuperview];
+            }
         }
         
         if(state<2000){
@@ -519,11 +531,11 @@
                 PointModel *model2 = [[PointModel alloc]init];
                 model2.Height = tem3;
                 
-                model2.firstBottomStr = [NSString stringWithFormat:@"%d°C",tem3];
+                model2.firstBottomStr = [NSString stringWithFormat:@"%d%%",tem3];
                 
                 model2.Height2 = tem4;
                 
-                model2.nextBottomStr = [NSString stringWithFormat:@"%d°C",tem4];
+                model2.nextBottomStr = [NSString stringWithFormat:@"%d%%",tem4];
                 
                 model2.lineName = dic[@"created_at"];
                 
@@ -546,6 +558,15 @@
             
             
             
+        }else{
+            MyZView *view = [self.view viewWithTag:201];
+            if(view){
+                [view removeFromSuperview];
+            }
+            MyZView *view2 = [self.view viewWithTag:202];
+            if(view2){
+                [view2 removeFromSuperview];
+            }
         }
         if(state == 2001){
             [MBProgressHUD showSuccess:@"暂无数据"];
@@ -588,7 +609,8 @@
 
     
     MyZView *Zview = [[MyZView alloc]initWithFrame:CGRectMake(0, 64 +HDAutoHeight(550), APP_CONTENT_WIDTH, HDAutoHeight(550))];
-    
+    Zview.maxVal = 100;
+    Zview.minVal = 0;
     
     Zview.tag = 202;
     

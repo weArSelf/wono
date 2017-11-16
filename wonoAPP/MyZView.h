@@ -18,4 +18,7 @@
 
 @property (nonatomic,strong) NSString *sevMark;
 
+@property (nonatomic) float maxVal;
+@property (nonatomic) float minVal;
+
 @end

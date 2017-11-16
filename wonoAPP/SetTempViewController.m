@@ -1147,6 +1147,17 @@
     
     //    [cell creatConView];
     
+    
+    NSArray *arr = [selDic allValues];
+    for(int i=0;i<arr.count;i++){
+        NSString *str1 = [NSString stringWithFormat:@"%@",arr[i]];
+        NSString *str2 = [NSString stringWithFormat:@"%@",model.needID];
+        if([str1 isEqualToString:str2]){
+            [cell changeColor];
+        }
+        
+    }
+    
     return cell;
 }
 

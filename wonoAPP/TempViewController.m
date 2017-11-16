@@ -79,11 +79,12 @@
     NSMutableArray *dataArr;
     BOOL animateMark;
     BOOL animateMark2;
+    int needCount;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    needCount = 0;
     animateMark = true;
     animateMark2 = true;
     
@@ -223,6 +224,16 @@
     }
 
 -(void)requestData{
+    
+    if(needCount == 0){
+        needCount++;
+    }else{
+        [self getLocate];
+        [self loadCatch];
+    }
+    
+    
+    
     NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"fid"];
     [[InterfaceSingleton shareInstance].interfaceModel getMainPengWithFid:str AndCallBack:^(int state, id data, NSString *msg) {
         
@@ -394,6 +405,7 @@
 }
 
 -(void)getLocate{
+    
     
     if(appDelegate.LocatePermission == YES){
         _locService = [[BMKLocationService alloc]init];//定位功能的初始化
@@ -685,7 +697,8 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"点击了");
-    
+//    [self showAlert];
+//    return;
     MainTempModel *nowModel = dataArr[indexPath.row];
     
     int needId = nowModel.pengID;
@@ -868,6 +881,9 @@
 //                                                       NSString *bodyString = [[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding];
                                                        
                                                        // JSON格式转换成字典，IOS5中自带解析类NSJSONSerialization从response中解析出数据放到字典中
+                                                       if(body == nil){
+                                                           return;
+                                                       }
                                                        id obj = [NSJSONSerialization JSONObjectWithData:body options:0 error:NULL];
                                                        
                                                        NSDictionary *dict = obj[@"data"];
@@ -1159,6 +1175,13 @@
 //
 //}
 
+
+- (void)showAlert
+{
+    
+    [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    
+}
 
 
 
