@@ -11,4 +11,10 @@
 @interface ZXView : UIView
 @property (nonatomic,strong)NSArray * dataArray;
 - (instancetype)initWithFrame:(CGRect)frame;
+
+@property (nonatomic) float maxVal;
+@property (nonatomic) float minVal;
+
+@property (nonatomic) float NedY;
+
 @end

@@ -15,6 +15,7 @@
 
 #import "CompleteInfoViewController.h"
 #import "BBFlashCtntLabel.h"
+#import "MalLocateModel.h"
 
 @interface MapSearchViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate,BMKPoiSearchDelegate,BMKGeoCodeSearchDelegate>
 
@@ -53,6 +54,9 @@
     NSString *resCity;
     
     NSString *resAddress;
+    
+    CLLocationCoordinate2D sel;
+    
 }
 
 - (void)viewDidLoad {
@@ -223,16 +227,23 @@
         return;
     }
     
+    
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     [dic setObject:resName forKey:@"name"];
     [dic setObject:lont forKey:@"lont"];
     [dic setObject:lat forKey:@"lat"];
     [dic setObject:resCity forKey:@"city"];
     [dic setObject:resAddress forKey:@"adress"];
+    MalLocateModel *model = [[MalLocateModel alloc]init];
+    model.loc = sel;
+//    NSObject *obj = (NSObject *)sel;
     
+    [dic setObject:model forKey:@"sel"];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"searchChange" object:dic];
     
-    for (UIViewController *controller in self.navigationController.viewControllers) { if ([controller isKindOfClass:[CompleteInfoViewController class]]) { CompleteInfoViewController *A =(CompleteInfoViewController *)controller; [self.navigationController popToViewController:A animated:YES]; } }
+    [self.navigationController popViewControllerAnimated:YES];
+    
+//    for (UIViewController *controller in self.navigationController.viewControllers) { if ([controller isKindOfClass:[CompleteInfoViewController class]]) { CompleteInfoViewController *A =(CompleteInfoViewController *)controller; [self.navigationController popToViewController:A animated:YES]; } }
     
 //    if ([self.delegate respondsToSelector:@selector(confirmWithName:AndLongitude:AndLatitude:)]) {
 //        [self.delegate confirmWithName:resName AndLongitude:lont AndLatitude:lat];
@@ -340,6 +351,8 @@
     //    _stuffTableView.showsVerticalScrollIndicator = NO;
     //    _stuffTableView.scrollEnabled = NO;
     
+    _stuffTableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0,0,0,0.01)];
+    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapClick)];
     tap.delegate = self;
     [_stuffTableView addGestureRecognizer:tap];
@@ -429,7 +442,7 @@
     //    resSel = model.pt;
     
     CLLocationCoordinate2D re = model.pt;
-    
+    sel = re;
     //    lont = re.longitude;
     lat = [NSString stringWithFormat:@"%f",re.latitude];
     lont = [NSString stringWithFormat:@"%f",re.longitude];

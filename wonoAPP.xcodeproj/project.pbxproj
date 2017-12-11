@@ -10,6 +10,8 @@
 		61EB95DFE3F818790E70A887 /* Pods_wonoAPP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E1A5ADF071EE1E73AE6E7C8 /* Pods_wonoAPP.framework */; };
 		A804B62E1FBBE3E1002EEB54 /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A804B62D1FBBE3E1002EEB54 /* SignInViewController.m */; };
 		A804B6311FBC2243002EEB54 /* SetDistanceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A804B6301FBC2243002EEB54 /* SetDistanceViewController.m */; };
+		A804B63D1FC26F28002EEB54 /* StaticChangeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A804B63C1FC26F28002EEB54 /* StaticChangeView.m */; };
+		A804B6401FC7D908002EEB54 /* UIButton+EnlargeTouchArea.m in Sources */ = {isa = PBXBuildFile; fileRef = A804B63F1FC7D908002EEB54 /* UIButton+EnlargeTouchArea.m */; };
 		A821F4AB1F21C43B0040846E /* StatisticsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F4AA1F21C43B0040846E /* StatisticsTableViewCell.m */; };
 		A821F4AE1F21F4560040846E /* UIImage+Scale.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F4AD1F21F4560040846E /* UIImage+Scale.m */; };
 		A821F4B21F2598C50040846E /* TempTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F4B11F2598C50040846E /* TempTableViewCell.m */; };
@@ -74,6 +76,8 @@
 		A87405E01F6A2130004A87C1 /* UIBarButtonItem+PPBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A87405DA1F6A2130004A87C1 /* UIBarButtonItem+PPBadgeView.m */; };
 		A87405E11F6A2130004A87C1 /* UITabBarItem+PPBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A87405DC1F6A2130004A87C1 /* UITabBarItem+PPBadgeView.m */; };
 		A87405E21F6A2130004A87C1 /* UIView+PPBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A87405DE1F6A2130004A87C1 /* UIView+PPBadgeView.m */; };
+		A886571F1FDA92A10049CBC0 /* MyMapTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A886571E1FDA92A10049CBC0 /* MyMapTableViewCell.m */; };
+		A88657241FDE79AE0049CBC0 /* MalLocateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A88657231FDE79AE0049CBC0 /* MalLocateModel.m */; };
 		A88D8CFC1F74E2A500138A9C /* UIColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = A88D8CFB1F74E2A500138A9C /* UIColor+Hex.m */; };
 		A88D8D011F78F28100138A9C /* CaiShouTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A88D8D001F78F28100138A9C /* CaiShouTypeViewController.m */; };
 		A88D8D041F78F29900138A9C /* ZhongZhiTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A88D8D031F78F29800138A9C /* ZhongZhiTypeViewController.m */; };
@@ -146,6 +150,9 @@
 		A8C0D9FB1F4C11ED000AD2D8 /* MapSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8C0D9FA1F4C11ED000AD2D8 /* MapSearchViewController.m */; };
 		A8C0DA0F1F4D69B4000AD2D8 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8C0DA0E1F4D69B4000AD2D8 /* UserNotifications.framework */; };
 		A8CECDA91F8B642000A9D024 /* UIDevice+DeviceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8CECDA81F8B642000A9D024 /* UIDevice+DeviceModel.m */; };
+		A8E2D8401FCD5029001048B4 /* SDBrowserImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A8E2D8381FCD5028001048B4 /* SDBrowserImageView.m */; };
+		A8E2D8411FCD5029001048B4 /* SDPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = A8E2D83A1FCD5028001048B4 /* SDPhotoBrowser.m */; };
+		A8E2D8421FCD5029001048B4 /* SDWaitingView.m in Sources */ = {isa = PBXBuildFile; fileRef = A8E2D83D1FCD5028001048B4 /* SDWaitingView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -214,6 +221,10 @@
 		A804B62D1FBBE3E1002EEB54 /* SignInViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SignInViewController.m; sourceTree = "<group>"; };
 		A804B62F1FBC2243002EEB54 /* SetDistanceViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SetDistanceViewController.h; sourceTree = "<group>"; };
 		A804B6301FBC2243002EEB54 /* SetDistanceViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SetDistanceViewController.m; sourceTree = "<group>"; };
+		A804B63B1FC26F28002EEB54 /* StaticChangeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StaticChangeView.h; sourceTree = "<group>"; };
+		A804B63C1FC26F28002EEB54 /* StaticChangeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StaticChangeView.m; sourceTree = "<group>"; };
+		A804B63E1FC7D908002EEB54 /* UIButton+EnlargeTouchArea.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+EnlargeTouchArea.h"; sourceTree = "<group>"; };
+		A804B63F1FC7D908002EEB54 /* UIButton+EnlargeTouchArea.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+EnlargeTouchArea.m"; sourceTree = "<group>"; };
 		A821F4A91F21C43B0040846E /* StatisticsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatisticsTableViewCell.h; sourceTree = "<group>"; };
 		A821F4AA1F21C43B0040846E /* StatisticsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatisticsTableViewCell.m; sourceTree = "<group>"; };
 		A821F4AC1F21F4560040846E /* UIImage+Scale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Scale.h"; sourceTree = "<group>"; };
@@ -345,6 +356,10 @@
 		A87405DC1F6A2130004A87C1 /* UITabBarItem+PPBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITabBarItem+PPBadgeView.m"; sourceTree = "<group>"; };
 		A87405DD1F6A2130004A87C1 /* UIView+PPBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+PPBadgeView.h"; sourceTree = "<group>"; };
 		A87405DE1F6A2130004A87C1 /* UIView+PPBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+PPBadgeView.m"; sourceTree = "<group>"; };
+		A886571D1FDA92A10049CBC0 /* MyMapTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyMapTableViewCell.h; sourceTree = "<group>"; };
+		A886571E1FDA92A10049CBC0 /* MyMapTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyMapTableViewCell.m; sourceTree = "<group>"; };
+		A88657221FDE79AE0049CBC0 /* MalLocateModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MalLocateModel.h; sourceTree = "<group>"; };
+		A88657231FDE79AE0049CBC0 /* MalLocateModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MalLocateModel.m; sourceTree = "<group>"; };
 		A88D8CFA1F74E2A500138A9C /* UIColor+Hex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Hex.h"; sourceTree = "<group>"; };
 		A88D8CFB1F74E2A500138A9C /* UIColor+Hex.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Hex.m"; sourceTree = "<group>"; };
 		A88D8CFF1F78F28100138A9C /* CaiShouTypeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaiShouTypeViewController.h; sourceTree = "<group>"; };
@@ -488,6 +503,13 @@
 		A8C0DA0E1F4D69B4000AD2D8 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		A8CECDA71F8B642000A9D024 /* UIDevice+DeviceModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIDevice+DeviceModel.h"; sourceTree = "<group>"; };
 		A8CECDA81F8B642000A9D024 /* UIDevice+DeviceModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+DeviceModel.m"; sourceTree = "<group>"; };
+		A8E2D8371FCD5028001048B4 /* SDBrowserImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDBrowserImageView.h; sourceTree = "<group>"; };
+		A8E2D8381FCD5028001048B4 /* SDBrowserImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDBrowserImageView.m; sourceTree = "<group>"; };
+		A8E2D8391FCD5028001048B4 /* SDPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDPhotoBrowser.h; sourceTree = "<group>"; };
+		A8E2D83A1FCD5028001048B4 /* SDPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDPhotoBrowser.m; sourceTree = "<group>"; };
+		A8E2D83B1FCD5028001048B4 /* SDPhotoBrowserConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDPhotoBrowserConfig.h; sourceTree = "<group>"; };
+		A8E2D83C1FCD5028001048B4 /* SDWaitingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDWaitingView.h; sourceTree = "<group>"; };
+		A8E2D83D1FCD5028001048B4 /* SDWaitingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDWaitingView.m; sourceTree = "<group>"; };
 		C19FD802BF9A56E1A918136F /* Pods-wonoAPP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wonoAPP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-wonoAPP/Pods-wonoAPP.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -558,6 +580,8 @@
 				A89990D61F4EB4A000D15005 /* MyZview2.m */,
 				A89990DA1F4FC10D00D15005 /* MyPieView.h */,
 				A89990DB1F4FC10D00D15005 /* MyPieView.m */,
+				A804B63B1FC26F28002EEB54 /* StaticChangeView.h */,
+				A804B63C1FC26F28002EEB54 /* StaticChangeView.m */,
 			);
 			name = view;
 			sourceTree = "<group>";
@@ -645,6 +669,7 @@
 		A82469FA1F14625600CFD65A /* Support Tools */ = {
 			isa = PBXGroup;
 			children = (
+				A8E2D8361FCD5028001048B4 /* SDPhotoBrowser */,
 				A87405C81F68FDB4004A87C1 /* 右上角小圆点控件 */,
 				A8A501B61F5E9D6000595B67 /* 自适应高度textview */,
 				A8A501A01F58F93A00595B67 /* 详细查看图片 */,
@@ -685,6 +710,8 @@
 				A88D8CFB1F74E2A500138A9C /* UIColor+Hex.m */,
 				A8CECDA71F8B642000A9D024 /* UIDevice+DeviceModel.h */,
 				A8CECDA81F8B642000A9D024 /* UIDevice+DeviceModel.m */,
+				A804B63E1FC7D908002EEB54 /* UIButton+EnlargeTouchArea.h */,
+				A804B63F1FC7D908002EEB54 /* UIButton+EnlargeTouchArea.m */,
 			);
 			name = "Support Tools";
 			sourceTree = "<group>";
@@ -894,6 +921,8 @@
 			children = (
 				A8A11D291F18532D008CA39A /* HDTimerBtn.h */,
 				A8A11D2A1F18532D008CA39A /* HDTimerBtn.m */,
+				A886571D1FDA92A10049CBC0 /* MyMapTableViewCell.h */,
+				A886571E1FDA92A10049CBC0 /* MyMapTableViewCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1109,6 +1138,8 @@
 			children = (
 				A8BC314A1F3D599300BD6E76 /* CompleteModel.h */,
 				A8BC314B1F3D599300BD6E76 /* CompleteModel.m */,
+				A88657221FDE79AE0049CBC0 /* MalLocateModel.h */,
+				A88657231FDE79AE0049CBC0 /* MalLocateModel.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1124,6 +1155,20 @@
 				A8A94F691F42A40F00D9BBA2 /* PengTypeModel.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		A8E2D8361FCD5028001048B4 /* SDPhotoBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				A8E2D8371FCD5028001048B4 /* SDBrowserImageView.h */,
+				A8E2D8381FCD5028001048B4 /* SDBrowserImageView.m */,
+				A8E2D8391FCD5028001048B4 /* SDPhotoBrowser.h */,
+				A8E2D83A1FCD5028001048B4 /* SDPhotoBrowser.m */,
+				A8E2D83B1FCD5028001048B4 /* SDPhotoBrowserConfig.h */,
+				A8E2D83C1FCD5028001048B4 /* SDWaitingView.h */,
+				A8E2D83D1FCD5028001048B4 /* SDWaitingView.m */,
+			);
+			path = SDPhotoBrowser;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1355,6 +1400,7 @@
 			files = (
 				A821F53B1F31D13F0040846E /* MineSettingViewController.m in Sources */,
 				A88D8CFC1F74E2A500138A9C /* UIColor+Hex.m in Sources */,
+				A8E2D8411FCD5029001048B4 /* SDPhotoBrowser.m in Sources */,
 				A8ABD1E61F70FD8B00CEF4DE /* MyTextViewController.m in Sources */,
 				A821F5801F39B5720040846E /* BaseInterfaceModel.m in Sources */,
 				A821F53E1F32AEBF0040846E /* MineDataViewController.m in Sources */,
@@ -1363,6 +1409,7 @@
 				A8A501B91F5E9D7300595B67 /* CMInputView.m in Sources */,
 				A8A94F6A1F42A40F00D9BBA2 /* PengTypeModel.m in Sources */,
 				A8A11D481F1CA217008CA39A /* SelectionViewController.m in Sources */,
+				A8E2D8421FCD5029001048B4 /* SDWaitingView.m in Sources */,
 				A821F5111F2B06BD0040846E /* FZHPickerView.m in Sources */,
 				A8C0D9F01F4AAE03000AD2D8 /* PlantTypeViewController.m in Sources */,
 				A8246A0D1F1467DC00CFD65A /* JXTCacher.m in Sources */,
@@ -1413,6 +1460,7 @@
 				A804B62E1FBBE3E1002EEB54 /* SignInViewController.m in Sources */,
 				A821F50B1F2AD1030040846E /* WorkViewController.m in Sources */,
 				A8BC314C1F3D599300BD6E76 /* CompleteModel.m in Sources */,
+				A88657241FDE79AE0049CBC0 /* MalLocateModel.m in Sources */,
 				A8A501BC1F5F9BED00595B67 /* MessageViewController.m in Sources */,
 				A8ADF1641F0F841100781E06 /* main.m in Sources */,
 				A8A94F621F41856E00D9BBA2 /* MainTempModel.m in Sources */,
@@ -1425,6 +1473,7 @@
 				A8246A181F146F4800CFD65A /* TempViewController.m in Sources */,
 				A8A94F791F46983A00D9BBA2 /* PercentModel.m in Sources */,
 				A88D8D071F7B3B9100138A9C /* WonoWebMessageViewController.m in Sources */,
+				A8E2D8401FCD5029001048B4 /* SDBrowserImageView.m in Sources */,
 				A821F5811F39B5720040846E /* InterfaceModel.m in Sources */,
 				A8246A281F14C25A00CFD65A /* CompleteInfoViewController.m in Sources */,
 				A8246A0E1F1467DC00CFD65A /* NSObject+JKCoding.m in Sources */,
@@ -1439,6 +1488,7 @@
 				A8A94F761F4572C000D9BBA2 /* PlantBaseModel.m in Sources */,
 				A821F4FB1F2878360040846E /* SetTempViewController.m in Sources */,
 				A821F5691F3844C40040846E /* NeedSelectionViewController.m in Sources */,
+				A804B63D1FC26F28002EEB54 /* StaticChangeView.m in Sources */,
 				A8A5019C1F56870100595B67 /* WonoCircleMainViewController.m in Sources */,
 				A821F5381F31C47E0040846E /* EmployeeViewController.m in Sources */,
 				A821F5011F28975C0040846E /* TempSetTableViewCell.m in Sources */,
@@ -1448,6 +1498,7 @@
 				A8246A221F14710C00CFD65A /* BaseTabBarController.m in Sources */,
 				A821F5601F34754A0040846E /* UIImageView+ForScrollView.m in Sources */,
 				A8A501991F54FDF900595B67 /* QNUploader.m in Sources */,
+				A804B6401FC7D908002EEB54 /* UIButton+EnlargeTouchArea.m in Sources */,
 				A821F51D1F2EE1A10040846E /* ZhiBaoViewController.m in Sources */,
 				A8A11D5A1F1EEAE3008CA39A /* MapViewController.m in Sources */,
 				A821F5231F2F06A30040846E /* TempCViewController.m in Sources */,
@@ -1464,6 +1515,7 @@
 				A821F5261F3011B20040846E /* MyZView.m in Sources */,
 				A821F5821F39B5720040846E /* InterfaceSingleton.m in Sources */,
 				A8BC314F1F41326300BD6E76 /* SearchModel.m in Sources */,
+				A886571F1FDA92A10049CBC0 /* MyMapTableViewCell.m in Sources */,
 				A8246A1B1F146F9200CFD65A /* StatisticsViewController.m in Sources */,
 				A87405E01F6A2130004A87C1 /* UIBarButtonItem+PPBadgeView.m in Sources */,
 				A8A11D3D1F18C1DF008CA39A /* PlantModel.m in Sources */,

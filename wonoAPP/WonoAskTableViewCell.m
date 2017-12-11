@@ -7,13 +7,14 @@
 //
 
 #import "WonoAskTableViewCell.h"
-#import "UIImageView+MHFacebookImageViewer.h"
+//#import "UIImageView+MHFacebookImageViewer.h"
 #import "BBFlashCtntLabel.h"
+#import "SDPhotoBrowser.h"
 
 #define HEIGHT [ [ UIScreen mainScreen ] bounds ].size.height
 
 
-@interface WonoAskTableViewCell ()
+@interface WonoAskTableViewCell ()<SDPhotoBrowserDelegate>
 
 @property (nonatomic,strong) UIView *ConView;
 @property (nonatomic,strong) UILabel *titleLabel;
@@ -543,7 +544,13 @@
             default:
                 break;
         }
-        [imageView setupImageViewer];
+        
+        imageView.tag = 300+i;
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imgTapClick:)];
+        [imageView addGestureRecognizer:tap];
+        imageView.userInteractionEnabled = YES;
+        
         [_ConView addSubview:imageView];
         
     }
@@ -563,6 +570,7 @@
         make.height.equalTo(@(HDAutoWidth(30)));
     }];
 }
+
 
 -(void)createType4{
     
@@ -628,7 +636,15 @@
             default:
                 break;
         }
-        [imageView setupImageViewer];
+        
+        
+        imageView.tag = 300+i;
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imgTapClick:)];
+        [imageView addGestureRecognizer:tap];
+        imageView.userInteractionEnabled = YES;
+        
+        
         [_ConView addSubview:imageView];
         
     }
@@ -669,6 +685,36 @@
     return size.height;
 }
 
+-(void)imgTapClick:(UIGestureRecognizer *)ges{
+    
+    UIView *view = ges.view;
+    NSInteger tap = view.tag;
+    NSLog(@"%ld",tap);
+    
+    SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
+    browser.sourceImagesContainerView = self; // 原图的父控件
+    browser.imageCount = _model.imageArr.count; // 图片总数
+    browser.currentImageIndex = tap-300;
+    browser.delegate = self;
+    [browser show];
+    
+}
+
+- (UIImage *)photoBrowser:(SDPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index{
+    
+    NSString *url2 = _model.imageArr[index];
+    NSURL *url = [NSURL URLWithString:url2];
+    NSData *data = [NSData dataWithContentsOfURL:url];
+    UIImage *image = [UIImage imageWithData:data];
+    return image;
+    
+}
+
+- (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index{
+    NSString *url2 = _model.imageArr[index];
+    NSURL *url = [NSURL URLWithString:url2];
+    return url;
+}
 
 
 @end

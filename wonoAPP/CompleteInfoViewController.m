@@ -71,6 +71,8 @@
     
     NSString *needlongitude;
     NSString *needlatitude;
+    
+    BMKReverseGeoCodeResult *res;
 }
 
 - (void)viewDidLoad {
@@ -97,23 +99,23 @@
     [self createAddress];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(searchChange:) name:@"searchChange" object:nil];
+//    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(searchChange:) name:@"searchChange" object:nil];
     
 }
 
--(void)searchChange:(NSNotification *)noti{
-    NSDictionary *dic = (NSDictionary *)[noti object];
-
-    NSString *lat = dic[@"lat"];
-    NSString *lont = dic[@"lont"];
-    _adrLabel.text = dic[@"adress"];
-    
-    needlongitude = lont;
-    needlatitude = lat;
-    
-    NSLog(@"%@  %@  %@", dic[@"name"],lat,lont);
-    
-}
+//-(void)searchChange:(NSNotification *)noti{
+//    NSDictionary *dic = (NSDictionary *)[noti object];
+//
+//    NSString *lat = dic[@"lat"];
+//    NSString *lont = dic[@"lont"];
+//    _adrLabel.text = dic[@"adress"];
+//    
+//    needlongitude = lont;
+//    needlatitude = lat;
+//    
+//    NSLog(@"%@  %@  %@", dic[@"name"],lat,lont);
+//    
+//}
 
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -858,20 +860,25 @@
     
 }
 
-
--(void)confirmWithName:(NSString *)name AndLongitude:(NSString *)longitude AndLatitude:(NSString *)latitude AndCity:(NSString *)city AndAddress:(NSString *)address{
-    
-    needlongitude = longitude;
-    needlatitude = latitude;
-    
-    NSLog(@"%@  %@  %@", address,longitude,latitude);
-    
-    _adrLabel.text = address;
-    
-    
-    
+-(void)confirmWithobj:(BMKReverseGeoCodeResult *)serRes AndName:(NSString *)name{
+    res = serRes;
+    _adrLabel.text = name;
     
 }
+
+//-(void)confirmWithName:(NSString *)name AndLongitude:(NSString *)longitude AndLatitude:(NSString *)latitude AndCity:(NSString *)city AndAddress:(NSString *)address{
+//
+//    needlongitude = longitude;
+//    needlatitude = latitude;
+//
+//    NSLog(@"%@  %@  %@", address,longitude,latitude);
+//
+//    _adrLabel.text = address;
+//
+//
+//
+//
+//}
 
 
 

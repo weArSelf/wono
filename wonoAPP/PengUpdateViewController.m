@@ -944,8 +944,13 @@
 //            int varID = [dic[@"varieties_id"]intValue];
             
 //            _catLabelContent.text = dic[@"variety_name"];
+            if(![dic[@"type_name"] isEqual:[NSNull null]])
+            {
+                _typeLabelContent.text = dic[@"type_name"];
+            }else{
+                _typeLabelContent.text = @"未知";
+            }
             
-            _typeLabelContent.text = dic[@"type_name"];
             
             NSString *str = dic[@"employee_name"];
             
@@ -960,6 +965,7 @@
             orginStuff = [self DataTOjsonString:arr123];
             
             NSLog(@"%@",str);
+            
             
             [self requestStuff];
             

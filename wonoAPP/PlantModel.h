@@ -22,5 +22,6 @@
 @property(nonatomic,strong) NSString *extraStr;
 
 @property(nonatomic,strong) NSString *pengID;
+@property (nonatomic,strong) NSString *deleteState;
 
 @end

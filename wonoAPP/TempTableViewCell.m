@@ -285,10 +285,15 @@
         _dishiLabel.textColor = UIColorFromHex(0x9fa0a0);
     }
     
-    NSString *text1 = [NSString stringWithFormat:@"气温：%@°C",_model.temp1];
-    NSString *text2 = [NSString stringWithFormat:@"气湿：%@%%",_model.temp2];
-    NSString *text3 = [NSString stringWithFormat:@"地温：%@°C",_model.temp3];
-    NSString *text4 = [NSString stringWithFormat:@"地湿：%@%%",_model.temp4];
+    NSString *str1 = [self floatToStringWithStr:_model.temp1];
+    NSString *str2 = [self floatToStringWithStr:_model.temp2];
+    NSString *str3 = [self floatToStringWithStr:_model.temp3];
+    NSString *str4 = [self floatToStringWithStr:_model.temp4];
+    
+    NSString *text1 = [NSString stringWithFormat:@"气温：%@°C",str1];
+    NSString *text2 = [NSString stringWithFormat:@"气湿：%@%%",str2];
+    NSString *text3 = [NSString stringWithFormat:@"地温：%@°C",str3];
+    NSString *text4 = [NSString stringWithFormat:@"地湿：%@%%",str4];
     
     _qiwenLabel.text = text1;
     
@@ -297,8 +302,14 @@
     _diwenLabel.text = text3;
     
     _dishiLabel.text = text4;
+    NSString *str;
+    if([_model.cat isEqual:[NSNull null]])
+    {
+        str = [NSString stringWithFormat:@"类别："];
+    }else{
+        str = [NSString stringWithFormat:@"类别：%@",_model.cat];
+    }
     
-    NSString *str = [NSString stringWithFormat:@"类别：%@",_model.cat];
     
     NSMutableAttributedString *hintString=[[NSMutableAttributedString alloc]initWithString:str];
     //获取要调整颜色的文字位置,调整颜色
@@ -326,6 +337,29 @@
     }else{
         _headImageView.image = nil;
     }
+    
+}
+
+- (NSString *)formatFloat:(double)f
+{
+    if (fmodf(f, 1)==0) {//如果有一位小数点
+        return [NSString stringWithFormat:@"%.0f",f];
+    } else if (fmodf(f*10, 1)==0) {//如果有两位小数点
+        return [NSString stringWithFormat:@"%.1f",f];
+    } else {
+        return [NSString stringWithFormat:@"%.2f",f];
+    }
+}
+
+
+-(NSString *)floatToStringWithStr:(NSString *)str{
+    
+    double flo = [str doubleValue];
+//    int intres = flo*100;
+//    double res = (double)intres/100;
+    NSString *need = [self formatFloat:flo];
+    return need;
+    
     
 }
 

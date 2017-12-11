@@ -8,6 +8,9 @@
 
 #import "ZXView.h"
 #import "UIView+Extension.h"
+
+//#define NedY HDAutoWidth(-80)
+
 @interface ZXView ()
 @property (nonatomic, strong) CAShapeLayer *lineChartLayer;
 @property (nonatomic, strong)UIBezierPath * path1;
@@ -124,12 +127,12 @@ static NSInteger countq = 0;
     
    
     
-    [path moveToPoint:CGPointMake( label.frame.origin.x - bounceX, (50 -real) /50 * (self.frame.size.height - bounceY*2 ) )];
+    [path moveToPoint:CGPointMake( label.frame.origin.x - bounceX, (50 -real) /50 * (self.frame.size.height - bounceY*2 ) + _NedY)];
     
     
     
     UIView *pointView = [[UIView alloc]init];
-    pointView.center = CGPointMake( label.frame.origin.x - bounceX, (50 -real) /50 * (self.frame.size.height - bounceY*2 ) );
+    pointView.center = CGPointMake( label.frame.origin.x - bounceX, (50 -real) /50 * (self.frame.size.height - bounceY*2 ) + _NedY );
     pointView.width = HDAutoWidth(10);
     pointView.height = HDAutoWidth(10);
     pointView.layer.masksToBounds = YES;
@@ -143,7 +146,7 @@ static NSInteger countq = 0;
     
     
     
-    UILabel * falglabel = [[UILabel alloc]initWithFrame:CGRectMake(label.frame.origin.x -15, (50 -real) /50 * (self.frame.size.height - bounceY*2 )+ bounceY +4 , 30, 15)];
+    UILabel * falglabel = [[UILabel alloc]initWithFrame:CGRectMake(label.frame.origin.x -15,_NedY + (50 -real) /50 * (self.frame.size.height - bounceY*2 )+ bounceY +4 , 30, 15)];
     //  falglabel.backgroundColor = [UIColor blueColor];
     falglabel.tag = 3000;
     
@@ -153,7 +156,7 @@ static NSInteger countq = 0;
     
     falglabel.textAlignment = NSTextAlignmentCenter;
     
-    UILabel * falglabelTop = [[UILabel alloc]initWithFrame:CGRectMake(label.frame.origin.x -15, (50 -real) /50 * (self.frame.size.height - bounceY*2 )+ bounceY -22 , 30, 15)];
+    UILabel * falglabelTop = [[UILabel alloc]initWithFrame:CGRectMake(label.frame.origin.x -15,_NedY+ (50 -real) /50 * (self.frame.size.height - bounceY*2 )+ bounceY -22 , 30, 15)];
     falglabelTop.textAlignment = NSTextAlignmentCenter;
     //  falglabel.backgroundColor = [UIColor blueColor];
     falglabelTop.tag = 4000;
@@ -184,15 +187,15 @@ static NSInteger countq = 0;
         
         UILabel * label1 = (UILabel*)[self viewWithTag:1000 + i];
         CGFloat  arc = real2;
-        [path addLineToPoint:CGPointMake(label1.frame.origin.x - bounceX,  (50 -arc) /50 * (self.frame.size.height - bounceY*2 ) )];
+        [path addLineToPoint:CGPointMake(label1.frame.origin.x - bounceX, _NedY + (50 -arc) /50 * (self.frame.size.height - bounceY*2 ) )];
         
-        UILabel * falglabel = [[UILabel alloc]initWithFrame:CGRectMake(label1.frame.origin.x -15, (50 -arc) /50 * (self.frame.size.height - bounceY*2 )+ bounceY +4 , 30, 15)];
+        UILabel * falglabel = [[UILabel alloc]initWithFrame:CGRectMake(label1.frame.origin.x -15,_NedY+ (50 -arc) /50 * (self.frame.size.height - bounceY*2 )+ bounceY +4 , 30, 15)];
         
         falglabel.textAlignment = NSTextAlignmentCenter;
         
         UIView *pointView = [[UIView alloc]init];
         
-        pointView.center = CGPointMake(label1.frame.origin.x - bounceX,  (50 -arc) /50 * (self.frame.size.height - bounceY*2 ) );
+        pointView.center = CGPointMake(label1.frame.origin.x - bounceX,_NedY+  (50 -arc) /50 * (self.frame.size.height - bounceY*2 ));
         
         pointView.width = HDAutoWidth(10);
         pointView.height = HDAutoWidth(10);
@@ -214,7 +217,7 @@ static NSInteger countq = 0;
         falglabel.font = [UIFont systemFontOfSize:8.0];
         [self addSubview:falglabel];
         
-        UILabel * falglabelTop2 = [[UILabel alloc]initWithFrame:CGRectMake(label1.frame.origin.x -15 , (50 -arc) /50 * (self.frame.size.height - bounceY*2 ) + bounceY -22 , 30, 15)];
+        UILabel * falglabelTop2 = [[UILabel alloc]initWithFrame:CGRectMake(label1.frame.origin.x -15 ,_NedY + (50 -arc) /50 * (self.frame.size.height - bounceY*2 ) + bounceY -22 , 30, 15)];
         //  falglabel.backgroundColor = [UIColor blueColor];
         falglabelTop2.textAlignment = NSTextAlignmentCenter;
         falglabelTop2.tag = 4000+i;

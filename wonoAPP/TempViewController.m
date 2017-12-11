@@ -18,6 +18,8 @@
 
 #import "BBFlashCtntLabel.h"
 
+#import "CompleteInfoViewController.h"
+
 //#import "LoadingView.h"
 
 //百度地图
@@ -697,8 +699,15 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"点击了");
+    
+    CompleteInfoViewController *com = [[CompleteInfoViewController alloc]init];
+    com.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:com animated:YES];
+    return;
+    
 //    [self showAlert];
 //    return;
+    
     MainTempModel *nowModel = dataArr[indexPath.row];
     
     int needId = nowModel.pengID;

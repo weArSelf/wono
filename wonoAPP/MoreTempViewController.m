@@ -229,7 +229,31 @@ static NSString *const kHeWeatherAPI   = @"https://api.heweather.com/x3/weather?
     [realDataArr addObject:date];
     [realDataArr addObject:temp];
     
+    float mincen = 100;
+    for (int i=0; i<max.count; i++) {
+        
+        NSString *maxstr = max[0];
+        NSString *minstr = min[0];
+        
+        int maxval = [maxstr intValue];
+        int minval = [minstr intValue];
+        
+        float real = (float)(maxval + minval)/2;
+        
+        if(real <mincen){
+            mincen = real;
+        }
+        
+    }
+    
+    float res = 0;
+    
+    if (mincen < 15) {
+        res = ((15-mincen)/15 )*HDAutoWidth(-90);
+    }
+    
     _zxView = [[ZXView alloc]initWithFrame:CGRectMake(10, 100, [UIScreen mainScreen].bounds.size.width, 250)];
+    _zxView.NedY = res;
     _zxView.dataArray = realDataArr;
     [self.view addSubview:_zxView];
 

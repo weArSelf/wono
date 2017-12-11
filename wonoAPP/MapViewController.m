@@ -7,16 +7,11 @@
 //
 
 #import "MapViewController.h"
-//百度地图
-#import <BaiduMapAPI_Base/BMKBaseComponent.h>//引入base相关所有的头文件
-#import <BaiduMapAPI_Map/BMKMapComponent.h>//引入地图功能所有的头文件
-#import <BaiduMapAPI_Search/BMKSearchComponent.h>//引入检索功能所有的头文件
-#import <BaiduMapAPI_Cloud/BMKCloudSearchComponent.h>//引入云检索功能所有的头文件
-#import <BaiduMapAPI_Location/BMKLocationComponent.h>//引入定位功能所有的头文件
-#import <BaiduMapAPI_Utils/BMKUtilsComponent.h>//引入计算工具所有的头文件
-#import <BaiduMapAPI_Radar/BMKRadarComponent.h>//引入周边雷达功能所有的头文件
-#import <BaiduMapAPI_Map/BMKMapView.h>//只引入所需的单个头文件
-#define BMK_KEY @"kClOFMdxGkzAgIr6MEfGF8cgGWMjqx02"//百度地图的key
+
+#import "MyMapTableViewCell.h"
+#import "MalLocateModel.h"
+
+
 
 #import "MapSearchViewController.h"
 
@@ -67,11 +62,20 @@
     NSString *resCity;
     
     NSString *resAddress;
+    
+    BMKReverseGeoCodeResult *nowPosiRes;
+    
+    float height;
+    
+    NSString *selectAdd;
+    
+    NSString *addResult;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    addResult = @"";
+    selectAdd = @"";
     citiCode = @"-1";
     // Do any additional setup after loading the view.
     resName = @"";
@@ -104,8 +108,87 @@
 //    [self createBottom];
     
     [self creatyRestView];
-
+    [self setKayboard];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(searchChange:) name:@"searchChange" object:nil];
+    
 }
+
+-(void)searchChange:(NSNotification *)noti{
+    NSDictionary *dic = (NSDictionary *)[noti object];
+    
+    NSString *lat = dic[@"lat"];
+    NSString *lont = dic[@"lont"];
+   
+    
+    MalLocateModel *model = dic[@"sel"];
+    
+    dispatch_after(0.2, dispatch_get_main_queue(), ^{
+        
+        [self reverseGeoCodeWithLatitude:lat withLongitude:lont];
+        
+        dispatch_after(2, dispatch_get_main_queue(), ^{
+            _mapView.centerCoordinate = model.loc;
+            _annotation.coordinate = model.loc;
+        });
+        
+    });
+    
+    
+    
+    
+    
+    selectItem = 100;
+    selectAdd = dic[@"adress"];
+    
+    
+    NSLog(@"%@  %@  %@", dic[@"name"],lat,lont);
+    
+}
+
+
+-(void)setKayboard{
+    //使用NSNotificationCenter 鍵盤出現時
+    [[NSNotificationCenter defaultCenter] addObserver:self
+     
+                                             selector:@selector(keyboardWasShown:)
+     
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    //使用NSNotificationCenter 鍵盤隐藏時
+    [[NSNotificationCenter defaultCenter] addObserver:self
+     
+                                             selector:@selector(keyboardWillBeHidden:)
+     
+                                                 name:UIKeyboardWillHideNotification object:nil];
+}
+
+//实现当键盘出现的时候计算键盘的高度大小。用于输入框显示位置
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    NSDictionary *userInfo = [aNotification userInfo];
+    NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect keyboardRect = [aValue CGRectValue];
+    height = keyboardRect.size.height;
+    [_table layoutIfNeeded];
+    [UIView animateWithDuration:0.3 animations:^{
+       
+        _table.y = SCREEN_HEIGHT - height-_table.height;
+        
+    }];
+}
+
+//当键盘隐藏的时候
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    [_table layoutIfNeeded];
+    [UIView animateWithDuration:0.5 animations:^{
+        
+        _table.y = SCREEN_HEIGHT - _table.height;
+        
+    }];
+    
+}
+
 
 -(void)creatyRestView{
     _regionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -457,7 +540,19 @@
 {
     
     if (error == BMK_SEARCH_NO_ERROR) {
+        
         citiCode = result.cityCode;
+        
+        nowPosiRes = result;
+        
+        if(_table !=nil){
+            NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:0];
+            NSArray *arr = [NSArray arrayWithObject:index];
+            [_table reloadRowsAtIndexPaths:arr withRowAnimation:YES];
+        }
+        
+//        BMKAddressComponent *detail = result.addressDetail;
+        
         NSString *address1 = result.address; // result.addressDetail ///层次化地址信息
         NSLog(@"我的位置在 %@",address1);
 //        _annotation.title = address1;
@@ -489,15 +584,17 @@
             [self.view addSubview:_table];
             [_table mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.equalTo(self.view.mas_left);
-                make.bottom.equalTo(self.view.mas_bottom).offset(-15);
+                make.bottom.equalTo(self.view.mas_bottom).offset(0);
                 make.right.equalTo(self.view.mas_right);
                 make.top.equalTo(self.mapView.mas_bottom).offset(5);
             }];
 
             
         }else{
-            [_table reloadData];
             selectItem = -1;
+            [_table setContentOffset:CGPointMake(0,0) animated:YES];
+            [_table reloadData];
+            
         }
         
         
@@ -512,62 +609,134 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return dataArr.count;
+    return dataArr.count+1;
 }
 
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    UITableViewCell *cell = [[UITableViewCell alloc]init];
     
     
-    BBFlashCtntLabel *titleLabel = [[BBFlashCtntLabel alloc]initWithFrame:CGRectMake(15, 5, SCREEN_WIDTH-30, 30)];
-    titleLabel.speed = -1;
-    titleLabel.font = [UIFont systemFontOfSize:14];
-    titleLabel.textColor = [UIColor grayColor];
-    BBFlashCtntLabel *detailLabel = [[BBFlashCtntLabel alloc]initWithFrame:CGRectMake(15, 35, SCREEN_WIDTH-39, 20)];
-    detailLabel.speed = -1;
-    detailLabel.font = [UIFont systemFontOfSize:12];
-    detailLabel.textColor = [UIColor lightGrayColor];
-    BMKPoiInfo *model = dataArr[indexPath.row];
-    titleLabel.text = model.name;
-    detailLabel.text = model.address;
-    [cell.contentView addSubview:titleLabel];
-    [cell.contentView addSubview:detailLabel];
-    
-    
-    
-    if(selectItem == indexPath.row){
-        UIImageView *imgV = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"对勾"]];
-        imgV.contentMode = UIViewContentModeScaleAspectFit;
-        [cell.contentView addSubview:imgV];
+    if(indexPath.row == 0){
         
-        [imgV mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(cell.contentView.mas_centerY);
-            make.right.equalTo(cell.contentView.mas_right).offset(-10);
-            make.width.equalTo(@(30));
-            make.height.equalTo(@(30));
-        }];
+        NSString *iden = @"identify";
+        
+        MyMapTableViewCell *neCell = [tableView dequeueReusableCellWithIdentifier:iden];
+        if(neCell == nil){
+            neCell = [[MyMapTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:iden];
+            neCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            neCell.res = nowPosiRes;
+            
+            if(selectItem != -1){
+                neCell.posiTextView.text = selectAdd;
+            }
+            addResult = neCell.posiTextView.text;
+            
+            neCell.addressBlock = ^(NSString *address) {
+                addResult = address;
+            };
+            
+        }
+        
+//        cell.textLabel.text = @"将要开发的功能";
+        
+        return neCell;
+    }else{
+        
+        NSString *ide = @"identyfy233";
 
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ide];
+        if(1){
+            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ide];
+            
+            BBFlashCtntLabel *titleLabel = [[BBFlashCtntLabel alloc]initWithFrame:CGRectMake(15, 5, SCREEN_WIDTH-30, 30)];
+            titleLabel.speed = -1;
+            titleLabel.font = [UIFont systemFontOfSize:14];
+            titleLabel.textColor = [UIColor grayColor];
+            BBFlashCtntLabel *detailLabel = [[BBFlashCtntLabel alloc]initWithFrame:CGRectMake(15, 35, SCREEN_WIDTH-39, 20)];
+            detailLabel.speed = -1;
+            detailLabel.font = [UIFont systemFontOfSize:12];
+            detailLabel.textColor = [UIColor lightGrayColor];
+            BMKPoiInfo *model = dataArr[indexPath.row-1];
+            titleLabel.text = model.name;
+            detailLabel.text = model.address;
+            [cell.contentView addSubview:titleLabel];
+            [cell.contentView addSubview:detailLabel];
+            
+            
+            
+            
+//            if(selectItem == indexPath.row){
+//                UIImageView *imgV = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"对勾"]];
+//                imgV.contentMode = UIViewContentModeScaleAspectFit;
+//                [cell.contentView addSubview:imgV];
+//
+//                [imgV mas_makeConstraints:^(MASConstraintMaker *make) {
+//                    make.centerY.equalTo(cell.contentView.mas_centerY);
+//                    make.right.equalTo(cell.contentView.mas_right).offset(-10);
+//                    make.width.equalTo(@(30));
+//                    make.height.equalTo(@(30));
+//                }];
+//
+//            }
+            
+        }
+        
+//        UITableViewCell *cell = [[UITableViewCell alloc]init];
+        
+        
+        return cell;
+
+        
     }
     
-    return cell;
-
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if(indexPath.row == 0){
+        
+        NSString *iden = @"identify";
+        
+        MyMapTableViewCell *neCell = [tableView dequeueReusableCellWithIdentifier:iden];
+        if(neCell == nil){
+            neCell = [[MyMapTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:iden];
+            neCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            neCell.res = nowPosiRes;
+        }
+        
+        
+        
+        return [neCell needReturnHeight];
+    }else{
+        return 60;
+    }
     
-    return 60;
     
 }
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    if(indexPath.row == 0){
+        return;
+    }
+    
+    [tableView setContentOffset:CGPointMake(0,0) animated:YES];
+    
+//    if(_table !=nil){
+//        NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:0];
+//        NSArray *arr = [NSArray arrayWithObject:index];
+//        [_table reloadRowsAtIndexPaths:arr withRowAnimation:YES];
+//    }
+    
     selectItem = (int)indexPath.row;
-    [tableView reloadData];
-    BMKPoiInfo *model = dataArr[indexPath.row];
+//    [tableView reloadData];
+    BMKPoiInfo *model = dataArr[indexPath.row-1];
+    
+    selectAdd = model.address;
+    
      _mapView.centerCoordinate = model.pt;
     _annotation.coordinate = model.pt;
     
@@ -583,6 +752,9 @@
     resCity = model.city;
     
     resAddress = model.address;
+    
+    [self reverseGeoCodeWithLatitude:lat withLongitude:lont];
+    
 }
 
 
@@ -684,21 +856,41 @@
 -(void)locationClick{
     NSLog(@"点击确定");
     
-    if([lont isEqualToString:@""]){
-        [MBProgressHUD showSuccess:@"请选择地点"];
-        return;
-    }
-    if([lat isEqualToString:@""]){
-        [MBProgressHUD showSuccess:@"请选择地点"];
-        return;
-    }
+//    if([lont isEqualToString:@""]){
+//        [MBProgressHUD showSuccess:@"请选择地点"];
+//        return;
+//    }
+//    if([lat isEqualToString:@""]){
+//        [MBProgressHUD showSuccess:@"请选择地点"];
+//        return;
+//    }
+//    UIAlertControllerStyle
+//    UIAlertControllerStyle
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:@"地址将以下方内容为准,是否确定?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        if ([self.delegate respondsToSelector:@selector(confirmWithName:AndLongitude:AndLatitude:AndCity: AndAddress:)]) {
+//            [self.delegate confirmWithName:resName AndLongitude:lont AndLatitude:lat AndCity:resCity AndAddress:resAddress];
+//        }
+        
+        if([self.delegate respondsToSelector:@selector(confirmWithobj:AndName:)]){
+            [self.delegate confirmWithobj:nowPosiRes AndName:addResult];
+        }
+        
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
     
+    [alertVC addAction:cancel];
+    [alertVC addAction:confirmAct];
+    [self presentViewController:alertVC animated:YES completion:nil];
     
-    
-    if ([self.delegate respondsToSelector:@selector(confirmWithName:AndLongitude:AndLatitude:AndCity: AndAddress:)]) {
-        [self.delegate confirmWithName:resName AndLongitude:lont AndLatitude:lat AndCity:resCity AndAddress:resAddress];
-    }
-    [self.navigationController popViewControllerAnimated:YES];
+   
+}
+
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    [self.view endEditing:YES];
 }
 
 @end

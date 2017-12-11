@@ -641,8 +641,18 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"点击了");
+    
+    
+    
     PlantBaseModel *baseModel = dataArr[indexPath.section];
     PlantModel *model = baseModel.arr[indexPath.row];
+    
+    NSString *need = model.deleteState;
+    int ne = [need intValue];
+    if(ne == 1){
+        [MBProgressHUD showSuccess:@"所属大棚已删除"];
+        return;
+    }
     
     NSString *needID = model.pengID;
     
@@ -913,6 +923,8 @@
                     
                     model.pengID = dic2[@"gid"];
                     
+                    model.deleteState = dic2[@"is_delete"];
+                    
                     NSString *typeS = [NSString stringWithFormat:@"%@",dic2[@"plant_type_id"]];
                     if([typeS isEqualToString:@"1"]){
                         
@@ -1112,7 +1124,7 @@
                     model.extraStr = dic2[@"variety_name"];
                     
                     model.pengID = dic2[@"gid"];
-                    
+                    model.deleteState = dic2[@"is_delete"];
                     
                     NSString *typeS = [NSString stringWithFormat:@"%@",dic2[@"plant_type_id"]];
                     if([typeS isEqualToString:@"1"]){
@@ -1241,7 +1253,7 @@
                     model.extraStr = dic2[@"variety_name"];
                     
                     model.pengID = dic2[@"gid"];
-                    
+                    model.deleteState = dic2[@"is_delete"];
                     NSString *typeS = [NSString stringWithFormat:@"%@",dic2[@"plant_type_id"]];
                     if([typeS isEqualToString:@"1"]){
                         
@@ -1419,7 +1431,7 @@
                     model.extraStr = dic2[@"variety_name"];
                     
                     model.pengID = dic2[@"gid"];
-                    
+                    model.deleteState = dic2[@"is_delete"];
                     NSString *typeS = [NSString stringWithFormat:@"%@",dic2[@"plant_type_id"]];
                     if([typeS isEqualToString:@"1"]){
                         
@@ -1583,7 +1595,7 @@
                     model.extraStr = dic2[@"variety_name"];
                     
                     model.pengID = dic2[@"gid"];
-                    
+                    model.deleteState = dic2[@"is_delete"];
                     NSString *typeS = [NSString stringWithFormat:@"%@",dic2[@"plant_type_id"]];
                     if([typeS isEqualToString:@"1"]){
                         
