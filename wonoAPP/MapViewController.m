@@ -592,8 +592,10 @@
             
         }else{
             selectItem = -1;
-            [_table setContentOffset:CGPointMake(0,0) animated:YES];
             [_table reloadData];
+            [_table scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+            
+            
             
         }
         
@@ -722,8 +724,8 @@
     if(indexPath.row == 0){
         return;
     }
-    
-    [tableView setContentOffset:CGPointMake(0,0) animated:YES];
+    [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+//    [tableView setContentOffset:CGPointMake(0,0) animated:YES];
     
 //    if(_table !=nil){
 //        NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:0];

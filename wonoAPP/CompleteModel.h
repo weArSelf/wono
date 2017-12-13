@@ -20,4 +20,8 @@
 @property (nonatomic,strong) NSString *address;
 @property (nonatomic,strong) NSString *location;
 
+@property (nonatomic,strong) NSString *province;
+@property (nonatomic,strong) NSString *city;
+@property (nonatomic,strong) NSString *district;
+
 @end

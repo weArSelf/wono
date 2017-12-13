@@ -28,12 +28,15 @@
 @property (nonatomic,strong) UIView *zhichuView;
 @property (nonatomic,strong) UILabel *zhichumiaoshuLabel;
 
-@property (nonatomic,strong) UIView *model6View;
+
 
 //@property (nonatomic,strong) UIView *rewardDetailView;
 
 //@property (nonatomic,strong) UIView *secondView;
 
+@property (nonatomic,strong) UIView *model4View;
+@property (nonatomic,strong) UIView *model5View;
+@property (nonatomic,strong) UIView *model6View;
 
 @end
 
@@ -379,8 +382,13 @@
     botView.frame = CGRectMake(HDAutoWidth(40), bot +HDAutoHeight(50), SCREEN_WIDTH-HDAutoWidth(80), 1);
     [_headScrlView addSubview:botView];
     
+    if(!IS_IPHONE_5){
+        height1 = botView.bottom +HDAutoHeight(10);
+    }else{
+        height1 = botView.bottom +HDAutoHeight(50);
+    }
     
-    height1 = botView.bottom +HDAutoHeight(10);
+    
     
     _headScrlView.contentSize = CGSizeMake(SCREEN_WIDTH*2, height1);
     _headScrlView.frame = CGRectMake(0, 0, SCREEN_WIDTH, height1);
@@ -494,8 +502,12 @@
     botView.frame = CGRectMake(0, bot +HDAutoHeight(50), SCREEN_WIDTH, 1);
     [_headScrlView addSubview:botView];
     
+    if(!IS_IPHONE_5){
+        height1 = botView.bottom +HDAutoHeight(10);
+    }else{
+        height1 = botView.bottom +HDAutoHeight(50);
+    }
     
-    height1 = botView.bottom +HDAutoHeight(10);
     
     _headScrlView.contentSize = CGSizeMake(SCREEN_WIDTH*2, height1);
     _headScrlView.frame = CGRectMake(0, 0, SCREEN_WIDTH, height1);
@@ -781,8 +793,13 @@
     botView.frame = CGRectMake(HDAutoWidth(40)+SCREEN_WIDTH, bot +HDAutoHeight(50), SCREEN_WIDTH-HDAutoWidth(80), 1);
     [_headScrlView addSubview:botView];
     
+    if(!IS_IPHONE_5){
+        height2 = botView.bottom +HDAutoHeight(10);
+    }else{
+        height2 = botView.bottom +HDAutoHeight(50);
+    }
     
-    height2 = botView.bottom +HDAutoHeight(10);
+//    height2 = botView.bottom +HDAutoHeight(10);
 //
 //    _headScrlView.contentSize = CGSizeMake(SCREEN_WIDTH*2, height1);
 //    _headScrlView.frame = CGRectMake(0, 0, SCREEN_WIDTH, height1);
@@ -899,7 +916,13 @@
     [_headScrlView addSubview:botView];
     
     
-    height2 = botView.bottom +HDAutoHeight(10);
+    if(!IS_IPHONE_5){
+        height2 = botView.bottom +HDAutoHeight(10);
+    }else{
+        height2 = botView.bottom +HDAutoHeight(50);
+    }
+    
+//    height2 = botView.bottom +HDAutoHeight(10);
 //
 //    _headScrlView.contentSize = CGSizeMake(SCREEN_WIDTH*2, height1);
 //    _headScrlView.frame = CGRectMake(0, 0, SCREEN_WIDTH, height1);
@@ -914,6 +937,8 @@
 -(void)createMode4{
     
 //    NSArray *arr = total[@"greens"];
+    
+
     
     NSArray *arr;
     @try {
@@ -933,12 +958,12 @@
         total +=res;
     }
     
-    UIView *mainView = [[UIView alloc]init];
-    mainView.tag = 234;
+    _model4View = [[UIView alloc]init];
+    _model4View.tag = 234;
     
-    mainView.frame = CGRectMake(0, height1, SCREEN_WIDTH, 0);
+    _model4View.frame = CGRectMake(0, height1+HDAutoHeight(10), SCREEN_WIDTH, 0);
     
-    [self addSubview:mainView];
+    [self addSubview:_model4View];
     
     BBFlashCtntLabel *headLabel = [self myLabel];
     [bbArrays addObject:headLabel];
@@ -946,13 +971,13 @@
     headLabel.textColor = [UIColor blackColor];
     headLabel.frame = CGRectMake(HDAutoWidth(20), HDAutoHeight(10), SCREEN_WIDTH, HDAutoHeight(60));
     headLabel.speed = -1;
-    [mainView addSubview:headLabel];
+    [_model4View addSubview:headLabel];
     
     
     UIImageView *shouruImageView = [self myImageView];
     [shouruImageView setImage:[UIImage imageNamed:@""]];
     //    [shouruImageView addSubview:_shouruImgView];
-    [mainView addSubview:shouruImageView];
+    [_model4View addSubview:shouruImageView];
     shouruImageView.frame = CGRectMake(HDAutoWidth(20), headLabel.bottom+HDAutoHeight(30), HDAutoWidth(75), HDAutoWidth(75));
     
     float bot = 0.0;
@@ -989,9 +1014,9 @@
         
         detailLabel.speed = -1;
         
-        [mainView addSubview:label];
-        [mainView addSubview:view];
-        [mainView addSubview:detailLabel];
+        [_model4View addSubview:label];
+        [_model4View addSubview:view];
+        [_model4View addSubview:detailLabel];
         
         bot = view.bottom;
     }
@@ -1006,15 +1031,15 @@
         label.textAlignment = NSTextAlignmentCenter;
         label.frame = CGRectMake(SCREEN_WIDTH, headLabel.bottom+HDAutoHeight(30), SCREEN_WIDTH, HDAutoHeight(100));
         
-        [_headScrlView addSubview:label];
+        [_model4View addSubview:label];
         bot = label.bottom;
     }
     
     UIView *botView = [[UIView alloc]init];
     botView.backgroundColor = [UIColor grayColor];
     botView.frame = CGRectMake(0, bot +HDAutoHeight(50), SCREEN_WIDTH, 1);
-    [mainView addSubview:botView];
-    mainView.height = botView.bottom + HDAutoHeight(10);
+    [_model4View addSubview:botView];
+    _model4View.height = botView.bottom + HDAutoHeight(10);
     
     height1 = botView.bottom + height1 +HDAutoHeight(10);
     
@@ -1053,19 +1078,19 @@
     
 //    shouruArr = [NSArray array];
     
-    UIView *mainView = [[UIView alloc]init];
-    mainView.layer.masksToBounds = YES;
-    mainView.tag = 201;
+    _model5View = [[UIView alloc]init];
+    _model5View.layer.masksToBounds = YES;
+    _model5View.tag = 201;
     
-    mainView.backgroundColor = [UIColor whiteColor];
-    [self addSubview:mainView];
-    mainView.frame = CGRectMake(0, height1, SCREEN_WIDTH, HDAutoHeight(290));
+    _model5View.backgroundColor = [UIColor whiteColor];
+    [self addSubview:_model5View];
+    _model5View.frame = CGRectMake(0, height1, SCREEN_WIDTH, HDAutoHeight(290));
     
     BBFlashCtntLabel *titleLabel = [self myLabel];
     [bbArrays addObject:titleLabel];
     titleLabel.text = @"详细收入";
     titleLabel.textColor = [UIColor blackColor];
-    [mainView addSubview:titleLabel];
+    [_model5View addSubview:titleLabel];
     titleLabel.frame = CGRectMake(HDAutoWidth(20), HDAutoHeight(0), HDAutoWidth(300), HDAutoHeight(80));
     titleLabel.speed = -1;
 //    UIControlState
@@ -1075,7 +1100,7 @@
     
     moreBtn.selected = NO;
     [moreBtn addTarget:self action:@selector(moreClick:) forControlEvents:UIControlEventTouchUpInside];
-    [mainView addSubview:moreBtn];
+    [_model5View addSubview:moreBtn];
     moreBtn.frame = CGRectMake(SCREEN_WIDTH - HDAutoWidth(100), titleLabel.top +HDAutoHeight(20), HDAutoHeight(100), HDAutoHeight(100));
     moreBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
     moreBtn.imageEdgeInsets = UIEdgeInsetsMake(0,HDAutoHeight(30),HDAutoHeight(60),HDAutoHeight(30));;
@@ -1097,7 +1122,7 @@
         label.textAlignment = NSTextAlignmentCenter;
         label.frame = CGRectMake(0, HDAutoHeight(100), SCREEN_WIDTH, HDAutoHeight(100));
         
-        [mainView addSubview:label];
+        [_model5View addSubview:label];
         
     }else{
         
@@ -1110,7 +1135,7 @@
             
             UIView *leftView = [[UIView alloc]init];
             leftView.backgroundColor = color;
-            [mainView addSubview:leftView];
+            [_model5View addSubview:leftView];
             
             NSString * totalStr = needDic[@"total_amount"];
             long int re = [totalStr intValue];
@@ -1136,7 +1161,7 @@
             
 //            UILabel *label = [self myLabel];
             label.text = needText;
-            [mainView addSubview:label];
+            [_model5View addSubview:label];
             
             int a = i%2;
             int row = i/2;
@@ -1156,7 +1181,7 @@
     UIView *botView = [[UIView alloc]init];
     botView.tag = 202;
     botView.backgroundColor = [UIColor grayColor];
-    [mainView addSubview:botView];
+    [_model5View addSubview:botView];
     
 //    [botView mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.left.equalTo(mainView.mas_left);
@@ -1166,9 +1191,9 @@
 //
 //    }];
     
-    botView.frame = CGRectMake(0, mainView.bottom-1 - mainView.y, SCREEN_WIDTH, 1);
+    botView.frame = CGRectMake(0, _model5View.bottom-1 - _model5View.y, SCREEN_WIDTH, 1);
 
-    height1 = botView.bottom +HDAutoHeight(10)+mainView.y;
+    height1 = botView.bottom +HDAutoHeight(10)+_model5View.y;
     
     NSLog(@"textheight:%f", height1);
     
@@ -1185,11 +1210,11 @@
     
     _model6View = [[UIView alloc]init];
     _model6View.layer.masksToBounds = YES;
-    _model6View.tag = 301;
+//    _model6View.tag = 301;
     
     _model6View.backgroundColor = [UIColor whiteColor];
     
-    _model6View.frame = CGRectMake(0, height1, SCREEN_WIDTH, 0);
+    _model6View.frame = CGRectMake(0, height1, SCREEN_WIDTH, 300);
     [self addSubview:_model6View];
     
     
@@ -1208,45 +1233,22 @@
     needView1.tag = 200;
     [_model6View addSubview:needView1];
     
-//    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5/*延迟执行时间*/ * NSEC_PER_SEC));
-//
-//    dispatch_after(delayTime, dispatch_get_main_queue(), ^{
-        UIView *needView2 = [self createModel6DetailViewWithDataArr:arr AndTitle:@"植保"];
-        needView2.layer.masksToBounds = YES;
-        needView2.frame = CGRectMake(0, needView1.bottom+HDAutoHeight(10), SCREEN_WIDTH, HDAutoHeight(205));
-        needView2.tag = 300;
-        [_model6View addSubview:needView2];
-        
-//        dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0/*延迟执行时间*/ * NSEC_PER_SEC));
-//
-//        dispatch_after(delayTime, dispatch_get_main_queue(), ^{
-            UIView *needView3 = [self createModel6DetailViewWithDataArr:arr AndTitle:@"施肥"];
-            needView3.layer.masksToBounds = YES;
-            needView3.frame = CGRectMake(0, needView2.bottom+HDAutoHeight(10), SCREEN_WIDTH, HDAutoHeight(205));
-            needView3.tag = 400;
-            [_model6View addSubview:needView3];
-            
-            _model6View.height = needView3.bottom + HDAutoHeight(20);
-            
-            botbotView = [[UIView alloc]init];
-            
-            botbotView.backgroundColor = [UIColor grayColor];
-            [_model6View addSubview:botbotView];
-            botbotView.frame = CGRectMake(0, _model6View.bottom-1-_model6View.y, SCREEN_WIDTH, 1);
-            
-            height1 = height1 + _model6View.height;
-            
-//            [self needPostNoti];
-//        });
+    UIView *needView2 = [self createModel6DetailViewWithDataArr:arr AndTitle:@"植保"];
+    needView2.layer.masksToBounds = YES;
+    needView2.frame = CGRectMake(0, needView1.bottom+HDAutoHeight(10), SCREEN_WIDTH, HDAutoHeight(205));
+    needView2.tag = 300;
+    [_model6View addSubview:needView2];
     
-        
-//    });
+    UIView *needView3 = [self createModel6DetailViewWithDataArr:arr AndTitle:@"施肥"];
+    needView3.layer.masksToBounds = YES;
+    needView3.frame = CGRectMake(0, needView2.bottom+HDAutoHeight(10), SCREEN_WIDTH, HDAutoHeight(205));
+    needView3.tag = 400;
+    [_model6View addSubview:needView3];
     
-    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0/*延迟执行时间*/ * NSEC_PER_SEC));
+    float height = needView3.bottom;
+    _model6View.height = height+HDAutoHeight(20);
     
-    dispatch_after(delayTime, dispatch_get_main_queue(), ^{
-        [self checkView];
-    });
+
     
     
 }
@@ -1392,6 +1394,7 @@
 
 -(void)mode6Click:(UIButton *)btn{
     
+    
     NSDictionary *dic = total[@"bills"];
     dic = dic[@"outdetail"];
     NSArray *shouruArr;
@@ -1410,10 +1413,11 @@
         row+=1;
     }
     
+    
     float height = row *HDAutoHeight(90);
     
     UIView *nowView = btn.superview;
-    UIView *faView = [self viewWithTag:301];
+    UIView *faView = _model6View;
 //    UIView *botView = [faView viewWithTag:233];
     NSArray *arr = faView.subviews;
     for (int i=0; i<arr.count; i++) {
@@ -1442,14 +1446,14 @@
     if(btn.selected == NO){
         
         [UIView animateWithDuration:0.5 animations:^{
-            botbotView.y+=height;
+//            botbotView.y+=height;
             faView.height += height;
         } completion:^(BOOL finished) {
             
         }];
     }else{
         [UIView animateWithDuration:0.5 animations:^{
-            botbotView.y-=height;
+//            botbotView.y-=height;
             faView.height -= height;
         } completion:^(BOOL finished) {
             
@@ -1504,6 +1508,21 @@
     UIView *needView;
     UIView *botView;
     NSArray *arr = self.subviews;
+    
+    if(btn.selected == NO){
+        [UIView animateWithDuration:0.5 animations:^{
+            _model6View.y+=height;
+        } completion:^(BOOL finished) {
+            
+        }];
+    }else{
+        [UIView animateWithDuration:0.5 animations:^{
+            _model6View.y-=height;
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+    
     for (int i=0; i<arr.count; i++) {
         UIView *view = arr[i];
         if(view.tag == 201){
@@ -1526,6 +1545,9 @@
             
             
         }
+        
+       
+        
     }
     NSArray *arr2 = needView.subviews;
     for (int i=0; i<arr2.count; i++) {
@@ -1605,7 +1627,7 @@
 
 -(float)needToReturnHeightWithModel:(NSString *)model{
     
-    UIView *view = [self viewWithTag:301];
+//    UIView *view = [self viewWithTag:301];
     return _model6View.bottom+HDAutoHeight(10);
 //    return 2600;
     
@@ -1619,42 +1641,40 @@
 -(void)changeScrollViewWithState:(int)state{
     NSLog(@"aaa233");
     
-    [self checkView];
+//    return;
+    
+//    [self checkView];
+    
+    float cha = height2 - heightOrgin;
+    
     if (state == 1) {
         [_headScrlView setContentOffset:CGPointMake(0, 0) animated:YES];
-        _headScrlView.height-=height2-heightOrgin;
-        _headScrlView.contentSize = CGSizeMake(SCREEN_WIDTH*2, _headScrlView.height);
-        NSArray *arr = [self subviews];
-        for (int i=0; i<arr.count; i++) {
-            UIView *view = arr[i];
-            if (view.tag == 234||view.tag == 201|view.tag == 301) {
-                
-                [UIView animateWithDuration:0.5 animations:^{
-                    
-                    view.y-=height2-heightOrgin;
-                    
-                }];
-                
-            }
-        }
+        
+        _headScrlView.height = heightOrgin;
+        _headScrlView.contentSize = CGSizeMake(SCREEN_WIDTH*2, heightOrgin);
+       
+        [UIView animateWithDuration:0.5 animations:^{
+
+            _model4View.y -=cha;
+            _model5View.y -=cha;
+            _model6View.y -=cha;
+
+        }];
         
     }else{
         [_headScrlView setContentOffset:CGPointMake(SCREEN_WIDTH, 0) animated:YES];
-        _headScrlView.height+=height2-heightOrgin;
-        _headScrlView.contentSize = CGSizeMake(SCREEN_WIDTH*2, _headScrlView.height);
-        NSArray *arr = [self subviews];
-        for (int i=0; i<arr.count; i++) {
-            UIView *view = arr[i];
-            if (view.tag == 234||view.tag == 201|view.tag == 301) {
-                
-                [UIView animateWithDuration:0.5 animations:^{
-                   
-                    view.y+=height2-heightOrgin;
-                    
-                }];
-                
-            }
-        }
+        _headScrlView.height = height2;
+        _headScrlView.contentSize = CGSizeMake(SCREEN_WIDTH*2, height2);
+        
+        [UIView animateWithDuration:0.5 animations:^{
+
+            _model4View.y +=cha;
+            _model5View.y +=cha;
+            _model6View.y +=cha;
+
+        }];
+        
+
         
     }
     [self needPostNoti];
@@ -1670,27 +1690,7 @@
     
 }
 
--(void)checkView{
-    
-    UIView *view = [self viewWithTag:301];
-    
-    
-    
-    if(view == nil){
-        height1 = height1 - _model6View.height;
-        [self createMode6];
-        view = [self viewWithTag:301];
-        if(view == nil){
-            dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0/*延迟执行时间*/ * NSEC_PER_SEC));
-            
-            dispatch_after(delayTime, dispatch_get_main_queue(), ^{
-                [self checkView];
-            });
-        }
-        
-    }
-    
-}
+
 
 
 @end

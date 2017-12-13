@@ -86,6 +86,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    BOOL isOPen = NO;
+    if ([CLLocationManager locationServicesEnabled] && [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
+        isOPen = YES;
+    }else{
+        [self showAlert];
+    }
+   
+    
     needCount = 0;
     animateMark = true;
     animateMark2 = true;
@@ -127,6 +136,38 @@
 
 }
 
+- (void)showAlert
+{
+    UIAlertController *alertController;
+    alertController = [UIAlertController alertControllerWithTitle:@"当前未开启定位功能" message:@"是否前往设置？" preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *maleAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if([self isSystemVersioniOS8]){
+            //跳入当前App设置界面,
+            [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+        }else{
+            //适配iOS7 ,跳入系统设置界面
+            [[UIApplication sharedApplication]openURL:[NSURL URLWithString:@"prefs:General&path=Reset"]];
+        }
+    }];
+    [alertController addAction:maleAction];
+    UIAlertAction *femaleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        
+    }];
+    [alertController addAction:femaleAction];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(BOOL)isSystemVersioniOS8 {
+    //check systemVerson of device
+    UIDevice *device = [UIDevice currentDevice];
+    float sysVersion = [device.systemVersion floatValue];
+    
+    if (sysVersion >= 8.0f) {
+        return YES;
+    }
+    return NO;
+}
 
 -(void)requestCount{
     
@@ -1185,12 +1226,7 @@
 //}
 
 
-- (void)showAlert
-{
-    
-    [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-    
-}
+
 
 
 

@@ -330,7 +330,7 @@
 }
 
 -(void)getSMS{
-    [[InterfaceSingleton shareInstance].interfaceModel getMsgWithPhoneNumber:_textfPhoneNum.text WithCallBack:^(int state, id data, NSString *msg) {
+    [[InterfaceSingleton shareInstance].interfaceModel getForgetMsgWithPhoneNumber:_textfPhoneNum.text WithCallBack:^(int state, id data, NSString *msg) {
         
         if(state == 2000){
             NSLog(@"获取成功");

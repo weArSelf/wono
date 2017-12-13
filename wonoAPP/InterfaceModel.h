@@ -126,4 +126,6 @@ typedef void(^AllCallBack)(int state, id data, NSString *msg);
 
 -(void)jobChangeWithJob:(NSString *)jobArr AndUnJob:(NSString *)unJob WithGid:(NSString *)gid WithCallBack:(AllCallBack)callback;
 
+-(void)getForgetMsgWithPhoneNumber:(NSString *)phone WithCallBack:(AllCallBack)callback;
+
 @end

@@ -22,6 +22,7 @@
 #define API_Login                           @"auth/login"
 #define API_Reges                           @"auth/register"
 #define API_getMsg                          @"sms/send"
+#define API_getMsgForget                    @"sms/send/forget"
 #define API_CopleteInfo                     @"user/perfect"
 #define API_SearchPhone                     @"user/like/mobile"
 #define API_GetFarm                         @"farm"

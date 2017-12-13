@@ -388,7 +388,12 @@
     model.farmName = _farmTextField.text;
     model.address = _adrLabel.text;
     
-    NSString *locate = [NSString stringWithFormat:@"%@,%@",needlongitude,needlatitude];
+    BMKAddressComponent *addDeal = res.addressDetail;
+    model.city = addDeal.city;
+    model.province = addDeal.province;
+    model.district = addDeal.district;
+    
+    NSString *locate = [NSString stringWithFormat:@"%f,%f",res.location.longitude,res.location.latitude];
     
     model.location = locate;
     
@@ -859,6 +864,7 @@
 //    }
     
 }
+
 
 -(void)confirmWithobj:(BMKReverseGeoCodeResult *)serRes AndName:(NSString *)name{
     res = serRes;

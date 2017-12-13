@@ -42,8 +42,8 @@
 @end
 
 @implementation StatisticsViewController{
-
-//    NSMutableDictionary *resDic;
+    
+    //    NSMutableDictionary *resDic;
     NSMutableArray *lineData;
     NSMutableArray *inDataArr;
     NSMutableArray *outDataArr;
@@ -78,24 +78,24 @@
     
     // Do any additional setup after loading the view.
     
-//    resDic = [NSMutableDictionary dictionary];
+    //    resDic = [NSMutableDictionary dictionary];
     self.view.backgroundColor = [UIColor whiteColor];
     [self creatTitleAndBackBtn];
     
     int nongChangHave = [[[NSUserDefaults standardUserDefaults]objectForKey:@"fid"]intValue];
-//    NSString *pengHave = [[NSUserDefaults standardUserDefaults]objectForKey:@"pengID"];
+    //    NSString *pengHave = [[NSUserDefaults standardUserDefaults]objectForKey:@"pengID"];
     int userType = [[[NSUserDefaults standardUserDefaults]objectForKey:@"userType"]intValue];
     
     if(userType == 2){
         
         if(nongChangHave == 0){
             
-//            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有进入农场\n请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
-//            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//
-//            }];
-//            [alertC addAction:confirmAct];
-//            [self presentViewController:alertC animated:YES completion:nil];
+            //            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"您还没有进入农场\n请联系相关农场主" preferredStyle:UIAlertControllerStyleAlert];
+            //            UIAlertAction *confirmAct = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            //
+            //            }];
+            //            [alertC addAction:confirmAct];
+            //            [self presentViewController:alertC animated:YES completion:nil];
             return;
         }
         
@@ -114,7 +114,7 @@
     
     _mainView = [[UIView alloc]initWithFrame:CGRectMake(0, 40, SCREEN_WIDTH, HDAutoHeight(150))];
     
-//    _mainView.tag = 210;
+    //    _mainView.tag = 210;
     _mainView.backgroundColor = [UIColor whiteColor];
     
     UILabel *label = [[UILabel alloc]init];
@@ -128,16 +128,16 @@
     _MLabel = label;
     
     [_mainScroll addSubview:_mainView];
-
+    
     
     
     [self createChangeView];
     
-//    refreshHeight
+    //    refreshHeight
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(refreshHeight) name:@"heightChange" object:nil];
     
-//    [self addObserver:<#(nonnull NSObject *)#> forKeyPath:<#(nonnull NSString *)#> options:<#(NSKeyValueObservingOptions)#> context:<#(nullable void *)#>]
+    //    [self addObserver:<#(nonnull NSObject *)#> forKeyPath:<#(nonnull NSString *)#> options:<#(NSKeyValueObservingOptions)#> context:<#(nullable void *)#>]
     
     newMainView = [[UIView alloc]initWithFrame:CGRectMake(0, 255+HDAutoHeight(20)+HDAutoHeight(65), SCREEN_WIDTH, 0)];
     [_mainScroll addSubview:newMainView];
@@ -153,19 +153,19 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-//    self.navigationController.navigationBar.alpha = 0;
+    //    self.navigationController.navigationBar.alpha = 0;
     self.navigationController.navigationBar.hidden = YES;
-//    [self.navigationController setNavigationBarHidden:YES animated:YES];
-//    self.navigationController.interactivePopGestureRecognizer.delegate = self;
-//    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    //    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    //    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    //    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     [_mainScroll flashScrollIndicators];
-//    [self requestData];
+    //    [self requestData];
     //    [self.navigationController setNavigationBarHidden:NO animated:YES];
     
     
     
     int nongChangHave = [[[NSUserDefaults standardUserDefaults]objectForKey:@"fid"]intValue];
-//    NSString *pengHave = [[NSUserDefaults standardUserDefaults]objectForKey:@"pengID"];
+    //    NSString *pengHave = [[NSUserDefaults standardUserDefaults]objectForKey:@"pengID"];
     int userType = [[[NSUserDefaults standardUserDefaults]objectForKey:@"userType"]intValue];
     
     if(userType == 2){
@@ -189,10 +189,10 @@
             return;
         }
         if(nongChangHave != 0){
-           
+            
             if(_mainScroll == nil){
                 
-//                [self creatTitleAndBackBtn];
+                //                [self creatTitleAndBackBtn];
                 [self createScroll];
                 [self requestCircleData];
                 
@@ -216,16 +216,16 @@
                 _MLabel = label;
                 
                 [_mainScroll addSubview:_mainView];
-
+                
                 
             }
             
         }
         
     }
-
     
-   
+    
+    
 }
 
 
@@ -276,7 +276,7 @@
 
 -(void)createScroll{
     _mainScroll = [[UIScrollView alloc]init];
-//    _mainScroll.backgroundColor = [UIColor redColor];
+    //    _mainScroll.backgroundColor = [UIColor redColor];
     _mainScroll.frame = CGRectMake(0, 64, SCREEN_WIDTH, SCREEN_HEIGHT-64-49);
     [self.view addSubview:_mainScroll];
     
@@ -287,7 +287,7 @@
     [header setTitle:@"松开立即刷新" forState:MJRefreshStatePulling];
     [header setTitle:@"正在刷新..." forState:MJRefreshStateRefreshing];
     
-   
+    
     _mainScroll.mj_header = header;
 }
 
@@ -347,8 +347,13 @@
                 
             }
             
-//            float cen = maxVal - minVal;
+            //            float cen = maxVal - minVal;
             
+            
+            UIView *view = [_mainScroll viewWithTag:212];
+            [view removeFromSuperview];
+            UIView *view2 = [_mainScroll viewWithTag:213];
+            [view2 removeFromSuperview];
             
             MyZView2 *zView = [[MyZView2 alloc]initWithFrame:CGRectMake(0, 5, [UIScreen mainScreen].bounds.size.width, 250)];
             zView.maxVal = maxVal;
@@ -365,9 +370,9 @@
             [_mainScroll addSubview:botView];
             botView.tag = 213;
             _mainScroll.alpha = 0;
-//            [UIView animateWithDuration:0.5 animations:^{
-//                _mainScroll.alpha = 1;
-//            }];
+            //            [UIView animateWithDuration:0.5 animations:^{
+            //                _mainScroll.alpha = 1;
+            //            }];
             
             [UIView animateWithDuration:0.5 animations:^{
                 _mainScroll.alpha = 1;
@@ -387,24 +392,24 @@
         if(state<2000){
             [MBProgressHUD showSuccess:msg];
         }
-//        [self switchClick];
+        //        [self switchClick];
     }];
     
 }
 
 -(void)createYueNian{
-//UIControlState
+    //UIControlState
     _switchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _switchBtn.tag = 211;
     _switchBtn.selected = NO;
     
-//    UIImage *buttonImage = [[UIImage imageNamed:@"切换"]resizableImageWithCapInsets:UIEdgeInsetsMake(HDAutoWidth(50),HDAutoWidth(50),HDAutoWidth(50),HDAutoWidth(50))];
+    //    UIImage *buttonImage = [[UIImage imageNamed:@"切换"]resizableImageWithCapInsets:UIEdgeInsetsMake(HDAutoWidth(50),HDAutoWidth(50),HDAutoWidth(50),HDAutoWidth(50))];
     
     [_switchBtn setImage:[UIImage imageNamed:@"切换"] forState:UIControlStateNormal];
-//    [_switchBtn setBackgroundImage:[UIImage imageNamed:@"切换"] forState:UIControlStateNormal];
+    //    [_switchBtn setBackgroundImage:[UIImage imageNamed:@"切换"] forState:UIControlStateNormal];
     [_switchBtn addTarget:self action:@selector(switchClick) forControlEvents:UIControlEventTouchUpInside];
     _switchBtn.layer.masksToBounds = YES;
-//    _switchBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    //    _switchBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
     _switchBtn.frame =  CGRectMake(SCREEN_WIDTH - HDAutoWidth(60)-HDAutoWidth(70), 255+HDAutoHeight(20), HDAutoWidth(180), HDAutoWidth(180));
     _switchBtn.alpha = 0;
     _switchBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -412,11 +417,11 @@
     
     [_mainScroll addSubview:_switchBtn];
     
-//    UIButton *hubBtn = [[UIButton alloc]init];
-//    [hubBtn setBackgroundColor:[UIColor clearColor]];
-//    [hubBtn addTarget:self action:@selector(switchClick:) forControlEvents:UIControlEventTouchUpInside];
-//    hubBtn.frame =  CGRectMake(SCREEN_WIDTH - HDAutoWidth(100), 255+HDAutoHeight(20), HDAutoWidth(120), HDAutoWidth(120));
-//    [_mainScroll addSubview:hubBtn];
+    //    UIButton *hubBtn = [[UIButton alloc]init];
+    //    [hubBtn setBackgroundColor:[UIColor clearColor]];
+    //    [hubBtn addTarget:self action:@selector(switchClick:) forControlEvents:UIControlEventTouchUpInside];
+    //    hubBtn.frame =  CGRectMake(SCREEN_WIDTH - HDAutoWidth(100), 255+HDAutoHeight(20), HDAutoWidth(120), HDAutoWidth(120));
+    //    [_mainScroll addSubview:hubBtn];
     
     _secTitleLabel = [[UILabel alloc]init];
     _secTitleLabel.text = @"当月总收入与支出";
@@ -428,28 +433,32 @@
     
     [newMainView addSubview:_secTitleLabel];
     
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn addTarget:self action:@selector(changeClick:) forControlEvents:UIControlEventTouchUpInside];
-    [btn setBackgroundImage:[UIImage imageNamed:@"年度收入与支出"] forState:UIControlStateNormal];
-    [btn setBackgroundImage:[UIImage imageNamed:@"月度收入与支出"] forState:UIControlStateSelected];
-    btn.frame = CGRectMake(HDAutoWidth(25), 255+HDAutoHeight(20), HDAutoWidth(250), HDAutoHeight(64));
-    btn.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    btn.selected = NO;
+    qweBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [qweBtn addTarget:self action:@selector(changeClick:) forControlEvents:UIControlEventTouchUpInside];
+    [qweBtn setBackgroundImage:[UIImage imageNamed:@"年度收入与支出"] forState:UIControlStateNormal];
+    [qweBtn setBackgroundImage:[UIImage imageNamed:@"月度收入与支出"] forState:UIControlStateSelected];
+    qweBtn.frame = CGRectMake(HDAutoWidth(25), 255+HDAutoHeight(20), HDAutoWidth(250), HDAutoHeight(64));
+    qweBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    qweBtn.selected = NO;
     
-    qweBtn = btn;
+    //    qweBtn = btn;
     
-    btn.tag = 230;
+    qweBtn.tag = 230;
     
-    [_mainScroll addSubview:btn];
+    [_mainScroll addSubview:qweBtn];
     
-    btn.alpha = 0;
-    _needBtn = btn;
-
+    qweBtn.alpha = 0;
+    _needBtn = qweBtn;
+    
 }
+
+
+
+
 -(void)changeClick:(UIButton *)btn{
     
     
-    
+    //    NSLog(@"我还在执行");
     btn.enabled = NO;
     dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.5/*延迟执行时间*/ * NSEC_PER_SEC);
     
@@ -457,63 +466,76 @@
         btn.enabled = YES;
     });
     
-    if(_switchBtn.selected == YES){
-     
-        NSLog(@"新页面切换");
-        
-        
-        if(btn.selected == NO){
-            btn.selected = YES;
-            [_needChangeView changeScrollViewWithState:2];
-            
-            [_needChangeView needtoreload];
-            
-        }else{
-            btn.selected = NO;
-            [_needChangeView changeScrollViewWithState:1];
-            
-            [_needChangeView needtoreload];
-        }
-        
-        
-        return;
-    }
     
-//    [MobClick startSession:nil];
-//    [MobClick event:@"check"];
-//    [MobClick event:@"login" durations:10];
     MyPieView *pie1 = [_mainScroll viewWithTag:301];
     MyPieView *pie2 = [_mainScroll viewWithTag:302];
     MyPieView *pie3 = [_mainScroll viewWithTag:401];
     MyPieView *pie4 = [_mainScroll viewWithTag:402];
     
     if(pie3==nil||pie4==nil){
-//        [MBProgressHUD showSuccess:@"尝试获取数据中"];
+        [MBProgressHUD showSuccess:@"您还没有年度数据哦"];
         return;
     }
     
+    
+    
+    
+    
+    //    if(_switchBtn.selected == YES){
+    
+    NSLog(@"新页面切换");
+    
+    
     if(btn.selected == NO){
-        btn.selected = YES;
+        NSLog(@"yes");
+        //            qweBtn.selected = YES;
+        [_needChangeView changeScrollViewWithState:2];
+        
+        [_needChangeView needtoreload];
+        
+    }else{
+        NSLog(@"no");
+        //            qweBtn.selected = NO;
+        
+        [_needChangeView changeScrollViewWithState:1];
+        
+        [_needChangeView needtoreload];
+    }
+    
+    
+    //        return;
+    //    }
+    
+    //    [MobClick startSession:nil];
+    //    [MobClick event:@"check"];
+    //    [MobClick event:@"login" durations:10];
+    
+    
+    if(qweBtn.selected == NO){
+        NSLog(@"yes");
+        qweBtn.selected = YES;
         _secTitleLabel.text = @"本年总收入与支出";
         [UIView animateWithDuration:0.5 animations:^{
-            pie1.x-=SCREEN_WIDTH;
-            pie2.x-=SCREEN_WIDTH;
-            pie3.x-=SCREEN_WIDTH;
-            pie4.x-=SCREEN_WIDTH;
+            
+            pie1.x = SCREEN_WIDTH;
+            pie2.x = SCREEN_WIDTH;
+            pie3.x =0;
+            pie4.x =0;
         }];
         
     }else{
-        btn.selected = NO;
-         _secTitleLabel.text = @"当月总收入与支出";
+        NSLog(@"no");
+        qweBtn.selected = NO;
+        _secTitleLabel.text = @"当月总收入与支出";
         [UIView animateWithDuration:0.5 animations:^{
-            pie1.x+=SCREEN_WIDTH;
-            pie2.x+=SCREEN_WIDTH;
-            pie3.x+=SCREEN_WIDTH;
-            pie4.x+=SCREEN_WIDTH;
+            pie1.x =0;
+            pie2.x =0;
+            pie3.x =SCREEN_WIDTH;
+            pie4.x =SCREEN_WIDTH;
         }];
         
     }
-   
+    
 }
 
 -(void)RequestYueNian{
@@ -530,7 +552,7 @@
             }];
             
         });
-
+        
         if(state == 2000){
             
             
@@ -574,26 +596,26 @@
                         [pieV removeFromSuperview];
                     }
                     
-                    UIView *needV = [[UIView alloc]init];
+                    //                    UIView *needV = [[UIView alloc]init];
+                    //
+                    //                    needV.tag = 301;
+                    //                    needV.backgroundColor = [UIColor clearColor];
+                    //                    needV.frame = CGRectMake(0, 255+HDAutoHeight(80), SCREEN_WIDTH, HDAutoHeight(450));
+                    //                    //                pieV.model = model;
+                    //
+                    //                    UILabel *label = [[UILabel alloc]init];
+                    //                    label.text = @"无图表信息";
+                    //                    label.textColor = MainColor;
+                    //                    label.font = [UIFont systemFontOfSize:16];
+                    //                    label.textAlignment = NSTextAlignmentCenter;
+                    //                    label.frame = CGRectMake(SCREEN_WIDTH/2-HDAutoWidth(100), HDAutoHeight(205)-(255+HDAutoHeight(20)+HDAutoHeight(65)), HDAutoWidth(200), HDAutoHeight(40));
+                    //                    [needV addSubview:label];
+                    //
+                    //                    [newMainView addSubview:needV];
                     
-                    needV.tag = 301;
-                    needV.backgroundColor = [UIColor clearColor];
-                    needV.frame = CGRectMake(0, 255+HDAutoHeight(80), SCREEN_WIDTH, HDAutoHeight(450));
-                    //                pieV.model = model;
-                    
-                    UILabel *label = [[UILabel alloc]init];
-                    label.text = @"无图表信息";
-                    label.textColor = MainColor;
-                    label.font = [UIFont systemFontOfSize:16];
-                    label.textAlignment = NSTextAlignmentCenter;
-                    label.frame = CGRectMake(SCREEN_WIDTH/2-HDAutoWidth(100), HDAutoHeight(205)-(255+HDAutoHeight(20)+HDAutoHeight(65)), HDAutoWidth(200), HDAutoHeight(40));
-                    [needV addSubview:label];
-                    
-                    [newMainView addSubview:needV];
-                
                     
                 }else{
-                
+                    
                     MyPieView *pieV = (MyPieView *)[self.view viewWithTag:301];
                     
                     if(pieV != nil){
@@ -609,7 +631,7 @@
                     [newMainView addSubview:pieV];
                 }
             });
-           
+            
             
             
             PercentModel *model2 = [[PercentModel alloc]init];
@@ -634,15 +656,15 @@
             model2.amountArr = amountArr;
             model2.total = total;
             model2.colorArr = colorArr;
-//            NSMutableArray *mulColorArr = [NSMutableArray array];
-//            UIColor *color1 = UIColorFromHex(0x4db366);
-//            UIColor *color2 = UIColorFromHex(0x795548);
-//            UIColor *color3 = UIColorFromHex(0x2196f3);
-//
-//            [mulColorArr addObject:color1];
-//            [mulColorArr addObject:color2];
-//            [mulColorArr addObject:color3];
-//            model2.colorArr = mulColorArr;
+            //            NSMutableArray *mulColorArr = [NSMutableArray array];
+            //            UIColor *color1 = UIColorFromHex(0x4db366);
+            //            UIColor *color2 = UIColorFromHex(0x795548);
+            //            UIColor *color3 = UIColorFromHex(0x2196f3);
+            //
+            //            [mulColorArr addObject:color1];
+            //            [mulColorArr addObject:color2];
+            //            [mulColorArr addObject:color3];
+            //            model2.colorArr = mulColorArr;
             
             
             
@@ -675,7 +697,7 @@
                     
                     
                 }else{
-
+                    
                     MyPieView *pieV2 = (MyPieView *)[self.view viewWithTag:302];
                     
                     if(pieV2 != nil){
@@ -695,15 +717,15 @@
                     botView.tag = 214;
                     botView.frame = CGRectMake(0, 255+HDAutoHeight(530)+HDAutoHeight(450)-(255+HDAutoHeight(20)+HDAutoHeight(65)), SCREEN_WIDTH, 1);
                     [newMainView addSubview:botView];
-                        
+                    
                 }
-
+                
             });
-
             
-           
             
-//            _mainScroll.contentSize = CGSizeMake(SCREEN_WIDTH, 255+HDAutoHeight(530)+HDAutoHeight(450)+10);
+            
+            
+            //            _mainScroll.contentSize = CGSizeMake(SCREEN_WIDTH, 255+HDAutoHeight(530)+HDAutoHeight(450)+10);
         }else{
             
             dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC);
@@ -721,7 +743,7 @@
                 needV.tag = 301;
                 needV.backgroundColor = [UIColor clearColor];
                 needV.frame = CGRectMake(0, 255+HDAutoHeight(80), SCREEN_WIDTH, HDAutoHeight(450));
-//                pieV.model = model;
+                //                pieV.model = model;
                 
                 UILabel *label = [[UILabel alloc]init];
                 label.text = @"无图表信息";
@@ -734,9 +756,9 @@
                 [newMainView addSubview:needV];
             });
             
-//            [MBProgressHUD showSuccess:msg];
+            //            [MBProgressHUD showSuccess:msg];
         }
-//        [self switchClick];
+        //        [self switchClick];
     }];
     
     
@@ -775,8 +797,8 @@
                 float value = [dic[@"total_amount"] floatValue];
                 total+=value;
                 [amountArr addObject:dic[@"total_amount"]];
-//                NSString *colStr = [NSString stringWithFormat:@"0x%@",dic[@"color"]];
-//                float flcol = [colStr floatValue];
+                //                NSString *colStr = [NSString stringWithFormat:@"0x%@",dic[@"color"]];
+                //                float flcol = [colStr floatValue];
                 UIColor *color = [UIColor colorWithHexString:dic[@"color"]];
                 [colorArr addObject:color];
                 
@@ -786,9 +808,9 @@
             model.amountArr = amountArr;
             model.total = total;
             model.colorArr = colorArr;
-             dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC);
+            dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC);
             dispatch_after(delayTime, dispatch_get_main_queue(), ^{
-
+                
                 MyPieView *pieV = (MyPieView *)[self.view viewWithTag:401];
                 
                 if(pieV != nil){
@@ -826,15 +848,15 @@
             model2.total = total;
             model2.colorArr = colorArr;
             
-//            NSMutableArray *mulColorArr = [NSMutableArray array];
-//            UIColor *color1 = UIColorFromHex(0x4db366);
-//            UIColor *color2 = UIColorFromHex(0x795548);
-//            UIColor *color3 = UIColorFromHex(0x2196f3);
-//
-//            [mulColorArr addObject:color1];
-//            [mulColorArr addObject:color2];
-//            [mulColorArr addObject:color3];
-//            model2.colorArr = mulColorArr;
+            //            NSMutableArray *mulColorArr = [NSMutableArray array];
+            //            UIColor *color1 = UIColorFromHex(0x4db366);
+            //            UIColor *color2 = UIColorFromHex(0x795548);
+            //            UIColor *color3 = UIColorFromHex(0x2196f3);
+            //
+            //            [mulColorArr addObject:color1];
+            //            [mulColorArr addObject:color2];
+            //            [mulColorArr addObject:color3];
+            //            model2.colorArr = mulColorArr;
             
             MyPieView *pieV2 = (MyPieView *)[self.view viewWithTag:402];
             
@@ -850,12 +872,12 @@
             pieV2.model = model2;
             [newMainView addSubview:pieV2];
             
-//            _mainScroll.contentSize = CGSizeMake(SCREEN_WIDTH, 255+HDAutoHeight(530)+HDAutoHeight(450));
+            //            _mainScroll.contentSize = CGSizeMake(SCREEN_WIDTH, 255+HDAutoHeight(530)+HDAutoHeight(450));
         }
         if(state<2000){
             [MBProgressHUD showSuccess:msg];
         }
-//        [self switchClick];
+        //        [self switchClick];
     }];
     
     
@@ -885,7 +907,7 @@
                 NSDictionary *dic = dArr[i];
                 NSString *name = dic[@"variety_name"];
                 if(![name isEqual:[NSNull null]]){
-               
+                    
                     [dnameArr addObject:name];
                     float value = [dic[@"greenhouse_num"] floatValue];
                     total+=value;
@@ -995,15 +1017,15 @@
             model2.total = total;
             model2.title = @"总支出(按品类划分)";
             model2.colorArr = colorArr;
-//            NSMutableArray *mulColorArr = [NSMutableArray array];
-//            UIColor *color1 = UIColorFromHex(0x4db366);
-//            UIColor *color2 = UIColorFromHex(0x795548);
-//            UIColor *color3 = UIColorFromHex(0x2196f3);
-//            
-//            [mulColorArr addObject:color1];
-//            [mulColorArr addObject:color2];
-//            [mulColorArr addObject:color3];
-//            model2.colorArr = mulColorArr;
+            //            NSMutableArray *mulColorArr = [NSMutableArray array];
+            //            UIColor *color1 = UIColorFromHex(0x4db366);
+            //            UIColor *color2 = UIColorFromHex(0x795548);
+            //            UIColor *color3 = UIColorFromHex(0x2196f3);
+            //
+            //            [mulColorArr addObject:color1];
+            //            [mulColorArr addObject:color2];
+            //            [mulColorArr addObject:color3];
+            //            model2.colorArr = mulColorArr;
             
             MyPieView *pieV2 = (MyPieView *)[self.view viewWithTag:503];
             
@@ -1021,14 +1043,14 @@
             
             _mainScroll.contentSize = CGSizeMake(SCREEN_WIDTH,255+HDAutoHeight(530)+HDAutoHeight(460)+HDAutoHeight(450)+HDAutoHeight(460)+HDAutoHeight(500));
             
-
+            
             
         }
         
         if(state<2000){
             [MBProgressHUD showSuccess:msg];
         }
-//        [self switchClick];
+        //        [self switchClick];
     }];
     
     
@@ -1059,9 +1081,66 @@
     self.needChangeView.model = rightDataDic;
     float height = [self.needChangeView needToReturnHeightWithModel:@"aaa"];
     self.needChangeView.height = height;
-    [self switchClick];
+    
+    NSLog(@"执行了");
+    [self switchClick2];
+    
 }
 
+-(void)switchClick2{
+    //    210
+    /**
+     *  这里可以防止重复点击
+     */
+    
+    if(rightDataDic.allValues.count<4){
+        return;
+    }
+    
+    
+    self.view.userInteractionEnabled = NO;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.6* NSEC_PER_SEC), dispatch_get_main_queue(), ^(void) {
+        self.view.userInteractionEnabled = YES;
+    });
+    
+    
+    if(_needChangeView == nil){
+        [self createChangeView];
+        return;
+    }
+    
+    
+    
+    NSLog(@"点击切换");
+    
+
+        hidViews = [NSMutableArray array];
+        hidAlphaArr = [NSMutableArray array];
+        
+        _switchBtn.selected = YES;
+        contentSize =  _mainScroll.contentSize;
+        
+        _mainScroll.contentSize = CGSizeMake(SCREEN_WIDTH, _switchBtn.bottom+HDAutoHeight(5)+_needChangeView.height);
+        
+        [_mainScroll addSubview:_needChangeView];
+        _needChangeView.alpha = 0;
+        //        UIViewAnimationOptions
+        [UIView animateWithDuration:0.5 delay:0.2 options:UIViewAnimationOptionTransitionNone animations:^{
+            _needChangeView.alpha = 1;
+            newMainView.alpha = 0;
+            [_needChangeView needtoreload];
+        } completion:^(BOOL finished) {
+            
+        }];
+        
+    
+    
+//    [self changeClick2];
+    
+
+    
+    
+}
 
 -(void)switchClick{
     //    210
@@ -1079,68 +1158,76 @@
         self.view.userInteractionEnabled = YES;
     });
     
-    if(qweBtn.selected == YES){
-        
-        [self changeClick:qweBtn];
-        
-    }
+    
     if(_needChangeView == nil){
         [self createChangeView];
+        return;
     }
     
     
     
     NSLog(@"点击切换");
+    
     if(_switchBtn.selected == NO){
         
         hidViews = [NSMutableArray array];
         hidAlphaArr = [NSMutableArray array];
         
         _switchBtn.selected = YES;
-        contentSize =  _mainScroll.contentSize;
+//        contentSize =  _mainScroll.contentSize;
         
         _mainScroll.contentSize = CGSizeMake(SCREEN_WIDTH, _switchBtn.bottom+HDAutoHeight(5)+_needChangeView.height);
         
         [_mainScroll addSubview:_needChangeView];
         _needChangeView.alpha = 0;
-//        UIViewAnimationOptions
+        //        UIViewAnimationOptions
         [UIView animateWithDuration:0.5 delay:0.2 options:UIViewAnimationOptionTransitionNone animations:^{
             _needChangeView.alpha = 1;
-             newMainView.alpha = 0;
+            newMainView.alpha = 0;
             [_needChangeView needtoreload];
         } completion:^(BOOL finished) {
             
         }];
         
     }else{
-       
+        _switchBtn.selected = NO;
         [UIView animateWithDuration:0.5 animations:^{
             _needChangeView.alpha = 0;
-             newMainView.alpha = 1;
+            newMainView.alpha = 1;
         } completion:^(BOOL finished) {
-            [_needChangeView removeFromSuperview];
+//            [_needChangeView removeFromSuperview];
             
-            _switchBtn.selected = NO;
+            
             _mainScroll.contentSize = contentSize;
             
-//            for (int i=0; i<hidViews.count; i++) {
-//                UIView *view = hidViews[i];
-//                [UIView animateWithDuration:0.5 animations:^{
-//
-//                    float alp = [hidAlphaArr[i] floatValue];
-//                    view.alpha = alp;
-//                }];
-//            }
+            //            for (int i=0; i<hidViews.count; i++) {
+            //                UIView *view = hidViews[i];
+            //                [UIView animateWithDuration:0.5 animations:^{
+            //
+            //                    float alp = [hidAlphaArr[i] floatValue];
+            //                    view.alpha = alp;
+            //                }];
+            //            }
             
         }];
         
         
     }
     
+    //    if(qweBtn.selected == YES){
+    //        NSLog(@"切换状态");
+    //
+    //        [self changeClick:qweBtn];
+    //
+    //    }
+    
     
 }
 
 -(void)refresh{
+    
+    
+    
     rightDataDic = [NSMutableDictionary dictionary];
     
     [_mainScroll.mj_header beginRefreshing];
@@ -1158,7 +1245,7 @@
     [self RequestYueNian];
     [self RequestYueNian2];
     [self requestTotalData];
-    
+    //    qweBtn.selected = YES;
     if(_switchBtn.selected == YES){
         _switchBtn.selected = NO;
         [_needChangeView removeFromSuperview];
@@ -1167,17 +1254,25 @@
     [_needChangeView removeFromSuperview];
     _needChangeView = nil;
     [self createChangeView];
-    
+    qweBtn.selected = NO;
 }
 
 -(void)refreshHeight{
-
+    
+    if(_switchBtn.selected == NO){
+        return;
+    }
+    
     [UIView animateWithDuration:0.5 animations:^{
         float height = [self.needChangeView needToReturnHeightWithModel:@"aaa"];
         self.needChangeView.frame = CGRectMake(0, _switchBtn.bottom+HDAutoHeight(5), SCREEN_WIDTH, height);
         _mainScroll.contentSize = CGSizeMake(SCREEN_WIDTH, _switchBtn.bottom+HDAutoHeight(5)+_needChangeView.height);
-
-    }];    
+        
+    } completion:^(BOOL finished) {
+        [_mainScroll flashScrollIndicators];
+    }];
+    
+    
     
 }
 

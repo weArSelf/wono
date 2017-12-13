@@ -92,6 +92,30 @@
     
 }
 
+-(void)getForgetMsgWithPhoneNumber:(NSString *)phone WithCallBack:(AllCallBack)callback{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:phone forKey:@"mobile"];
+    
+    [[BaseInterfaceModel shareInstance] sendData:API_getMsgForget parameters:param type:ENRT_POST success:^(id task, id responseObject) {
+        
+        NSString *code = responseObject[@"code"];
+        NSString *msg = responseObject[@"msg"];
+        NSString *data = responseObject[@"data"];
+        if (callback) {
+            callback([code intValue], data, msg);
+        }
+        
+        
+    } failure:^(id task, NSError *error) {
+        if (callback) {
+            callback(2001, nil, @"网络错误");
+        }
+    }];
+    
+}
+
+
 -(void)getMsgWithPhoneNumber:(NSString *)phone WithCallBack:(AllCallBack)callback{
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
@@ -139,6 +163,9 @@
         NSMutableDictionary *dic = [NSMutableDictionary dictionary];
         [dic setObject:model.address forKey:@"detail"];
         [dic setObject:model.location forKey:@"gps"];
+        [dic setObject:model.district forKey:@"district"];
+        [dic setObject:model.city forKey:@"city"];
+        [dic setObject:model.province forKey:@"province"];
         NSString *resStr = [self DataTOjsonString:dic];
         
         [param setObject:resStr forKey:@"area"];
