@@ -82,17 +82,20 @@
     BOOL animateMark;
     BOOL animateMark2;
     int needCount;
+    
+    int onceC;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    BOOL isOPen = NO;
-    if ([CLLocationManager locationServicesEnabled] && [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
-        isOPen = YES;
-    }else{
-        [self showAlert];
-    }
+    onceC = 0;
+    
+//    float asd = APP_CONTENT_HEIGHT;
+//    float qwe = APP_CONTENT_WIDTH;
+//
+//    NSLog(@"%f",asd);
+//    NSLog(@"%f",qwe);
    
     
     needCount = 0;
@@ -472,6 +475,19 @@
     NSLog(@"我显示了");
     self.navigationController.navigationBar.hidden = YES;
     [_zaihaiLabel reloadView];
+    
+    if(onceC == 0){
+        onceC = 1;
+        BOOL isOPen = NO;
+        if ([CLLocationManager locationServicesEnabled] && [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
+            isOPen = YES;
+        }else{
+            [self showAlert];
+        }
+    }
+    
+    
+    
 //    self.navigationController.navigationBar.alpha = 0;
 //    [self.navigationController setNavigationBarHidden:YES animated:animated];
 //    self.navigationController.interactivePopGestureRecognizer.delegate = self;
@@ -485,7 +501,7 @@
     [_headView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
-        make.top.equalTo(self.view.mas_top).offset(64);
+        make.top.equalTo(self.view.mas_top).offset(SafeAreaTopRealHeight);
         make.height.equalTo(@(HDAutoHeight(202)));
     }];
     _headView.backgroundColor = [UIColor whiteColor];
@@ -741,10 +757,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"点击了");
     
-    CompleteInfoViewController *com = [[CompleteInfoViewController alloc]init];
-    com.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:com animated:YES];
-    return;
+//    CompleteInfoViewController *com = [[CompleteInfoViewController alloc]init];
+//    com.hidesBottomBarWhenPushed = YES;
+//    [self.navigationController pushViewController:com animated:YES];
+//    return;
     
 //    [self showAlert];
 //    return;
@@ -1136,12 +1152,12 @@
         make.left.equalTo(self.view.mas_left);
         make.top.equalTo(self.view.mas_top);
         make.right.equalTo(self.view.mas_right);
-        make.height.equalTo(@(64));
+        make.height.equalTo(@(SafeAreaTopRealHeight));
     }];
     
     [_backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_headView2.mas_left).offset(15);
-        make.top.equalTo(_headView2.mas_top).offset(24);
+        make.top.equalTo(_headView2.mas_top).offset(24+SafeAreaTopHeight);
         make.width.equalTo(@(26));
         make.height.equalTo(@(26));
     }];

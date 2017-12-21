@@ -74,6 +74,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
+    BOOL isOPen = NO;
+    if ([CLLocationManager locationServicesEnabled] && [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
+        isOPen = YES;
+    }else{
+        [self showAlert];
+    }
+    
+    
     addResult = @"";
     selectAdd = @"";
     citiCode = @"-1";
@@ -112,6 +122,39 @@
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(searchChange:) name:@"searchChange" object:nil];
     
+}
+
+-(BOOL)isSystemVersioniOS8 {
+    //check systemVerson of device
+    UIDevice *device = [UIDevice currentDevice];
+    float sysVersion = [device.systemVersion floatValue];
+    
+    if (sysVersion >= 8.0f) {
+        return YES;
+    }
+    return NO;
+}
+
+- (void)showAlert
+{
+    UIAlertController *alertController;
+    alertController = [UIAlertController alertControllerWithTitle:@"当前未开启定位功能" message:@"是否前往设置？" preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *maleAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if([self isSystemVersioniOS8]){
+            //跳入当前App设置界面,
+            [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+        }else{
+            //适配iOS7 ,跳入系统设置界面
+            [[UIApplication sharedApplication]openURL:[NSURL URLWithString:@"prefs:General&path=Reset"]];
+        }
+    }];
+    [alertController addAction:maleAction];
+    UIAlertAction *femaleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        
+    }];
+    [alertController addAction:femaleAction];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 -(void)searchChange:(NSNotification *)noti{
@@ -355,12 +398,12 @@
         make.left.equalTo(self.view.mas_left);
         make.top.equalTo(self.view.mas_top);
         make.right.equalTo(self.view.mas_right);
-        make.height.equalTo(@(64));
+        make.height.equalTo(@(SafeAreaTopRealHeight));
     }];
     
     [_backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_headView.mas_left).offset(15);
-        make.top.equalTo(_headView.mas_top).offset(24);
+        make.top.equalTo(_headView.mas_top).offset(24+SafeAreaTopHeight);
         make.width.equalTo(@(26));
         make.height.equalTo(@(26));
     }];
@@ -628,19 +671,18 @@
         if(neCell == nil){
             neCell = [[MyMapTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:iden];
             neCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            neCell.res = nowPosiRes;
-            
-            if(selectItem != -1){
-                neCell.posiTextView.text = selectAdd;
-            }
-            addResult = neCell.posiTextView.text;
-            
-            neCell.addressBlock = ^(NSString *address) {
-                addResult = address;
-            };
-            
         }
         
+        neCell.res = nowPosiRes;
+        
+        if(selectItem != -1){
+            neCell.posiTextView.text = selectAdd;
+        }
+        addResult = neCell.posiTextView.text;
+        
+        neCell.addressBlock = ^(NSString *address) {
+            addResult = address;
+        };
 //        cell.textLabel.text = @"将要开发的功能";
         
         return neCell;

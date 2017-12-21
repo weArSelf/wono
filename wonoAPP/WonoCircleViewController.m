@@ -166,12 +166,12 @@
             if(multy>0){
                 _numberLabel.layer.cornerRadius = HDAutoHeight(12);
                 
-                _numberLabel.frame = CGRectMake(SCREEN_WIDTH-HDAutoWidth(50), (64-HDAutoHeight(50))/2 , size2.width+HDAutoWidth(10), HDAutoWidth(25));
+                _numberLabel.frame = CGRectMake(SCREEN_WIDTH-HDAutoWidth(50), (64-HDAutoHeight(50))/2 +SafeAreaTopHeight, size2.width+HDAutoWidth(10), HDAutoWidth(25));
                 
             }else{
                 _numberLabel.layer.cornerRadius = HDAutoHeight(12);
                 
-                _numberLabel.frame = CGRectMake(SCREEN_WIDTH-HDAutoWidth(52), (64-HDAutoHeight(50))/2, size2.width+HDAutoWidth(10), HDAutoWidth(25));
+                _numberLabel.frame = CGRectMake(SCREEN_WIDTH-HDAutoWidth(52), (64-HDAutoHeight(50))/2+SafeAreaTopHeight, size2.width+HDAutoWidth(10), HDAutoWidth(25));
             }
 
             NSLog(@"成功");
@@ -384,7 +384,7 @@
     
 //    CGRect re = [[UIApplication sharedApplication]statusBarFrame];
     
-    _askBtn.frame = CGRectMake(SCREEN_WIDTH-HDAutoWidth(80), (64-HDAutoHeight(50))/2 +HDAutoHeight(10), HDAutoHeight(50), HDAutoHeight(50));
+    _askBtn.frame = CGRectMake(SCREEN_WIDTH-HDAutoWidth(80), (64-HDAutoHeight(50))/2 +HDAutoHeight(10)+SafeAreaTopHeight, HDAutoHeight(50), HDAutoHeight(50));
     _askBtn.backgroundColor = [UIColor clearColor];
 //    [_askBtn setTitle:@"我要提问" forState:UIControlStateNormal];
 //    [_askBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -653,12 +653,12 @@
         make.left.equalTo(self.view.mas_left);
         make.top.equalTo(self.view.mas_top);
         make.right.equalTo(self.view.mas_right);
-        make.height.equalTo(@(64));
+        make.height.equalTo(@(SafeAreaTopRealHeight));
     }];
     
     [_backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_headView2.mas_left).offset(15);
-        make.top.equalTo(_headView2.mas_top).offset(24);
+        make.top.equalTo(_headView2.mas_top).offset(24+SafeAreaTopHeight);
         make.width.equalTo(@(26));
         make.height.equalTo(@(26));
     }];

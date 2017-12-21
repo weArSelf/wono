@@ -43,6 +43,8 @@
     int Ccount;
     
     NSMutableArray *tempArr;
+    
+    NSIndexPath *needIndex;
 }
 
 - (void)viewDidLoad {
@@ -64,12 +66,12 @@
     
 //    [self requesData];
     
-    _wonoTableView.mj_header =[MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
+    _wonoTableView.mj_header =[MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh2)];
     _wonoTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(requestMore)];
     //    [[BaiduMobStat defaultStat] eventStart:@"login" eventLabel:@"登录"];
     [self makePlaceHolderWithTitle:@"加载数据中..."];
     
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(refresh) name:@"wonoCircleRe" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(refresh2) name:@"wonoCircleRe2" object:nil];
     
     [self refresh];
 }
@@ -104,38 +106,30 @@
     
     
 }
-
--(void)refresh{
+-(void)refresh2{
     page = 1;
-    //    _wonoTableView = [[UITableView alloc]init];
-    
-    //    _wonoTableView.
-    
-//    if(Ccount == 0){
-//        Ccount++;
-//    }else{
-//        return;
-//    }
     
     [[NSNotificationCenter defaultCenter]postNotificationName:@"markChange" object:nil];
-//    for(int i=0;i<dataArr.count;i++){
-//        NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
-//        //        NSString *cellIdentifier = [NSString stringWithFormat:@"identy%d",i];
-//        WonoCircleTableViewCell *cell = [_wonoTableView cellForRowAtIndexPath:path];
-//        if(cell == nil){
-//            break;
-//        }
-//        cell.changeMark = @"1";
-//    }
+    
     tempArr = [NSMutableArray array];
     askArr = [NSMutableArray array];
     ChangeMark = true;
-//    [self requesData];
-//    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 0.2/*延迟执行时间*/ * NSEC_PER_SEC);
-//    
-//    dispatch_after(delayTime, dispatch_get_main_queue(), ^{
-        [self requesData];
-//    });
+    dataArr = [NSMutableArray array];
+    [self requesData];
+    
+    
+}
+-(void)refresh{
+    page = 1;
+
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"markChange" object:nil];
+
+    tempArr = [NSMutableArray array];
+    askArr = [NSMutableArray array];
+    ChangeMark = true;
+
+    [self requesData];
+
     
 }
 
@@ -163,7 +157,7 @@
 
 -(void)requesData{
     
-    
+
     
     [[InterfaceSingleton shareInstance].interfaceModel getUserCollectDetailWithPage:page WithCallBack:^(int state, id data, NSString *msg) {
         [_wonoTableView.mj_header endRefreshing];
@@ -171,11 +165,24 @@
         
 //        [self doMark];
         if(page == 1){
-            [self makePlaceHolderWithTitle:@"暂无数据"];
+            dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0/*延迟执行时间*/ * NSEC_PER_SEC));
+            
+            dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+                [self makePlaceHolderWithTitle:@"暂无数据"];
+            });
+            
         }
-        if(state == 2000){
+        if(state == 2000 ||state == 2001){
             NSLog(@"aa");
-            NSArray *arr = data[@"data"];
+            NSArray *arr = [NSArray array];
+            
+            @try {
+                arr = data[@"data"];
+            } @catch (NSException *exception) {
+                
+            } @finally {
+                
+            }
             
             if(arr.count == 0){
                 if(page!=1){
@@ -220,8 +227,47 @@
                 
                 
             }
-            dataArr = tempArr;
-            [_wonoTableView reloadData];
+            
+            if(dataArr.count != 0){
+//                dataArr = tempArr;
+                NSArray *needarr = [NSArray arrayWithObjects:needIndex, nil];
+                @try {
+                    if(tempArr.count>0){
+                        dataArr = tempArr;
+                        [_wonoTableView deleteRowsAtIndexPaths:needarr withRowAnimation:UITableViewRowAnimationRight];
+                    }else{
+                        [UIView animateWithDuration:0.5 animations:^{
+                            _wonoTableView.alpha = 0;
+                        }];
+                        
+                        [UIView animateWithDuration:0.5 animations:^{
+                            _wonoTableView.alpha = 0;
+                        } completion:^(BOOL finished) {
+                        }];
+                        
+                        dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5/*延迟执行时间*/ * NSEC_PER_SEC));
+                        
+                        dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+                            dataArr = [NSMutableArray array];
+                            [_wonoTableView reloadData];
+                            [UIView animateWithDuration:0.5 animations:^{
+                                _wonoTableView.alpha = 1;
+                            }];
+
+                        });
+                    }
+                    
+                } @catch (NSException *exception) {
+                    
+                } @finally {
+                    
+                }
+                
+            }else{
+                dataArr = tempArr;
+                [_wonoTableView reloadData];
+            }
+            
             
             if(alpMark == false){
                 alpMark = true;
@@ -447,7 +493,7 @@
     [cell changeImg];
     
     cell.cellBlock = ^(NSDictionary *dic) {
-        
+        needIndex = indexPath;
         NSLog(@"aaa");
         NSString *needID = dic[@"ID"];
         
@@ -457,7 +503,7 @@
             [[InterfaceSingleton shareInstance].interfaceModel collectWithAction:@"2" AndQid:needID WithCallBack:^(int state, id data, NSString *msg) {
                
                 if(state == 2000){
-                
+//                    [MBProgressHUD showSuccess:@"取消收藏成功"];
                     [self refresh];
                     
                 }else{
@@ -565,12 +611,12 @@
         make.left.equalTo(self.view.mas_left);
         make.top.equalTo(self.view.mas_top);
         make.right.equalTo(self.view.mas_right);
-        make.height.equalTo(@(64));
+        make.height.equalTo(@(SafeAreaTopRealHeight));
     }];
     
     [_backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_headView2.mas_left).offset(15);
-        make.top.equalTo(_headView2.mas_top).offset(24);
+        make.top.equalTo(_headView2.mas_top).offset(24+SafeAreaTopHeight);
         make.width.equalTo(@(26));
         make.height.equalTo(@(26));
     }];

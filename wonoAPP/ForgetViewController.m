@@ -80,12 +80,12 @@
         make.left.equalTo(self.view.mas_left);
         make.top.equalTo(self.view.mas_top);
         make.right.equalTo(self.view.mas_right);
-        make.height.equalTo(@(64));
+        make.height.equalTo(@(SafeAreaTopRealHeight));
     }];
     
     [_backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_headView.mas_left).offset(15);
-        make.top.equalTo(_headView.mas_top).offset(24);
+        make.top.equalTo(_headView.mas_top).offset(24+SafeAreaTopHeight);
         make.width.equalTo(@(26));
         make.height.equalTo(@(26));
     }];
@@ -96,6 +96,7 @@
         make.width.equalTo(@(100));
         make.height.equalTo(@(40));
     }];
+
     
     UIButton *hubBtn = [[UIButton alloc]init];
     hubBtn.backgroundColor = [UIColor clearColor];

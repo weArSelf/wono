@@ -43,6 +43,13 @@
 #define IS_IPHONE_6P (IS_IPHONE && SCREEN_MAX_LENGTH == 736.0)
 
 //按iPhone6比例
+
+#define KIsiPhoneX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
+ #define SafeAreaTopRealBot (APP_CONTENT_HEIGHT == 812.0 ? 34 : 0)
+ #define SafeAreaTopRealHeight (APP_CONTENT_HEIGHT == 812.0 ? 88 : 64)
+  #define SafeAreaTopHeight (APP_CONTENT_HEIGHT == 812.0 ? 20 : 0)
+  #define SafeAreaBottomHeight   (APP_CONTENT_HEIGHT == 812.0 ? 20 : 0)
+//#define HDNewAutoHeightScale        (APP_CONTENT_HEIGHT == 812.0)?APP_CONTENT_HEIGHT/1334.0:APP_CONTENT_HEIGHT/750.0
 #define HDAutoWidth(width)          APP_CONTENT_WIDTH * (width) / 750.0
 #define HDAutoHeight(height)        APP_CONTENT_HEIGHT * (height) / 1334.0
 #define MainColor                   UIColorFromHex(0x4cb566)

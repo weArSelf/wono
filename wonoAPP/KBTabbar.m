@@ -48,7 +48,7 @@
         
         if ([sub isKindOfClass:NSClassFromString(@"UITabBarButton")]) {
             
-            sub.frame = CGRectMake(index * wigth, self.bounds.origin.y, wigth, self.bounds.size.height - 2);
+            sub.frame = CGRectMake(index * wigth, self.bounds.origin.y - SafeAreaBottomHeight, wigth, self.bounds.size.height - 2);
             
             index++;
             

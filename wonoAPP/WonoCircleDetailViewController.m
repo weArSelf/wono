@@ -12,6 +12,7 @@
 #import "CMInputView.h"
 #import "ToAnswerViewController.h"
 #import <AVFoundation/AVFoundation.h>
+#import "MyCollectionViewController.h"
 
 #define HEIGHT [ [ UIScreen mainScreen ] bounds ].size.height
 
@@ -226,7 +227,32 @@
             
             
             
+        }else if (state == 2001){
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [self makePlaceHolderWithTitle:@"暂无数据"];
+            });
+            
+            UIAlertController *alertController;
+            alertController = [UIAlertController alertControllerWithTitle:@"发生错误" message:@"该问题可能已被删除" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *maleAction = [UIAlertAction actionWithTitle:@"返回" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                if([_Cmark isEqualToString:@"1"]){
+                    [self.navigationController popViewControllerAnimated:YES];
+                }else{
+                    [self.navigationController popToRootViewControllerAnimated:YES];
+                }
+                
+            }];
+            [alertController addAction:maleAction];
+            
+            [self presentViewController:alertController animated:YES completion:nil];
+            
         }else{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [self makePlaceHolderWithTitle:@"暂无数据"];
+            });
             [MBProgressHUD showSuccess:msg];
         }
         
@@ -585,12 +611,12 @@
         make.left.equalTo(self.view.mas_left);
         make.top.equalTo(self.view.mas_top);
         make.right.equalTo(self.view.mas_right);
-        make.height.equalTo(@(64));
+        make.height.equalTo(@(SafeAreaTopRealHeight));
     }];
     
     [_backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_headView.mas_left).offset(15);
-        make.top.equalTo(_headView.mas_top).offset(24);
+        make.top.equalTo(_headView.mas_top).offset(24+SafeAreaTopHeight);
         make.width.equalTo(@(26));
         make.height.equalTo(@(26));
     }];
@@ -674,6 +700,13 @@
             [[InterfaceSingleton shareInstance].interfaceModel collectWithAction:@"2" AndQid:_askModel.askId WithCallBack:^(int state, id data, NSString *msg) {
                 
                 if(state == 2000){
+                    [MBProgressHUD showSuccess:@"取消收藏成功"];
+                    
+                    for (UIViewController *controller in self.navigationController.viewControllers) {
+                        if ([controller isKindOfClass:[MyCollectionViewController class]]) {
+                            [[NSNotificationCenter defaultCenter]postNotificationName:@"wonoCircleRe2" object:nil];
+                        }
+                    }
                     
                     //                    _nextBtn.enabled = YES;
                     
@@ -701,6 +734,15 @@
             if(state!=2000){
                 [MBProgressHUD showSuccess:@"收藏失败"];
                 _nextBtn.selected = NO;
+            }else{
+                
+                for (UIViewController *controller in self.navigationController.viewControllers) {
+                    if ([controller isKindOfClass:[MyCollectionViewController class]]) {
+                        [[NSNotificationCenter defaultCenter]postNotificationName:@"wonoCircleRe2" object:nil];
+                    }
+                }
+                
+                
             }
         }];
 

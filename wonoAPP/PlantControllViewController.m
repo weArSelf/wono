@@ -239,12 +239,12 @@
         make.left.equalTo(self.view.mas_left);
         make.top.equalTo(self.view.mas_top);
         make.right.equalTo(self.view.mas_right);
-        make.height.equalTo(@(64));
+        make.height.equalTo(@(SafeAreaTopRealHeight));
     }];
     
     [_backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_headView2.mas_left).offset(15);
-        make.top.equalTo(_headView2.mas_top).offset(24);
+        make.top.equalTo(_headView2.mas_top).offset(24+SafeAreaTopHeight);
         make.width.equalTo(@(26));
         make.height.equalTo(@(26));
     }];
@@ -677,7 +677,7 @@
     _headView.layer.shadowOffset = CGSizeMake(2,5);
     [self.view addSubview:_headView];
     [_headView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view.mas_top).offset(64);
+        make.top.equalTo(self.view.mas_top).offset(SafeAreaTopRealHeight);
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
         make.height.equalTo(@(HDAutoHeight(90)));
@@ -866,6 +866,8 @@
     if(Count == 1){
         dataArr = [NSMutableArray array];
     }
+    [self tableBackgroundWithTitle:@"加载数据中"];
+
     
     [[InterfaceSingleton shareInstance].interfaceModel getMainPlantWithModel:model WithCallBack:^(int state, id data, NSString *msg) {
         [_plantTableView.mj_header endRefreshing];
@@ -875,11 +877,7 @@
         [self toendRe];
         
         int userType = [[[NSUserDefaults standardUserDefaults]objectForKey:@"userType"]intValue];
-        if(userType == 1){
-            [self tableBackgroundWithTitle:@"暂无数据,请添加相关大棚和员工"];
-        }else{
-            [self tableBackgroundWithTitle:@"暂无数据,请点击“开始干活”按钮添加记录"];
-        }
+        
         
         if(state == 2000){
             NSLog(@"成功");
@@ -888,6 +886,7 @@
             NSArray *arr = data[@"data"];
             
             if(arr.count == 0){
+                
                 if(Count!=1){
                     Count--;
                     [_plantTableView.mj_footer endRefreshingWithNoMoreData];
@@ -952,9 +951,19 @@
             }
         }else{
             
+            if(userType == 1){
+                [self tableBackgroundWithTitle:@"暂无数据,请添加相关大棚和员工"];
+            }else{
+                [self tableBackgroundWithTitle:@"暂无数据,请点击“开始干活”按钮添加记录"];
+            }
             
         }
         if(state<2000){
+            if(userType == 1){
+                [self tableBackgroundWithTitle:@"暂无数据,请添加相关大棚和员工"];
+            }else{
+                [self tableBackgroundWithTitle:@"暂无数据,请点击“开始干活”按钮添加记录"];
+            }
             [MBProgressHUD showSuccess:msg];
         }
     }];

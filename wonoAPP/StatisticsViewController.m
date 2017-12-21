@@ -161,7 +161,7 @@
     [_mainScroll flashScrollIndicators];
     //    [self requestData];
     //    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    
+    [_needChangeView needtoreload];
     
     
     int nongChangHave = [[[NSUserDefaults standardUserDefaults]objectForKey:@"fid"]intValue];
@@ -255,12 +255,12 @@
         make.left.equalTo(self.view.mas_left);
         make.top.equalTo(self.view.mas_top);
         make.right.equalTo(self.view.mas_right);
-        make.height.equalTo(@(64));
+        make.height.equalTo(@(SafeAreaTopRealHeight));
     }];
     
     [_backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_headView2.mas_left).offset(15);
-        make.top.equalTo(_headView2.mas_top).offset(24);
+        make.top.equalTo(_headView2.mas_top).offset(24+SafeAreaTopHeight);
         make.width.equalTo(@(26));
         make.height.equalTo(@(26));
     }];
@@ -277,7 +277,7 @@
 -(void)createScroll{
     _mainScroll = [[UIScrollView alloc]init];
     //    _mainScroll.backgroundColor = [UIColor redColor];
-    _mainScroll.frame = CGRectMake(0, 64, SCREEN_WIDTH, SCREEN_HEIGHT-64-49);
+    _mainScroll.frame = CGRectMake(0, SafeAreaTopRealHeight, SCREEN_WIDTH, SCREEN_HEIGHT-SafeAreaTopRealHeight-49 - SafeAreaTopRealBot);
     [self.view addSubview:_mainScroll];
     
     MJRefreshGifHeader *header = [MJRefreshGifHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
@@ -435,8 +435,8 @@
     
     qweBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [qweBtn addTarget:self action:@selector(changeClick:) forControlEvents:UIControlEventTouchUpInside];
-    [qweBtn setBackgroundImage:[UIImage imageNamed:@"年度收入与支出"] forState:UIControlStateNormal];
-    [qweBtn setBackgroundImage:[UIImage imageNamed:@"月度收入与支出"] forState:UIControlStateSelected];
+    [qweBtn setBackgroundImage:[UIImage imageNamed:@"年度收入与支出"] forState:UIControlStateSelected];
+    [qweBtn setBackgroundImage:[UIImage imageNamed:@"月度收入与支出"] forState:UIControlStateNormal];
     qweBtn.frame = CGRectMake(HDAutoWidth(25), 255+HDAutoHeight(20), HDAutoWidth(250), HDAutoHeight(64));
     qweBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
     qweBtn.selected = NO;

@@ -68,7 +68,7 @@
         make.left.equalTo(self.view.mas_left);
         make.top.equalTo(self.view.mas_top);
         make.right.equalTo(self.view.mas_right);
-        make.height.equalTo(@(64));
+        make.height.equalTo(@(SafeAreaTopRealHeight));
     }];
     
     [_backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -80,7 +80,7 @@
     
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(_headView.mas_centerX);
-        make.centerY.equalTo(_backBtn.mas_centerY);
+        make.centerY.equalTo(_backBtn.mas_centerY).offset(SafeAreaTopHeight);
         make.width.equalTo(@(300));
         make.height.equalTo(@(40));
     }];
