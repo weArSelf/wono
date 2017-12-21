@@ -90,7 +90,7 @@ static NSString *const kHeWeatherAPI   = @"https://api.heweather.com/x3/weather?
     [self.view addSubview:_backBtn];
     [_backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view.mas_centerX);
-        make.bottom.equalTo(self.view.mas_bottom).offset(-HDAutoHeight(60));
+        make.bottom.equalTo(self.view.mas_bottom).offset(-HDAutoHeight(60)-SafeAreaTopRealBot);
         make.width.equalTo(@(HDAutoWidth(120)));
         make.height.equalTo(@(HDAutoWidth(120)));
     }];
@@ -259,7 +259,7 @@ static NSString *const kHeWeatherAPI   = @"https://api.heweather.com/x3/weather?
 
     [_zxView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view.mas_centerX);
-        make.bottom.equalTo(_backBtn.mas_top).offset(-HDAutoHeight(10));
+        make.bottom.equalTo(_backBtn.mas_top).offset(-HDAutoHeight(10)-SafeAreaTopRealBot);
         make.width.equalTo(@(self.view.width));
         make.height.equalTo(@(250));
     }];

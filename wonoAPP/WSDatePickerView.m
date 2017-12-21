@@ -15,9 +15,13 @@
 #define kPickerSize self.datePicker.frame.size
 #define RGBA(r, g, b, a) ([UIColor colorWithRed:(r / 255.0) green:(g / 255.0) blue:(b / 255.0) alpha:a])
 #define RGB(r, g, b) RGBA(r,g,b,1)
+// 判断是否是iPhone X
+#define isiPhoneX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
+// home indicator
+#define bottom_height (isiPhoneX ? 34.f : 10.f)
 
 
-#define MAXYEAR 9999
+#define MAXYEAR 2099
 #define MINYEAR 0
 
 typedef void(^doneBlock)(NSDate *);
@@ -59,7 +63,9 @@ typedef void(^doneBlock)(NSDate *);
 @end
 
 @implementation WSDatePickerView
-
+/**
+ 默认滚动到当前时间
+ */
 -(instancetype)initWithDateStyle:(WSDateStyle)datePickerStyle CompleteBlock:(void(^)(NSDate *))completeBlock {
     self = [super init];
     if (self) {
@@ -93,8 +99,53 @@ typedef void(^doneBlock)(NSDate *);
         [self defaultConfig];
         
         if (completeBlock) {
-            self.doneBlock = ^(NSDate *startDate) {
-                completeBlock(startDate);
+            self.doneBlock = ^(NSDate *selectDate) {
+                completeBlock(selectDate);
+            };
+        }
+    }
+    return self;
+}
+
+/**
+ 滚动到指定的的日期
+ */
+-(instancetype)initWithDateStyle:(WSDateStyle)datePickerStyle scrollToDate:(NSDate *)scrollToDate CompleteBlock:(void(^)(NSDate *))completeBlock {
+    self = [super init];
+    if (self) {
+        self = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil] lastObject];
+        
+        
+        self.datePickerStyle = datePickerStyle;
+        self.scrollToDate = scrollToDate;
+        switch (datePickerStyle) {
+            case DateStyleShowYearMonthDayHourMinute:
+                _dateFormatter = @"yyyy-MM-dd HH:mm";
+                break;
+            case DateStyleShowMonthDayHourMinute:
+                _dateFormatter = @"yyyy-MM-dd HH:mm";
+                break;
+            case DateStyleShowYearMonthDay:
+                _dateFormatter = @"yyyy-MM-dd";
+                break;
+            case DateStyleShowMonthDay:
+                _dateFormatter = @"yyyy-MM-dd";
+                break;
+            case DateStyleShowHourMinute:
+                _dateFormatter = @"HH:mm";
+                break;
+                
+            default:
+                _dateFormatter = @"yyyy-MM-dd HH:mm";
+                break;
+        }
+        
+        [self setupUI];
+        [self defaultConfig];
+        
+        if (completeBlock) {
+            self.doneBlock = ^(NSDate *selectDate) {
+                completeBlock(selectDate);
             };
         }
     }
@@ -104,7 +155,6 @@ typedef void(^doneBlock)(NSDate *);
 -(void)setupUI {
     self.buttomView.layer.cornerRadius = 10;
     self.buttomView.layer.masksToBounds = YES;
-    //self.themeColor = [UIColor colorFromHexRGB:@"#f7b639"];
     self.doneButtonColor = RGB(247, 133, 51);
     self.frame=CGRectMake(0, 0, kScreenWidth, kScreenHeight);
     
@@ -151,14 +201,14 @@ typedef void(^doneBlock)(NSDate *);
             [_hourArray addObject:num];
         [_minuteArray addObject:num];
     }
-    for (NSInteger i=MINYEAR; i<MAXYEAR; i++) {
+    for (NSInteger i=MINYEAR; i<=MAXYEAR; i++) {
         NSString *num = [NSString stringWithFormat:@"%ld",(long)i];
         [_yearArray addObject:num];
     }
     
     //最大最小限制
     if (!self.maxLimitDate) {
-        self.maxLimitDate = [NSDate date:@"9999-12-31 23:59" WithFormat:@"yyyy-MM-dd HH:mm"];
+        self.maxLimitDate = [NSDate date:@"2099-12-31 23:59" WithFormat:@"yyyy-MM-dd HH:mm"];
     }
     //最小限制
     if (!self.minLimitDate) {
@@ -172,15 +222,31 @@ typedef void(^doneBlock)(NSDate *);
             [subView removeFromSuperview];
         }
     }
+    
+    if (!_dateLabelColor) {
+        _dateLabelColor =  RGB(247, 133, 51);
+    }
+    
     for (int i=0; i<nameArr.count; i++) {
         CGFloat labelX = kPickerSize.width/(nameArr.count*2)+18+kPickerSize.width/nameArr.count*i;
         UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(labelX, self.showYearView.frame.size.height/2-15/2.0, 15, 15)];
         label.text = nameArr[i];
         label.textAlignment = NSTextAlignmentCenter;
         label.font = [UIFont systemFontOfSize:14];
-        label.textColor =  RGB(247, 133, 51);
+        label.textColor =  _dateLabelColor;
         label.backgroundColor = [UIColor clearColor];
         [self.showYearView addSubview:label];
+    }
+}
+
+
+-(void)setDateLabelColor:(UIColor *)dateLabelColor {
+    _dateLabelColor = dateLabelColor;
+    for (id subView in self.showYearView.subviews) {
+        if ([subView isKindOfClass:[UILabel class]]) {
+            UILabel *label = subView;
+            label.textColor = _dateLabelColor;
+        }
     }
 }
 
@@ -194,6 +260,10 @@ typedef void(^doneBlock)(NSDate *);
     return mutableArray;
 }
 
+-(void)setYearLabelColor:(UIColor *)yearLabelColor {
+    self.showYearView.textColor = yearLabelColor;
+}
+
 #pragma mark - UIPickerViewDelegate,UIPickerViewDataSource
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
@@ -201,12 +271,12 @@ typedef void(^doneBlock)(NSDate *);
         case DateStyleShowYearMonthDayHourMinute:
             [self addLabelWithName:@[@"年",@"月",@"日",@"时",@"分"]];
             return 5;
-        case DateStyleShowYearMonthDay:
-            [self addLabelWithName:@[@"年",@"月",@"日"]];
-            return 3;
         case DateStyleShowMonthDayHourMinute:
             [self addLabelWithName:@[@"月",@"日",@"时",@"分"]];
             return 4;
+        case DateStyleShowYearMonthDay:
+            [self addLabelWithName:@[@"年",@"月",@"日"]];
+            return 3;
         case DateStyleShowMonthDay:
             [self addLabelWithName:@[@"月",@"日"]];
             return 2;
@@ -335,7 +405,10 @@ typedef void(^doneBlock)(NSDate *);
     }
     
     customLabel.text = title;
-    customLabel.textColor = [UIColor blackColor];
+    if (!_datePickerColor) {
+        _datePickerColor = [UIColor blackColor];
+    }
+    customLabel.textColor = _datePickerColor;
     return customLabel;
     
 }
@@ -412,7 +485,7 @@ typedef void(^doneBlock)(NSDate *);
             if (component == 0) {
                 
                 [self yearChange:row];
-                
+                [self DaysfromYear:[_yearArray[yearIndex] integerValue] andMonth:[_monthArray[monthIndex] integerValue]];
                 if (_dayArray.count-1<dayIndex) {
                     dayIndex = _dayArray.count-1;
                 }
@@ -429,7 +502,7 @@ typedef void(^doneBlock)(NSDate *);
             if (component == 0) {
                 
                 [self yearChange:row];
-                
+                [self DaysfromYear:[_yearArray[yearIndex] integerValue] andMonth:[_monthArray[monthIndex] integerValue]];
                 if (_dayArray.count-1<dayIndex) {
                     dayIndex = _dayArray.count-1;
                 }
@@ -505,10 +578,8 @@ typedef void(^doneBlock)(NSDate *);
 -(void)show {
     
     [[UIApplication sharedApplication].keyWindow addSubview:self];
-     self.bottomConstraint.constant = -kScreenHeight;
-    [self layoutIfNeeded];
     [UIView animateWithDuration:.3 animations:^{
-        self.bottomConstraint.constant = 10;
+        self.bottomConstraint.constant = bottom_height;
         self.backgroundColor = RGBA(0, 0, 0, 0.4);
         [self layoutIfNeeded];
     }];
@@ -582,7 +653,7 @@ typedef void(^doneBlock)(NSDate *);
     if (!date) {
         date = [NSDate date];
     }
-    _scrollToDate = date;
+    
     [self DaysfromYear:date.year andMonth:date.month];
     
     yearIndex = date.year-MINYEAR;
@@ -647,5 +718,8 @@ typedef void(^doneBlock)(NSDate *);
     _doneButtonColor = doneButtonColor;
     self.doneBtn.backgroundColor = doneButtonColor;
 }
+
+
+
 
 @end

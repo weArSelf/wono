@@ -72,6 +72,10 @@
 		A8246A251F149C5400CFD65A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8246A241F149C5400CFD65A /* LoginViewController.m */; };
 		A8246A281F14C25A00CFD65A /* CompleteInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8246A271F14C25A00CFD65A /* CompleteInfoViewController.m */; };
 		A8246A2B1F17448300CFD65A /* AgreementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8246A2A1F17448300CFD65A /* AgreementViewController.m */; };
+		A854D3801FEBA71F00CCF391 /* WSDatePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = A854D37A1FEBA71E00CCF391 /* WSDatePickerView.m */; };
+		A854D3811FEBA71F00CCF391 /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = A854D37D1FEBA71E00CCF391 /* UIView+Extension.m */; };
+		A854D3821FEBA71F00CCF391 /* NSDate+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = A854D37E1FEBA71F00CCF391 /* NSDate+Extension.m */; };
+		A854D3831FEBA71F00CCF391 /* WSDatePickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A854D37F1FEBA71F00CCF391 /* WSDatePickerView.xib */; };
 		A87405DF1F6A2130004A87C1 /* PPBadgeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A87405D71F6A2130004A87C1 /* PPBadgeLabel.m */; };
 		A87405E01F6A2130004A87C1 /* UIBarButtonItem+PPBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A87405DA1F6A2130004A87C1 /* UIBarButtonItem+PPBadgeView.m */; };
 		A87405E11F6A2130004A87C1 /* UITabBarItem+PPBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A87405DC1F6A2130004A87C1 /* UITabBarItem+PPBadgeView.m */; };
@@ -93,10 +97,6 @@
 		A8A11D421F1C6A29008CA39A /* WonoCircleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A11D411F1C6A29008CA39A /* WonoCircleTableViewCell.m */; };
 		A8A11D451F1C7FCB008CA39A /* WonoCircleModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A11D441F1C7FCB008CA39A /* WonoCircleModel.m */; };
 		A8A11D481F1CA217008CA39A /* SelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A11D471F1CA217008CA39A /* SelectionViewController.m */; };
-		A8A11D531F1DF058008CA39A /* NSDate+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A11D4D1F1DF058008CA39A /* NSDate+Extension.m */; };
-		A8A11D541F1DF058008CA39A /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A11D4F1F1DF058008CA39A /* UIView+Extension.m */; };
-		A8A11D551F1DF058008CA39A /* WSDatePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A11D511F1DF058008CA39A /* WSDatePickerView.m */; };
-		A8A11D561F1DF058008CA39A /* WSDatePickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A8A11D521F1DF058008CA39A /* WSDatePickerView.xib */; };
 		A8A11D5A1F1EEAE3008CA39A /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A11D591F1EEAE3008CA39A /* MapViewController.m */; };
 		A8A11D5E1F1F5E72008CA39A /* RegeistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A11D5D1F1F5E72008CA39A /* RegeistViewController.m */; };
 		A8A5018C1F53C30200595B67 /* BBFlashCtntLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A5018B1F53C30200595B67 /* BBFlashCtntLabel.m */; };
@@ -347,6 +347,13 @@
 		A8246A271F14C25A00CFD65A /* CompleteInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompleteInfoViewController.m; sourceTree = "<group>"; };
 		A8246A291F17448300CFD65A /* AgreementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgreementViewController.h; sourceTree = "<group>"; };
 		A8246A2A1F17448300CFD65A /* AgreementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgreementViewController.m; sourceTree = "<group>"; };
+		A854D3791FEBA71D00CCF391 /* WSDatePickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSDatePickerView.h; sourceTree = "<group>"; };
+		A854D37A1FEBA71E00CCF391 /* WSDatePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSDatePickerView.m; sourceTree = "<group>"; };
+		A854D37B1FEBA71E00CCF391 /* UIView+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
+		A854D37C1FEBA71E00CCF391 /* NSDate+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Extension.h"; sourceTree = "<group>"; };
+		A854D37D1FEBA71E00CCF391 /* UIView+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
+		A854D37E1FEBA71F00CCF391 /* NSDate+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Extension.m"; sourceTree = "<group>"; };
+		A854D37F1FEBA71F00CCF391 /* WSDatePickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WSDatePickerView.xib; sourceTree = "<group>"; };
 		A87405D61F6A2130004A87C1 /* PPBadgeLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PPBadgeLabel.h; sourceTree = "<group>"; };
 		A87405D71F6A2130004A87C1 /* PPBadgeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PPBadgeLabel.m; sourceTree = "<group>"; };
 		A87405D81F6A2130004A87C1 /* PPBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PPBadgeView.h; sourceTree = "<group>"; };
@@ -390,13 +397,6 @@
 		A8A11D441F1C7FCB008CA39A /* WonoCircleModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WonoCircleModel.m; sourceTree = "<group>"; };
 		A8A11D461F1CA217008CA39A /* SelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectionViewController.h; sourceTree = "<group>"; };
 		A8A11D471F1CA217008CA39A /* SelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectionViewController.m; sourceTree = "<group>"; };
-		A8A11D4C1F1DF058008CA39A /* NSDate+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Extension.h"; sourceTree = "<group>"; };
-		A8A11D4D1F1DF058008CA39A /* NSDate+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Extension.m"; sourceTree = "<group>"; };
-		A8A11D4E1F1DF058008CA39A /* UIView+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
-		A8A11D4F1F1DF058008CA39A /* UIView+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
-		A8A11D501F1DF058008CA39A /* WSDatePickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSDatePickerView.h; sourceTree = "<group>"; };
-		A8A11D511F1DF058008CA39A /* WSDatePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSDatePickerView.m; sourceTree = "<group>"; };
-		A8A11D521F1DF058008CA39A /* WSDatePickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WSDatePickerView.xib; sourceTree = "<group>"; };
 		A8A11D581F1EEAE3008CA39A /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		A8A11D591F1EEAE3008CA39A /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		A8A11D5C1F1F5E72008CA39A /* RegeistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegeistViewController.h; sourceTree = "<group>"; };
@@ -690,13 +690,6 @@
 				A821F5021F29BE610040846E /* CDZPicker */,
 				A821F4B31F25E67A0040846E /* prograssLib */,
 				A8A11D4B1F1DF04A008CA39A /* WSDaePickerView */,
-				A8A11D4C1F1DF058008CA39A /* NSDate+Extension.h */,
-				A8A11D4D1F1DF058008CA39A /* NSDate+Extension.m */,
-				A8A11D4E1F1DF058008CA39A /* UIView+Extension.h */,
-				A8A11D4F1F1DF058008CA39A /* UIView+Extension.m */,
-				A8A11D501F1DF058008CA39A /* WSDatePickerView.h */,
-				A8A11D511F1DF058008CA39A /* WSDatePickerView.m */,
-				A8A11D521F1DF058008CA39A /* WSDatePickerView.xib */,
 				A8246A071F1467C300CFD65A /* Cacher */,
 				A82469FD1F14626B00CFD65A /* MBProgressHUD+XMG.h */,
 				A82469FE1F14626B00CFD65A /* MBProgressHUD+XMG.m */,
@@ -988,6 +981,13 @@
 		A8A11D4B1F1DF04A008CA39A /* WSDaePickerView */ = {
 			isa = PBXGroup;
 			children = (
+				A854D37C1FEBA71E00CCF391 /* NSDate+Extension.h */,
+				A854D37E1FEBA71F00CCF391 /* NSDate+Extension.m */,
+				A854D37B1FEBA71E00CCF391 /* UIView+Extension.h */,
+				A854D37D1FEBA71E00CCF391 /* UIView+Extension.m */,
+				A854D3791FEBA71D00CCF391 /* WSDatePickerView.h */,
+				A854D37A1FEBA71E00CCF391 /* WSDatePickerView.m */,
+				A854D37F1FEBA71F00CCF391 /* WSDatePickerView.xib */,
 			);
 			name = WSDaePickerView;
 			sourceTree = "<group>";
@@ -1324,7 +1324,7 @@
 			files = (
 				A8ADF1721F0F841200781E06 /* LaunchScreen.storyboard in Resources */,
 				A8ADF16F1F0F841200781E06 /* Assets.xcassets in Resources */,
-				A8A11D561F1DF058008CA39A /* WSDatePickerView.xib in Resources */,
+				A854D3831FEBA71F00CCF391 /* WSDatePickerView.xib in Resources */,
 				A8ADF16D1F0F841200781E06 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1424,6 +1424,7 @@
 				A821F5071F29BE790040846E /* CDZPicker.m in Sources */,
 				A821F5321F31B1270040846E /* ChangePswViewController.m in Sources */,
 				A8A11D421F1C6A29008CA39A /* WonoCircleTableViewCell.m in Sources */,
+				A854D3801FEBA71F00CCF391 /* WSDatePickerView.m in Sources */,
 				A87405DF1F6A2130004A87C1 /* PPBadgeLabel.m in Sources */,
 				A8A11D351F189F1B008CA39A /* BaseViewController.m in Sources */,
 				A8A5018F1F53F3BD00595B67 /* ToAskViewController.m in Sources */,
@@ -1441,7 +1442,9 @@
 				A821F51A1F2EDA190040846E /* ShifeiViewController.m in Sources */,
 				A8ABD1E31F6A4DC000CEF4DE /* PengUpdateViewController.m in Sources */,
 				A8246A251F149C5400CFD65A /* LoginViewController.m in Sources */,
+				A854D3821FEBA71F00CCF391 /* NSDate+Extension.m in Sources */,
 				A821F5861F3AA29B0040846E /* PengAddViewController.m in Sources */,
+				A854D3811FEBA71F00CCF391 /* UIView+Extension.m in Sources */,
 				A8A94F6D1F4537F800D9BBA2 /* ScreenDetailViewController.m in Sources */,
 				A89990DC1F4FC10D00D15005 /* MyPieView.m in Sources */,
 				A8A11D261F1852DB008CA39A /* ForgetViewController.m in Sources */,
@@ -1451,7 +1454,6 @@
 				A8A501AF1F5D285300595B67 /* WonoAskModel.m in Sources */,
 				A8C0D9EB1F4A70FE000AD2D8 /* PlantAddModel.m in Sources */,
 				A8A94F7F1F46E3C700D9BBA2 /* AddDetailModel.m in Sources */,
-				A8A11D551F1DF058008CA39A /* WSDatePickerView.m in Sources */,
 				A8A501971F54FDF900595B67 /* HDQiNiuOperation.m in Sources */,
 				A8ADF1671F0F841200781E06 /* AppDelegate.m in Sources */,
 				A821F4B91F25E6900040846E /* CABasicAnimation+Category.m in Sources */,
@@ -1479,7 +1481,6 @@
 				A8246A0E1F1467DC00CFD65A /* NSObject+JKCoding.m in Sources */,
 				A821F5661F3818240040846E /* MyFarmTableViewCell.m in Sources */,
 				A821F5411F32C1390040846E /* CustomActionSheet.m in Sources */,
-				A8A11D541F1DF058008CA39A /* UIView+Extension.m in Sources */,
 				A8A11D2B1F18532D008CA39A /* HDTimerBtn.m in Sources */,
 				A8A94F701F4546BD00D9BBA2 /* ScreenDetailModel.m in Sources */,
 				A8A501A91F593B0400595B67 /* WonoCircleDetailViewController.m in Sources */,
@@ -1526,7 +1527,6 @@
 				A8246A121F146EE400CFD65A /* MineViewController.m in Sources */,
 				A89990D71F4EB4A000D15005 /* MyZview2.m in Sources */,
 				A8A5018C1F53C30200595B67 /* BBFlashCtntLabel.m in Sources */,
-				A8A11D531F1DF058008CA39A /* NSDate+Extension.m in Sources */,
 				A821F4AE1F21F4560040846E /* UIImage+Scale.m in Sources */,
 				A821F56F1F386A670040846E /* CustomLabel.m in Sources */,
 				A821F4BE1F26D50B0040846E /* MoreTempViewController.m in Sources */,
