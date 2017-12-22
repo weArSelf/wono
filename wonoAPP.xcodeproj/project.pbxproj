@@ -44,7 +44,6 @@
 		A821F5381F31C47E0040846E /* EmployeeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F5371F31C47E0040846E /* EmployeeViewController.m */; };
 		A821F53B1F31D13F0040846E /* MineSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F53A1F31D13F0040846E /* MineSettingViewController.m */; };
 		A821F53E1F32AEBF0040846E /* MineDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F53D1F32AEBF0040846E /* MineDataViewController.m */; };
-		A821F5411F32C1390040846E /* CustomActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F5401F32C1390040846E /* CustomActionSheet.m */; };
 		A821F5451F32D2430040846E /* StuffTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F5441F32D2430040846E /* StuffTableViewCell.m */; };
 		A821F5541F3442E60040846E /* KBTabbar.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F5531F3442E60040846E /* KBTabbar.m */; };
 		A821F5571F34618C0040846E /* PengViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A821F5561F34618C0040846E /* PengViewController.m */; };
@@ -76,6 +75,7 @@
 		A854D3811FEBA71F00CCF391 /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = A854D37D1FEBA71E00CCF391 /* UIView+Extension.m */; };
 		A854D3821FEBA71F00CCF391 /* NSDate+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = A854D37E1FEBA71F00CCF391 /* NSDate+Extension.m */; };
 		A854D3831FEBA71F00CCF391 /* WSDatePickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A854D37F1FEBA71F00CCF391 /* WSDatePickerView.xib */; };
+		A854D38D1FECB0F700CCF391 /* CustomActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = A854D38C1FECB0F700CCF391 /* CustomActionSheet.m */; };
 		A87405DF1F6A2130004A87C1 /* PPBadgeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A87405D71F6A2130004A87C1 /* PPBadgeLabel.m */; };
 		A87405E01F6A2130004A87C1 /* UIBarButtonItem+PPBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A87405DA1F6A2130004A87C1 /* UIBarButtonItem+PPBadgeView.m */; };
 		A87405E11F6A2130004A87C1 /* UITabBarItem+PPBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A87405DC1F6A2130004A87C1 /* UITabBarItem+PPBadgeView.m */; };
@@ -288,8 +288,6 @@
 		A821F53A1F31D13F0040846E /* MineSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineSettingViewController.m; sourceTree = "<group>"; };
 		A821F53C1F32AEBF0040846E /* MineDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineDataViewController.h; sourceTree = "<group>"; };
 		A821F53D1F32AEBF0040846E /* MineDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineDataViewController.m; sourceTree = "<group>"; };
-		A821F53F1F32C1390040846E /* CustomActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomActionSheet.h; sourceTree = "<group>"; };
-		A821F5401F32C1390040846E /* CustomActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomActionSheet.m; sourceTree = "<group>"; };
 		A821F5431F32D2430040846E /* StuffTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StuffTableViewCell.h; sourceTree = "<group>"; };
 		A821F5441F32D2430040846E /* StuffTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StuffTableViewCell.m; sourceTree = "<group>"; };
 		A821F5521F3442E60040846E /* KBTabbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBTabbar.h; sourceTree = "<group>"; };
@@ -354,6 +352,8 @@
 		A854D37D1FEBA71E00CCF391 /* UIView+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
 		A854D37E1FEBA71F00CCF391 /* NSDate+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Extension.m"; sourceTree = "<group>"; };
 		A854D37F1FEBA71F00CCF391 /* WSDatePickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WSDatePickerView.xib; sourceTree = "<group>"; };
+		A854D38B1FECB0F600CCF391 /* CustomActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomActionSheet.h; sourceTree = "<group>"; };
+		A854D38C1FECB0F700CCF391 /* CustomActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomActionSheet.m; sourceTree = "<group>"; };
 		A87405D61F6A2130004A87C1 /* PPBadgeLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PPBadgeLabel.h; sourceTree = "<group>"; };
 		A87405D71F6A2130004A87C1 /* PPBadgeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PPBadgeLabel.m; sourceTree = "<group>"; };
 		A87405D81F6A2130004A87C1 /* PPBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PPBadgeView.h; sourceTree = "<group>"; };
@@ -669,6 +669,7 @@
 		A82469FA1F14625600CFD65A /* Support Tools */ = {
 			isa = PBXGroup;
 			children = (
+				A854D3841FECAED600CCF391 /* 弹出框 */,
 				A8E2D8361FCD5028001048B4 /* SDPhotoBrowser */,
 				A87405C81F68FDB4004A87C1 /* 右上角小圆点控件 */,
 				A8A501B61F5E9D6000595B67 /* 自适应高度textview */,
@@ -679,8 +680,6 @@
 				A8C0D9F71F4BE29F000AD2D8 /* UITableView+JRTableViewPlaceHolder.m */,
 				A821F5521F3442E60040846E /* KBTabbar.h */,
 				A821F5531F3442E60040846E /* KBTabbar.m */,
-				A821F53F1F32C1390040846E /* CustomActionSheet.h */,
-				A821F5401F32C1390040846E /* CustomActionSheet.m */,
 				A821F5131F2B1EE40040846E /* LimitInput.h */,
 				A821F5121F2B1EE40040846E /* LimitInput.m */,
 				A821F50F1F2B06BD0040846E /* FZHPickerView.h */,
@@ -882,6 +881,15 @@
 				A8A11D341F189F1B008CA39A /* BaseViewController.m */,
 			);
 			name = Base;
+			sourceTree = "<group>";
+		};
+		A854D3841FECAED600CCF391 /* 弹出框 */ = {
+			isa = PBXGroup;
+			children = (
+				A854D38B1FECB0F600CCF391 /* CustomActionSheet.h */,
+				A854D38C1FECB0F700CCF391 /* CustomActionSheet.m */,
+			);
+			name = "弹出框";
 			sourceTree = "<group>";
 		};
 		A87405C81F68FDB4004A87C1 /* 右上角小圆点控件 */ = {
@@ -1454,6 +1462,7 @@
 				A8A501AF1F5D285300595B67 /* WonoAskModel.m in Sources */,
 				A8C0D9EB1F4A70FE000AD2D8 /* PlantAddModel.m in Sources */,
 				A8A94F7F1F46E3C700D9BBA2 /* AddDetailModel.m in Sources */,
+				A854D38D1FECB0F700CCF391 /* CustomActionSheet.m in Sources */,
 				A8A501971F54FDF900595B67 /* HDQiNiuOperation.m in Sources */,
 				A8ADF1671F0F841200781E06 /* AppDelegate.m in Sources */,
 				A821F4B91F25E6900040846E /* CABasicAnimation+Category.m in Sources */,
@@ -1480,7 +1489,6 @@
 				A8246A281F14C25A00CFD65A /* CompleteInfoViewController.m in Sources */,
 				A8246A0E1F1467DC00CFD65A /* NSObject+JKCoding.m in Sources */,
 				A821F5661F3818240040846E /* MyFarmTableViewCell.m in Sources */,
-				A821F5411F32C1390040846E /* CustomActionSheet.m in Sources */,
 				A8A11D2B1F18532D008CA39A /* HDTimerBtn.m in Sources */,
 				A8A94F701F4546BD00D9BBA2 /* ScreenDetailModel.m in Sources */,
 				A8A501A91F593B0400595B67 /* WonoCircleDetailViewController.m in Sources */,

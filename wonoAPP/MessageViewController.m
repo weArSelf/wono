@@ -12,8 +12,9 @@
 #import "WonoCircleDetailViewController.h"
 #import "PPBadgeView.h"
 #import "WonoWebMessageViewController.h"
+#import "CustomActionSheet.h"
 
-@interface MessageViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface MessageViewController ()<UITableViewDelegate,UITableViewDataSource,CustomActionSheetDelegate>
 
 @property (nonatomic,strong)UIView *headView;
 @property (nonatomic,strong)UILabel *titleLabel;
@@ -213,6 +214,45 @@
         make.top.equalTo(_headView.mas_top);
         make.bottom.equalTo(_headView.mas_bottom);
     }];
+    
+    UIButton *rightBtn = [[UIButton alloc]init];
+    
+    [rightBtn setImage:[UIImage imageNamed:@"nav-list-o"] forState:UIControlStateNormal];
+    [rightBtn addTarget:self action:@selector(rightClick) forControlEvents:UIControlEventTouchUpInside];
+    rightBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    rightBtn.imageEdgeInsets = UIEdgeInsetsMake(HDAutoHeight(30),HDAutoHeight(20),HDAutoHeight(20),HDAutoHeight(20));
+    
+   
+//    rightBtn.frame = CGRectMake(SCREEN_WIDTH - HDAutoWidth(100), <#CGFloat y#>, HDAutoWidth(40), HDAutoWidth(40))
+    
+    [_headView addSubview:rightBtn];
+    
+    [rightBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(@(HDAutoWidth(100)));
+        make.height.equalTo(@(HDAutoWidth(100)));
+        make.right.equalTo(_headView.mas_right);
+        make.top.equalTo(_backBtn.mas_top).offset(-HDAutoHeight(30));
+    }];
+    
+}
+
+-(void)rightClick{
+    
+    NSLog(@"点击");
+    CustomActionSheet *sheet = [[CustomActionSheet alloc] initWithTitle:nil
+                                                           buttonTitles:[NSArray arrayWithObjects:@"全部标为已读", nil]
+                                                      cancelButtonTitle:@"取消"
+                                                               delegate:(id<CustomActionSheetDelegate>)self];
+    
+    [sheet show];
+}
+
+- (void)actionSheet:(CustomActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    if(buttonIndex == 0){
+        NSLog(@"标为已读");
+    }
+    
 }
 
 
