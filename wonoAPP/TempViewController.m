@@ -88,7 +88,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+//    __strong UIView *view = [[UIView alloc]init];
     onceC = 0;
     
 //    float asd = APP_CONTENT_HEIGHT;
@@ -1243,8 +1243,24 @@
 
 
 
+//static inline UIEdgeInsets sgm_safeAreaInset(UIView *view) {
+//    if (@available(iOS 11.0, *)) {
+//        return view.safeAreaInsets;
+//    }
+//    return UIEdgeInsetsZero;
+//}
+//
+//-(void)viewSafeAreaInsetsDidChange{
+//    [super viewSafeAreaInsetsDidChange];
+//    UIEdgeInsets safeAreaInsets = sgm_safeAreaInset(self.view);
+//    CGFloat height = 44.0; // 导航栏原本的高度，通常是44.0
+//    height += safeAreaInsets.top > 0 ? safeAreaInsets.top : 20.0; // 20.0是statusbar的高度
+//}
 
-
-
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
+    
+    
+    
+}
 
 @end

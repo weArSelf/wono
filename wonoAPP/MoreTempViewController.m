@@ -72,7 +72,12 @@ static NSString *const kHeWeatherAPI   = @"https://api.heweather.com/x3/weather?
     _backImageView = [[UIImageView alloc]init];
     NSString *str = [NSString stringWithFormat:@"BW%@",self.model.icon];
     _backImageView.image = [UIImage imageNamed:str];
-    _backImageView.contentMode = UIViewContentModeScaleAspectFit;
+    if(KIsiPhoneX){
+        _backImageView.contentMode = UIViewContentModeScaleToFill;
+    }else{
+        _backImageView.contentMode = UIViewContentModeScaleAspectFit;
+    }
+    
     [self.view addSubview:_backImageView];
     [_backImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left);
